@@ -1,4 +1,4 @@
-import { ChartColumnIncreasing, Users, Cable, Package, ShoppingBasket, Warehouse, BookOpenCheck, ClipboardList, Ribbon, GraduationCap } from 'lucide-react';
+import { ChartColumnIncreasing, Users, UsersRound, Cable, Package, ShoppingBasket, Warehouse, BookOpenCheck, ClipboardList, Ribbon, GraduationCap, PencilRuler } from 'lucide-react';
 
 export const technologNav = [
     {
@@ -37,15 +37,27 @@ export const technologNav = [
                 elements: false
             },
             {
+                title: 'Клиенты',
+                path: 'clients',
+                icon: <UsersRound />,
+                elements: false
+            },
+            {
                 title: 'Товары',
                 path: 'product',
                 icon: <ShoppingBasket />,
                 elements: false
             },
             {
-                title: 'Разряд',
+                title: 'Разряды',
                 path: 'discharge',
                 icon: <Ribbon />,
+                elements: false,
+            },
+            {
+                title: 'Размеры',
+                path: 'sizes',
+                icon: <PencilRuler/>,
                 elements: false,
             },
             {

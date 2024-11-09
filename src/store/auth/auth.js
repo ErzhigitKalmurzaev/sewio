@@ -5,7 +5,7 @@ export const logIn = createAsyncThunk(
     'technologProduct/logIn',
     async (props, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.post('token/', props);
+            const { data } = await axiosInstance.post('token/login/', props);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -17,7 +17,7 @@ export const getProfile = createAsyncThunk(
     'technologProduct/getProfile',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get('staff/me-info/');
+            const { data } = await axiosInstance.get('user/staff/info/');
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -54,7 +54,7 @@ const AuthSlice = createSlice({
         }).addCase(logIn.fulfilled, (state, action) => {
             state.user = action.payload;
             state.isAuthenticated = 'success';
-            localStorage.setItem('sewio_token', action.payload?.access_token);
+            localStorage.setItem('sewio_token', action.payload?.access);
         }).addCase(logIn.rejected, (state) => {
             state.isAuthenticated = 'error';
         })

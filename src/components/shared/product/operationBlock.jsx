@@ -3,15 +3,8 @@ import Button from '../../ui/button';
 import OperationTabs from './operationTabs';
 import { ChevronDown } from 'lucide-react';
 
-const OperationBlock = ({ operation, setNewProduct, index }) => {
+const OperationBlock = ({ operation, index }) => {
   const [collapse, setCollapse] = React.useState(false);
-
-  const getValue = (e, index) => {
-    const { name, value } = e.target;
-    const newSizes = [...operation.sizes];
-    newSizes[index][name] = value;
-    setNewProduct({ ...setNewProduct, sizes: newSizes });
-  };
 
   return (
     <div className='flex flex-col gap-y-3 bg-white py-4 px-6 rounded-lg'>
@@ -31,7 +24,7 @@ const OperationBlock = ({ operation, setNewProduct, index }) => {
       </div>
 
       {/* Контейнер для плавного сворачивания */}
-      <div
+      {/* <div
         className={`overflow-hidden transition-[max-height] ease-in-out duration-700 ${
           collapse ? 'max-h-0' : 'max-h-screen'
         }`}
@@ -39,7 +32,7 @@ const OperationBlock = ({ operation, setNewProduct, index }) => {
         <div className='flex flex-col gap-y-4'>
           <OperationTabs newOperation={operation} setNewOperation={setNewProduct} />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

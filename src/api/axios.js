@@ -58,7 +58,7 @@ ImageUploadingFetch.interceptors.response.use(
 
 ImageUploadingFetch.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("sewio_token");
     return {
       ...config,
       headers: {

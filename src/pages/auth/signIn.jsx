@@ -16,7 +16,7 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(logIn({ email: login, password }))
+    dispatch(logIn({ username: login, password }))
   }
 
   return (

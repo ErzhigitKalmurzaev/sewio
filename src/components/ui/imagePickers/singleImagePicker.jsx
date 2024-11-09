@@ -1,6 +1,6 @@
 import { Uploader, Message, Loader, useToaster } from 'rsuite';
 import AvatarIcon from '@rsuite/icons/legacy/Avatar';
-import React from 'react';
+import React, { useState } from 'react';
 
 function previewFile(file, callback) {
   const reader = new FileReader();
@@ -10,26 +10,30 @@ function previewFile(file, callback) {
   reader.readAsDataURL(file);
 }
 
-const SingleImagePicker = () => {
+const SingleImagePicker = ({ fileInfo, setFileInfo }) => {
   const toaster = useToaster();
   const [uploading, setUploading] = React.useState(false);
-  const [fileInfo, setFileInfo] = React.useState(null);
+  const [image, setImage] = useState(fileInfo)
 
+  const handleUpload = (file) => {
+    setUploading(true);
+    previewFile(file.blobFile, value => {
+      setFileInfo(file);
+      setImage(value)
+      setUploading(false);
+      toaster.push(<Message type="success">Uploaded successfully</Message>);
+    });
+  };
+  
   return (
     <Uploader
+      autoUpload={false}
       fileListVisible={false}
       listType="picture"
-      action="//jsonplaceholder.typicode.com/posts/"
-      onUpload={file => {
-        setUploading(true);
-        previewFile(file.blobFile, value => {
-          setFileInfo(value);
-        });
-      }}
-      onSuccess={(response, file) => {
-        setUploading(false);
-        toaster.push(<Message type="success">Uploaded successfully</Message>);
-        console.log(response);
+      onChange={(fileList) => {
+        if (fileList.length > 0) {
+          handleUpload(fileList[0]);
+        }
       }}
       onError={() => {
         setFileInfo(null);
@@ -37,10 +41,10 @@ const SingleImagePicker = () => {
         toaster.push(<Message type="error">Upload failed</Message>);
       }}
     >
-      <button style={{ width: 150, height: 150 }}>
+      <button type='button' style={{ width: 150, height: 150 }}>
         {uploading && <Loader backdrop center />}
         {fileInfo ? (
-          <img src={fileInfo} width="100%" height="100%" />
+          <img src={image || fileInfo} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
           <AvatarIcon style={{ fontSize: 80 }} />
         )}

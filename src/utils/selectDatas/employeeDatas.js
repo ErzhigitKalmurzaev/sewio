@@ -1,25 +1,37 @@
 export const employeeSalaryType = [
     {
+        label: 'Все',
+        value: ''
+    },
+    {
         label: 'Договорная',
-        value: 'dinamic'
+        value: 0
     },
     {
         label: 'Фиксированная',
-        value: 'fixed'
+        value: 1
     }
 ];
 
 export const employeeRole = [
     {
-        label: 'Администратор',
-        value: 'admin'
+        label: 'Все',
+        value: ''
+    },
+    {
+        label: 'Директор',
+        value: 1
     },
     {
         label: 'Технолог',
-        value: 'technolog'
+        value: 2
     },
     {
         label: 'Зав. склад',
-        value: 'warehouse'
+        value: 3
+    },
+    {
+        label: 'Швея',
+        value: 4
     }
 ]

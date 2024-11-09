@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { Accordion, Placeholder } from "rsuite";
+import { Accordion, Placeholder, Toggle } from "rsuite";
 
 import MyBreadcrums from "../../../components/ui/breadcrums";
 import Title from "../../../components/ui/title";
-import MultiImagePicker from "../../../components/ui/imagePickers/multiImagePicker";
 import Input from "../../../components/ui/inputs/input";
 import Button from "./../../../components/ui/button";
-import NewOperation from "../../../components/modals/product/newOperation";
 
 import styled from "@emotion/styled/macro";
-import OperationBlock from "../../../components/shared/product/operationBlock";
-import NewCombination from "../../../components/modals/product/newCombination";
-import Checkbox from "../../../components/ui/inputs/checkbox";
-import { Trash2 } from "lucide-react";
+import { MoveRight, Trash2 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { createProduct } from "../../../store/technolog/product";
+import BackDrop from "../../../components/ui/backdrop";
+import { useNavigate } from "react-router-dom";
 
 const CreateProduct = () => {
   const breadcrumbs = [
@@ -28,149 +28,100 @@ const CreateProduct = () => {
     },
   ];
 
-  const [modals, setModals] = useState({ newOperation: false, newCombination: false });
-  const [newCombination, setNewCombination] = useState({
-    name: '',
-    operations: []
-  })
-  const [newOperation, setNewOperation] = useState({
-    name: '',
-    equipment: '',
-    sizes: [
-      {
-        size: 's',
-        time: 0,
-        rank: '',
-        materials: []
-      },
-      {
-        size: 'm',
-        time: 0,
-        rank: '',
-        materials: []
-      },
-      {
-        size: 'l',
-        time: 0,
-        rank: '',
-        materials: []
-      },
-      {
-        size: 'xl',
-        time: 0,
-        rank: '',
-        materials: []
-      },
-      {
-        size: 'xxl',
-        time: 0,
-        rank: '',
-        materials: []
-      }
-    ]
-  })
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
   const [newProduct, setNewProduct] = useState({
-    name: '',
-    article: '',
-    combinations: [],
-    operations: []
+    title: '',
+    vendor_code: '',
+    is_active: true
   })
+  const [errors, setErrors] = useState({
+    title: false,
+    vendor_code: false,
+    is_active: false
+  })
+
+  const getValue = (e) => {
+    const { name, value } = e.target;
+    setNewProduct({
+      ...newProduct,
+      [name]: value
+    })
+  }
+
+  const validateFields = () => {
+    const newErrors = {
+      title: !newProduct.title,
+      vendor_code: !newProduct.vendor_code
+    };
+
+    setErrors(newErrors);
+
+    return !Object.values(newErrors).some((error) => error === true);
+  }
+
+  const onSubmit = () => {
+    if(validateFields()) {
+      setLoading(true)
+      dispatch(createProduct(newProduct))
+        .then(res => {
+          if(res.meta.requestStatus === 'fulfilled') {
+            setLoading(false);
+            navigate(`${res.payload.data.id}`)
+          }
+        })
+    } else {
+      toast("Заполните все поля!")
+    }
+  }
 
   return (
     <div className="flex flex-col gap-y-5 mb-5">
       <MyBreadcrums items={breadcrumbs} />
       <Title text="Создание товара" />
+      {loading && <BackDrop open={loading}/>}
 
       <WhiteWrapper>
-        <MultiImagePicker />
-        <div className="w-3/6 flex flex-col justify-between gap-y-4">
-          <Input type="text" label="Название" placeholder="Введите название" />
-          <Input type="text" label="Артикул" placeholder="Введите артикул" />
+        <div className="flex gap-x-5">
+          <div className="w-3/6 flex flex-col justify-between gap-y-4">
+            <Input 
+              type="text" 
+              name="title"
+              label="Название" 
+              placeholder="Введите название" 
+              value={newProduct.title}
+              onChange={getValue}
+              error={errors.title}
+            />
+            <Input 
+              type="text" 
+              name="vendor_code"
+              label="Артикул" 
+              placeholder="Введите артикул"
+              value={newProduct.vendor_code}
+              onChange={getValue} 
+              error={errors.vendor_code}
+            />
+            <Toggle 
+              checked={newProduct?.is_active}
+              onChange={(e) => getValue({ target: { value: e, name: 'is_active' }})}
+            >
+              Активный
+            </Toggle>
+          </div>
+          <div className="w-3/6 flex justify-between items-end">
+            <p className="font-inter text-semibold">
+              Для создания товара сначала заполните основную информацию, и нажмите кнопку "Далее"
+            </p>
+            <Button width='180px' onClick={onSubmit}>
+                Далее <MoveRight className="ml-2" />
+            </Button>
+          </div>
         </div>
       </WhiteWrapper>
 
-      <div className="flex flex-col gap-y-4 mt-5">
-        <div className="flex justify-between items-center">
-          <p className="text-lg font-semibold font-inter">Комбинации</p>
-          <Button onClick={() => setModals({ ...modals, newCombination: true })}>+ Создать комбинацию</Button>
-        </div>
-
-        {
-          newProduct.combinations.length > 0 ?
-            <div className="bg-white rounded-lg">
-              {
-                newProduct.combinations.map((combination, index) => (
-                  <Accordion className="border-b border-borderGray rounded-0">
-                    <Accordion.Panel header={combination.name}>
-                      <p className="text-base font-semibold font-inter my-2">Операции</p>
-                      <div className='w-full flex flex-wrap justify-between gap-4 rounded-md p-1' key={index}>
-                            {
-                                combination?.operations?.map((item, index) => (
-                                    <div 
-                                        className='w-[49%] gap-x-3 flex justify-between items-center justify-between p-2 rounded-sm py-3 bg-[#FAFAFA] cursor-pointer' 
-                                        key={index} 
-                                    >
-                                        <p className="text-sm font-medium font-inter">{item.name}</p>
-                                        <div className="pl-1">
-                                          <Trash2 color="red" size={20} />
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </Accordion.Panel>
-                  </Accordion>
-                ))
-              }
-            </div>
-            :
-            <p className="text-base font-semibold font-inter text-center my-5">Комбинации отсутствуют</p>
-        }
-      </div>
-
-      <div className="flex flex-col gap-y-4 mt-5">
-        <div className="flex justify-between items-center">
-          <p className="text-lg font-semibold font-inter">Операции</p>
-          <Button onClick={() => setModals({ ...modals, newOperation: true })}>+ Создать операцию</Button>
-        </div>
-
-        <div className="flex flex-col gap-y-6">
-          {
-            newProduct.operations.length > 0 ?
-            newProduct.operations.map((operation, index) => (
-              <OperationBlock
-                key={index}
-                operation={operation}
-                setNewProduct={setNewProduct}
-                index={index}
-              />
-            ))
-            :
-            <p className="text-base font-semibold font-inter text-center my-5">Операции отсутствуют</p>
-          }
-        </div>
-      </div>
-
-      {/* Модалки */}
-
-      <NewOperation 
-        open={modals.newOperation} 
-        modals={modals} 
-        setModals={setModals} 
-        newOperation={newOperation} 
-        setNewOperation={setNewOperation}
-        newProduct={newProduct}
-        setNewProduct={setNewProduct}
-      />
-      <NewCombination
-        open={modals.newCombination}
-        modals={modals}
-        setModals={setModals}
-        newCombination={newCombination}
-        setNewCombination={setNewCombination}
-        newProduct={newProduct}
-        setNewProduct={setNewProduct}
-      />
     </div>
   );
 };

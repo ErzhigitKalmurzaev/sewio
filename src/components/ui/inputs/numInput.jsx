@@ -41,6 +41,7 @@ const NumInput = ({ label, id, value = "", onChange, placeholder, required, erro
 export default NumInput;
 
 const StyledDiv = styled("div")`
+  width: ${(props) => props.width || "100%"};
   display: flex;
   flex-direction: column;
   

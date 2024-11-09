@@ -1,144 +1,112 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Button } from 'rsuite';
+import { Table } from 'rsuite';
+import { employeeRole, employeeSalaryType } from '../../../utils/selectDatas/employeeDatas';
+
+import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
+import TableDropdown from '../tableDropdown';
+
 const { Column, HeaderCell, Cell } = Table;
 
-const TechnologEmployeeTable = () => {
+const 
+TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const data = [
-        {
-          id: 1,
-          full_name: "Иван Иванов",
-          status: "Активен",
-          phone: "+996 555 123 456",
-          salary_type: "Фиксированная",
-          role: "Технолог"
-        },
-        {
-          id: 2,
-          full_name: "Мария Петрова",
-          status: "В отпуске",
-          phone: "+996 555 654 321",
-          salary_type: "Почасовая",
-          role: "Технолог"
-        },
-        {
-            id: 1,
-            full_name: "Иван Иванов",
-            status: "Активен",
-            phone: "+996 555 123 456",
-            salary_type: "Фиксированная",
-            role: "Технолог"
-          },
-          {
-            id: 2,
-            full_name: "Мария Петрова",
-            status: "В отпуске",
-            phone: "+996 555 654 321",
-            salary_type: "Почасовая",
-            role: "Технолог"
-          },
-          {
-            id: 1,
-            full_name: "Иван Иванов",
-            status: "Активен",
-            phone: "+996 555 123 456",
-            salary_type: "Фиксированная",
-            role: "Технолог"
-          },
-          {
-            id: 2,
-            full_name: "Мария Петрова",
-            status: "В отпуске",
-            phone: "+996 555 654 321",
-            salary_type: "Почасовая",
-            role: "Технолог"
-          },
-          {
-            id: 1,
-            full_name: "Иван Иванов",
-            status: "Активен",
-            phone: "+996 555 123 456",
-            salary_type: "Фиксированная",
-            role: "Технолог"
-          },
-          {
-            id: 2,
-            full_name: "Мария Петрова",
-            status: "В отпуске",
-            phone: "+996 555 654 321",
-            salary_type: "Почасовая",
-            role: "Технолог"
-          },
-        {
-          id: 3,
-          full_name: "Алексей Сидоров",
-          status: "Активен",
-          phone: "+996 555 789 012",
-          salary_type: "Фиксированная",
-          role: "Менеджер"
-        },
-        {
-          id: 4,
-          full_name: "Елена Павлова",
-          status: "Уволен",
-          phone: "+996 555 567 890",
-          salary_type: "Почасовая",
-          role: "Оператор"
-        }
-      ];
+  const getData = () => {
+    if(urls.salary_type === '1') {
+      return data.filter(item => item.salary > 0)
+    } else if(urls.salary_type === '0') {
+      return data.filter(item => item.salary === 0)
+    } else {
+      return data;
+    }
+  }
 
   return (
-    <div>
-        <Table
-            height={600}
-            data={data}
-            onRowClick={() => navigate('info')}
+        <div className='min-h-[500px] bg-white rounded-xl'>
+            <Table
+              virtualized
+              loading={status === 'loading'}
+              data={getData()}
+              className='rounded-xl'
             >
-            <Column width={60} align="center" fixed>
-                <HeaderCell>ID</HeaderCell>
-                <Cell dataKey="id" />
-            </Column>
+              <Column width={60} align="center" fixed>
+                  <HeaderCell>ID</HeaderCell>
+                  <Cell dataKey="id" />
+              </Column>
 
-            <Column width={250}>
-                <HeaderCell>Ф.И.О.</HeaderCell>
-                <Cell dataKey="full_name" />
-            </Column>
+              <Column width={150}>
+                  <HeaderCell>Имя</HeaderCell>
+                  <Cell dataKey="name" />
+              </Column>
 
-            <Column width={150}>
-                <HeaderCell>Статус</HeaderCell>
-                <Cell dataKey="status" />
-            </Column>
+              <Column width={150}>
+                  <HeaderCell>Фамилия</HeaderCell>
+                  <Cell dataKey="surname" />
+              </Column>
 
-            <Column width={200}>
-                <HeaderCell>Телефон</HeaderCell>
-                <Cell dataKey="phone" />
-            </Column>
+              <Column width={200}>
+                  <HeaderCell>Телефон</HeaderCell>
+                  <Cell dataKey="phone" />
+              </Column>
 
-            <Column width={200}>
-                <HeaderCell>Тип зарплаты</HeaderCell>
-                <Cell dataKey="salary_type" />
-            </Column>
+              <Column width={200}>
+                  <HeaderCell>Email</HeaderCell>
+                  <Cell dataKey="email" />
+              </Column>
 
-            <Column width={150}>
-                <HeaderCell>Роль</HeaderCell>
-                <Cell dataKey="role" />
-            </Column>
-            <Column width={200} fixed="right">
-                <HeaderCell>Действия</HeaderCell>
+              <Column width={200}>
+                  <HeaderCell>
+                    <TableDropdown 
+                      title="Тип зарплаты" 
+                      data={employeeSalaryType} 
+                      handleChangeFilter={handleChangeFilter}
+                      name='salary_type'
+                      urls={urls}
+                    /> 
+                  </HeaderCell>
+                  <Cell dataKey="salary_type">
+                    {
+                      rowData => (
+                        <p>{rowData?.salary > 0 ? 'Фиксированная' : 'Договорная'}</p>
+                      )
+                    }
+                  </Cell>
+              </Column>
 
-                <Cell style={{ padding: '6px' }}>
-                  {rowData => (
-                      <Button appearance="link" onClick={() => alert(`id:${rowData.id}`)}>
-                        Edit
-                      </Button>
-                  )}
-                </Cell>
-            </Column>
-            </Table>
-    </div>
+              <Column width={150}>
+                  <HeaderCell>
+                      <TableDropdown 
+                        title="Роль" 
+                        data={employeeRole} 
+                        handleChangeFilter={handleChangeFilter}
+                        name='role'
+                        urls={urls}
+                      />
+                  </HeaderCell>
+                  <Cell dataKey="role">
+                    {
+                      rowData => (
+                        <p>{employeeRole[rowData.role].label}</p>
+                      )
+                    }
+                  </Cell>
+              </Column>
+
+              <Column width={100} fixed="right">
+                  <HeaderCell>Действия</HeaderCell>
+
+                  <Cell style={{ padding: '6px' }}>
+                    {rowData => (
+                        <div className='flex items-center px-3 py-1 cursor-pointer'>
+                          <Pencil onClick={() => navigate(`${rowData.id}`)}/>
+                        </div>
+                    )}
+                  </Cell>
+              </Column>
+          </Table>
+        </div>
   )
 }
 

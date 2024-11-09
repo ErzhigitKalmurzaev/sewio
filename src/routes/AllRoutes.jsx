@@ -14,13 +14,21 @@ const AllRoutes = () => {
     dispatch(checkAuth());
   }, []);
 
+  const routes = {
+    director: <TechnologRoute/>,
+    technolog: <TechnologRoute/>
+  }
+
+  const allowedCRMRoles = ['director', 'technolog', 'werehouse', 'shveya'];
+
   return (
     <Routes>
       <Route path="/" element={isAuthenticated === 'success' ? <Navigate to="/crm/" /> : <SignIn />} />
 
       <Route path="/crm/*" element={
-        <ProtectedRoute>
-          <TechnologRoute />
+        <ProtectedRoute navigate="/"
+            allowed={allowedCRMRoles.some(i => i === 'director')} >
+            {routes['director']}
         </ProtectedRoute>
       } />
       <Route path="*" element={<div>Page not found</div>} />
@@ -28,14 +36,8 @@ const AllRoutes = () => {
   );
 };
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-
-  if (isAuthenticated !== 'success') {
-    return <Navigate to="/" />;
-  }
-
-  return children;
+export const ProtectedRoute = ({ allowed, navigate, children }) => {
+  return allowed ? children : <Navigate to={navigate} replace />;
 };
 
 export default AllRoutes;

@@ -4,21 +4,19 @@ import MyBreadcrums from '../../../../components/ui/breadcrums';
 import Button from '../../../../components/ui/button';
 import SingleImagePicker from '../../../../components/ui/imagePickers/singleImagePicker';
 import Input from '../../../../components/ui/inputs/input';
-import Select from '../../../../components/ui/inputs/select';
 
-import { employeeRole, employeeSalaryType } from '../../../../utils/selectDatas/employeeDatas';
 import TelInput from '../../../../components/ui/inputs/phoneInput';
 import NumInput from '../../../../components/ui/inputs/numInput';
 import { getRankList } from '../../../../store/technolog/rank';
 import { useDispatch, useSelector } from 'react-redux';
-import { createEmployee } from '../../../../store/technolog/staff';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { createClient } from '../../../../store/technolog/client';
 
-const CreateEmployee = () => {
+const CreateClient = () => {
   const breadcrumbs = [
-    { label: 'Сотрудники', path: '/employee', active: false },
-    { label: 'Создание сотрудника', path: '/employee/create', active: true },
+    { label: 'Клиенты', path: '/clients', active: false },
+    { label: 'Создание клиента', path: '/clients/create', active: true },
   ];
 
   const dispatch = useDispatch();
@@ -32,18 +30,16 @@ const CreateEmployee = () => {
     phone: '',
     email: '',
     password: '',
-    role: '',
-    rank: '',
-    salary: 0
+    company_title: '',
+    address: ''
   })
   const [errors, setErrors] = useState({
     full_name: false,
     phone: false,
     email: false,
     password: false,
-    role: false,
-    rank: false,
-    salary: false
+    company_title: false,
+    address: false
   })
   const [image, setImage] = useState(null);
 
@@ -68,9 +64,8 @@ const CreateEmployee = () => {
       phone: !employee_data.phone || !/^\+?\d{10,13}$/.test(employee_data.phone),
       email: !employee_data.email || !/\S+@\S+\.\S+/.test(employee_data.email),
       password: employee_data.password.length < 6,
-      role: !employee_data.role,
-      rank: !employee_data.rank,
-      salary: employee_data.salary <= 0,
+      company_title: !employee_data.company_title,
+      address: !employee_data.address,
     };
 
     setErrors(newErrors);
@@ -83,10 +78,10 @@ const CreateEmployee = () => {
     e.preventDefault();
     
     if (validateFields()) {
-      dispatch(createEmployee({ ...employee_data, image }))
+      dispatch(createClient({ ...employee_data, image }))
         .then(res => {
-          navigate('/employee')
-          toast("Разряд создан успешно!")
+          navigate(-1)
+          toast("Клиент создан успешно!")
         })
     } else {
       console.log('Form contains errors');
@@ -96,7 +91,7 @@ const CreateEmployee = () => {
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs} />
-      <Title text="Создание сотрудника" />
+      <Title text="Создание клиента" />
 
       <form onSubmit={onSubmit}>
         <div className='w-full mx-auto flex flex-col bg-white p-5 px-10 rounded-xl mt-2 gap-y-5'>
@@ -167,33 +162,23 @@ const CreateEmployee = () => {
             </div>
 
             <div className='flex gap-x-6'>
-              <Select 
-                label='Роль' 
-                name='role' 
-                placeholder='Выберите роль' 
-                data={employeeRole} 
-                error={errors.role} 
-                onChange={e => getValue({ target: { value: e, name: 'role' } })}
-              />
-              <Select 
-                label='Разряд' 
-                name='rank'
-                placeholder='Выберите разряд' 
-                data={rank_list} 
-                error={errors.rank} 
-                labelKey='title'
-                valueKey='id'
-                onChange={e => getValue({ target: { value: e, name: 'rank' } })}
-              />
+                <Input
+                    label='Компания'
+                    name='company_title'
+                    placeholder='Введите название компании'
+                    type='text'
+                    error={errors.company_title}
+                    onChange={getValue}
+                />
+                <Input
+                    label='Адрес'
+                    name='address'
+                    placeholder='Введите адрес'
+                    type='text'
+                    error={errors.address}
+                    onChange={getValue}
+                />
             </div>
-
-            <NumInput
-              label='Зарплата'
-              name='salary'
-              placeholder='Введите зарплату'
-              error={errors.salary}
-              onChange={e => getValue({ target: { value: e, name: 'salary' } })}
-            />
           </div>
         </div>
 
@@ -205,4 +190,4 @@ const CreateEmployee = () => {
   );
 };
 
-export default CreateEmployee;
+export default CreateClient;
