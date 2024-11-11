@@ -1,12 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Title from '../../../components/ui/title'
 import Button from '../../../components/ui/button'
 import Input from '../../../components/ui/inputs/input'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { getProductList } from '../../../store/technolog/product'
+import ProductTable from '../../../components/tables/productTables/productTable'
 
 const Products = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { products_list, products_list_status } = useSelector(state => state.product);
+
+  useEffect(() => {
+    dispatch(getProductList());
+  }, [])
 
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
@@ -24,6 +34,10 @@ const Products = () => {
             <div className='w-3/6 mt-1'>
                 <Input searchicon={true} placeholder='Поиск по товарам' type="text"/>
             </div>
+
+        </div>
+        <div className='w-full h-full'>
+            <ProductTable data={products_list.results} status={products_list_status} />
         </div>
 
     </div>

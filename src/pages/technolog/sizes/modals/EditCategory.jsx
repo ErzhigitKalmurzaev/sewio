@@ -1,23 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, Toggle } from 'rsuite'
 import Input from '../../../../components/ui/inputs/input'
 import Button from '../../../../components/ui/button'
 import { useDispatch } from 'react-redux'
-import { createSizeCategory } from '../../../../store/technolog/size'
+import { createSizeCategory, editSizeCategory } from '../../../../store/technolog/size'
 import { toast } from 'react-toastify'
 
-const CreateCategory = ({ modals, setModals }) => {
+const EditCategory = ({ modals, setModals, data }) => {
 
   const dispatch = useDispatch();
 
   const [category, setCategory] = useState({
-    title: '',
-    is_active: true
+    title: data.title,
+    is_active: data.is_active
   })
   const [errors, setErrors] = useState({
     title: false,
     is_active: false
   })
+
+  useEffect(() => {
+    if(data?.title) {
+        setCategory({
+            title: data.title,
+            is_active: data.is_active
+        })
+    }
+  }, [data.title])
 
 
   const getValue = (e) => {
@@ -27,13 +36,13 @@ const CreateCategory = ({ modals, setModals }) => {
         [name]: value
     })
   }
-
+  
   const onSubmit = () => {
-    dispatch(createSizeCategory(category))
+    dispatch(editSizeCategory({ id: data.id, props: category}))
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
-                toast("Категория создана успешно!");
-                setModals({ ...modals, create_category: false })
+                toast("Категория изменена успешно!");
+                setModals({ ...modals, edit: false })
                 setCategory({
                     title: '',
                     is_active: true
@@ -43,10 +52,10 @@ const CreateCategory = ({ modals, setModals }) => {
   }
 
   return (
-    <Modal open={modals.create_category} onClose={() => setModals({ ...modals, create_category: false })} className='my-auto'>
+    <Modal open={modals.edit} onClose={() => setModals({ ...modals, edit: false })} className='my-auto'>
         <Modal.Header>
             <Modal.Title>
-                <p className='text-lg font-bold font-inter'>Создание категории</p>
+                <p className='text-lg font-bold font-inter'>Редактирование категории</p>
             </Modal.Title>
         </Modal.Header>
         <Modal.Body className='flex flex-col gap-y-5'>
@@ -66,10 +75,10 @@ const CreateCategory = ({ modals, setModals }) => {
             </div>
         </Modal.Body>
         <Modal.Footer className='flex justify-center'>
-            <Button width='385px' onClick={onSubmit}>Создать</Button>
+            <Button width='385px' onClick={onSubmit}>Сохранить</Button>
         </Modal.Footer>
     </Modal>
   )
 }
 
-export default CreateCategory
+export default EditCategory

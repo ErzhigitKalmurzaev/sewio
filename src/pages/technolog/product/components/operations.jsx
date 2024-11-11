@@ -1,12 +1,22 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import OperationBlock from './../../../../components/shared/product/operationBlock';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import OperationBlock from '../../../../components/shared/product/operationBlock';
 import Button from '../../../../components/ui/button';
 import CreateOperationModal from './modals/createOperationModal';
+import { getRankList } from '../../../../store/technolog/rank';
+import { getEquipmentList } from '../../../../store/technolog/equipment';
 
-const EditOperations = ({ operations }) => {
+const EditOperations = ({ operations, id_product }) => {
+
+  const { rank_list } = useSelector(state => state.rank);
+  const { equipment_list } = useSelector(state => state.equipment);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(!rank_list) dispatch(getRankList());
+    if(!equipment_list) dispatch(getEquipmentList());
+  }, [])
 
   const [modals, setModals] = useState({ create: false, edit: false });
 
@@ -20,12 +30,13 @@ const EditOperations = ({ operations }) => {
 
         <div className="flex flex-col gap-y-6">
           {
-            operations.length > 0 ?
-            operations.map((operation, index) => (
+            operations?.length > 0 ?
+            operations?.map((operation, index) => (
               <OperationBlock
                 key={index}
                 operation={operation}
                 index={index}
+                id_product={id_product}
               />
             ))
             :
@@ -35,7 +46,7 @@ const EditOperations = ({ operations }) => {
       </div>
 
       {/* Modals */}
-      <CreateOperationModal modals={modals} setModals={setModals}/>
+      <CreateOperationModal modals={modals} setModals={setModals} id_product={id_product}/>
     </div>
   )
 }

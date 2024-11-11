@@ -5,8 +5,8 @@ import styled from '@emotion/styled'
 const Button = ({ variant = "default", active, disabled, type, sx, loading, children, width, onClick, icon, ...props }) => {
     const VARIANTS = {
         default: {
-            padding: "0 12px",
-            height: "35px",
+            padding: "0 10px",
+            height: "33px",
             background: "#2F4F4F",
             color: "white",
             fontSize: "13px",
@@ -14,7 +14,7 @@ const Button = ({ variant = "default", active, disabled, type, sx, loading, chil
             fontFamily: "Inter",
             textTransform: 'capitalize',
             border: "1px solid #2F4F4F",
-            borderRadius: "8px",
+            borderRadius: "6px",
             ":hover": {
                 transition: "0.5s all ease",
                 color: "#2F4F4F",
@@ -50,15 +50,16 @@ const Button = ({ variant = "default", active, disabled, type, sx, loading, chil
             },
         },
         red: {
-            padding: "0px 15px",
-            height: "35px",
+            padding: "0px 10px",
+            height: "33px",
             background: "#EB5656",
             color: "white",
-            fontSize: "14px",
-            fontWeight: "500",
+            fontSize: "13px",
+            fontWeight: "400",
+            fontFamily: "Inter",
             textTransform: 'capitalize',
             border: "1px solid #EB5656",
-            borderRadius: "8px",
+            borderRadius: "6px",
             ":hover": {
                 transition: "0.5s all ease",
                 color: "#EB5656",
@@ -71,12 +72,13 @@ const Button = ({ variant = "default", active, disabled, type, sx, loading, chil
             }
         },
         blue: {
-            padding: "0px 15px",
-            height: "35px",
+            padding: "0px 10px",
+            height: "33px",
             background: "#4682B4",
             color: "white",
-            fontSize: "14px",
-            fontWeight: "500",
+            fontSize: "13px",
+            fontFamily: "Inter",
+            fontWeight: "400",
             textTransform: 'capitalize',
             border: "1px solid #4682B4",
             borderRadius: "8px",
@@ -92,8 +94,8 @@ const Button = ({ variant = "default", active, disabled, type, sx, loading, chil
             }
         },
         white: {
-            padding: "0px 12px",
-            height: "35px",
+            padding: "0px 10px",
+            height: "33px",
             background: "white",
             color: "#2F4F4F",
             fontSize: "13px",

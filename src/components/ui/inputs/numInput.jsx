@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
-const NumInput = ({ label, id, value = "", onChange, placeholder, required, error, errorTitle }) => {
+const NumInput = ({ label, id, value = "", onChange, placeholder, required, error, errorTitle, disabled = false }) => {
   const [inputValue, setInputValue] = useState(value);
 
   const formatNumber = (num) => {
@@ -29,9 +29,10 @@ const NumInput = ({ label, id, value = "", onChange, placeholder, required, erro
         type="text"
         value={inputValue}
         onChange={handleChange}
+        disabled={disabled}
         placeholder={placeholder}
       />
-      <p className='text-red text-xs font-inter mt-1'>
+      <p className='text-redd text-xs font-inter mt-1'>
           {error && (errorTitle ? errorTitle : '(Заполните поле правильно!)')}
       </p>
     </StyledDiv>

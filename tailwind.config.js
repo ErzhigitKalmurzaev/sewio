@@ -10,7 +10,7 @@ module.exports = {
         'fprimary': "#4E5564",
         'sprimary': '#40444D',
         'borderGray': 'rgba(208, 213, 221, 1)',
-        'red': '#E53E3E',
+        'redd': '#E53E3E',
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'], // Добавляем шрифт Inter

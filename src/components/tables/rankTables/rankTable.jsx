@@ -1,14 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Button } from 'rsuite';
+import { Table } from 'rsuite';
 
 import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const RankTable = ({ data, setModals, modals, setEditRank }) => {
-
-  const navigate = useNavigate();
+const RankTable = ({ data, setModals, modals, setEditRank, rank_list_status }) => {
 
   const editRank = (data) => {
     setModals({ ...modals, edit: true})
@@ -19,6 +17,7 @@ const RankTable = ({ data, setModals, modals, setEditRank }) => {
     <div>
         <Table
             height={600}
+            loading={rank_list_status === 'loading'}
             data={data}
             className='rounded-xl'
         >

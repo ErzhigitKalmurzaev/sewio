@@ -92,7 +92,7 @@ const Discharge = () => {
         </div>
 
         <div className='mt-3'>
-            <RankTable data={rank_list} setModals={setModals} modals={modals} setEditRank={setEditRank} />
+            <RankTable data={rank_list} setModals={setModals} modals={modals} setEditRank={setEditRank} rank_list_status={rank_list_status} />
         </div>
 
         <Modal open={modals.create} onClose={() => setModals({ ...modals, create: false })} className='my-auto'>

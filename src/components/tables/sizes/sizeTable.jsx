@@ -6,20 +6,21 @@ import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const SizeTable = ({ data, setModals, modals, setEditRank }) => {
+const SizeTable = ({ data, setModals, modals, setEditSize, size_category_list_status }) => {
 
-    const editRank = (data) => {
+    const editSize = (data) => {
         setModals({ ...modals, edit: true})
-        setEditRank(data)
-      }
+        setEditSize(data)
+    }
 
     return (
         <div>
         <Table
-                height={600}
-                data={data}
-                className='rounded-xl'
-            >
+            height={600}
+            loading={size_category_list_status === 'loading'}
+            data={data}
+            className='rounded-xl'
+        >
                 <Column width={90} align="center" fixed>
                     <HeaderCell>ID</HeaderCell>
                     <Cell dataKey="id" />
@@ -64,7 +65,7 @@ const SizeTable = ({ data, setModals, modals, setEditRank }) => {
                     <Cell style={{ padding: '6px' }}>
                         {rowData => (
                             <div className='flex items-center px-3 py-1 cursor-pointer'>
-                                <Pencil onClick={() => editRank(rowData)}/>
+                                <Pencil onClick={() => editSize(rowData)}/>
                             </div>
                         )}
                     </Cell>

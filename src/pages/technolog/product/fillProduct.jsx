@@ -4,7 +4,9 @@ import EditMainInfo from './components/editMainInfo';
 import BackDrop from '../../../components/ui/backdrop';
 import { useParams } from 'react-router-dom';
 import { getProductById } from '../../../store/technolog/product';
-import EditOperations from './components/editOperations';
+import EditOperations from './components/operations';
+import Combinations from './components/combinations';
+import ProductImages from './components/shared/productImages';
 
 const FillProduct = () => {
 
@@ -15,19 +17,26 @@ const FillProduct = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(getProductById({ id }));
+    setLoading(true)
+    dispatch(getProductById({ id }))
+      .then(res => {
+        setLoading(false)
+    })
   }, []);
 
   return (
     <div>
         {
-            product_status === 'loading' && <BackDrop open={loading}/>
+            loading && <BackDrop open={loading}/>
         }
         {
             product_status === 'success' && 
             <div className='flex flex-col gap-y-6'>
+
                 <EditMainInfo product={product} setLoading={setLoading}/>
-                <EditOperations operations={product.operations} />
+                <ProductImages id_product={id}/>
+                <Combinations combinations={product.combinations} operations={product.operations} id_product={id}/>
+                <EditOperations operations={product.operations} id_product={id} />
             </div>
         }
     </div>

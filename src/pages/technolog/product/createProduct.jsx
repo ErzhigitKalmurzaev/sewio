@@ -69,7 +69,8 @@ const CreateProduct = () => {
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
             setLoading(false);
-            navigate(`${res.payload.data.id}`)
+            console.log(res)
+            navigate(`/crm/product/${res.payload?.id}`)
           }
         })
     } else {

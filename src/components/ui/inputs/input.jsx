@@ -95,7 +95,7 @@ const Input = ({
             <Close onClick={() => setIsOpen(!isOpen)} />
           ))}
       </div>
-      <p className='text-red text-xs font-inter mt-1'>
+      <p className='text-redd text-xs font-inter mt-1'>
           {error && (errorTitle ? errorTitle : '(Заполните поле правильно!)')}
       </p>
     </StyledDiv>

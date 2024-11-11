@@ -1,63 +1,68 @@
 import React, { useState } from 'react'
 import Input from '../../ui/inputs/input'
+import NumInput from '../../ui/inputs/numInput'
 import Select from '../../ui/inputs/select'
-import { Tabs } from 'rsuite'
-import MaterialBlock from './materialBlock'
-import { dischargeDatas } from '../../../utils/selectDatas/productDatas'
-import NewMaterial from '../../modals/product/newMaterial'
-import Button from '../../ui/button'
+import { Toggle } from 'rsuite'
+import { useSelector } from 'react-redux'
+import ShowMaterialActions from '../../../pages/technolog/product/components/shared/showMaterialActions'
 
-const OperationTabs = ({ newOperation, setNewOperation }) => {
+const OperationTabs = ({ operation }) => {
 
-  const [modals, setModals] = useState({ newMaterial: false });
-  const [active_key, setActiveKey] = useState('s');
-
-  const getValue = (e, index) => {
-    const { name, value } = e.target;
-    const newSizes = [...newOperation.sizes];
-    newSizes[index][name] = value;
-    setNewOperation({ ...newOperation, sizes: newSizes });
-  }
-
+  const { rank_list } = useSelector(state => state.rank);
+  const { equipment_list } = useSelector(state => state.equipment);
+   
   return (
-    <div className='flex w-full'>
-        <Tabs style={{ width: '100%' }} defaultActiveKey={'s'} onSelect={key => setActiveKey(key)}>
-            {
-                newOperation.sizes.map((item, index) => (
-                    <Tabs.Tab eventKey={item.size} title={item.size}>
-                        <div className='flex flex-col gap-y-4'>
-                            <div className='flex gap-x-6'>
-                                <Input type="text" name='time' label="Время (сек)" placeholder="Введите время" onChange={(e) => getValue(e, index)} value={item.time} />
-                                <Select label="Разряд" placeholder="Выберите разряд" data={dischargeDatas} value={item.rank} onChange={(e) => getValue({ target: { name: 'rank', value: e }}, index)}/>
-                            </div>
-                            <div className='flex flex-col gap-y-2'>
-                                <p className='font-inter text-base font-semibold'>Сырье</p>
-                                <div className='flex flex-col gap-y-4'>
-                                    {
-                                        item.materials.length > 0 && 
-                                        item.materials.map((item, index) => (
-                                            <MaterialBlock material={item} key={index}/>
-                                        ))
-                                    }
-                                </div>
-                                <div>
-                                    <Button onClick={() => setModals({ ...modals, newMaterial: true })}>+ Добавить сырье</Button>
-                                </div>
-                            </div>
-                        </div>
-                    </Tabs.Tab>
-                ))
-            }
-        </Tabs>
-
-        <NewMaterial 
-            open={modals.newMaterial}
-            modals={modals}
-            setModals={setModals}
-            setNewOperation={setNewOperation}
-            newOperation={newOperation}
-            active_key={active_key}
-        />
+    <div className='flex flex-col gap-y-3'>
+        <div className='flex gap-x-3 justify-between'>
+            <Input 
+                type='text'
+                label="Название"
+                value={operation.title}
+                disabled={true}
+            />
+            <NumInput
+                label="Время"
+                value={operation.time || 0}
+                disabled={true}
+            />
+            <NumInput
+                label="Стоимость"
+                value={operation.price}
+                disabled={true}
+            />
+        </div>
+        {
+            rank_list && equipment_list &&
+            <div className='flex gap-x-3'>
+                <Select
+                    label='Разряд'
+                    data={rank_list}
+                    labelKey='title'
+                    valueKey='id'
+                    value={operation.rank}
+                    disabled={true}
+                />
+                <Select
+                    label='Оборудование'
+                    data={equipment_list}
+                    labelKey='title'
+                    valueKey='id'
+                    value={operation.equipment}
+                    disabled={true}
+                />
+            </div>
+        }
+        <div className='my-3'>
+            <Toggle 
+                checked={operation?.is_active}
+                disabled={true}
+            >
+                Активный
+            </Toggle>
+        </div>
+        <div>
+            <ShowMaterialActions operation={operation}/>
+        </div>
     </div>
   )
 }

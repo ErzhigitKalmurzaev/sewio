@@ -11,8 +11,11 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '../../store/auth/auth';
+import { useNavigate } from 'react-router-dom';
 
 const UserMenu = () => {
+
+    const navigate = useNavigate()
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -29,11 +32,10 @@ const UserMenu = () => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
-        setAnchorEl(null);
+        localStorage.removeItem('sewio_token');
+        navigate('/')
     };
-
-    console.log(me_info)
-
+    
   return (
     <div>
         <Tooltip title="Account settings">
@@ -91,23 +93,32 @@ const UserMenu = () => {
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
             <MenuItem onClick={handleClose}>
-                <Avatar /> Profile
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-                <Avatar /> My account
+                <div className='flex flex-col gap-y-4'>
+                    <div className='flex items-center gap-x-2'>
+                        {
+                            me_info?.image ? 
+                                <Avatar size='lg' alt={me_info?.first_name} src={me_info?.image}/>
+                                    :
+                                <Avatar size='md'>{me_info?.first_name?.length > 0 ? me_info?.first_name[0] : ''}</Avatar>
+                        }
+                        <div className='flex flex-col gap-y-0'>
+                            <p className='text-sm font-semibold font-inter leading-3'>{me_info?.user?.username}</p>
+                            <p className='text-sm font-inter leading-3'>{me_info?.name + ' ' + me_info?.surname}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p className='text-[13px] font-inter'>Уровень: {me_info?.rank?.title}</p>
+                        <p className='text-[13px] font-inter'>Телефон: {me_info?.phone}</p>
+                        <p className='text-[13px] font-inter'>Email: {me_info?.email}</p>
+                    </div>
+                </div>
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleClose}>
                 <ListItemIcon>
-                    <Settings fontSize="small" />
-                </ListItemIcon>
-                Settings
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-                <ListItemIcon>
                     <Logout fontSize="small" />
                 </ListItemIcon>
-                Logout
+                Выйти
             </MenuItem>
         </Menu>
         </Tooltip>

@@ -1,18 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '../../ui/button';
 import OperationTabs from './operationTabs';
 import { ChevronDown } from 'lucide-react';
+import EditOperationModal from '../../../pages/technolog/product/components/modals/editOperation';
+import { useDispatch } from 'react-redux';
+import { deactivateOperationById, getProductById } from '../../../store/technolog/product';
+import { toast } from 'react-toastify';
+import DeleteOperationModal from '../../../pages/technolog/product/components/modals/deleteOperationModal';
 
-const OperationBlock = ({ operation, index }) => {
-  const [collapse, setCollapse] = React.useState(false);
+const OperationBlock = ({ operation, index, id_product }) => {
+
+  const dispatch = useDispatch();
+
+  const [collapse, setCollapse] = useState(false);
+  const [modals, setModals] = useState({ edit: false, delete: false })
+
+  const activateProduct = () => {
+
+  }
 
   return (
-    <div className='flex flex-col gap-y-3 bg-white py-4 px-6 rounded-lg'>
+    <div className={`flex flex-col gap-y-3 py-4 px-6 rounded-lg ${operation.is_active ? 'bg-white' : 'bg-red-100'}`}>
       <div className={`flex justify-between items-center`}>
-        <p className='text-base font-semibold font-inter'>Операция: {operation.name}</p>
+        <p className='text-base font-semibold font-inter'>Операция: {operation.title}</p>
         <div className='flex gap-x-3'>
-          <Button variant='red'>Удалить</Button>
-          <Button>Редактировать</Button>
+          {
+            operation.is_active ?
+            <Button variant='red' onClick={() => setModals({ ...modals, delete: true })}>Удалить</Button>
+            :
+            <Button onClick={activateProduct}>Активировать</Button>
+          }
+          <Button onClick={() => setModals({ ...modals, edit: true })}>Редактировать</Button>
           <Button width='130px' variant='notHover' onClick={() => setCollapse(!collapse)}>
             {collapse ? 'Развернуть' : 'Свернуть'}
             <ChevronDown
@@ -24,15 +42,20 @@ const OperationBlock = ({ operation, index }) => {
       </div>
 
       {/* Контейнер для плавного сворачивания */}
-      {/* <div
-        className={`overflow-hidden transition-[max-height] ease-in-out duration-700 ${
+      <div
+        className={`overflow-hidden mt-3 transition-[max-height] ease-in-out duration-700 ${
           collapse ? 'max-h-0' : 'max-h-screen'
         }`}
-      >
+        >
         <div className='flex flex-col gap-y-4'>
-          <OperationTabs newOperation={operation} setNewOperation={setNewProduct} />
+          <OperationTabs operation={operation} index={index} />
         </div>
-      </div> */}
+      </div>
+
+      {/* Modals */}
+      <EditOperationModal modals={modals} setModals={setModals} operation={operation} />
+      <DeleteOperationModal modals={modals} setModals={setModals} operation={operation} id_product={id_product}/>
+
     </div>
   );
 };

@@ -7,26 +7,27 @@ import { getRankList } from '../../../../../store/technolog/rank'
 import { getEquipmentList } from '../../../../../store/technolog/equipment'
 import NumInput from '../../../../../components/ui/inputs/numInput'
 import MaterialActions from '../shared/materialActions'
-import { createOperation, getProductById } from '../../../../../store/technolog/product'
+import { createOperation, editOperationById } from '../../../../../store/technolog/product'
 import { toast } from 'react-toastify'
 import Button from '../../../../../components/ui/button'
+import MaterialActionsEdit from '../shared/materialActionsEdit'
 
-const CreateOperationModal = ({ modals, setModals, id_product }) => {
+const EditOperationModal = ({ modals, setModals, operation }) => {
 
   const dispatch = useDispatch();
 
   const { rank_list } = useSelector(state => state.rank)
   const { equipment_list } = useSelector(state => state.equipment)
 
-  const [newOperation, setNewOperation] = useState({
-    title: '',
-    time: '',
-    price: '',
-    equipment: '',
-    rank: '',
-    is_active: true,
-    nomenclature: Number(id_product),
-    op_noms: []
+  const [editOperation, setEditOperation] = useState({
+    title: operation.title,
+    time: operation.time,
+    price: operation.price,
+    equipment: operation.equipment,
+    rank: operation.rank,
+    is_active: operation.is_active,
+    nomenclature: operation.nomenclature,
+    op_noms: operation.op_noms
   })
   const [errors, setErrors] = useState({
     title: false,
@@ -38,25 +39,32 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
     op_noms: false
   })
 
-  useEffect(() => {
-    if(!rank_list) {
-      dispatch(getRankList())
-    }
-    if(!equipment_list) {
-      dispatch(getEquipmentList())
-    }
-  }, [])
+//   const getOps = (ops) => {
+//     if(!ops) return []
+//     return ops.map(op => {
+//         (
+//             {
+//                 consumables: op.consumables.map(item => {({
+//                     size: item.size.id,
+//                     consumption: item.consumption,
+//                     waste: item.waste
+//                 })}),
+//                 nomenclature: op.nomenclature
+//             }
+//         )
+//     })
+//   }
 
   const getValue = (e) => {
     const { name, value } = e.target;
     if(name === 'price' || name === 'time') {
-      setNewOperation({
-        ...newOperation,
+      setEditOperation({
+        ...editOperation,
         [name]: Number(value)
       })
     } else {
-      setNewOperation({
-        ...newOperation,
+        setEditOperation({
+        ...editOperation,
         [name]: value
       })
     }
@@ -64,11 +72,11 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
 
   const validateFields = () => {
     const newErrors = {
-      title: !newOperation.title,
-      time:  !newOperation.time,
-      price: !newOperation.price,
-      equipment: !newOperation.equipment,
-      rank: !newOperation.rank,
+      title: !editOperation.title,
+      time:  !editOperation.time,
+      price: !editOperation.price,
+      equipment: !editOperation.equipment,
+      rank: !editOperation.rank,
     };
 
     setErrors(newErrors);
@@ -76,27 +84,46 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
     return !Object.values(newErrors).some((error) => error === true);
   }
 
+  const reductPostData = (datas) => {
+    let data = {...datas}
+    let ops = data.op_noms.map(op => 
+        op.id ? (
+            {
+                consumables: op.consumables.map(item => ({
+                    size: item.size.id,
+                    consumption: item.consumption,
+                    waste: item.waste
+                })),
+                nomenclature: op.nomenclature.id
+            }
+        ) : op
+    )
+    data = {
+        ...data,
+        op_noms: ops
+    }
+  }
+
   const onSubmit = () => {
     if(validateFields()) {
-      dispatch(createOperation(newOperation))
+      const trueData = reductPostData(editOperation)
+      dispatch(editOperationById({ id: operation.id, props: trueData}))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
-            toast("Операция создана успешно!");
+            toast("Операция изменена успешно!");
             setModals({ ...modals, create: false })
-            dispatch(getProductById({ id: id_product }))
           }
         })
-      console.log(newOperation)
     } else {
       toast("Заполните все поля!");
     }
   }
 
   return (
-    <Modal open={modals.create} onClose={() => setModals({ ...modals, create: false})} size='lg' overflow={true}>
+    <Modal open={modals.edit} onClose={() => setModals({ ...modals, edit: false})} size='lg' overflow={true}>
         <form>
           <Modal.Header>
-            <Modal.Title>Создание операции</Modal.Title>
+            <Modal.Title>Редактирование операции</Modal.Title>
           </Modal.Header>
           <Modal.Body>
               <div className='flex flex-col gap-y-3'>
@@ -106,21 +133,21 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
                       type='text'
                       label="Название"
                       placeholder="Введите название"
-                      value={newOperation.title}
+                      value={editOperation.title}
                       onChange={getValue}
                       error={errors.title}
                     />
                     <NumInput
                       label="Время"
                       placeholder="Введите время"
-                      value={newOperation.time}
+                      value={editOperation.time}
                       onChange={e => getValue({ target: { value: e, name: 'time' } })}
                       error={errors.time}
                     />
                     <NumInput
                       label="Стоимость"
                       placeholder="Введите стоимость"
-                      value={newOperation.price}
+                      value={editOperation.price}
                       onChange={e => getValue({ target: { value: e, name: 'price' } })}
                       error={errors.price}
                     />
@@ -130,6 +157,7 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
                       label='Разряд'
                       placeholder='Выберите разряд' 
                       data={rank_list} 
+                      value={editOperation.rank}
                       error={errors.rank}
                       labelKey='title'
                       valueKey='id' 
@@ -139,6 +167,7 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
                       label='Оборудование'
                       placeholder='Выберите оборудование' 
                       data={equipment_list} 
+                      value={editOperation.equipment}
                       error={errors.equipment}
                       labelKey='title'
                       valueKey='id' 
@@ -147,16 +176,16 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
                   </div>
                   <div className='my-3'>
                     <Toggle 
-                      checked={newOperation?.is_active}
+                      checked={editOperation?.is_active}
                       onChange={(e) => getValue({ target: { value: e, name: 'is_active' }})}
                     >
                       Активный
                     </Toggle>
                   </div>
                   <div>
-                    <MaterialActions 
-                      newOperation={newOperation} 
-                      setNewOperation={setNewOperation}
+                    <MaterialActionsEdit 
+                      newOperation={editOperation} 
+                      setNewOperation={setEditOperation}
                     />
                   </div>
               </div>
@@ -172,4 +201,4 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
   )
 }
 
-export default CreateOperationModal
+export default EditOperationModal

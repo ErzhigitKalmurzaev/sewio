@@ -4,8 +4,10 @@ import { toast } from 'react-toastify';
 import Input from '../../../../components/ui/inputs/input';
 import { Toggle } from 'rsuite';
 import Button from '../../../../components/ui/button';
-import { MoveRight } from 'lucide-react';
+import { MoveRight, Save } from 'lucide-react';
 import { styled } from '@mui/material';
+import { editProductById } from '../../../../store/technolog/product';
+import BackDrop from '../../../../components/ui/backdrop';
 
 const EditMainInfo = ({ product, setLoading }) => {
 
@@ -42,17 +44,18 @@ const EditMainInfo = ({ product, setLoading }) => {
   }
 
   const onSubmit = () => {
-    // if(validateFields()) {
-    //   setLoading(true)
-    //   dispatch(createProduct(editProduct))
-    //     .then(res => {
-    //       if(res.meta.requestStatus === 'fulfilled') {
-    //         setLoading(true);
-    //       }
-    //     })
-    // } else {
-    //   toast("Заполните все поля!")
-    // }
+    if(validateFields()) {
+      setLoading(true)
+      dispatch(editProductById({ id: product.id, props: editProduct}))
+        .then(res => {
+          if(res.meta.requestStatus === 'fulfilled') {
+            setLoading(false);
+            toast("Основная информация о товаре успешно изменена!");
+          }
+        })
+    } else {
+      toast("Заполните все поля!")
+    }
   }
 
   return (
@@ -84,12 +87,12 @@ const EditMainInfo = ({ product, setLoading }) => {
               Активный
             </Toggle>
           </div>
-          <div className="w-3/6 flex justify-between items-end">
+          <div className="w-3/6 flex justify-between items-end gap-x-3">
             <p className="font-inter text-semibold">
-              Для создания товара сначала заполните основную информацию, и нажмите кнопку "Далее"
+              Для редактирования основной информации о товаре, нажмите кнопку "Сохранить"
             </p>
             <Button width='180px' onClick={onSubmit}>
-                Далее <MoveRight className="ml-2" />
+                Сохранить <Save className="ml-2" size={18} />
             </Button>
           </div>
         </div>

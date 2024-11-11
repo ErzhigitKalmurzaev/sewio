@@ -7,13 +7,13 @@ import Button from '../../../../../components/ui/button';
 import MaterialBlock from '../../../../../components/shared/product/materialBlock';
 import SelectMaterial from '../modals/selectMaterial';
 
-const MaterialActions = ({ newOperation, setNewOperation, mainModals, setMainModals }) => {
+const MaterialActionsEdit = ({ newOperation, setNewOperation, mainModals, setMainModals }) => {
 
   const { size_category_list } = useSelector(state => state.size);
 
   const dispatch = useDispatch();
 
-  const [selectSize, setSelectSize] = useState(null);
+  const [sizes, setSizes] = useState(null);
   const [activeKey, setActiveKey] = useState('');
   const [op_nom, setOp_nom] = useState([]);
   const [modals, setModals] = useState({ newMaterial: false, editMaterial: false })
@@ -22,13 +22,18 @@ const MaterialActions = ({ newOperation, setNewOperation, mainModals, setMainMod
     if(!size_category_list.length) dispatch(getSizeCategoryList());
   }, [])
 
-  const handleSelectCategorySize = (e) => {
-      const index = size_category_list.findIndex(item => item.id === e);
-      setSelectSize(size_category_list[index]);
-      setActiveKey(size_category_list[index].sizes[0].id);
-      const op_noms_arr = size_category_list[index].sizes.map(item => (
+  useEffect(() => {
+    const sizes_arr = newOperation?.op_noms[0]?.consumables?.map(item => item.size);
+    setSizes(sizes_arr);
+    setActiveKey(sizes_arr[0].id);
+    
+    handleSelectCategorySize(sizes_arr)
+  }, [])
+
+  const handleSelectCategorySize = (sizes_arr) => {
+      const op_noms_arr = sizes_arr.map(item => (
         {
-          size: item.id,
+          size: item,
           consumption: '',
           waste: ''
         }
@@ -40,7 +45,7 @@ const MaterialActions = ({ newOperation, setNewOperation, mainModals, setMainMod
   }
 
   const hanleClearOp_nom = () => {
-    const op_noms_arr = selectSize.sizes.map(item => (
+    const op_noms_arr = sizes.map(item => (
       {
         size: item.id,
         consumption: '',
@@ -55,24 +60,14 @@ const MaterialActions = ({ newOperation, setNewOperation, mainModals, setMainMod
 
   return (
     <div className='flex flex-col gap-y-8'>
-      <div className='w-1/2'>
-        <Select
-            label='Вариант размера'
-            placeholder='Выберите вариант размера' 
-            data={size_category_list}
-            labelKey='title'
-            valueKey='id' 
-            onChange={e => handleSelectCategorySize(e)}
-        />
-      </div>
       {
-        selectSize && 
+        sizes && 
         <div className='flex flex-col gap-y-3'>
           <div className='flex justify-between'>
               <div className='w-2/3'>
-                      <Tabs style={{ width: '100%' }} defaultActiveKey={selectSize.sizes[0].id} onSelect={key => setActiveKey(key)}>
+                      <Tabs style={{ width: '100%' }} defaultActiveKey={sizes[0].id} onSelect={key => setActiveKey(key)}>
                           {
-                              selectSize?.sizes?.map((item, index) => (
+                              sizes?.map((item, index) => (
                                   <Tabs.Tab eventKey={item.id} title={item.title} key={index}/>
                               ))
                           }
@@ -101,16 +96,15 @@ const MaterialActions = ({ newOperation, setNewOperation, mainModals, setMainMod
         setModals={setModals}
         setNewOperation={setNewOperation}
         newOperation={newOperation}
-        sizes={selectSize?.sizes}
+        sizes={sizes}
         mainModals={mainModals}
         setMainModals={setMainModals}
         op_nom={op_nom}
         setOp_nom={setOp_nom}
-        hanleClearOp_nom={hanleClearOp_nom
-      }
+        hanleClearOp_nom={hanleClearOp_nom}
       />
     </div>
   )
 }
 
-export default MaterialActions
+export default MaterialActionsEdit

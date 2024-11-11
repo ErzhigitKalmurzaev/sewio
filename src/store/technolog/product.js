@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "../../api/axios";
+import axiosInstance, { ImageUploadingFetch } from "../../api/axios";
 
 export const getProductList = createAsyncThunk(
     'technologProduct/getProductList',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get('products');
+            const { data } = await axiosInstance.get('product/list/');
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -25,12 +25,134 @@ export const createProduct = createAsyncThunk(
     }
 )
 
+export const editProductById = createAsyncThunk(
+    'technologProduct/editProductById',
+    async ({ id, props}, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.put(`product/crud/${id}/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+
 export const getProductById = createAsyncThunk(
     'technologProduct/getProductById',
     async ({ id }, { rejectWithValue }) => {
         try {
-            const res = await axiosInstance.get(`product/crud/${id}/`);
+            const res = await axiosInstance.get(`product/detail/${id}/`);
             return res.data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const createOperation = createAsyncThunk(
+    'technologProduct/createOperation',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.post('product/operation/crud/', props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const editOperationById = createAsyncThunk(
+    'technologProduct/editOperationById',
+    async ({ id, props }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.patch(`product/operation/crud/${id}/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const deactivateOperationById = createAsyncThunk(
+    'technologProduct/deactivateOperationById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.delete(`product/operation/crud/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const createCombination = createAsyncThunk(
+    'technologProduct/createCombination',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.post('product/combination/crud/', props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const editCombinationById = createAsyncThunk(
+    'technologProduct/editCombinationById',
+    async ({ id, props }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.patch(`product/combination/crud/${id}/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const deleteCombinationById = createAsyncThunk(
+    'technologProduct/deleteCombinationById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.delete(`product/combination/crud/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getProductImages = createAsyncThunk(
+    'technologProduct/getProductImages',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`product/${id}/images/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const createProductImages = createAsyncThunk(
+    'technologProduct/createProductImages',
+    async ({ props }, { rejectWithValue }) => {
+        try {
+            const formData = new FormData();
+
+            for (const key in props) {
+                if (key === "images" || key === 'delete_ids') {
+                    for (let i = 0; i < props[key].length; i++) {
+                        const item = props[key][i]
+                        formData.append(key, item)
+                    }
+                } else {
+                    formData.append(key, props[key])
+                }
+            }
+            console.log(formData)
+            const { data } = await ImageUploadingFetch.post(`product/images/crud`, formData);
+            return data;
         } catch (err) {
             return rejectWithValue(err)
         }
@@ -43,7 +165,9 @@ const TechnologProductSlice = createSlice({
         products_list: [],
         products_list_status: 'loading',
         product: {},
-        product_status: 'loading'
+        product_status: 'loading',
+        product_images: [],
+        product_images_status: 'loading',
     },
     reducers: {
 
@@ -66,6 +190,15 @@ const TechnologProductSlice = createSlice({
                 state.product = action.payload
             }).addCase(getProductById.rejected, (state) => {
                 state.product_status = 'error';
+            })
+            // ------------------------------------------
+            .addCase(getProductImages.pending, (state) => {
+                state.product_images_status = 'loading';
+            }).addCase(getProductImages.fulfilled, (state, action) => {
+                state.product_images_status = 'success';
+                state.product_images = action.payload
+            }).addCase(getProductImages.rejected, (state) => {
+                state.product_images_status = 'error';
             })
             // ------------------------------------------
     }

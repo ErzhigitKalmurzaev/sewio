@@ -1,7 +1,7 @@
 import React from 'react'
 import { SelectPicker } from 'rsuite'
 
-const Select = ({ width, label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false }) => {
+const Select = ({ width, label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false, disabled = false }) => {
   return (
     <div className={`${width ? `w-${width}` : 'w-full'} flex flex-col gap-y-1 z-0`}>
         <label style={{ fontSize: '13px', fontFamily: 'Inter', fontWeight: '400', color: 'rgba(52, 64, 84, 1)'}}>
@@ -17,8 +17,9 @@ const Select = ({ width, label, placeholder, data, onChange, error, required, la
             labelKey={labelKey ? labelKey : 'label'}
             valueKey={valueKey ? valueKey : 'value'}
             placeholder={placeholder}
+            disabled={disabled}
         />
-        <p className='text-red text-xs font-inter'>
+        <p className='text-redd text-xs font-inter'>
           {error && '(Заполните поле правильно!)'}
         </p>
     </div>

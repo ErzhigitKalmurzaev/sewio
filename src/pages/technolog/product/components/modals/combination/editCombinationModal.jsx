@@ -1,25 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal } from 'rsuite'
-import Input from '../../ui/inputs/input'
-import Checkbox from '../../ui/inputs/checkbox'
-import Button from '../../ui/button'
 import { useDispatch } from 'react-redux'
-import { createCombination, getProductById } from './../../../store/technolog/product';
 import { toast } from 'react-toastify'
-import { create } from '@mui/material/styles/createTransitions'
-import { get } from 'react-hook-form'
+import Input from '../../../../../../components/ui/inputs/input';
+import Checkbox from '../../../../../../components/ui/inputs/checkbox';
+import Button from '../../../../../../components/ui/button';
+import { editCombinationById, getProductById } from '../../../../../../store/technolog/product';
 
-const NewCombination = ({ modals, setModals, operations, id_product }) => {
+const EditCombinationModal = ({ modals, setModals, combination, operations, id_product }) => {
 
   const dispatch = useDispatch();
 
-  const [newCombination, setNewCombination] = useState({ nomenclature: Number(id_product), title: '', operations: [] })
+  const [newCombination, setNewCombination] = useState({ 
+    nomenclature: Number(id_product), 
+    title: combination.title, 
+    operations: combination?.operations?.map(op => op.id) || []
+  })
+
+  useEffect(() => {
+    setNewCombination({
+        nomenclature: Number(id_product), 
+        title: combination.title, 
+        operations: combination?.operations?.map(op => op.id) || []
+    })
+  }, [combination.title])
 
   const getOperation = (operation) => {
-    console.log(operation)
-    const findOper = newCombination.operations.find(oper => oper === operation.id);
+    console.log(operation, newCombination?.operations)
+    const findOper = newCombination?.operations?.find(oper => oper === operation.id);
     if(findOper) {
-        const opers = newCombination.operations.filter(oper => oper !== operation.id);
+        const opers = newCombination?.operations?.filter(oper => oper !== operation.id);
         setNewCombination({
             ...newCombination,
             operations: opers
@@ -27,7 +37,7 @@ const NewCombination = ({ modals, setModals, operations, id_product }) => {
     } else {
         setNewCombination({
             ...newCombination,
-            operations: [...newCombination.operations, operation.id]
+            operations: [...newCombination?.operations, operation.id]
         })
     }
   }
@@ -38,7 +48,7 @@ const NewCombination = ({ modals, setModals, operations, id_product }) => {
 
   const onSubmit = () => {
     if(validateFields()) {
-        dispatch(createCombination(newCombination))
+        dispatch(editCombinationById({ id: combination.id, props: newCombination }))
             .then(res => {
                 if(res.meta.requestStatus === 'fulfilled') {
                     toast('Комбинация создана успешно!');
@@ -52,7 +62,7 @@ const NewCombination = ({ modals, setModals, operations, id_product }) => {
   }
 
   return (
-    <Modal size={'md'} open={modals.create} onClose={() => setModals({ ...modals, create: false })}>
+    <Modal size={'md'} open={modals.edit} onClose={() => setModals({ ...modals, edit: false })}>
         <Modal.Header>
             <Modal.Title>
                 <p className='text-lg font-bold font-inter'>Создание комбинации</p>
@@ -62,7 +72,12 @@ const NewCombination = ({ modals, setModals, operations, id_product }) => {
         <Modal.Body>
             <div className='flex flex-col gap-y-4 px-3'>
                 <div>
-                    <Input type='text' label='Название' placeholder='Введите название' onChange={(e) => setNewCombination({ ...newCombination, title: e.target.value })} value={newCombination.name} />
+                    <Input 
+                        type='text' 
+                        label='Название' 
+                        placeholder='Введите название' 
+                        onChange={(e) => setNewCombination({ ...newCombination, title: e.target.value })} 
+                        value={newCombination.title} />
                 </div>
 
                 <div className='flex flex-col gap-y-3'>
@@ -90,7 +105,7 @@ const NewCombination = ({ modals, setModals, operations, id_product }) => {
 
         <Modal.Footer className='pt-3'>
             <div className='flex justify-center items-center gap-x-6'>
-                <Button width='200px' variant='white' onClick={() => setModals({ ...modals, create: false })}>Отмена</Button>
+                <Button width='200px' variant='white' onClick={() => setModals({ ...modals, edit: false })}>Отмена</Button>
                 <Button width='200px' onClick={onSubmit}>Готово</Button>
             </div>
         </Modal.Footer>
@@ -98,4 +113,4 @@ const NewCombination = ({ modals, setModals, operations, id_product }) => {
   )
 }
 
-export default NewCombination
+export default EditCombinationModal
