@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
-const NumInput = ({ label, id, value = "", onChange, placeholder, required, error, errorTitle, disabled = false }) => {
+const NumInput = ({ label, id, width, value = "", onChange, placeholder, required, error, errorTitle, disabled = false }) => {
   const [inputValue, setInputValue] = useState(value);
 
   const formatNumber = (num) => {
@@ -19,7 +19,7 @@ const NumInput = ({ label, id, value = "", onChange, placeholder, required, erro
   };
 
   return (
-    <StyledDiv>
+    <StyledDiv width={width}>
       <label htmlFor={id}>
         {label}
         {required && <span className="required"> *</span>}

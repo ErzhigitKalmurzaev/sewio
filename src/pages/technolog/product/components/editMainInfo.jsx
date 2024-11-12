@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
 import Input from '../../../../components/ui/inputs/input';
 import { Toggle } from 'rsuite';
@@ -8,19 +8,24 @@ import { MoveRight, Save } from 'lucide-react';
 import { styled } from '@mui/material';
 import { editProductById } from '../../../../store/technolog/product';
 import BackDrop from '../../../../components/ui/backdrop';
+import Select from '../../../../components/ui/inputs/select';
 
 const EditMainInfo = ({ product, setLoading }) => {
 
   const dispatch = useDispatch();
 
+  const { size_category_list } = useSelector(state => state.size)
+
   const [editProduct, setEditProduct] = useState({
     title: product?.title || '',
     vendor_code: product?.vendor_code || '',
+    category: product?.category || '',
     is_active: product?.is_active || true
   })
   const [errors, setErrors] = useState({
     title: false,
     vendor_code: false,
+    category: false,
     is_active: false
   })
 
@@ -35,7 +40,8 @@ const EditMainInfo = ({ product, setLoading }) => {
   const validateFields = () => {
     const newErrors = {
       title: !editProduct.title,
-      vendor_code: !editProduct.vendor_code
+      vendor_code: !editProduct.vendor_code,
+      category: !editProduct.category
     };
 
     setErrors(newErrors);
@@ -79,6 +85,16 @@ const EditMainInfo = ({ product, setLoading }) => {
               value={editProduct.vendor_code}
               onChange={getValue} 
               error={errors.vendor_code}
+            />
+            <Select
+              label="Категория размера"
+              placeholder="Выберите категорию размера"
+              data={size_category_list || []}
+              labelKey='title'
+              valueKey='id'
+              value={editProduct.category}
+              onChange={(e) => getValue({ target: { value: e, name: 'category' }})}
+              error={errors.category}
             />
             <Toggle
               checked={editProduct?.is_active}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, Placeholder, Toggle } from "rsuite";
 
 import MyBreadcrums from "../../../components/ui/breadcrums";
@@ -8,11 +8,13 @@ import Button from "./../../../components/ui/button";
 
 import styled from "@emotion/styled/macro";
 import { MoveRight, Trash2 } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { createProduct } from "../../../store/technolog/product";
 import BackDrop from "../../../components/ui/backdrop";
 import { useNavigate } from "react-router-dom";
+import Select from "../../../components/ui/inputs/select";
+import { getSizeCategoryList } from "../../../store/technolog/size";
 
 const CreateProduct = () => {
   const breadcrumbs = [
@@ -31,17 +33,25 @@ const CreateProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { size_category_list, size_category_list_status } = useSelector(state => state.size);
+
   const [loading, setLoading] = useState(false);
   const [newProduct, setNewProduct] = useState({
     title: '',
     vendor_code: '',
+    category: '',
     is_active: true
   })
   const [errors, setErrors] = useState({
     title: false,
     vendor_code: false,
+    category: false,
     is_active: false
   })
+
+  useEffect(() => {
+    dispatch(getSizeCategoryList());
+  }, [])
 
   const getValue = (e) => {
     const { name, value } = e.target;
@@ -54,7 +64,8 @@ const CreateProduct = () => {
   const validateFields = () => {
     const newErrors = {
       title: !newProduct.title,
-      vendor_code: !newProduct.vendor_code
+      vendor_code: !newProduct.vendor_code,
+      category: !newProduct.category,
     };
 
     setErrors(newErrors);
@@ -104,6 +115,15 @@ const CreateProduct = () => {
               value={newProduct.vendor_code}
               onChange={getValue} 
               error={errors.vendor_code}
+            />
+            <Select
+              label="Категория размера"
+              placeholder="Выберите категорию размера"
+              data={size_category_list || []}
+              labelKey='title'
+              valueKey='id'
+              onChange={(e) => getValue({ target: { value: e, name: 'category' }})}
+              error={errors.category}
             />
             <Toggle 
               checked={newProduct?.is_active}
