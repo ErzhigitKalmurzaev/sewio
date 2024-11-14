@@ -7,21 +7,23 @@ import Button from '../../../components/ui/button';
 import DataPicker from '../../../components/ui/inputs/dataPicker';
 import SelectUser from '../../../components/ui/inputs/selectUser';
 import { useDispatch, useSelector } from 'react-redux';
-import { createOrder, getOrderClientList, getOrderProductList } from '../../../store/technolog/order';
+import { createOrder, editOrderById, getOrderById, getOrderClientList, getOrderProductList } from '../../../store/technolog/order';
 import AddProductModal from './modals/addProductModal';
 import OrderProductInfo from './components/orderProductInfo';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getSizeCategoryList } from '../../../store/technolog/size';
 
-const OrderCreate = () => {
+const OrderEdit = () => {
   const breadcrumbs = [
     { label: 'Заказы', path: '/orders', active: false },
-    { label: 'Создание заказа', path: '/orders/create', active: true }
+    { label: 'Редактирование заказа', path: '', active: true }
   ];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
+
   const { client_list, client_list_status, product_list, product_list_status  } = useSelector(state => state.order);
   const { size_category_list } = useSelector(state => state.size);
 
@@ -43,6 +45,17 @@ const OrderCreate = () => {
     dispatch(getOrderClientList());
     dispatch(getOrderProductList());
     dispatch(getSizeCategoryList());
+    dispatch(getOrderById({ id}))
+        .then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+                setOrder({
+                    deadline: res.payload.deadline,
+                    client: res.payload.client,
+                    products: res.payload.products
+                });
+            }
+        })
+
   }, []);
 
   useEffect(() => {
@@ -72,18 +85,18 @@ const OrderCreate = () => {
 
   const onSubmit = () => {
     if(validateFields()) {
-      dispatch(createOrder({
-        ...order,
-        deadline: new Date(order.deadline.split('.').reverse().join('-')).toISOString()
-      })).then(res => {
-        if (res.meta.requestStatus === 'fulfilled') {
-          setOrder({...order, deadline: '', client: '', products: []});
-          setSelectedClient(null);
-          navigate(-1)
-        }
-      })
+        dispatch(editOrderById({ id, props: {
+            ...order,
+            deadline: new Date(order.deadline.split('.').reverse().join('-')).toISOString()
+          }})).then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+              setOrder({...order, deadline: '', client: '', products: []});
+              setSelectedClient(null);
+              navigate(-1)
+            }
+          })
     } else {
-      toast('Заполните все поля и выберите минимум 1 товар!');
+        toast('Заполните все поля и выберите минимум 1 товар!');
     }
   }
 
@@ -91,7 +104,7 @@ const OrderCreate = () => {
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs} />
-      <Title text="Создание заказа" />
+      <Title text={`Редактирование заказа #${id}`} />
 
       <div className='w-full flex gap-x-7'>
         <div className='w-1/2 flex flex-col gap-y-2 bg-white rounded-lg px-8 py-5'>
@@ -100,7 +113,6 @@ const OrderCreate = () => {
             label='Дата сдачи заказа'
             placeholder='Выберите дату'
             value={order.deadline}
-            error={error.deadline}
             onChange={e => getMainValue({ target: { name: 'deadline', value: e } })}
           />
           <SelectUser
@@ -109,7 +121,6 @@ const OrderCreate = () => {
             data={client_list || []}
             searchable={true}
             value={order.client}
-            error={error.client}
             onChange={e => getMainValue({ target: { name: 'client', value: e } })}
             valueKey='id'
             labelKey='name'
@@ -165,19 +176,19 @@ const OrderCreate = () => {
         />
       </div>
       <div className='flex justify-center'>
-        <Button width='250px' onClick={onSubmit}>Создать заказ</Button>
+        <Button width='250px' onClick={onSubmit}>Сохранить</Button>
       </div>
       <AddProductModal
         modals={modals}
         setModals={setModals}
         order={order}
+        size_category_list={size_category_list}
         setOrder={setOrder}
         products={product_list}
         status={product_list_status}
-        size_category_list={size_category_list}
       />
     </div>
   );
 };
 
-export default OrderCreate;
+export default OrderEdit;

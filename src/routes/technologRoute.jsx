@@ -21,6 +21,7 @@ import CreateClient from '../pages/technolog/clients/create/createClient'
 import EditClient from '../pages/technolog/clients/edit/editClient'
 import Sizes from '../pages/technolog/sizes/main'
 import FillProduct from '../pages/technolog/product/fillProduct'
+import OrderEdit from '../pages/technolog/orders/orderEdit'
 
 const TechnologRoute = () => {
   return (
@@ -48,6 +49,7 @@ const TechnologRoute = () => {
             <Route path="orders" element={<Outlet />}>
                 <Route path="" element={<Orders />} />
                 <Route path="create" element={<OrderCreate />} />
+                <Route path=":id" element={<OrderEdit />} />
             </Route>
             
             <Route path="product" element={<Outlet />}>

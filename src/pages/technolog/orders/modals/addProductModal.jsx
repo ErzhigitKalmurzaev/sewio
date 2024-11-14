@@ -6,12 +6,11 @@ import Button from '../../../../components/ui/button';
 import NumInput from '../../../../components/ui/inputs/numInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSizeCategoryList } from '../../../../store/technolog/size';
+import { toast } from 'react-toastify';
 
-const AddProductModal = ({ modals, setModals, setOrder, order, products, status }) => {
+const AddProductModal = ({ modals, setModals, setOrder, order, products, status, size_category_list }) => {
 
   const dispatch = useDispatch();
-
-  const { size_category_list } = useSelector(state => state.size);
 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,10 +20,6 @@ const AddProductModal = ({ modals, setModals, setOrder, order, products, status 
     price: '',
     amounts: []
   })
-
-  useEffect(() => {
-    dispatch(getSizeCategoryList());
-  }, [])
 
   const filteredProducts = products?.filter((product) =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -46,13 +41,29 @@ const AddProductModal = ({ modals, setModals, setOrder, order, products, status 
     })
   };
 
+  const validateFields = () => {
+    return product.nomenclature && product.amounts.every(item => item.amount > 0) && product.price
+  }
+
   const handleAddToOrder = () => {
-    setOrder({
+    if(validateFields()) {
+      setOrder({
         ...order,
         ['products']: [...order.products, product]
-    });
+      });
 
-    setModals({ ...modals, add: false})
+      setProduct({
+        nomenclature: '',
+        price: '',
+        amounts: []
+      })
+      setSelectedProduct(null);
+      setSizes([])
+
+      setModals({ ...modals, add: false})
+    } else {
+      toast('Заполните все поля!');
+    }
   };
 
   const getSizeValue = (e) => {
@@ -71,8 +82,6 @@ const AddProductModal = ({ modals, setModals, setOrder, order, products, status 
         })
     })
   }
-
-  const handleAddProduct = () => {}
 
   return (
     <Modal size='lg' open={modals.add} onClose={() => setModals({ ...modals, add: false })}>

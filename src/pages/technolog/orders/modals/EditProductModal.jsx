@@ -6,28 +6,38 @@ import Button from '../../../../components/ui/button';
 import NumInput from '../../../../components/ui/inputs/numInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSizeCategoryList } from '../../../../store/technolog/size';
+import { toast } from 'react-toastify';
 
-const EditProductModal = ({ modals, setModals, setOrder, order, products, status }) => {
-
-  const dispatch = useDispatch();
-
-  const { size_category_list } = useSelector(state => state.size);
+const EditProductModal = ({ modals, setModals, setOrder, order, products, editProd, setEditProd, size_category_list }) => {
 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sizes, setSizes] = useState([])
   const [product, setProduct] = useState({
-    nomenclature: '',
-    price: '',
-    amounts: []
+    nomenclature: editProd?.nomenclature,
+    price: editProd?.price,
+    amounts: editProd.amounts
   })
 
   useEffect(() => {
-    dispatch(getSizeCategoryList());
-  }, [])
+    setSelectedProduct({
+      id: editProd?.nomenclature
+    });
+    if(editProd?.nomenclature) {
+      setProduct({
+        nomenclature: editProd?.nomenclature,
+        price: Number(editProd?.price),
+        amounts: editProd?.amounts
+      })
+      const outerIndex = size_category_list.findIndex(outerObj =>
+        outerObj.sizes.some(innerObj => innerObj.id === editProd?.amounts[0]?.size)
+      );
+      setSizes(size_category_list[outerIndex]?.sizes);
+    }
+  }, [editProd])
 
   const filteredProducts = products?.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    product?.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSelectProduct = (selectedProduct) => {
@@ -46,13 +56,33 @@ const EditProductModal = ({ modals, setModals, setOrder, order, products, status
     })
   };
 
-  const handleAddToOrder = () => {
-    setOrder({
-        ...order,
-        ['products']: [...order.products, product]
-    });
+  const validateFields = () => {
+    return product.nomenclature && product.amounts.every(item => item.amount > 0) && product.price
+  }
 
-    setModals({ ...modals, add: false})
+  const handleAddToOrder = () => {
+    if(validateFields()) {
+      const newProducts = [...order?.products];
+      const index = newProducts?.findIndex(item => item.nomenclature === product?.nomenclature);
+      if(index !== -1) {
+        newProducts[index] = product;
+      } else {
+        newProducts.push(product);
+      }
+      setOrder({...order, products: newProducts});
+
+      setProduct({
+        nomenclature: '',
+        price: '',
+        amounts: []
+      })
+      setSelectedProduct(null);
+      setSizes([])
+
+      setModals({ ...modals, edit: false})
+    } else {
+      toast("Заполните все поля!");
+    }
   };
 
   const getSizeValue = (e) => {
@@ -60,11 +90,10 @@ const EditProductModal = ({ modals, setModals, setOrder, order, products, status
     setProduct({
         ...product,
         amounts: product.amounts.map(amount => {
-          // Проверяем, соответствует ли `id` нужному объекту
           if (amount.size === id) {
             return {
               ...amount,
-              amount: Number(value) // Обновляем количество в нужном объекте
+              amount: Number(value)
             };
           }
           return amount;
@@ -72,12 +101,22 @@ const EditProductModal = ({ modals, setModals, setOrder, order, products, status
     })
   }
 
-  const handleAddProduct = () => {}
+  const handleCloseModal = () => {
+    setProduct({
+      nomenclature: '',
+      price: '',
+      amounts: []
+    })
+    setSelectedProduct(null);
+    setSizes([])
+
+    setModals({ ...modals, edit: false})
+  }
 
   return (
-    <Modal size='lg' open={modals.add} onClose={() => setModals({ ...modals, add: false })}>
+    <Modal size='lg' open={modals.edit} onClose={handleCloseModal}>
         <Modal.Header>
-            <Modal.Title>Добавление товара</Modal.Title>
+            <Modal.Title>Редактирование товара</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <div className='px-1'>
@@ -90,18 +129,18 @@ const EditProductModal = ({ modals, setModals, setOrder, order, products, status
             </div>
 
             <SelectProductTable
-                products={filteredProducts}
-                selectedProduct={selectedProduct}
+                products={[products?.find(item => item.id === editProd?.nomenclature)] || []}
+                selectedProduct={products?.find(item => item.id === editProd?.nomenclature)}
                 onSelectProduct={handleSelectProduct}
             />
 
-            {selectedProduct && (
+            {selectedProduct && editProd.price && (
             <div className='flex flex-col my-3 gap-y-4'>
                 <NumInput
                     width='50%'
                     label="Цена"
                     type="number"
-                    value={product.price}
+                    value={product?.price || editProd.price}
                     onChange={(e) => setProduct({ ...product, ['price']: e })}
                     placeholder="Введите цену"
                 />
@@ -111,7 +150,7 @@ const EditProductModal = ({ modals, setModals, setOrder, order, products, status
                             <NumInput
                                 label={`Количество размеров ${item.title}`}
                                 type="number"
-                                value={product.amounts.find(amount => amount.size === item.id)?.amount || ''}
+                                value={product?.amounts?.find(amount => amount.size === item.id)?.amount || ''}
                                 onChange={(e) => getSizeValue({ target: { value: e, id: item.id }})}
                                 placeholder={`Введите количество ${item.title}`}
                             />
@@ -124,11 +163,11 @@ const EditProductModal = ({ modals, setModals, setOrder, order, products, status
 
       <Modal.Footer>
         <div className='flex justify-end items-center gap-x-6'>
-            <Button variant='white' onClick={() => setModals({ ...modals, add: false })} appearance="subtle">
+            <Button variant='white' onClick={handleCloseModal} appearance="subtle">
                 Отмена
             </Button>
             <Button width='100px' onClick={handleAddToOrder} appearance="primary" disabled={!selectedProduct}>
-                Добавить
+                Сохранить
             </Button>
         </div>
       </Modal.Footer>

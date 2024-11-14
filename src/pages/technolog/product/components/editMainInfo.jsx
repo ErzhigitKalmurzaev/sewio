@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
 import Input from '../../../../components/ui/inputs/input';
@@ -9,6 +9,7 @@ import { styled } from '@mui/material';
 import { editProductById } from '../../../../store/technolog/product';
 import BackDrop from '../../../../components/ui/backdrop';
 import Select from '../../../../components/ui/inputs/select';
+import { getSizeCategoryList } from '../../../../store/technolog/size';
 
 const EditMainInfo = ({ product, setLoading }) => {
 
@@ -28,6 +29,10 @@ const EditMainInfo = ({ product, setLoading }) => {
     category: false,
     is_active: false
   })
+
+  useEffect(() => {
+    dispatch(getSizeCategoryList());
+  }, [])
 
   const getValue = (e) => {
     const { name, value } = e.target;

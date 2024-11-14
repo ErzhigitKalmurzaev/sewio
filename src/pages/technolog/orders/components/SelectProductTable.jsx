@@ -4,6 +4,7 @@ import { Table, Radio } from 'rsuite';
 const { Column, HeaderCell, Cell } = Table;
 
 const SelectProductTable = ({ products, selectedProduct, onSelectProduct }) => {
+
   return (
     <Table
       height={300}

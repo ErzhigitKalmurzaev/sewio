@@ -2,10 +2,13 @@ import React from 'react'
 
 import { Table } from 'rsuite';
 import { ReactComponent as Pencil } from '../../../../assets/icons/pencil.svg';
+import EditProductModal from '../modals/EditProductModal';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const OrderProductInfo = ({ products, product_list, modals, setModals }) => {
+const OrderProductInfo = ({ products, product_list, modals, setModals, order, setOrder, size_category_list }) => {
+
+  const [editProd, setEditProd] = React.useState({})
 
   const getProductValueWithKey = (key, id) => {
     //   return product_list?.find((product) => product.id === id)[key]
@@ -13,12 +16,18 @@ const OrderProductInfo = ({ products, product_list, modals, setModals }) => {
     return product_list[index][key]
   }
 
+  const handleEditProduct = (product) => {
+    setEditProd({})
+    setModals({...modals, edit: true})
+    setEditProd(product)
+  }
+
   return (
     <div>
         <Table
-        height={300}
-        data={products}
-        rowHeight={50}
+            height={300}
+            data={products}
+            rowHeight={50}
         >
         <Column width={100} align="center" fixed>
             <HeaderCell>Артикул</HeaderCell>
@@ -73,8 +82,13 @@ const OrderProductInfo = ({ products, product_list, modals, setModals }) => {
             <HeaderCell>Размер/Количество</HeaderCell>
                 <Cell>
                     {(rowData) => (
-                        rowData.amounts.map(item => (
-                            <>{item.size}/{item.amount}, </>
+                        rowData.amounts.map((item, index) => (
+                            <>
+                                {size_category_list?.flatMap(category => category.sizes)?.find(size => size.id === item.size)?.title}
+                                /
+                                {item.amount}
+                                {index !== rowData.amounts.length - 1 ? ', ' : ''}
+                            </>
                         ))
                     )}
                 </Cell>
@@ -82,14 +96,25 @@ const OrderProductInfo = ({ products, product_list, modals, setModals }) => {
 
         <Column width={100} align="center">
             <HeaderCell>Выбрать</HeaderCell>
-            <Cell onClick={() => setModals({ ...modals, edit: true })}>
+            <Cell className='cursor-pointer'>
             {(rowData) => (
-                <Pencil/>
+                <div onClick={() => handleEditProduct(rowData)}>
+                    <Pencil/>
+                </div>
             )}
             </Cell>
         </Column>
         </Table>
-        
+        <EditProductModal 
+            modals={modals} 
+            setModals={setModals} 
+            products={product_list}
+            editProd={editProd}
+            setEditProd={setEditProd}
+            order={order}
+            setOrder={setOrder}
+            size_category_list={size_category_list}
+        />
     </div>
   )
 }

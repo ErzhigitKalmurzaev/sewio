@@ -29,7 +29,7 @@ export const editProductById = createAsyncThunk(
     'technologProduct/editProductById',
     async ({ id, props}, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.put(`product/crud/${id}/`, props);
+            const { data } = await axiosInstance.patch(`product/crud/${id}/`, props);
             return data;
         } catch (err) {
             return rejectWithValue(err)
