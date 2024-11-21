@@ -197,7 +197,7 @@ const EditEmployee = () => {
               />
               <TelInput
                 label='Телефон'
-                value={employee_data.phone}
+                value={employee_data?.phone}
                 error={errors.phone}
                 onChange={e => getValue({ target: { value: e, name: 'phone' } })}
               />
@@ -210,7 +210,7 @@ const EditEmployee = () => {
                 placeholder='Выберите роль' 
                 data={employeeRole} 
                 error={errors.role} 
-                value={employee_data.role}
+                value={employee_data?.role}
                 onChange={e => getValue({ target: { value: e, name: 'role' } })}
               />
               <Select 
@@ -219,7 +219,7 @@ const EditEmployee = () => {
                 placeholder='Выберите разряд' 
                 data={rank_list} 
                 error={errors.rank} 
-                value={employee_data.rank}
+                value={employee_data?.rank}
                 labelKey='title'
                 valueKey='id'
                 onChange={e => getValue({ target: { value: e, name: 'rank' } })}
@@ -231,7 +231,7 @@ const EditEmployee = () => {
               name='salary'
               placeholder='Введите зарплату'
               error={errors.salary}
-              value={employee_data.salary}
+              value={employee_data?.salary}
               onChange={e => getValue({ target: { value: e, name: 'salary' } })}
             />
           </div>

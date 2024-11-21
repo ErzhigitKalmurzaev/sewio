@@ -3,9 +3,33 @@ import axiosInstance from "../../api/axios";
 
 export const getMateralList = createAsyncThunk(
     'material/getMateralList',
-    async (_, { rejectWithValue }) => {
+    async ({ title }, { rejectWithValue }) => {
         try {
-            const { data } =  await axiosInstance.get('material/list/');
+            const { data } =  await axiosInstance.get(`material/list/?title=${title}`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const postMaterial = createAsyncThunk(
+    'material/postMaterial',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.post(`warehouse/material/crud/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const fillWarehouseWithMaterial = createAsyncThunk(
+    'material/fillWarehouseWithMaterial',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.post(`warehouse/input/`, props);
             return data;
         } catch (err) {
             return rejectWithValue(err)

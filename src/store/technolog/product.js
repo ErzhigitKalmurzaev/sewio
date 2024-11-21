@@ -3,9 +3,10 @@ import axiosInstance, { ImageUploadingFetch } from "../../api/axios";
 
 export const getProductList = createAsyncThunk(
     'technologProduct/getProductList',
-    async (_, { rejectWithValue }) => {
+    async ({ urls}, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get('product/list/');
+            const { is_active, page, page_size, title } = urls;
+            const { data } = await axiosInstance.get(`product/list/?is_active=${is_active}&page=${page}&page_size=${page_size}&title=${title}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)

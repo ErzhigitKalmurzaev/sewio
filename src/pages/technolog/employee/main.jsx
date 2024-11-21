@@ -24,7 +24,7 @@ const Employee = () => {
 
   useEffect(() => {
     dispatch(getStaffList({ urls }))
-  }, [urls.role])
+  }, [urls.role, urls.is_active])
 
   const handleChangeFilter = (name, value) => {
     params.set(name, value);

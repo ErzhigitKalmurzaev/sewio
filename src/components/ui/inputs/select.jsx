@@ -9,7 +9,7 @@ const Select = ({ width, label, placeholder, data, onChange, error, required, la
           {required && <span style={ error && { color: 'red' }}> *</span>}
         </label>
         <SelectPicker
-            data={data}
+            data={data || []}
             onChange={(e) => onChange(e)}
             searchable={searchable}
             size='md'

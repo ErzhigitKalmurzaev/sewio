@@ -10,7 +10,7 @@ import { OrderStatuses } from '../../../utils/constants/statuses';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const OrderListTable = ({ data, status, handleChangeFilter, urls, total, limit, activePage, setPage }) => {
+const OrderListTable = ({ data, status, total, activePage, limit, setPage }) => {
 
   const navigate = useNavigate();
 
@@ -97,8 +97,8 @@ const OrderListTable = ({ data, status, handleChangeFilter, urls, total, limit, 
                 size="xs"
                 layout={['total', '-', 'limit', '|', 'pager', 'skip']}
                 total={total}
-                limitOptions={[10, 30, 50]}
-                limit={total}
+                // limitOptions={[10, 30, 50]}
+                limit={limit}
                 activePage={activePage}
                 onChangePage={(e) => setPage('page', e)}
             />

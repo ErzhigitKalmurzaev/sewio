@@ -11,8 +11,8 @@ import Products from '../pages/technolog/product/main'
 import CreateProduct from '../pages/technolog/product/createProduct'
 import Orders from '../pages/technolog/orders/main'
 import OrderCreate from '../pages/technolog/orders/orderCreate'
-import Sklad from '../pages/technolog/sklad/main'
-import DetailSklad from '../pages/technolog/sklad/detailSklad'
+import Sklad from '../pages/technolog/warehouse/main'
+import DetailSklad from '../pages/technolog/warehouse/detailSklad'
 import Discharge from '../pages/technolog/discharge/main'
 import Operations from '../pages/technolog/operations/main'
 import Equipments from '../pages/technolog/equipments/main'
@@ -22,6 +22,8 @@ import EditClient from '../pages/technolog/clients/edit/editClient'
 import Sizes from '../pages/technolog/sizes/main'
 import FillProduct from '../pages/technolog/product/fillProduct'
 import OrderEdit from '../pages/technolog/orders/orderEdit'
+import CreateWarehouse from '../pages/technolog/warehouse/create/createWarehouse'
+import EditWarehouse from '../pages/technolog/warehouse/edit/EditWarehouse'
 
 const TechnologRoute = () => {
   return (
@@ -60,7 +62,8 @@ const TechnologRoute = () => {
             
             <Route path="sklad" element={<Outlet />}>
                 <Route path="" element={<Sklad />} />
-                <Route path=":id" element={<DetailSklad />} />
+                <Route path="create" element={<CreateWarehouse />} />
+                <Route path=":id" element={<EditWarehouse />} />
             </Route>
             
             <Route path="discharge" element={<Discharge />} />

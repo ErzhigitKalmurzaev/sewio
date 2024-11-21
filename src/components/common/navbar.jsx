@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { technologNav } from '../../utils/navDatas/navDatas'
+import { technologNav, warehouseNav } from '../../utils/navDatas/navDatas'
 import NavButton from '../shared/navButton'
 import { useLocation } from 'react-router-dom';
 
 import { ChevronLeft } from 'lucide-react';
 import NavAccardion from '../shared/navAccardion';
 
-const Navbar = () => {
+const Navbar = ({ role }) => {
 
     const { pathname } = useLocation();
     const active = pathname.split("/")[2];
@@ -22,10 +22,17 @@ const Navbar = () => {
         localStorage.setItem('navbar-hide', JSON.stringify(hide));
     }, [hide]);
 
+    const navs = [
+        technologNav,
+        technologNav,
+        technologNav,
+        warehouseNav
+    ]
+
     return (
         <div className={`${hide ? 'w-[80px]' : 'w-[270px]'} h-[100vh] relative border-r border-gray flex flex-col items-center gap-1 py-10 transition-all ease-linear duration-300`}>
             {
-                technologNav.map((item, index) => {
+                navs[role].map((item, index) => {
                     return (
                         item.elements ? 
                             <NavAccardion key={index} title={item.title} icon={item.icon} active={active} hide={hide} buttons={item.buttons} />

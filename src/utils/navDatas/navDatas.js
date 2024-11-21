@@ -75,3 +75,12 @@ export const technologNav = [
         ]
     }
 ]
+
+export const warehouseNav = [
+    {
+        title: 'Мой склад',
+        path: 'main',
+        icon: <Warehouse/>,
+        elements: false
+    },
+]

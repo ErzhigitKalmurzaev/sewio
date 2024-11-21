@@ -85,7 +85,7 @@ const CreateEmployee = () => {
     if (validateFields()) {
       dispatch(createEmployee({ ...employee_data, image }))
         .then(res => {
-          navigate('/employee')
+          navigate(-1)
           toast("Разряд создан успешно!")
         })
     } else {

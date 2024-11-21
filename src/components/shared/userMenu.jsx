@@ -10,7 +10,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProfile } from '../../store/auth/auth';
+import { getProfile, logout } from '../../store/auth/auth';
 import { useNavigate } from 'react-router-dom';
 
 const UserMenu = () => {
@@ -31,10 +31,11 @@ const UserMenu = () => {
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-    const handleClose = () => {
-        localStorage.removeItem('sewio_token');
+
+    const handleLogout = () => {
+        dispatch(logout());
         navigate('/')
-    };
+    }
     
   return (
     <div>
@@ -59,8 +60,7 @@ const UserMenu = () => {
             anchorEl={anchorEl}
             id="account-menu"
             open={open}
-            onClose={handleClose}
-            onClick={handleClose}
+            onClose={() => setAnchorEl(null)}
             slotProps={{
             paper: {
                 elevation: 0,
@@ -92,7 +92,7 @@ const UserMenu = () => {
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-            <MenuItem onClick={handleClose}>
+            <MenuItem>
                 <div className='flex flex-col gap-y-4'>
                     <div className='flex items-center gap-x-2'>
                         {
@@ -114,7 +114,7 @@ const UserMenu = () => {
                 </div>
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                     <Logout fontSize="small" />
                 </ListItemIcon>

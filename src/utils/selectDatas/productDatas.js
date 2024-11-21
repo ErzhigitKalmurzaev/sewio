@@ -9,6 +9,25 @@ export const dischargeDatas = [
         label: '2-разряд',
         value: 200
     }
+];
+
+export const materialUnits = [
+    {
+        label: 'мм',
+        value: 1
+    },
+    {
+        label: 'см',
+        value: 2
+    },
+    {
+        label: 'm2',
+        value: 3
+    },
+    {
+        label: 'литр',
+        value: 4
+    }
 ]
 
 

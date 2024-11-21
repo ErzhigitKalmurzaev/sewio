@@ -8,6 +8,8 @@ import TechnologSizeSlice from "./technolog/size";
 import EquipmentSlice from "./technolog/equipment";
 import MaterialSlice from "./technolog/material";
 import TechnologOrderSlice from "./technolog/order";
+import WarehouseSlice from "./technolog/warehouse";
+import WarehouseMaterialSlice from "./warehouse/materails";
 
 const store = configureStore({
     reducer: {
@@ -23,7 +25,11 @@ const store = configureStore({
         product: TechnologProductSlice.reducer,
         equipment: EquipmentSlice.reducer,
         material: MaterialSlice.reducer,
-        order: TechnologOrderSlice.reducer
+        order: TechnologOrderSlice.reducer,
+        warehouse: WarehouseSlice.reducer,
+
+        //Warehouse
+        ware_materials: WarehouseMaterialSlice.reducer,
     }
 })
 

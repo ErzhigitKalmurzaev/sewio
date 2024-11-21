@@ -44,6 +44,8 @@ const AuthSlice = createSlice({
       if (user) {
         // state.user = JSON.parse(user);
         state.isAuthenticated = 'success';
+      } else {
+        state.isAuthenticated = 'error';
       }
     },
   },

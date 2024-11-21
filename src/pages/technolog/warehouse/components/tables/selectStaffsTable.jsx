@@ -1,15 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table } from 'rsuite';
-import { employeeRole, employeeSalaryType } from '../../../utils/selectDatas/employeeDatas';
+import { Checkbox, Table } from 'rsuite';
+import { employeeRole, employeeSalaryType } from '../../../../../utils/selectDatas/employeeDatas';
 
-import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
-import TableDropdown from '../tableDropdown';
+import TablePopover from '../../../../../components/tables/tableDropdown';
+
 
 const { Column, HeaderCell, Cell } = Table;
 
-const 
-TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
+const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, setWarehouse }) => {
 
   const navigate = useNavigate();
 
@@ -23,11 +22,20 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
     }
   }
 
+  const selectStaff = (id, e) => {
+    if(warehouse.staffs.includes(id)) {
+      setWarehouse({...warehouse, staffs: warehouse.staffs.filter(item => item !== id)})
+    } else {
+      setWarehouse({...warehouse, staffs: [...warehouse.staffs, id]})
+    }
+    console.log(id)
+  };
+
   return (
-        <div className='min-h-[500px] bg-white rounded-xl'>
+        <div className='min-h-[400px] bg-white rounded-xl'>
             <Table
               virtualized
-              height={600}
+              height={400}
               loading={status === 'loading'}
               data={getData()}
               className='rounded-xl'
@@ -42,24 +50,14 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
                   <Cell dataKey="name" />
               </Column>
 
-              <Column width={150}>
+              <Column width={200}>
                   <HeaderCell>Фамилия</HeaderCell>
                   <Cell dataKey="surname" />
               </Column>
 
               <Column width={200}>
-                  <HeaderCell>Телефон</HeaderCell>
-                  <Cell dataKey="phone" />
-              </Column>
-
-              <Column width={200}>
-                  <HeaderCell>Email</HeaderCell>
-                  <Cell dataKey="email" />
-              </Column>
-
-              <Column width={200}>
                   <HeaderCell>
-                    <TableDropdown 
+                    <TablePopover 
                       title="Тип зарплаты" 
                       data={employeeSalaryType} 
                       handleChangeFilter={handleChangeFilter}
@@ -76,9 +74,9 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
                   </Cell>
               </Column>
 
-              <Column width={150}>
+              <Column width={200}>
                   <HeaderCell>
-                      <TableDropdown 
+                      <TablePopover
                         title="Роль" 
                         data={employeeRole} 
                         handleChangeFilter={handleChangeFilter}
@@ -99,10 +97,14 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
                   <HeaderCell>Действия</HeaderCell>
 
                   <Cell style={{ padding: '6px' }}>
-                    {rowData => (
-                        <div className='flex items-center px-3 py-1 cursor-pointer'>
-                          <Pencil onClick={() => navigate(`${rowData.id}`)}/>
-                        </div>
+                    {(rowData, index) => (
+                          <div 
+                            className='flex items-center cursor-pointer' 
+                            key={index + 'checl'}
+                            onClick={(e) => selectStaff(rowData.id, e)}
+                          >
+                            <Checkbox checked={warehouse.staffs.includes(rowData.id)}/>
+                          </div>
                     )}
                   </Cell>
               </Column>
@@ -111,4 +113,4 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
   )
 }
 
-export default TechnologEmployeeTable
+export default SelectStaffTable

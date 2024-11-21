@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table } from 'rsuite';
+import { Pagination, Table } from 'rsuite';
 import { employeeRole, employeeSalaryType } from '../../../utils/selectDatas/employeeDatas';
 
 import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
@@ -8,19 +8,9 @@ import TableDropdown from '../tableDropdown';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const ProductTable = ({ data, status, handleChangeFilter, urls }) => {
+const ProductTable = ({ data, status, total, activePage, limit, setPage }) => {
 
   const navigate = useNavigate();
-
-//   const getData = () => {
-//     if(urls.salary_type === '1') {
-//       return data.filter(item => item.salary > 0)
-//     } else if(urls.salary_type === '0') {
-//       return data.filter(item => item.salary === 0)
-//     } else {
-//       return data;
-//     }
-//   }
 
   return (
         <div className='min-h-[500px] bg-white rounded-xl'>
@@ -72,6 +62,24 @@ const ProductTable = ({ data, status, handleChangeFilter, urls }) => {
                   </Cell>
               </Column>
           </Table>
+          <div style={{ padding: 20 }}>
+            <Pagination
+                prev
+                next
+                first
+                last
+                ellipsis
+                boundaryLinks
+                maxButtons={5}
+                size="xs"
+                layout={['total', '-', 'limit', '|', 'pager', 'skip']}
+                total={total}
+                limitOptions={[10, 30, 50]}
+                limit={limit}
+                activePage={activePage}
+                onChangePage={(e) => setPage('page', e)}
+            />
+          </div>
         </div>
   )
 }

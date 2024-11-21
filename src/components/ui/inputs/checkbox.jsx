@@ -1,12 +1,13 @@
 import React from 'react'
 
-const Checkbox = ({ isChecked, handleCheckboxChange, label }) => {
+const Checkbox = ({ isChecked, handleCheckboxChange, label, key }) => {
   return (
     <div className='flex items-center gap-x-2'>
         <div className="relative flex items-center justify-center w-6 h-6">
             <input
                 type="checkbox"
-                id="checkbox"
+                id={"checkbox"}
+                key={key}
                 className="hidden"
                 checked={isChecked}
                 onChange={handleCheckboxChange}
