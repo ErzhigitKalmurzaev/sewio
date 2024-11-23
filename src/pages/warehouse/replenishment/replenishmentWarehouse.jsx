@@ -14,12 +14,12 @@ const ReplenishmentWarehouse = () => {
   const breadcrumbs = [
     {
         label: 'Склады',
-        path: '/sklad',
+        path: '/main',
         active: false
     },
     {
         label: 'Заполнение склада',
-        path: '/sklad/repleshipment',
+        path: '/main/repleshipment',
         active: true
     }
   ]

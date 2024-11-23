@@ -36,6 +36,7 @@ const AuthSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
+      state.me_info = {};
       state.isAuthenticated = false;
       localStorage.removeItem('sewio_token');
     },

@@ -16,7 +16,7 @@ const MyBreadcrums = ({ items }) => {
                     : 
                     <Link 
                         key={index} 
-                        href={item.path} 
+                        href={"/crm" + item.path} 
                         sx={{ textDecoration: 'none', fontSize: 13 }} 
                         color="text.primary">
                             {item.label}

@@ -14,7 +14,7 @@ const AllRoutes = () => {
   useEffect(() => {
     dispatch(checkAuth());
     dispatch(getProfile());
-  }, [me_info?.role]);
+  }, [me_info?.role, isAuthenticated]);
 
   const routes = {
     director: <TechnologRoute/>,
@@ -27,20 +27,19 @@ const AllRoutes = () => {
   
   return (
     <Routes>
-      {
-        me_info?.role &&
-        <>
-          <Route path="/" element={isAuthenticated === 'success' ? <Navigate to="/crm/" /> : <SignIn />} />
-
-          <Route path="/crm/*" element={
-            <ProtectedRoute navigate="/"
-                allowed={allowedCRMRoles.some((i, index) => index === (me_info?.role))} >
-                {routes[allowedCRMRoles[me_info?.role]]}
-            </ProtectedRoute>
-          } />
-          <Route path="*" element={<div>Page not found</div>} />
-        </>
-      }
+        <Route path="/" element={isAuthenticated === 'success' ? <Navigate to="/crm/" /> : <SignIn />} />
+        {
+          me_info?.role &&
+          <>
+            <Route path="/crm/*" element={
+              <ProtectedRoute navigate="/"
+                  allowed={allowedCRMRoles.some((i, index) => index === (me_info?.role))} >
+                  {routes[allowedCRMRoles[me_info?.role]]}
+              </ProtectedRoute>
+            } />
+            <Route path="*" element={<div>Page not found</div>} />
+          </>
+        }
     </Routes>
   );
 };

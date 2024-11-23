@@ -1,4 +1,5 @@
 import React from 'react'
+import NewOperation from '../../../components/modals/product/newOperation';
 
 const FillProduct = () => {
 
@@ -118,7 +119,7 @@ const FillProduct = () => {
 
       {/* Модалки */}
 
-      <NewOperation 
+      <NewOperation
         open={modals.newOperation} 
         modals={modals} 
         setModals={setModals} 

@@ -10,6 +10,7 @@ import MaterialSlice from "./technolog/material";
 import TechnologOrderSlice from "./technolog/order";
 import WarehouseSlice from "./technolog/warehouse";
 import WarehouseMaterialSlice from "./warehouse/materails";
+import WareWarehouseSlice from "./warehouse/warehouse";
 
 const store = configureStore({
     reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
 
         //Warehouse
         ware_materials: WarehouseMaterialSlice.reducer,
+        ware_warehouse: WareWarehouseSlice.reducer
     }
 })
 

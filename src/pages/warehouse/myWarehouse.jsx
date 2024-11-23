@@ -7,6 +7,8 @@ import Button from '../../components/ui/button';
 import MaterialListTable from './components/tables/replenishment/materialListTable';
 import CreateMaterialModal from './components/modals/createMaterialModal.';
 import { getMyMateralsList } from '../../store/warehouse/materails';
+import { Badge } from 'rsuite';
+import { getComings } from '../../store/warehouse/warehouse';
 
 const MyWarehouse = () => {
 
@@ -14,6 +16,8 @@ const MyWarehouse = () => {
   const dispatch = useDispatch();
 
   const { materials_list, materials_list_status } = useSelector(state => state.ware_materials);
+  const { comings_list } = useSelector(state => state.ware_warehouse);
+  const { me_info } = useSelector(state => state.auth);
   const [params, setParams] = useSearchParams();
 
   const urls = {
@@ -27,6 +31,7 @@ const MyWarehouse = () => {
 
   useEffect(() => {
     dispatch(getMyMateralsList(urls));
+    dispatch(getComings());
   }, [])
 
   const handleChangeFilter = (name, value) => {
@@ -37,10 +42,10 @@ const MyWarehouse = () => {
   const searchHandle = () => {
     dispatch(getMyMateralsList(urls));
   }
-
+  console.log(comings_list)
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
-        <Title text="Склад №12"/>
+        <Title text={`Склад: ${me_info?.warehouse?.title}`}/>
 
         <div className='flex items-start justify-between my-2 gap-x-6'>
             <div className='w-3/6'>
@@ -53,8 +58,12 @@ const MyWarehouse = () => {
                     searchHandle={searchHandle}
                 />
             </div>
-            <div className='2/6 flex gap-x-3'>
+            <div className='3/6 flex gap-x-3'>
+                <Button width='100px' variant='green' onClick={() => navigate('coming')}>
+                  <Badge content={comings_list?.length || 0}>Приход</Badge>
+                </Button>
                 <Button variant='red' onClick={() => navigate('reject')}>Учет брака</Button>
+                <Button width='100px' variant='blue' onClick={() => navigate('issue')}>Выдать</Button>
                 <Button variant='white' onClick={() => navigate('fill')}>Пополнение</Button>
                 <Button onClick={() => setModals({ ...modals, create: true })}>+ Создать материал</Button>
             </div>

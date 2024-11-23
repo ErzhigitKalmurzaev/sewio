@@ -19,29 +19,29 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
   return (
     <div className='min-h-[400px] bg-white rounded-xl'>
         <Table
-            height={400}
+            height={500}
             loading={status === 'loading'}
             data={data || []}
             className='rounded-xl'
         >
             <Column width={60} align="center" fixed>
                 <HeaderCell>ID</HeaderCell>
-                <Cell dataKey="nomenclature.id" />
+                <Cell dataKey="id" />
             </Column>
 
             <Column width={150}>
                 <HeaderCell>Артикул</HeaderCell>
-                <Cell dataKey="nomenclature.vendor_code" />
+                <Cell dataKey="vendor_code" />
             </Column>
 
             <Column width={200}>
                 <HeaderCell>Название</HeaderCell>
-                <Cell dataKey="nomenclature.title" />
+                <Cell dataKey="title" />
             </Column>
 
             <Column width={150}>
                 <HeaderCell>Цена</HeaderCell>
-                <Cell dataKey="nomenclature.cost_price" />
+                <Cell dataKey="cost_price" />
             </Column>
 
             <Column width={150}>
@@ -53,7 +53,7 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
                 <HeaderCell>Единица измерения</HeaderCell>
                 <Cell>
                     {rowData => (
-                        <p>{materialUnits[rowData.nomenclature.unit-1].label}</p>
+                        <p>{materialUnits[rowData?.unit-1]?.label}</p>
                     )}
                 </Cell>
             </Column>

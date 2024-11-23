@@ -71,6 +71,28 @@ const Button = ({ variant = "default", active, disabled, type, sx, loading, chil
                 color: "gray"
             }
         },
+        green: {
+            padding: "0px 10px",
+            height: "33px",
+            background: "#24A758",
+            color: "white",
+            fontSize: "13px",
+            fontWeight: "400",
+            fontFamily: "Inter",
+            textTransform: 'capitalize',
+            border: "1px solid #24A758",
+            borderRadius: "6px",
+            ":hover": {
+                transition: "0.5s all ease",
+                color: "#98FF98",
+                background: "white",
+                border: "1px solid #98FF98",
+            },
+            ":disabled": {
+                background: "#dadada",
+                color: "gray"
+            }
+        },
         blue: {
             padding: "0px 10px",
             height: "33px",

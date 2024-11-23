@@ -13,12 +13,12 @@ const RejectMaterials = () => {
   const breadcrumbs = [
     {
         label: 'Склады',
-        path: '/sklad',
+        path: '/main',
         active: false
     },
     {
         label: 'Учет брака',
-        path: '/sklad/repleshipment',
+        path: '/main/repleshipment',
         active: true
     }
   ]
