@@ -144,9 +144,9 @@ const CreateWarehouse = () => {
             />
         </div>
 
-        <div className='flex justify-end'>
-          <Button width='150px' onClick={onSubmit}>
-            Далее <MoveRight className="ml-2" />
+        <div className='flex justify-center'>
+          <Button width='200px' onClick={onSubmit}>
+            Создать
           </Button>
         </div>
 

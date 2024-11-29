@@ -1,4 +1,4 @@
-import { ChartColumnIncreasing, Users, UsersRound, Cable, Package, ShoppingBasket, Warehouse, BookOpenCheck, ClipboardList, Ribbon, GraduationCap, PencilRuler } from 'lucide-react';
+import { ChartColumnIncreasing, Users, UsersRound, Cable, Package, ShoppingBasket, Warehouse, BookOpenCheck, ClipboardList, Ribbon, GraduationCap, PencilRuler, CircleDollarSign } from 'lucide-react';
 
 export const technologNav = [
     {
@@ -83,4 +83,19 @@ export const warehouseNav = [
         icon: <Warehouse/>,
         elements: false
     },
+]
+
+export const shveyaNav = [
+    {
+        title: 'Заработная плата',
+        path: 'salary',
+        icon: <CircleDollarSign/>,
+        elements: false
+    },
+    {
+        title: 'Операции',
+        path: 'operations',
+        icon: <ClipboardList/>,
+        elements: false
+    }
 ]

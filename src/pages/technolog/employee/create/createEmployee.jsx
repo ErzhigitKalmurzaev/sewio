@@ -6,7 +6,7 @@ import SingleImagePicker from '../../../../components/ui/imagePickers/singleImag
 import Input from '../../../../components/ui/inputs/input';
 import Select from '../../../../components/ui/inputs/select';
 
-import { employeeRole, employeeSalaryType } from '../../../../utils/selectDatas/employeeDatas';
+import { employeeRole } from '../../../../utils/selectDatas/employeeDatas';
 import TelInput from '../../../../components/ui/inputs/phoneInput';
 import NumInput from '../../../../components/ui/inputs/numInput';
 import { getRankList } from '../../../../store/technolog/rank';
@@ -69,8 +69,7 @@ const CreateEmployee = () => {
       email: !employee_data.email || !/\S+@\S+\.\S+/.test(employee_data.email),
       password: employee_data.password.length < 6,
       role: !employee_data.role,
-      rank: !employee_data.rank,
-      salary: employee_data.salary <= 0,
+      rank: !employee_data.rank
     };
 
     setErrors(newErrors);

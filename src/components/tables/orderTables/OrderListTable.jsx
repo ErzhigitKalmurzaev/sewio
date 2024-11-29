@@ -15,7 +15,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage }) => 
   const navigate = useNavigate();
 
   return (
-        <div className='min-h-[500px] bg-white rounded-xl'>
+        <div className='min-h-[500px] font-inter bg-white rounded-xl'>
             <Table
               virtualized
               loading={status === 'loading'}
@@ -50,7 +50,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage }) => 
                   <HeaderCell>Статус</HeaderCell>
                   <Cell dataKey="is_active">
                     {rowData => (
-                        <p>{OrderStatuses[rowData.status].label}</p>
+                        <p className='font-inter'>{OrderStatuses[rowData.status].label}</p>
                     )}
                   </Cell>
               </Column>

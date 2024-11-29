@@ -13,7 +13,7 @@ const ProductTable = ({ data, status, total, activePage, limit, setPage }) => {
   const navigate = useNavigate();
 
   return (
-        <div className='min-h-[500px] bg-white rounded-xl'>
+        <div className='min-h-[500px] font-inter bg-white rounded-xl'>
             <Table
               virtualized
               loading={status === 'loading'}

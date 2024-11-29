@@ -14,7 +14,7 @@ const RankTable = ({ data, setModals, modals, setEditRank, rank_list_status }) =
   }
 
   return (
-    <div>
+    <div className='font-inter'>
         <Table
             height={600}
             loading={rank_list_status === 'loading'}

@@ -20,3 +20,26 @@ export const OrderStatuses = [
         label: 'Просрочен'
     }
 ]
+
+export const PaymentStatuses = [
+    {
+        title: "ЗП",
+        color: 'green'
+    },
+    {
+        title: 'ШТРАФ',
+        color: 'red'
+    },
+    {
+        title: "АВАНС",
+        color: 'blue'
+    },
+    {
+        title: 'ШТРАФ',
+        color: 'red'
+    },
+    {
+        title: "АВАНС",
+        color: 'blue'
+    },
+]

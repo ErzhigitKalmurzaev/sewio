@@ -24,7 +24,7 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
   }
 
   return (
-        <div className='min-h-[500px] bg-white rounded-xl'>
+        <div className='min-h-[500px] font-inter bg-white rounded-xl'>
             <Table
               virtualized
               height={600}

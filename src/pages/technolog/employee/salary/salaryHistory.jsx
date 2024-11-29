@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import MyBreadcrums from '../../../../components/ui/breadcrums'
 import Title from '../../../../components/ui/title'
 import InfoCard from '../../../../components/shared/infoCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { getStaffSalaryHistory } from '../../../../store/technolog/staff'
+import SalaryHistoryTable from '../components/tables/salaryHistoryTable'
+import { useParams } from 'react-router-dom'
 
 const SalaryHistory = () => {
 
@@ -61,6 +65,15 @@ const SalaryHistory = () => {
     }
   ]
 
+  const { id } = useParams()
+  const dispatch = useDispatch();
+
+  const { salary_history, salary_history_status } = useSelector(state => state.staff);
+
+  useEffect(() => {
+    dispatch(getStaffSalaryHistory({ id }));
+  }, [])
+
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
         <MyBreadcrums items={breadcrumbs}/>
@@ -75,7 +88,7 @@ const SalaryHistory = () => {
         </div>
 
         <div>
-            
+            <SalaryHistoryTable data={salary_history} status={salary_history_status}/>
         </div>
     </div>
   )

@@ -16,3 +16,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+p, h1, h2, h3, h4, h5, h6 {
+  @apply font-inter;
+}
+.rsuite-table th,
+.rsuite-table td {
+  font-family: 'Inter', sans-serif !important; /* Важно для переопределения стилей */
+}
+
+.rsuite-table {
+  font-family: 'Inter', sans-serif !important;
+}

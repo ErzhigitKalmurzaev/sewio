@@ -14,7 +14,7 @@ const SizeTable = ({ data, setModals, modals, setEditSize, size_category_list_st
     }
 
     return (
-        <div>
+        <div className='font-inter'>
         <Table
             height={600}
             loading={size_category_list_status === 'loading'}

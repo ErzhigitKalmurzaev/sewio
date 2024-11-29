@@ -12,7 +12,7 @@ const WarehouseTable = ({ data, status }) => {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className='font-inter'>
         <Table
             height={600}
             loading={status === 'loading'}

@@ -50,13 +50,78 @@ export const editEmployeeInfo = createAsyncThunk(
     }
 )
 
+export const getStaffPaymentInfo = createAsyncThunk(
+    'technologStaff/getStaffPaymentInfo',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`payment/salary-info/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const postPayment = createAsyncThunk(
+    'technologStaff/postPayment',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.post(`payment/create/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const postPaymentFiles = createAsyncThunk(
+    'technologStaff/postPaymentFiles',
+    async (props, { rejectWithValue }) => {
+        try {
+            const formData = new FormData();
+
+            for (const key in props) {
+                if (key === "files") {
+                    for (let i = 0; i < props[key].length; i++) {
+                        const item = props[key][i]
+                        formData.append(key, item)
+                    }
+                } else {
+                    formData.append(key, props[key])
+                }
+            }
+
+            const { data } = await ImageUploadingFetch.post(`payment/files/create/`, formData);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getStaffSalaryHistory = createAsyncThunk(
+    'technologStaff/getStaffSalaryHistory',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`payment/history/list/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const TechnologStaffSlice = createSlice({
     name: 'technologStaff',
     initialState: {
         staff_list: [],
         staff_list_status: 'loading',
         staff_info: {},
-        staff_info_status: ''
+        staff_info_status: '',
+        payment_info: {},
+        payment_info_status: 'loading',
+        salary_history: [],
+        salary_history_status: 'loading',
     },
     reducers: {
     },
@@ -70,6 +135,7 @@ const TechnologStaffSlice = createSlice({
             }).addCase(getStaffList.rejected, (state) => {
                 state.staff_list_status = 'error';
             })
+            //---------------------------------------------------------
             .addCase(getEmployeeInfo.pending, (state) => {
                 state.staff_info_status = 'loading';
             }).addCase(getEmployeeInfo.fulfilled, (state, action) => {
@@ -77,6 +143,24 @@ const TechnologStaffSlice = createSlice({
                 state.staff_info = action.payload
             }).addCase(getEmployeeInfo.rejected, (state) => {
                 state.staff_info_status = 'error';
+            })
+            //---------------------------------------------------------
+            .addCase(getStaffPaymentInfo.pending, (state) => {
+                state.payment_info_status = 'loading';
+            }).addCase(getStaffPaymentInfo.fulfilled, (state, action) => {
+                state.payment_info_status = 'success';
+                state.payment_info = action.payload
+            }).addCase(getStaffPaymentInfo.rejected, (state) => {
+                state.payment_info_status = 'error';
+            })
+            //---------------------------------------------------------
+            .addCase(getStaffSalaryHistory.pending, (state) => {
+                state.salary_history_status = 'loading';
+            }).addCase(getStaffSalaryHistory.fulfilled, (state, action) => {
+                state.salary_history_status = 'success';
+                state.salary_history = action.payload
+            }).addCase(getStaffSalaryHistory.rejected, (state) => {
+                state.salary_history_status = 'error';
             })
     }
 })

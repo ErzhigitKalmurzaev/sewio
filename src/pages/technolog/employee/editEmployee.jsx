@@ -16,6 +16,8 @@ import { editEmployeeInfo, getEmployeeInfo } from '../../../store/technolog/staf
 import TelInput from '../../../components/ui/inputs/phoneInput'
 import { getRankList } from '../../../store/technolog/rank'
 import { toast } from 'react-toastify'
+import AdvanceModal from './components/modals/advanceModal'
+import FineModal from './components/modals/fineModal'
 
 const EditEmployee = () => {
 
@@ -128,7 +130,17 @@ const EditEmployee = () => {
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs}/>
-      <Title text="Редактирование сотрудника"/>
+      
+      <div className='flex justify-between items-center'>
+        <Title text="Редактирование сотрудника"/>
+        
+        <div className='flex gap-x-5'>
+            <Button onClick={() => navigate('salary_history')}>История расчета</Button>
+            <Button onClick={() => setModals({ ...modals, advance: true })}>Аванс</Button>
+            <Button variant='red' onClick={() => setModals({ ...modals, fine: true })}>Штраф</Button>
+            <Button variant='blue' onClick={() => navigate('salary_payment')}>Рассчитать зарплату</Button>
+        </div>
+      </div>
 
       <form onSubmit={onSubmit}>
         <div className='w-full mx-auto flex flex-col bg-white p-5 px-10 rounded-xl mt-2 gap-y-5'>
@@ -241,61 +253,15 @@ const EditEmployee = () => {
           <Button className='w-[300px]' type='submit'>Сохранить</Button>
         </div>
       </form>
-      <div className='flex gap-x-5'>
-            <Button onClick={() => navigate('salary_history')}>История расчета</Button>
-            <Button onClick={() => setModals({ ...modals, advance: true })}>Аванс</Button>
-            <Button variant='red' onClick={() => setModals({ ...modals, fine: true })}>Штраф</Button>
-            <Button variant='blue' onClick={() => navigate('salary_payment')}>Рассчитать зарплату</Button>
-      </div>
 
-      <Modal open={modals.advance} onClose={() => setModals({ ...modals, advance: false })} className='my-auto'>
-            <Modal.Header>
-                <Modal.Title>
-                    <p className='text-lg font-bold font-inter'>Выдача аванса</p>
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body className='flex flex-col gap-y-5'>
-                <div className='flex justify-between bg-[#467070] text-white font-inter p-5 rounded-2xl'>
-                    <div className='w-1/2 flex flex-col'>
-                        <p className='text-sm'>Заработанная сумма</p>
-                        <p className='text-xl'>50 000 сом</p>
-                    </div>
-                    <div className='w-1/2 flex flex-col'>
-                        <p className='text-sm'>Штрафы</p>
-                        <p className='text-xl'>5 000 сом</p>
-                    </div>
-                </div>
-                <div className='flex flex-col gap-y-4'>
-                    <NumInput label='Сумма аванса' placeholder='50 000 сом' type='text'/>
-                    <Textarea label='Комментарий' placeholder='Комментарий'/>
-                </div>
-            </Modal.Body>
-            <Modal.Footer className='flex justify-center'>
-                <Button width='385px'>Выдать</Button>
-            </Modal.Footer>
-      </Modal>
-      <Modal open={modals.fine} onClose={() => setModals({ ...modals, fine: false })} className='my-auto'>
-            <Modal.Header>
-                <Modal.Title>
-                    <p className='text-lg font-bold font-inter'>Учет штрафа</p>
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body className='flex flex-col gap-y-5'>
-                <div className='flex flex-col gap-y-4'>
-                    <NumInput label='Сумма аванса' placeholder='50 000 сом' type='text'/>
-                    <Textarea label='Комментарий' placeholder='Комментарий'/>
-                    <div className='flex flex-col gap-y-1'>
-                        <label style={{ fontSize: '13px', fontFamily: 'Inter', fontWeight: '400', color: 'rgba(52, 64, 84, 1)'}}>
-                            Закрепить фото
-                        </label>
-                        <SingleImagePicker width='100%'/>
-                    </div>
-                </div>
-            </Modal.Body>
-            <Modal.Footer className='flex justify-center'>
-                <Button width='385px'>Выдать</Button>
-            </Modal.Footer>
-      </Modal>
+      <AdvanceModal
+        modals={modals}
+        setModals={setModals}
+      />
+      <FineModal
+        modals={modals}
+        setModals={setModals}
+      />
     </div>
   )
 }

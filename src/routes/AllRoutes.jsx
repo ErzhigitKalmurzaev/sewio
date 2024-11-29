@@ -6,6 +6,7 @@ import TechnologRoute from './technologRoute';
 import { checkAuth, getProfile } from '../store/auth/auth';
 import SignIn from './../pages/auth/signIn';
 import WarehouseRoute from './warehouseRoute';
+import ShveyaRoute from './shveyaRoutes';
 
 const AllRoutes = () => {
   const { isAuthenticated, me_info } = useSelector((state) => state.auth);
@@ -14,16 +15,16 @@ const AllRoutes = () => {
   useEffect(() => {
     dispatch(checkAuth());
     dispatch(getProfile());
-  }, [me_info?.role, isAuthenticated]);
+  }, [isAuthenticated]);
 
   const routes = {
     director: <TechnologRoute/>,
     technolog: <TechnologRoute/>,
-    shveya: <TechnologRoute />,
+    shveya: <ShveyaRoute />,
     warehouse: <WarehouseRoute/>,
   }
 
-  const allowedCRMRoles = ['director', 'technolog', 'shveya', 'warehouse',];
+  const allowedCRMRoles = ['', 'director', 'technolog', 'warehouse', 'shveya'];
   
   return (
     <Routes>

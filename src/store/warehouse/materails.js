@@ -43,7 +43,6 @@ export const postRejectMaterialsFiles = createAsyncThunk(
                     formData.append(key, props[key])
                 }
             }
-            console.log(formData)
 
             const { data } =  await ImageUploadingFetch.post(`warehouse/defective/files/`, formData);
             return data;

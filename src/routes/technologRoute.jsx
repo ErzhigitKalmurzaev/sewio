@@ -24,6 +24,7 @@ import FillProduct from '../pages/technolog/product/fillProduct'
 import OrderEdit from '../pages/technolog/orders/orderEdit'
 import CreateWarehouse from '../pages/technolog/warehouse/create/createWarehouse'
 import EditWarehouse from '../pages/technolog/warehouse/edit/EditWarehouse'
+import DistOperations from '../pages/technolog/operations/distribution/distOperations'
 
 const TechnologRoute = () => {
   return (
@@ -65,11 +66,15 @@ const TechnologRoute = () => {
                 <Route path="create" element={<CreateWarehouse />} />
                 <Route path=":id" element={<EditWarehouse />} />
             </Route>
+
+            <Route path="operations" element={<Outlet/>}>
+                <Route path="" element={<Operations />} />
+                <Route path=":id" element={<DistOperations/>} />
+            </Route>
             
             <Route path="discharge" element={<Discharge />} />
             <Route path="sizes" element={<Sizes />} />
             <Route path="knowledge" element={<p>База знаний</p>} />
-            <Route path="operations" element={<Operations />} />
             <Route path="equipments" element={<Equipments />} />
         </Route>
     </Routes>

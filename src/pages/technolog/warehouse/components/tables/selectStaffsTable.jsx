@@ -32,7 +32,7 @@ const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, s
   };
 
   return (
-        <div className='min-h-[400px] bg-white rounded-xl'>
+        <div className='min-h-[400px] font-inter bg-white rounded-xl'>
             <Table
               virtualized
               height={400}
