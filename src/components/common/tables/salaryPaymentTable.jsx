@@ -1,26 +1,18 @@
 import React from 'react'
+import { formatedToDDMMYYYY } from '../../../utils/functions/dateFuncs';
+import { formatNumber } from '../../../utils/functions/numFuncs';
 
-const SalaryPaymentTable = () => {
-    const operations = [
-        { id: 1, name: 'Крой', quantity: 100, amount: 1000.0, date: '15/11/2024' },
-        { id: 2, name: 'Пошив', quantity: 20, amount: 1000.0, date: '15/11/2024' },
-        { id: 3, name: 'Глажка', quantity: 30, amount: 1000.0, date: '15/11/2024' },
-        { id: 4, name: 'Упаковка', quantity: 300, amount: 1500.0, date: '15/11/2024' },
-        { id: 5, name: 'Пуговицы', quantity: 130, amount: 1500.0, date: '15/11/2024' },
-      ];
+const SalaryPaymentTable = ({ data, status }) => {
+      const operations = data?.works?.map(item => item)
     
-      const fines = [
-        { id: 6, date: '15/11/2024', amount: 500.0 },
-      ];
+      const fines = data?.payments?.filter(item => item.status === 2 || item.status === 4);
     
-      const advances = [
-        { id: 11, date: '15/11/2024', amount: 1000.0 },
-      ];
+      const advances = data?.payments?.filter(item => item.status === 5 || item.status === 3);
     
-      const calculateTotal = (items) => items.reduce((total, item) => total + item.amount, 0);
+      const calculateTotal = (items) => items?.reduce((total, item) => total + item.amount, 0);
     
       return (
-        <div className="bg-[#EDEDED] rounded-xl border border-borderGray">
+        <div className="bg-[#EDEDED] rounded-xl border border-borderGray font-inter">
           <h3 className="text-lg font-bold mb-2 px-4 pt-2">Операции</h3>
           <table className="min-w-full table-auto bg-white">
             <thead className="bg-gray-100">
@@ -33,19 +25,29 @@ const SalaryPaymentTable = () => {
               </tr>
             </thead>
             <tbody>
-              {operations.map((op, index) => (
+              {
+              operations?.length > 0 ? 
+              operations?.map((op, index) => (
                 <tr key={op.id} className={'bg-green-50'}>
-                  <td className="border border-borderGray px-4 py-2">{op.id}</td>
+                  <td className="border border-borderGray px-4 py-2 text-center">{op.id}</td>
                   <td className="border border-borderGray px-4 py-2">{op.name}</td>
                   <td className="border border-borderGray px-4 py-2">{op.quantity}</td>
-                  <td className="border border-borderGray px-4 py-2">{op.amount.toFixed(2)}</td>
+                  <td className="border border-borderGray px-4 py-2">{op.amount}</td>
                   <td className="border border-borderGray px-4 py-2">{op.date}</td>
                 </tr>
-              ))}
+              )) : 
+              <tr className='bg-green-50 w-full' >
+                <td></td>
+                <td></td>
+                <p className='text-center py-4'>Нет выполненных операций</p>
+                <td></td>
+                <td></td>
+              </tr>
+              }
               <tr>
                 <td colSpan="3" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
-                <td className="border border-borderGray px-4 py-2 font-bold text-green-600">
-                  +{calculateTotal(operations).toFixed(2)}
+                <td colSpan='2' className="border border-borderGray px-4 py-2 font-bold text-green-600">
+                  +{formatNumber(calculateTotal(operations))}
                 </td>
                 <td></td>
               </tr>
@@ -62,17 +64,25 @@ const SalaryPaymentTable = () => {
               </tr>
             </thead>
             <tbody>
-              {fines.map((fine, index) => (
-                <tr key={fine.id} className={'bg-[#FFE4E6]'}>
-                  <td className="border border-borderGray px-4 py-2">{fine.id}</td>
-                  <td className="border border-borderGray px-4 py-2">{fine.date}</td>
-                  <td className="border border-borderGray px-4 py-2">{fine.amount.toFixed(2)}</td>
+              {
+                fines?.length > 0 ?
+                fines?.map((fine, index) => (
+                  <tr key={fine.id} className={'bg-[#FFE4E6]'}>
+                    <td className="border border-borderGray px-4 py-2 text-center">{fine.id}</td>
+                    <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYY(fine.created_at)}</td>
+                    <td className="border border-borderGray px-4 py-2">{formatNumber(fine.amount)}</td>
+                  </tr>
+                )) :
+                <tr className='bg-[#FFE4E6] w-full' >
+                  <td></td>
+                  <p className='text-center py-4'>Нет штрафов</p>
+                  <td></td>
                 </tr>
-              ))}
+              }
               <tr>
                 <td colSpan="2" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
-                <td className="border border-borderGray px-4 py-2 font-bold text-red">
-                  -{calculateTotal(fines).toFixed(2)}
+                <td className="border border-borderGray px-4 py-2 font-bold text-redd">
+                  -{formatNumber(calculateTotal(fines))}
                 </td>
               </tr>
             </tbody>
@@ -88,17 +98,25 @@ const SalaryPaymentTable = () => {
               </tr>
             </thead>
             <tbody>
-              {advances.map((advance, index) => (
-                <tr key={advance.id} className={'bg-blue-50'}>
-                  <td className="border border-borderGray px-4 py-2">{advance.id}</td>
-                  <td className="border border-borderGray px-4 py-2">{advance.date}</td>
-                  <td className="border border-borderGray px-4 py-2">{advance.amount.toFixed(2)}</td>
+              {
+                advances?.length > 0 ?
+                advances?.map((advance, index) => (
+                  <tr key={advance.id} className={'bg-blue-50'}>
+                    <td className="border border-borderGray px-4 py-2 text-center">{advance.id}</td>
+                    <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYY(advance.created_at)}</td>
+                    <td className="border border-borderGray px-4 py-2">{formatNumber(advance.amount)}</td>
+                  </tr>
+                )) :
+                <tr className='bg-blue-50 w-full' >
+                  <td></td>
+                  <p className='text-center py-4'>Нет авансов</p>
+                  <td></td>
                 </tr>
-              ))}
+              }
               <tr>
                 <td colSpan="2" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
                 <td className="border border-borderGray px-4 py-2 font-bold text-blue-600">
-                  -{calculateTotal(advances).toFixed(2)}
+                  -{formatNumber(calculateTotal(advances))}
                 </td>
               </tr>
             </tbody>
@@ -106,7 +124,7 @@ const SalaryPaymentTable = () => {
     
           <div className="flex justify-between items-center font-inter bg-white text-lg font-semibold rounded-b-xl px-4 py-3">
             <p>К выплате:</p> 
-            <p>{(calculateTotal(operations) - calculateTotal(fines) - calculateTotal(advances)).toFixed(2)}</p>
+            <p>{formatNumber((calculateTotal(operations) - calculateTotal(fines) - calculateTotal(advances)))}</p>
           </div>
         </div>
       );

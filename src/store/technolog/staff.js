@@ -62,6 +62,18 @@ export const getStaffPaymentInfo = createAsyncThunk(
     }
 )
 
+export const getStaffPaymentDetail = createAsyncThunk(
+    'technologStaff/getStaffPaymentDetail',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`payment/history/detail/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const postPayment = createAsyncThunk(
     'technologStaff/postPayment',
     async (props, { rejectWithValue }) => {
@@ -122,6 +134,8 @@ const TechnologStaffSlice = createSlice({
         payment_info_status: 'loading',
         salary_history: [],
         salary_history_status: 'loading',
+        payment_detail: {},
+        payment_detail_status: 'loading',
     },
     reducers: {
     },
@@ -161,6 +175,15 @@ const TechnologStaffSlice = createSlice({
                 state.salary_history = action.payload
             }).addCase(getStaffSalaryHistory.rejected, (state) => {
                 state.salary_history_status = 'error';
+            })
+            //---------------------------------------------------------
+            .addCase(getStaffPaymentDetail.pending, (state) => {
+                state.payment_detail_status = 'loading';
+            }).addCase(getStaffPaymentDetail.fulfilled, (state, action) => {
+                state.payment_detail_status = 'success';
+                state.payment_detail = action.payload
+            }).addCase(getStaffPaymentDetail.rejected, (state) => {
+                state.payment_detail_status = 'error';
             })
     }
 })

@@ -25,6 +25,18 @@ export const postMaterial = createAsyncThunk(
     }
 )
 
+export const patchMaterial = createAsyncThunk(
+    'material/patchMaterial',
+    async ({ props, id }, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.patch(`warehouse/material/crud/${id}/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const fillWarehouseWithMaterial = createAsyncThunk(
     'material/fillWarehouseWithMaterial',
     async (props, { rejectWithValue }) => {

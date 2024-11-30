@@ -138,7 +138,7 @@ const EditEmployee = () => {
             <Button onClick={() => navigate('salary_history')}>История расчета</Button>
             <Button onClick={() => setModals({ ...modals, advance: true })}>Аванс</Button>
             <Button variant='red' onClick={() => setModals({ ...modals, fine: true })}>Штраф</Button>
-            <Button variant='blue' onClick={() => navigate('salary_payment')}>Рассчитать зарплату</Button>
+            <Button variant='blue' onClick={() => navigate('salary_calculate')}>Рассчитать зарплату</Button>
         </div>
       </div>
 

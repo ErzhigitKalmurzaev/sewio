@@ -32,7 +32,12 @@ const Button = ({ variant = "default", active, disabled, type, sx, loading, chil
             color: "white",
             fontSize: "14px",
             textTransform: "capitalize",
-            borderRadius: "30px"
+            borderRadius: "30px",
+
+            "@media (max-width: 768px)" : {
+                fontSize: "13px",
+                borderRadius: "20px",
+            }
         },
         filter: {
             padding: "2px 10px",
@@ -48,6 +53,10 @@ const Button = ({ variant = "default", active, disabled, type, sx, loading, chil
                 background: "#2F4F4F",
                 border: "1px solid #2F4F4F",
             },
+            "@media (max-width: 768px)" : {
+                fontSize: "13px",
+                borderRadius: "20px",
+            }
         },
         red: {
             padding: "0px 10px",

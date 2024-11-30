@@ -8,7 +8,7 @@ import { materialUnits } from '../../../../utils/selectDatas/productDatas'
 import { postMaterial } from '../../../../store/technolog/material'
 import { toast } from 'react-toastify'
 
-const CreateMaterialModal = ({ modals, setModals }) => {
+const CreateMaterialModal = ({ modals, setModals, setUpdate }) => {
 
   const dispatch = useDispatch();
 
@@ -50,6 +50,7 @@ const CreateMaterialModal = ({ modals, setModals }) => {
             if(res.meta.requestStatus === 'fulfilled') {
                 toast("Сырье создано успешно!");
                 setModals({ ...modals, create: false })
+                setUpdate(prev => !prev)
                 setMaterial({
                     title: '',
                     vendor_code: '',

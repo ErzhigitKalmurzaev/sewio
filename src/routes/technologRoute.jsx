@@ -25,6 +25,7 @@ import OrderEdit from '../pages/technolog/orders/orderEdit'
 import CreateWarehouse from '../pages/technolog/warehouse/create/createWarehouse'
 import EditWarehouse from '../pages/technolog/warehouse/edit/EditWarehouse'
 import DistOperations from '../pages/technolog/operations/distribution/distOperations'
+import PaymentInfo from '../pages/technolog/employee/salary/paymentInfo'
 
 const TechnologRoute = () => {
   return (
@@ -39,7 +40,8 @@ const TechnologRoute = () => {
                 <Route path=":id">
                   <Route path="" element={<EditEmployee />} />
                   <Route path="salary_history" element={<SalaryHistory />} />
-                  <Route path="salary_payment" element={<SalaryPayment />} />
+                  <Route path="salary_history/:id" element={<PaymentInfo />} />
+                  <Route path="salary_calculate" element={<SalaryPayment />} />
                 </Route>
             </Route>
 

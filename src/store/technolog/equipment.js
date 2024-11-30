@@ -13,6 +13,30 @@ export const getEquipmentList = createAsyncThunk(
     }
 )
 
+export const createEquipment = createAsyncThunk(
+    'equipment/createEquipment',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.post('equipment/crud/', props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const patchEquipment = createAsyncThunk(
+    'equipment/patchEquipment',
+    async ({ props, id }, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.patch(`equipment/crud/${id}/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const createRank = createAsyncThunk(
     'equipment/createRank',
     async (props, { rejectWithValue }) => {

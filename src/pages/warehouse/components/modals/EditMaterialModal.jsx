@@ -5,10 +5,10 @@ import Input from '../../../../components/ui/inputs/input'
 import { useDispatch } from 'react-redux'
 import Select from '../../../../components/ui/inputs/select'
 import { materialUnits } from '../../../../utils/selectDatas/productDatas'
-import { postMaterial } from '../../../../store/technolog/material'
+import { patchMaterial, postMaterial } from '../../../../store/technolog/material'
 import { toast } from 'react-toastify'
 
-const EditMaterialModal = ({ modals, setModals, data }) => {
+const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
   
     const dispatch = useDispatch();
 
@@ -34,7 +34,7 @@ const EditMaterialModal = ({ modals, setModals, data }) => {
               is_active: data.is_active
           })
       }
-    }, [data.title])
+    }, [data.title, data])
   
     const getValue = (e) => {
       const { name, value } = e.target;
@@ -56,11 +56,12 @@ const EditMaterialModal = ({ modals, setModals, data }) => {
   
     const onSubmit = () => {
       if(validateField()) {
-          dispatch(postMaterial(material))
+          dispatch(patchMaterial({props: material, id: data.id}))
           .then(res => {
               if(res.meta.requestStatus === 'fulfilled') {
-                  toast("Сырье создано успешно!");
-                  setModals({ ...modals, create: false })
+                  toast("Сырье изменено успешно!");
+                  setModals({ ...modals, edit: false })
+                  setUpdate(prev => !prev)
                   setMaterial({
                       title: '',
                       vendor_code: '',

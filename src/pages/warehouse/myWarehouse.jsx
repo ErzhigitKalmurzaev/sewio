@@ -28,11 +28,12 @@ const MyWarehouse = () => {
   }
 
   const [modals, setModals] = useState({ create: false, edit: false });
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     dispatch(getMyMateralsList(urls));
     dispatch(getComings());
-  }, [])
+  }, [dispatch, update])
 
   const handleChangeFilter = (name, value) => {
     params.set(name, value);
@@ -42,7 +43,7 @@ const MyWarehouse = () => {
   const searchHandle = () => {
     dispatch(getMyMateralsList(urls));
   }
-  console.log(comings_list)
+  
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
         <Title text={`Склад: ${me_info?.warehouse?.title}`}/>
@@ -79,12 +80,14 @@ const MyWarehouse = () => {
                 limit={urls.page_size}
                 activePage={urls.page}
                 setPage={handleChangeFilter}
+                setUpdate={setUpdate}
             />
         </div>
 
         <CreateMaterialModal
             modals={modals}
             setModals={setModals}
+            setUpdate={setUpdate}
         />
     </div>
   )

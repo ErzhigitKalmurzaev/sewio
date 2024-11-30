@@ -50,7 +50,7 @@ const ComingDeteil = () => {
                     }  else {
                         toast("Приход сырья отклонен!");
                     }
-                    navigate(-1)
+                    navigate(-2)
                 }
             })
     }

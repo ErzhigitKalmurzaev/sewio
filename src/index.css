@@ -28,3 +28,9 @@ p, h1, h2, h3, h4, h5, h6 {
 .rsuite-table {
   font-family: 'Inter', sans-serif !important;
 }
+
+.rs-progress-circle-info span {
+  font-size: 14px !important;
+  text-align: center !important;
+  margin-top: 3px !important;
+}

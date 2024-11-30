@@ -7,7 +7,7 @@ import Input from '../../../../components/ui/inputs/input';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStaffList } from '../../../../store/technolog/staff';
 import SelectStaffTable from '../components/tables/selectStaffsTable';
-import { getWarehouseById, patchWarehouse } from '../../../../store/technolog/warehouse';
+import { deleteWarehouse, getWarehouseById, patchWarehouse } from '../../../../store/technolog/warehouse';
 import { toast } from 'react-toastify';
 import Button from '../../../../components/ui/button';
 import { MoveRight } from 'lucide-react';
@@ -104,6 +104,16 @@ const EditWarehouse = () => {
     }
   }
 
+  const onDelete = () => {
+    dispatch(deleteWarehouse({ id }))
+        .then(res => {
+          if(res.meta.requestStatus === 'fulfilled') {
+            navigate(-1)
+            toast("Склад успешно удален!")
+          }
+        })
+  }
+
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
         <MyBreadcrums items={breadcrumbs}/>
@@ -158,8 +168,11 @@ const EditWarehouse = () => {
             />
         </div>
 
-        <div className='flex justify-center'>
-          <Button width='200px' onClick={onSubmit}>
+        <div className='flex justify-center gap-x-10'>
+          <Button variant='red' width='150px' onClick={onDelete}>
+              Удалить
+          </Button>
+          <Button width='150px' onClick={onSubmit}>
             Сохранить 
           </Button>
         </div>

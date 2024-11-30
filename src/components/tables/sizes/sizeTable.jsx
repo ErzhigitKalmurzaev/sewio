@@ -14,9 +14,9 @@ const SizeTable = ({ data, setModals, modals, setEditSize, size_category_list_st
     }
 
     return (
-        <div className='font-inter'>
+        <div className='min-h-[450px] font-inter bg-white rounded-xl'>
         <Table
-            height={600}
+            height={450}
             loading={size_category_list_status === 'loading'}
             data={data}
             className='rounded-xl'

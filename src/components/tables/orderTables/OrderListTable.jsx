@@ -7,6 +7,8 @@ import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
 import TableDropdown from '../tableDropdown';
 import { formatedToDDMMYYYY } from '../../../utils/functions/dateFuncs';
 import { OrderStatuses } from '../../../utils/constants/statuses';
+import { formatNumber } from '../../../utils/functions/numFuncs';
+import CircularWithValueLabel from '../../ui/circularProgressWithLabel';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -21,14 +23,17 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage }) => 
               loading={status === 'loading'}
               data={data}
               height={600}
+              bordered
+              cellBordered
               className='rounded-xl h-full'
+              rowHeight={50}
             >
               <Column width={60} align="center" fixed>
                   <HeaderCell>ID</HeaderCell>
                   <Cell dataKey="id" />
               </Column>
 
-              <Column width={250}>
+              <Column width={200}>
                   <HeaderCell>ФИО</HeaderCell>
                   <Cell dataKey="title">
                     {rowData => (
@@ -37,7 +42,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage }) => 
                   </Cell>
               </Column>
 
-              <Column width={200}>
+              <Column width={120}>
                   <HeaderCell>Компания</HeaderCell>
                   <Cell dataKey="company">
                     {rowData => (
@@ -46,7 +51,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage }) => 
                   </Cell>
               </Column>
 
-              <Column width={200}>
+              <Column width={100}>
                   <HeaderCell>Статус</HeaderCell>
                   <Cell dataKey="is_active">
                     {rowData => (
@@ -55,7 +60,34 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage }) => 
                   </Cell>
               </Column>
 
-              <Column width={200}>
+              <Column width={130}>
+                  <HeaderCell>Общий доход</HeaderCell>
+                  <Cell dataKey="created_at">
+                    {rowData => (
+                        <p>{formatNumber(rowData.total_revenue)} сом</p>
+                    )}
+                  </Cell>
+              </Column>
+
+              <Column width={130}>
+                  <HeaderCell>Расход</HeaderCell>
+                  <Cell dataKey="created_at">
+                    {rowData => (
+                        <p>{formatNumber(rowData.total_cost)} сом</p>
+                    )}
+                  </Cell>
+              </Column>
+              
+              <Column width={130}>
+                  <HeaderCell>Прибыль</HeaderCell>
+                  <Cell dataKey="created_at">
+                    {rowData => (
+                        <p>{formatNumber(rowData.profit)} сом</p>
+                    )}
+                  </Cell>
+              </Column>
+
+              <Column width={120}>
                   <HeaderCell>Дата создания</HeaderCell>
                   <Cell dataKey="created_at">
                     {rowData => (
@@ -64,7 +96,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage }) => 
                   </Cell>
               </Column>
 
-              <Column width={200}>
+              <Column width={120}>
                   <HeaderCell>Дата сдачи</HeaderCell>
                   <Cell dataKey="deadline">
                     {rowData => (
@@ -73,7 +105,18 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage }) => 
                   </Cell>
               </Column>
 
-              <Column width={100} fixed="right">
+              <Column width={100} align='center'>
+                  <HeaderCell>Выполнено</HeaderCell>
+                  <Cell style={{ padding: '4px' }}>
+                    {rowData => (
+                        <div className='w-[42px] h-[42px]'>
+                          <CircularWithValueLabel progress={rowData.completion_percentage} />
+                        </div>
+                    )}
+                  </Cell>
+              </Column>
+
+              <Column width={80} fixed="right">
                   <HeaderCell>Действия</HeaderCell>
 
                   <Cell style={{ padding: '6px' }}>

@@ -49,6 +49,18 @@ export const patchWarehouse = createAsyncThunk(
     }
 )
 
+export const deleteWarehouse = createAsyncThunk(
+    'warehouse/deleteWarehouse',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.delete(`warehouse/crud/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const WarehouseSlice = createSlice({
     name: 'warehouse',
     initialState: {

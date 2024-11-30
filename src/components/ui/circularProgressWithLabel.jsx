@@ -10,5 +10,5 @@ export default function CircularWithValueLabel({ progress }) {
     return '#2c9b90';
   };
 
-  return <Progress.Circle percent={progress} strokeColor={getColor(progress)} color={getColor(progress)} />;
+  return <Progress.Circle percent={progress} strokeColor={getColor(progress)} strokeWidth={8} trailWidth={8} color={getColor(progress)} />;
 }

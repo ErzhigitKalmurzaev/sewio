@@ -54,18 +54,23 @@ const AdvanceModal = ({ modals, setModals }) => {
         dispatch(postPayment({ ...payment, amount: Number(payment.amount) }))
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
-                const dataWithFiles = {
-                    payment_id: res.payload.id,
-                    files: files.map(item => (item.blobFile))
+                if(files.length > 0) {
+                    const dataWithFiles = {
+                        payment_id: res.payload.id,
+                        files: files.map(item => (item.blobFile))
+                    }
+    
+                    dispatch(postPaymentFiles(dataWithFiles))
+                        .then(res => {
+                            if(res.meta.requestStatus === 'fulfilled') {
+                                setModals({ ...modals, advance: false });
+                                toast('Аванс успешно оформлен!')
+                            }
+                        })
+                } else {
+                    setModals({ ...modals, advance: false });
+                    toast('Аванс успешно оформлен!')
                 }
-
-                dispatch(postPaymentFiles(dataWithFiles))
-                    .then(res => {
-                        if(res.meta.requestStatus === 'fulfilled') {
-                            setModals({ ...modals, fine: false });
-                            toast('Штраф успешно оформлен!')
-                        }
-                    })
             }
         })
     } else {
@@ -118,7 +123,7 @@ const AdvanceModal = ({ modals, setModals }) => {
             </div>
         </Modal.Body>
         <Modal.Footer className='flex justify-center'>
-            <Button width='385px'>Выдать</Button>
+            <Button width='385px' onClick={onSubmit}>Выдать</Button>
         </Modal.Footer>
     </Modal>
   )

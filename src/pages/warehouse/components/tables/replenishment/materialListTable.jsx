@@ -7,7 +7,7 @@ import { materialUnits } from '../../../../../utils/selectDatas/productDatas';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const MaterialListTable = ({ data, status, modals, setModals, total, limit, activePage, setPage }) => {
+const MaterialListTable = ({ data, status, modals, setModals, total, limit, activePage, setPage, setUpdate }) => {
 
   const [selectedMaterial, setSelectedMaterial] = useState({});
 
@@ -73,6 +73,7 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
             modals={modals}
             setModals={setModals}
             data={selectedMaterial}
+            setUpdate={setUpdate}
         />
         <div style={{ padding: 20 }}>
             <Pagination
