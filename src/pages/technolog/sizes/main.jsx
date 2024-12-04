@@ -14,11 +14,12 @@ const Sizes = () => {
   const { size_category_list, size_category_list_status } = useSelector(state => state.size);
   
   const [modals, setModals] = useState({ create_category: false, create_size: false, edit: false });
+  const [update, setUpdate] = useState(false);
   const [editSize, setEditSize] = useState({})
 
   useEffect(() => {
     dispatch(getSizeCategoryList());
-  }, [modals.edit])
+  }, [update])
 
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-3'>
@@ -42,9 +43,9 @@ const Sizes = () => {
 
       {/* Modals */}
 
-      <CreateCategory modals={modals} setModals={setModals}/>
-      <EditCategory modals={modals} setModals={setModals} data={editSize} />
-      <CreateSize modals={modals} setModals={setModals} categories={size_category_list} />
+      <CreateCategory modals={modals} setModals={setModals} setUpdate={setUpdate}/>
+      <EditCategory modals={modals} setModals={setModals} data={editSize} setUpdate={setUpdate} />
+      <CreateSize modals={modals} setModals={setModals} categories={size_category_list} setUpdate={setUpdate} />
 
     </div>
   )

@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import MyBreadcrums from '../../../../components/ui/breadcrums'
 import Title from '../../../../components/ui/title'
 import InfoCard from '../../../../components/shared/infoCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { getStaffSalaryHistory } from '../../../../store/technolog/staff'
 import SalaryHistoryTable from '../components/tables/salaryHistoryTable'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
+import DateRangePickerInput from '../../../../components/ui/inputs/dateRangePicker'
+import { formatedToDDMMYYYY, getDefaultDateRange } from '../../../../utils/functions/dateFuncs'
 
 const SalaryHistory = () => {
 
@@ -69,15 +71,37 @@ const SalaryHistory = () => {
   const dispatch = useDispatch();
 
   const { salary_history, salary_history_status } = useSelector(state => state.staff);
+  const [params, setParams] = useSearchParams();
+
+  const urls = {
+    from_date: params.get("from_date") || getDefaultDateRange().from_date,
+    to_date: params.get("to_date") || getDefaultDateRange().to_date,
+    page: params.get("page") || 1,
+    page_size: params.get("page_size") || 20
+  }
+
+  const handleChangeFilter = (value) => {
+    if(value?.length > 0) {
+      params.set('from_date', formatedToDDMMYYYY(value[0], '-'));
+      params.set('to_date', formatedToDDMMYYYY(value[1], '-'));
+      setParams(params);
+    }
+  }
 
   useEffect(() => {
-    dispatch(getStaffSalaryHistory({ id }));
-  }, [])
+    dispatch(getStaffSalaryHistory({ id, urls }));
+  }, [urls.from_date, urls.to_date, id])
 
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
         <MyBreadcrums items={breadcrumbs}/>
-        <Title text="История выдачи ЗП сотрудника: Александр Сергеев"/>
+        
+        <div className='flex justify-between'>
+          <Title text="История выдачи ЗП сотрудника"/>
+          <div>
+            <DateRangePickerInput date={[urls.from_date, urls.to_date]} setDate={handleChangeFilter}/>
+          </div>
+        </div>
 
         <div className='flex gap-x-5'>
             {
@@ -88,7 +112,14 @@ const SalaryHistory = () => {
         </div>
 
         <div>
-            <SalaryHistoryTable data={salary_history} status={salary_history_status}/>
+            <SalaryHistoryTable 
+              data={salary_history?.results} 
+              status={salary_history_status}
+              total={salary_history?.count || 0}
+              limit={urls.page_size}
+              activePage={Number(urls.page)}
+              setPage={handleChangeFilter}
+            />
         </div>
     </div>
   )

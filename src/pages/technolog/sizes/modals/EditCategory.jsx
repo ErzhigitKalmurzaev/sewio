@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { createSizeCategory, editSizeCategory } from '../../../../store/technolog/size'
 import { toast } from 'react-toastify'
 
-const EditCategory = ({ modals, setModals, data }) => {
+const EditCategory = ({ modals, setModals, data, setUpdate }) => {
 
   const dispatch = useDispatch();
 
@@ -42,7 +42,8 @@ const EditCategory = ({ modals, setModals, data }) => {
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
                 toast("Категория изменена успешно!");
-                setModals({ ...modals, edit: false })
+                setModals({ ...modals, edit: false });
+                setUpdate(prev => !prev);
                 setCategory({
                     title: '',
                     is_active: true

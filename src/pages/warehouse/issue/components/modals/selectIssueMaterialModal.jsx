@@ -110,7 +110,7 @@ const SelectIssueMaterialModal = ({ modals, setModals, materials_list, status, u
                       total={materials_list?.count}
                       limitOptions={[10, 30, 50]}
                       limit={urls.page_size}
-                      activePage={urls.page}
+                      activePage={Number(urls.page || 1)}
                       onChangePage={(e) => handleChangeFilter('page', e)}
                   />
                 </div>

@@ -22,7 +22,7 @@ const FillProduct = () => {
       .then(res => {
         setLoading(false)
     })
-  }, []);
+  }, [id, dispatch]);
 
   return (
     <div>

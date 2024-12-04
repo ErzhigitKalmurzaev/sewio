@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { createSizeCategory } from '../../../../store/technolog/size'
 import { toast } from 'react-toastify'
 
-const CreateCategory = ({ modals, setModals }) => {
+const CreateCategory = ({ modals, setModals, setUpdate }) => {
 
   const dispatch = useDispatch();
 
@@ -34,6 +34,7 @@ const CreateCategory = ({ modals, setModals }) => {
             if(res.meta.requestStatus === 'fulfilled') {
                 toast("Категория создана успешно!");
                 setModals({ ...modals, create_category: false })
+                setUpdate(prev => !prev)
                 setCategory({
                     title: '',
                     is_active: true

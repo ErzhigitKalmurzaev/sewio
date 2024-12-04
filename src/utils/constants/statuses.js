@@ -27,19 +27,19 @@ export const PaymentStatuses = [
         color: 'green'
     },
     {
-        title: 'ШТРАФ',
+        title: 'Штраф',
         color: 'red'
     },
     {
-        title: "АВАНС",
+        title: "Аванс",
         color: 'blue'
     },
     {
-        title: 'ШТРАФ',
+        title: 'Штраф',
         color: 'red'
     },
     {
-        title: "АВАНС",
+        title: "Аванс",
         color: 'blue'
     },
 ]

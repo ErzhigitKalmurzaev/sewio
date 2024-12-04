@@ -3,6 +3,7 @@ import React from 'react'
 import { Table } from 'rsuite';
 import { ReactComponent as Pencil } from '../../../../assets/icons/pencil.svg';
 import EditProductModal from '../modals/EditProductModal';
+import { Trash, Trash2 } from 'lucide-react';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -11,15 +12,19 @@ const OrderProductInfo = ({ products, product_list, modals, setModals, order, se
   const [editProd, setEditProd] = React.useState({})
 
   const getProductValueWithKey = (key, id) => {
-    //   return product_list?.find((product) => product.id === id)[key]
     const index = product_list?.findIndex((product) => product.id === id);
-    return product_list[index][key]
+    return product_list?.[index]?.[key];
   }
 
   const handleEditProduct = (product) => {
     setEditProd({})
     setModals({...modals, edit: true})
     setEditProd(product)
+  }
+
+  const handleDeleteProduct = (product) => {
+    const newProducts = order?.products?.filter((item) => item.nomenclature !== product.nomenclature)
+    setOrder({...order, products: newProducts})
   }
 
   return (
@@ -94,12 +99,17 @@ const OrderProductInfo = ({ products, product_list, modals, setModals, order, se
                 </Cell>
         </Column>
 
-        <Column width={100} align="center">
-            <HeaderCell>Выбрать</HeaderCell>
+        <Column width={120} align="center">
+            <HeaderCell>Действия</HeaderCell>
             <Cell className='cursor-pointer'>
             {(rowData) => (
-                <div onClick={() => handleEditProduct(rowData)}>
-                    <Pencil/>
+                <div className='flex gap-x-3 items-center'>
+                    <div onClick={() => handleEditProduct(rowData)}>
+                        <Pencil/>
+                    </div>
+                    <div onClick={() => handleDeleteProduct(rowData)}>
+                        <Trash2 size={19} color='red'/>
+                    </div>
                 </div>
             )}
             </Cell>

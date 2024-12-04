@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Title from '../../../components/ui/title'
 import Button from '../../../components/ui/button'
 import DateRangePickerInput from '../../../components/ui/inputs/dateRangePicker';
 import InfoCard from '../../../components/shared/infoCard';
+import { useDispatch } from 'react-redux';
+import { getStatistic } from '../../../store/technolog/statistic';
 
 const Statistic = () => {
 
@@ -44,6 +46,12 @@ const Statistic = () => {
       month: '12.11.2024' 
     }
   ]
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getStatistic())
+  }, [])
 
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-12'>

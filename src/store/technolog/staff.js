@@ -113,9 +113,9 @@ export const postPaymentFiles = createAsyncThunk(
 
 export const getStaffSalaryHistory = createAsyncThunk(
     'technologStaff/getStaffSalaryHistory',
-    async ({ id }, { rejectWithValue }) => {
+    async ({ id, urls }, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get(`payment/history/list/${id}/`);
+            const { data } = await axiosInstance.get(`payment/history/list/${id}/?from_date=${urls.from_date}&to_date=${urls.to_date}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)

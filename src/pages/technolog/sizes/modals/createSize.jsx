@@ -7,7 +7,7 @@ import { createSize } from '../../../../store/technolog/size'
 import { toast } from 'react-toastify'
 import Select from '../../../../components/ui/inputs/select'
 
-const CreateSize = ({ modals, setModals, categories }) => {
+const CreateSize = ({ modals, setModals, categories, setUpdate }) => {
 
   const dispatch = useDispatch();
 
@@ -36,6 +36,7 @@ const CreateSize = ({ modals, setModals, categories }) => {
             if(res.meta.requestStatus === 'fulfilled') {
                 toast("Категория создана успешно!");
                 setModals({ ...modals, create_size: false })
+                setUpdate(prev => !prev)
                 setSize({
                     title: '',
                     is_active: true

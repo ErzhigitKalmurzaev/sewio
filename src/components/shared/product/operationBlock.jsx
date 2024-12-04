@@ -12,7 +12,7 @@ const OperationBlock = ({ operation, index, id_product }) => {
 
   const dispatch = useDispatch();
 
-  const [collapse, setCollapse] = useState(false);
+  const [collapse, setCollapse] = useState(true);
   const [modals, setModals] = useState({ edit: false, delete: false })
 
   const activateProduct = () => {
@@ -53,7 +53,7 @@ const OperationBlock = ({ operation, index, id_product }) => {
       </div>
 
       {/* Modals */}
-      <EditOperationModal modals={modals} setModals={setModals} operation={operation} />
+      <EditOperationModal modals={modals} setModals={setModals} operation={operation} id_product={id_product} />
       <DeleteOperationModal modals={modals} setModals={setModals} operation={operation} id_product={id_product}/>
 
     </div>

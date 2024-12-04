@@ -1,4 +1,4 @@
-import { ChartColumnIncreasing, Users, UsersRound, Cable, Package, ShoppingBasket, Warehouse, BookOpenCheck, ClipboardList, Ribbon, GraduationCap, PencilRuler, CircleDollarSign } from 'lucide-react';
+import { ChartColumnIncreasing, Users, UsersRound, Cable, Package, ShoppingBasket, Warehouse, BookOpenCheck, ClipboardList, Ribbon, GraduationCap, PencilRuler, CircleDollarSign, Calculator } from 'lucide-react';
 
 export const technologNav = [
     {
@@ -61,16 +61,22 @@ export const technologNav = [
                 elements: false,
             },
             {
+                title: 'Оборудование',
+                path: 'equipments',
+                icon: <Cable />,
+                elements: false
+            },
+            {
                 title: 'База знаний',
                 path: 'knowledge',
                 icon: <GraduationCap />,
                 elements: false,
             },
             {
-                title: 'Оборудование',
-                path: 'equipments',
-                icon: <Cable />,
-                elements: false
+                title: 'Калькулятор',
+                path: 'calculator',
+                icon: <Calculator />,
+                elements: false,
             },
         ]
     }

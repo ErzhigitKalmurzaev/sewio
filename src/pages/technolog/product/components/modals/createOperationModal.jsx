@@ -86,7 +86,6 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
             dispatch(getProductById({ id: id_product }))
           }
         })
-      console.log(newOperation)
     } else {
       toast("Заполните все поля!");
     }

@@ -16,7 +16,6 @@ const NewCombination = ({ modals, setModals, operations, id_product }) => {
   const [newCombination, setNewCombination] = useState({ nomenclature: Number(id_product), title: '', operations: [] })
 
   const getOperation = (operation) => {
-    console.log(operation)
     const findOper = newCombination.operations.find(oper => oper === operation.id);
     if(findOper) {
         const opers = newCombination.operations.filter(oper => oper !== operation.id);
@@ -77,6 +76,8 @@ const NewCombination = ({ modals, setModals, operations, id_product }) => {
                                     onClick={() => getOperation(item)}
                                 >
                                     <Checkbox 
+                                        key={index + "checks"}
+                                        onClick={e => e.stopPropagation()}
                                         isChecked={newCombination.operations.find(oper => oper === item.id)} 
                                         label={item.title}    
                                     />

@@ -27,10 +27,8 @@ function renameKeys(obj, parentType = null) {
 
 const DistOperationTable = ({ data, status, operations, setOperations }) => {
 
-    // Переименовываем ключи и добавляем типы
     const dataWithChildren = data.map(item => renameKeys(item));
 
-    // Функция для обработки выбора операций
     const selectOperation = (rowData) => {
         if (rowData.type === 'combinations') {
             const operationObjects = rowData.children;
@@ -82,7 +80,7 @@ const DistOperationTable = ({ data, status, operations, setOperations }) => {
         <div className='min-h-[400px] font-inter bg-white font-inter rounded-xl'>
             <Table
                 isTree
-                defaultExpandAllRows={true}
+                defaultExpandAllRows={false}
                 bordered
                 cellBordered
                 virtualized

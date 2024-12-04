@@ -65,6 +65,10 @@ const CreateWarehouse = () => {
   }
 
   const validateField = () => {
+    if(warehouse.staffs.length < 1) {
+      toast.error('Выберите минимум 1го сотрудника!')
+      return false
+    }
     const newErrors = {
       title: !warehouse.title,
       address: !warehouse.address
@@ -81,7 +85,7 @@ const CreateWarehouse = () => {
       dispatch(postWarehouse(warehouse))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
-            navigate(`${res.payload.id}`)
+            navigate(-1)
             toast("Склад успешно создан!")
           }
         })

@@ -26,7 +26,6 @@ const EditCombinationModal = ({ modals, setModals, combination, operations, id_p
   }, [combination.title])
 
   const getOperation = (operation) => {
-    console.log(operation, newCombination?.operations)
     const findOper = newCombination?.operations?.find(oper => oper === operation.id);
     if(findOper) {
         const opers = newCombination?.operations?.filter(oper => oper !== operation.id);
@@ -51,8 +50,8 @@ const EditCombinationModal = ({ modals, setModals, combination, operations, id_p
         dispatch(editCombinationById({ id: combination.id, props: newCombination }))
             .then(res => {
                 if(res.meta.requestStatus === 'fulfilled') {
-                    toast('Комбинация создана успешно!');
-                    setModals({ ...modals, create: false })
+                    toast('Комбинация изменена успешно!');
+                    setModals({ ...modals, edit: false })
                     dispatch(getProductById({ id: id_product }))
                 }
             })
@@ -65,7 +64,7 @@ const EditCombinationModal = ({ modals, setModals, combination, operations, id_p
     <Modal size={'md'} open={modals.edit} onClose={() => setModals({ ...modals, edit: false })}>
         <Modal.Header>
             <Modal.Title>
-                <p className='text-lg font-bold font-inter'>Создание комбинации</p>
+                <p className='text-lg font-bold font-inter'>Редактирование комбинации</p>
             </Modal.Title>
         </Modal.Header>
 
@@ -92,6 +91,8 @@ const EditCombinationModal = ({ modals, setModals, combination, operations, id_p
                                     onClick={() => getOperation(item)}
                                 >
                                     <Checkbox 
+                                        key={index + "checks"}
+                                        onClick={e => e.stopPropagation()}
                                         isChecked={newCombination.operations.find(oper => oper === item.id)} 
                                         label={item.title}    
                                     />

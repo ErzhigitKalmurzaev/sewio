@@ -89,7 +89,7 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
                 total={total}
                 limitOptions={[10, 30, 50]}
                 limit={limit}
-                activePage={activePage}
+                activePage={Number(activePage)}
                 onChangePage={(e) => setPage('page', e)}
             />
           </div>

@@ -14,7 +14,12 @@ const SelectMaterial = ({ modals, setModals, setNewOperation, newOperation, size
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(!materials_list) dispatch(getMateralList());
+    if(!materials_list) {
+      dispatch(getMateralList({ title: '' }));
+    } else {
+      console.log(materials_list)
+      
+    }
   }, [])
 
   const handleSelectMaterial = (e) => {
@@ -64,6 +69,7 @@ const SelectMaterial = ({ modals, setModals, setNewOperation, newOperation, size
                         data={materials_list}
                         labelKey='title'
                         valueKey='id'
+                        searchable={true}
                         placeholder='Выберите сырье'
                         label='Сырье'
                         onChange={(e) => handleSelectMaterial(e)}

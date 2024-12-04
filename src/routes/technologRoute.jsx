@@ -26,6 +26,7 @@ import CreateWarehouse from '../pages/technolog/warehouse/create/createWarehouse
 import EditWarehouse from '../pages/technolog/warehouse/edit/EditWarehouse'
 import DistOperations from '../pages/technolog/operations/distribution/distOperations'
 import PaymentInfo from '../pages/technolog/employee/salary/paymentInfo'
+import Calculator from '../pages/technolog/calculator/main'
 
 const TechnologRoute = () => {
   return (
@@ -78,6 +79,7 @@ const TechnologRoute = () => {
             <Route path="sizes" element={<Sizes />} />
             <Route path="knowledge" element={<p>База знаний</p>} />
             <Route path="equipments" element={<Equipments />} />
+            <Route path="calculator" element={<Calculator />} />
         </Route>
     </Routes>
   )

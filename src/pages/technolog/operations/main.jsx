@@ -74,7 +74,7 @@ const Operations = () => {
                 status={order_list_status}
                 total={order_list?.count || 0}
                 limit={urls.page_size}
-                activePage={urls.page}
+                activePage={Number(urls.page)}
                 setPage={handleChangeFilter}
             />
         </div>

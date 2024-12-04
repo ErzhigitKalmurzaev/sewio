@@ -7,12 +7,12 @@ import { getRankList } from '../../../../../store/technolog/rank'
 import { getEquipmentList } from '../../../../../store/technolog/equipment'
 import NumInput from '../../../../../components/ui/inputs/numInput'
 import MaterialActions from '../shared/materialActions'
-import { createOperation, editOperationById } from '../../../../../store/technolog/product'
+import { createOperation, editOperationById, getProductById } from '../../../../../store/technolog/product'
 import { toast } from 'react-toastify'
 import Button from '../../../../../components/ui/button'
 import MaterialActionsEdit from '../shared/materialActionsEdit'
 
-const EditOperationModal = ({ modals, setModals, operation }) => {
+const EditOperationModal = ({ modals, setModals, operation, id_product }) => {
 
   const dispatch = useDispatch();
 
@@ -38,22 +38,6 @@ const EditOperationModal = ({ modals, setModals, operation }) => {
     is_active: false,
     op_noms: false
   })
-
-//   const getOps = (ops) => {
-//     if(!ops) return []
-//     return ops.map(op => {
-//         (
-//             {
-//                 consumables: op.consumables.map(item => {({
-//                     size: item.size.id,
-//                     consumption: item.consumption,
-//                     waste: item.waste
-//                 })}),
-//                 nomenclature: op.nomenclature
-//             }
-//         )
-//     })
-//   }
 
   const getValue = (e) => {
     const { name, value } = e.target;
@@ -86,22 +70,22 @@ const EditOperationModal = ({ modals, setModals, operation }) => {
 
   const reductPostData = (datas) => {
     let data = {...datas}
-    let ops = data.op_noms.map(op => 
-        op.id ? (
+    let ops = data.op_noms.map(op => (
             {
                 consumables: op.consumables.map(item => ({
-                    size: item.size.id,
+                    size: item?.size?.id,
                     consumption: item.consumption,
                     waste: item.waste
                 })),
-                nomenclature: op.nomenclature.id
+                nomenclature: op.nomenclature?.id ? op.nomenclature?.id : op.nomenclature
             }
-        ) : op
+        )
     )
     data = {
         ...data,
         op_noms: ops
     }
+    return data;
   }
 
   const onSubmit = () => {
@@ -111,9 +95,13 @@ const EditOperationModal = ({ modals, setModals, operation }) => {
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
             toast("Операция изменена успешно!");
-            setModals({ ...modals, create: false })
+            setModals({ ...modals, edit: false })
+            dispatch(getProductById({ id: id_product }))
           }
         })
+
+      console.log(trueData)
+
     } else {
       toast("Заполните все поля!");
     }

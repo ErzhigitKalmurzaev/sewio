@@ -76,7 +76,7 @@ const ProductTable = ({ data, status, total, activePage, limit, setPage }) => {
                 total={total}
                 limitOptions={[10, 30, 50]}
                 limit={limit}
-                activePage={activePage}
+                activePage={Number(activePage)}
                 onChangePage={(e) => setPage('page', e)}
             />
           </div>

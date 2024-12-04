@@ -49,8 +49,8 @@ const SizeTable = ({ data, setModals, modals, setEditSize, size_category_list_st
                             rowData => (
                                 <p>
                                     {
-                                        rowData.sizes.map(item => (
-                                            `${item.title}, `
+                                        rowData.sizes.map((item, index) => (
+                                            `${item.title}${index !== rowData.sizes.length - 1 ? ', ' : ''} `
                                         ))
                                     }
                                 </p>

@@ -78,7 +78,7 @@ const MyWarehouse = () => {
                 setModals={setModals}
                 total={materials_list?.count || 0}
                 limit={urls.page_size}
-                activePage={urls.page}
+                activePage={Number(urls.page || 1)}
                 setPage={handleChangeFilter}
                 setUpdate={setUpdate}
             />

@@ -86,7 +86,13 @@ const MaterialActions = ({ newOperation, setNewOperation, mainModals, setMainMod
             {
               newOperation.op_noms.length > 0 ? 
               newOperation.op_noms.map((item, index) => (
-                <MaterialBlock material={item} key={index} activeKey={activeKey}/>
+                <MaterialBlock 
+                  key={index} 
+                  material={item} 
+                  activeKey={activeKey} 
+                  newOperation={newOperation} 
+                  setNewOperation={setNewOperation}
+                />
               )) :
               <p className="text-base font-semibold font-inter text-center my-5">Сырье отсутствуют</p>
             }

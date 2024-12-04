@@ -1,13 +1,13 @@
 import React from 'react'
 import { formatedToDDMMYYYY } from '../../../../../utils/functions/dateFuncs'
-import { Table } from 'rsuite';
+import { Pagination, Table } from 'rsuite';
 import { PaymentStatuses } from '../../../../../utils/constants/statuses';
 import { formatNumber } from '../../../../../utils/functions/numFuncs';
 import { useNavigate } from 'react-router-dom';
 
 const { Column, HeaderCell, Cell } = Table
 
-const SalaryHistoryTable = ({ data, status }) => {
+const SalaryHistoryTable = ({ data, status, activePage, limit, setPage, total }) => {
 
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ const SalaryHistoryTable = ({ data, status }) => {
                 <HeaderCell>Статус выплаты</HeaderCell>
                 <Cell>
                     {(rowData) => (
-                        <p style={{ color: PaymentStatuses[rowData?.status - 1].color }}>
+                        <p className='font-semibold te' style={{ color: PaymentStatuses[rowData?.status - 1].color }}>
                             {PaymentStatuses[rowData?.status - 1].title}
                         </p>
                     )}
@@ -58,6 +58,24 @@ const SalaryHistoryTable = ({ data, status }) => {
             </Column>
 
         </Table>
+        <div style={{ padding: 20 }}>
+            <Pagination
+                prev
+                next
+                first
+                last
+                ellipsis
+                boundaryLinks
+                maxButtons={5}
+                size="xs"
+                layout={['total', '-', 'limit', '|', 'pager', 'skip']}
+                total={total}
+                limitOptions={[10, 30, 50]}
+                limit={limit}
+                activePage={Number(activePage)}
+                onChangePage={(e) => setPage('page', e)}
+            />
+        </div>
     </div>
   )
 }
