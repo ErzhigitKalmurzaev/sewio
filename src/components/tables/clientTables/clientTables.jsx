@@ -11,10 +11,11 @@ const ClentsTable = ({ data, status }) => {
     const navigate = useNavigate();
 
   return (
-        <div className='min-h-[500px] font-inter bg-white rounded-xl'>
+        <div className='min-h-[450px] font-inter bg-white rounded-xl'>
             <Table
               loading={status === 'loading'}
               data={data}
+              height={450}
               className='rounded-xl'
               >
               <Column width={60} align="center" fixed>

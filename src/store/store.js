@@ -12,6 +12,7 @@ import WarehouseSlice from "./technolog/warehouse";
 import WarehouseMaterialSlice from "./warehouse/materails";
 import WareWarehouseSlice from "./warehouse/warehouse";
 import OperationSlice from "./technolog/operations";
+import ShveyaOperationSlice from "./shveya/operation";
 
 const store = configureStore({
     reducer: {
@@ -33,7 +34,10 @@ const store = configureStore({
 
         //Warehouse
         ware_materials: WarehouseMaterialSlice.reducer,
-        ware_warehouse: WareWarehouseSlice.reducer
+        ware_warehouse: WareWarehouseSlice.reducer,
+
+        //Shveya 
+        sh_operation: ShveyaOperationSlice.reducer
     }
 })
 

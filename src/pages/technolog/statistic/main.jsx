@@ -68,7 +68,7 @@ const Statistic = () => {
           </div>
           <div className='flex gap-x-5 my-3'>
               {
-                statistics.map(item => (
+                statistics?.map(item => (
                   <InfoCard data={item}/>
                 ))
               }

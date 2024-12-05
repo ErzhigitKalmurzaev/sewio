@@ -25,6 +25,31 @@ export const createClient = createAsyncThunk(
     }
 )
 
+export const createClientFiles = createAsyncThunk(
+    'technologClient/createClientFiles',
+    async (props, { rejectWithValue }) => {
+        try {
+            const formData = new FormData();
+
+            for (const key in props) {
+                if (key === "files" || key === 'delete_ids') {
+                    for (let i = 0; i < props[key].length; i++) {
+                        const item = props[key][i]
+                        formData.append(key, item)
+                    }
+                } else {
+                    formData.append(key, props[key])
+                }
+            }
+
+            const { data } = await ImageUploadingFetch.post('user/client/files/', formData);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const getClientInfo = createAsyncThunk(
     'technologClient/getClientInfo',
     async (id, { rejectWithValue }) => {

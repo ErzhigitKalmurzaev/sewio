@@ -11,7 +11,9 @@ import { getRankList } from '../../../../store/technolog/rank';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { createClient } from '../../../../store/technolog/client';
+import { createClient, createClientFiles } from '../../../../store/technolog/client';
+import { Uploader } from 'rsuite';
+import { CloudUpload } from 'lucide-react';
 
 const CreateClient = () => {
   const breadcrumbs = [
@@ -42,6 +44,7 @@ const CreateClient = () => {
     address: false
   })
   const [image, setImage] = useState(null);
+  const [files, setFiles] = useState([])
 
   useEffect(() => {
     dispatch(getRankList())
@@ -80,11 +83,22 @@ const CreateClient = () => {
     if (validateFields()) {
       dispatch(createClient({ ...employee_data, image }))
         .then(res => {
-          navigate(-1)
-          toast("Клиент создан успешно!")
+          if(res.meta.requestStatus === 'fulfilled') {
+            dispatch(createClientFiles({ 
+              client_id: res.payload.id,
+              files: files.map(item => item.blobFile),
+              delete_ids: []
+             }))
+              .then(res => {
+                if(res.meta.requestStatus === 'fulfilled') {
+                  navigate(-1)
+                  toast("Клиент создан успешно!")
+                }
+              })
+          }
         })
     } else {
-      console.log('Form contains errors');
+      toast.error("Заполните все поля!")
     }
   };
 
@@ -179,6 +193,17 @@ const CreateClient = () => {
                     onChange={getValue}
                 />
             </div>
+
+            <p className='text-base font-semibold'>Файлы</p>
+            <div className='w-1/2 flex flex-col'>
+                <Uploader fileList={files} onChange={setFiles} autoUpload={false}>
+                    <Button>
+                        <CloudUpload className='mr-2' size={18}/>
+                        Загрузите файл или изображение
+                    </Button>
+                </Uploader>
+            </div>
+
           </div>
         </div>
 

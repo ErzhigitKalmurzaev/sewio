@@ -27,6 +27,7 @@ import EditWarehouse from '../pages/technolog/warehouse/edit/EditWarehouse'
 import DistOperations from '../pages/technolog/operations/distribution/distOperations'
 import PaymentInfo from '../pages/technolog/employee/salary/paymentInfo'
 import Calculator from '../pages/technolog/calculator/main'
+import ModerationOperation from '../pages/technolog/operations/moderation/moderationOperation'
 
 const TechnologRoute = () => {
   return (
@@ -73,6 +74,7 @@ const TechnologRoute = () => {
             <Route path="operations" element={<Outlet/>}>
                 <Route path="" element={<Operations />} />
                 <Route path=":id" element={<DistOperations/>} />
+                <Route path="moderation/:id" element={<ModerationOperation/>} />
             </Route>
             
             <Route path="discharge" element={<Discharge />} />

@@ -5,7 +5,7 @@ import 'rsuite/dist/rsuite.min.css';
 import { styled } from '@mui/material';
 import { formatToLocalString } from '../../../utils/functions/dateFuncs';
 
-const DateRangePickerInput = ({ date, setDate }) => {
+const DateRangePickerInput = ({ date = [], setDate }) => {
 
   // const [dateRange, setDateRange] = useState([null, null]);
   // const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -20,7 +20,7 @@ const DateRangePickerInput = ({ date, setDate }) => {
   // };
 
 
-  const dateValues = date.map(dateString => {
+  const dateValues = date?.map(dateString => {
     const [day, month, year] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day); // Month is 0-indexed
   });

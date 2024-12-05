@@ -13,6 +13,30 @@ export const getOrderClientList = createAsyncThunk(
     }
 )
 
+export const getModerationList = createAsyncThunk(
+    'order/getModerationList',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.get('work/moderation/list/');
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const acceptOperation = createAsyncThunk(
+    'order/acceptOperation',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.post('work/moderation/update/', props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const getOrderProductList = createAsyncThunk(
     'order/getOrderProductList',
     async (_, { rejectWithValue }) => {
@@ -82,7 +106,10 @@ const TechnologOrderSlice = createSlice({
         product_list: null,
         product_list_status: 'loading',
         order_list: null,
-        order_list_status: 'loading'
+        order_list_status: 'loading',
+        moderation_list: null,
+        moderation_list_status: 'loading',
+        accept_operation_status: 'loading'
     },
     reducers: {
 
@@ -116,6 +143,22 @@ const TechnologOrderSlice = createSlice({
                 state.order_list_status = 'error';
             })
             // --------------------------------------------------
+            .addCase(getModerationList.pending, (state) => {
+                state.moderation_list_status = 'loading';
+            }).addCase(getModerationList.fulfilled, (state, action) => {
+                state.moderation_list_status = 'success';
+                state.moderation_list = action.payload
+            }).addCase(getModerationList.rejected, (state) => {
+                state.moderation_list_status = 'error';
+            })
+            // --------------------------------------------------
+            .addCase(acceptOperation.pending, (state) => {
+                state.accept_operation_status = 'loading';
+            }).addCase(acceptOperation.fulfilled, (state) => {
+                state.accept_operation_status = 'success';
+            }).addCase(acceptOperation.rejected, (state) => {
+                state.accept_operation_status = 'error';
+            })
     }
 })
 

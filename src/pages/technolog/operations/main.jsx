@@ -4,7 +4,7 @@ import Input from '../../../components/ui/inputs/input'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
-import { getOrderList } from '../../../store/technolog/order'
+import { getModerationList, getOrderList } from '../../../store/technolog/order'
 import { OrderStatuses } from '../../../utils/constants/statuses'
 import OrderListTable from '../../../components/tables/orderTables/OrderListTable'
 
@@ -14,7 +14,7 @@ const Operations = () => {
   const navigate = useNavigate();
 
   const [params, setParams] = useSearchParams();
-  const { order_list, order_list_status } = useSelector(state => state.order);
+  const { order_list, order_list_status, moderation_list, accept_operation_status } = useSelector(state => state.order);
 
   const urls = {
     status: params?.get("status") || "",
@@ -29,7 +29,15 @@ const Operations = () => {
   }
 
   useEffect(() => {
-    dispatch(getOrderList({ urls }));
+    dispatch(getModerationList())
+  }, [])
+
+  useEffect(() => {
+    if(!order_list) {
+      dispatch(getOrderList({ urls }));
+    } else if (accept_operation_status === 'success') {
+      dispatch(getOrderList({ urls }));
+    }
   }, [urls.status, urls.page, urls.page_size])
 
   const handleSearch = () => {
@@ -76,6 +84,7 @@ const Operations = () => {
                 limit={urls.page_size}
                 activePage={Number(urls.page)}
                 setPage={handleChangeFilter}
+                moderation_list={moderation_list}
             />
         </div>
     </div>

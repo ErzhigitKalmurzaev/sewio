@@ -10,6 +10,7 @@ import TelInput from '../../../../components/ui/inputs/phoneInput'
 import { getRankList } from '../../../../store/technolog/rank'
 import { toast } from 'react-toastify'
 import { editClientInfo, getClientInfo } from '../../../../store/technolog/client'
+import UploaderFiles from '../components/uploaderFiles'
 
 const EditClient = () => {
 
@@ -45,6 +46,7 @@ const EditClient = () => {
                 address: res.payload?.address,
             })
             setImage(res.payload?.image)
+            setFiles(res?.payload?.files)
         })
   }, [])
 
@@ -69,6 +71,7 @@ const EditClient = () => {
     address: false
   })
   const [image, setImage] = useState(null);
+  const [files, setFiles] = useState([]);
 
   const getValue = (e) => {
     const { name, value } = e.target;
@@ -212,6 +215,12 @@ const EditClient = () => {
                     onChange={getValue}
                 />
             </div>
+
+            <p className='text-base font-semibold'>Файлы</p>
+            <div className='w-1/2 flex flex-col'>
+                <UploaderFiles data={files} setData={setFiles}/>
+            </div>
+
           </div>
         </div>
 

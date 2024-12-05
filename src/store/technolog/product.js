@@ -151,7 +151,7 @@ export const createProductImages = createAsyncThunk(
                     formData.append(key, props[key])
                 }
             }
-            console.log(formData)
+            
             const { data } = await ImageUploadingFetch.post(`product/images/crud`, formData);
             return data;
         } catch (err) {
