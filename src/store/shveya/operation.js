@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axios";
 
 export const getMyOperationList = createAsyncThunk(
-    'material/getMyOperationList',
+    'operation/getMyOperationList',
     async (_, { rejectWithValue }) => {
         try {
             const { data } =  await axiosInstance.get(`work/history/list/my/`);
@@ -14,7 +14,7 @@ export const getMyOperationList = createAsyncThunk(
 )
 
 export const postInputWork = createAsyncThunk(
-    'material/postInputWork',
+    'operation/postInputWork',
     async (props, { rejectWithValue }) => {
         try {
             const { data } =  await axiosInstance.post(`work/input/my/`, props);

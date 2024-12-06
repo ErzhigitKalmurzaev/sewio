@@ -5,7 +5,7 @@ import 'rsuite/dist/rsuite.min.css';
 import { styled } from '@mui/material';
 import { formatToLocalString } from '../../../utils/functions/dateFuncs';
 
-const DateRangePickerInput = ({ date = [], setDate }) => {
+const DateRangePickerInput = ({ date = [], setDate, placement = 'bottomStart', size = 'lg' }) => {
 
   // const [dateRange, setDateRange] = useState([null, null]);
   // const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -33,10 +33,10 @@ const DateRangePickerInput = ({ date = [], setDate }) => {
         calendarSnapping={false}
         showOneCalendar
         block
-        placement={'bottomStart'}
+        placement={placement}
         format='dd-MM-yyyy'
-        character='-'
-        size='lg'
+        character=' до '
+        size={size}
         value={dateValues}
         onChange={(value) => setDate(value)}
       />

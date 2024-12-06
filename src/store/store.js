@@ -13,6 +13,8 @@ import WarehouseMaterialSlice from "./warehouse/materails";
 import WareWarehouseSlice from "./warehouse/warehouse";
 import OperationSlice from "./technolog/operations";
 import ShveyaOperationSlice from "./shveya/operation";
+import ShveyaSalarySlice from "./shveya/salary";
+import StatisticSlice from "./technolog/statistic";
 
 const store = configureStore({
     reducer: {
@@ -31,13 +33,15 @@ const store = configureStore({
         order: TechnologOrderSlice.reducer,
         warehouse: WarehouseSlice.reducer,
         operation: OperationSlice.reducer,
+        statistic: StatisticSlice.reducer,
 
         //Warehouse
         ware_materials: WarehouseMaterialSlice.reducer,
         ware_warehouse: WareWarehouseSlice.reducer,
 
         //Shveya 
-        sh_operation: ShveyaOperationSlice.reducer
+        sh_operation: ShveyaOperationSlice.reducer,
+        sh_salary: ShveyaSalarySlice.reducer
     }
 })
 

@@ -9,8 +9,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import TelInput from '../../../../components/ui/inputs/phoneInput'
 import { getRankList } from '../../../../store/technolog/rank'
 import { toast } from 'react-toastify'
-import { editClientInfo, getClientInfo } from '../../../../store/technolog/client'
-import UploaderFiles from '../components/uploaderFiles'
+import { createClientFiles, editClientInfo, getClientInfo } from '../../../../store/technolog/client'
+import MultiFilePicker from '../components/uploaderFiles'
+import { Loader } from 'rsuite'
+import BackDrop from '../../../../components/ui/backdrop'
 
 const EditClient = () => {
 
@@ -46,7 +48,7 @@ const EditClient = () => {
                 address: res.payload?.address,
             })
             setImage(res.payload?.image)
-            setFiles(res?.payload?.files)
+            setExistingFiles(res?.payload?.files)
         })
   }, [])
 
@@ -71,7 +73,10 @@ const EditClient = () => {
     address: false
   })
   const [image, setImage] = useState(null);
+  const [existingFiles, setExistingFiles] = useState([]);
   const [files, setFiles] = useState([]);
+  const [deleteFiles, setDeleteFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getValue = (e) => {
     const { name, value } = e.target;
@@ -103,17 +108,27 @@ const EditClient = () => {
     e.preventDefault();
     
     if (validateFields()) {
+      setLoading(true)
       dispatch(editClientInfo({ id, props: {...client_data, image: image?.blobFile} }))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
-            toast("Данные клиента успешно изменены!");
-            navigate(-1)
+            dispatch(createClientFiles({
+              client_id: Number(id),
+              files: files.map(item => item.blobFile),
+              delete_ids: deleteFiles
+            })).then(res => {
+              if(res.meta.requestStatus === 'fulfilled') {
+                setLoading(false)
+                navigate(-1)
+                toast("Клиент обновлен успешно!")
+              }
+            })
           } else {
             toast.error("Произошла ошибка!")
           }
         })
     } else {
-      console.log('Form contains errors');
+      toast.error("Заполните все поля!")
     }
   };
 
@@ -121,6 +136,7 @@ const EditClient = () => {
     <div className='flex flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs}/>
       <Title text="Редактирование клиента"/>
+      {loading && <BackDrop open={loading}/>}
 
       <form onSubmit={onSubmit}>
         <div className='w-full mx-auto flex flex-col bg-white p-5 px-10 rounded-xl mt-2 gap-y-5'>
@@ -218,7 +234,13 @@ const EditClient = () => {
 
             <p className='text-base font-semibold'>Файлы</p>
             <div className='w-1/2 flex flex-col'>
-                <UploaderFiles data={files} setData={setFiles}/>
+                <MultiFilePicker
+                   existingFiles={existingFiles} 
+                   setExistingFiles={setExistingFiles}
+                   newFiles={files}
+                   setNewFiles={setFiles}
+                   setDeleteFiles={setDeleteFiles}
+                />
             </div>
 
           </div>

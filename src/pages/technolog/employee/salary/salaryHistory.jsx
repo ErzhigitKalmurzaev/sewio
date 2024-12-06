@@ -80,11 +80,14 @@ const SalaryHistory = () => {
     page_size: params.get("page_size") || 20
   }
 
-  const handleChangeFilter = (value) => {
+  const handleChangeFilter = (value, name) => {
     if(value?.length > 0) {
       params.set('from_date', formatedToDDMMYYYY(value[0], '-'));
       params.set('to_date', formatedToDDMMYYYY(value[1], '-'));
       setParams(params);
+    } else {
+      params.set(name, value);
+      setParams(params)
     }
   }
 

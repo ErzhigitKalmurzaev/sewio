@@ -4,6 +4,7 @@ import CRMLayout from '../layouts/crm/CRMLayout';
 import MySalary from '../pages/shveya/salary/main';
 import MyOperations from '../pages/shveya/operations/main';
 import ShveyaMobileLayout from '../layouts/mobile/ShveyaMobileLayout';
+import MySalaryDetail from '../pages/shveya/salary/mySalaryDetail';
 
 const ShveyaRoute = () => {
 
@@ -20,7 +21,7 @@ const ShveyaRoute = () => {
             
             <Route path="salary" element={<Outlet/>}>
                 <Route path="" element={<MySalary />} />
-
+                <Route path=":id" element={<MySalaryDetail />} />
             </Route>
 
             <Route path='operations' element={<Outlet/>}>

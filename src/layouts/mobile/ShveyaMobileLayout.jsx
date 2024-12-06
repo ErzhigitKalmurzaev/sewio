@@ -11,9 +11,9 @@ const ShveyaMobileLayout = () => {
   const { me_info } = useSelector((state) => state.auth);
 
   return (
-    <div className='w-full h-[100vh] flex flex-col'>
+    <div className='w-full min-h-[100vh] flex flex-col'>
         <Header/>
-        <div className='p-4 w-full h-[calc(100vh-80px)]' style={{ background: "#F5F5FA"}}>
+        <div className='p-4 w-full min-h-[calc(100vh-80px)]' style={{ background: "#F5F5FA"}}>
             <Suspense fallback={<BackDrop />}>
                 <Outlet />
             </Suspense>
