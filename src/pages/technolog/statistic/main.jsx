@@ -6,7 +6,7 @@ import InfoCard from '../../../components/shared/infoCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStatistic } from '../../../store/technolog/statistic';
 import { useSearchParams } from 'react-router-dom';
-import { getDefaultDateRange } from '../../../utils/functions/dateFuncs';
+import { formatedToDDMMYYYY, getDefaultDateRange } from '../../../utils/functions/dateFuncs';
 import { ChartColumn, CircleCheckBig, CircleDollarSign, Package, Star, Wrench } from 'lucide-react';
 
 const Statistic = () => {
@@ -60,6 +60,12 @@ const Statistic = () => {
     to_date: params.get("to_date") || getDefaultDateRange().to_date,
   }
 
+  const handleChangeFilter = (value) => {
+    params.set('from_date', formatedToDDMMYYYY(value[0], '-'));
+    params.set('to_date', formatedToDDMMYYYY(value[1], '-'));
+    setParams(params);
+  }
+
   useEffect(() => {
     dispatch(getStatistic())
   }, [])
@@ -69,13 +75,13 @@ const Statistic = () => {
         <div className='flex justify-between items-center'>
             <Title text="Общая статистика" />
             <div className='flex gap-x-5'>
-                <DateRangePickerInput/>
+                <DateRangePickerInput date={[urls.from_date, urls.to_date]} setDate={handleChangeFilter} size='medium' />
                 <Button>+ Создать план</Button>
             </div>
         </div>
 
         {/* По заказам */}
-        <div className='flex flex-col gap-y-4'>
+        <div className='flex flex-col gap-y-3'>
           <div>
               <Button variant='filterActive'>По заказам</Button>
           </div>
@@ -86,12 +92,14 @@ const Statistic = () => {
                 plan_status={true}
                 value={statistic_list?.order?.fact?.income || 0}
                 date={urls}
+                unit=' сом'
               />
               <InfoCard
                 title='Расход'
                 plan_status={false}
                 value={statistic_list?.order?.fact?.consumption || 0}
                 date={urls}
+                unit=' сом'
                 icon={<CircleDollarSign color='red' size={20}/>}
               />
               <InfoCard
@@ -99,6 +107,7 @@ const Statistic = () => {
                 plan_status={false}
                 value={statistic_list?.order?.fact?.profit || 0}
                 date={urls}
+                unit=' сом'
                 icon={<CircleDollarSign color='green' size={20}/>}
               />
               <InfoCard
@@ -107,12 +116,13 @@ const Statistic = () => {
                 plan_status={true}
                 value={statistic_list?.order?.fact?.orders || 0}
                 date={urls}
+                unit=''
               />
           </div>
         </div>
 
         {/* По сотрудникам */}
-        <div className='flex flex-col gap-y-4'>
+        <div className='flex flex-col gap-y-3'>
           <div>
               <Button variant='filterActive'>По сотрудникам</Button>
           </div>
@@ -122,6 +132,7 @@ const Statistic = () => {
                 plan_status={false}
                 value={statistic_list?.staff?.avg_performance || 0}
                 date={urls}
+                unit=' шт.'
                 icon={<ChartColumn color='blue' size={20} />}
               />
               <InfoCard
@@ -129,6 +140,7 @@ const Statistic = () => {
                 plan_status={false}
                 value={statistic_list?.staff?.done || 0}
                 date={urls}
+                unit=' шт.'
                 icon={<CircleCheckBig color='green' size={20}/>}
               />
               <InfoCard
@@ -136,6 +148,7 @@ const Statistic = () => {
                 plan_status={false}
                 value={statistic_list?.staff?.fine || 0}
                 date={urls}
+                unit=' сом'
                 icon={<CircleDollarSign color='red' size={20}/>}
               />
               <InfoCard
@@ -143,13 +156,14 @@ const Statistic = () => {
                 plan_status={false}
                 value={statistic_list?.staff?.machine || 0}
                 date={urls}
+                unit=' ч.'
                 icon={<Wrench color='gray' size={20} />}
               />
           </div>
         </div>
 
         {/* По продуктам */}
-        <div className='flex flex-col gap-y-4'>
+        <div className='flex flex-col gap-y-3'>
           <div>
               <Button variant='filterActive'>По продуктам</Button>
           </div>
@@ -159,6 +173,7 @@ const Statistic = () => {
                 plan_status={false}
                 value={statistic_list?.product?.produced || 0}
                 date={urls}
+                unit=' шт.'
                 icon={<Package color='gray' size={20} />}
               />
               <InfoCard
@@ -166,6 +181,7 @@ const Statistic = () => {
                 plan_status={false}
                 value={statistic_list?.product?.popular || 0}
                 date={urls}
+                unit=''
                 icon={<Star color='gold' fill='gold' size={20}/>}
               />
           </div>

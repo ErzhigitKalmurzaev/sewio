@@ -6,7 +6,7 @@ import { CircleDollarSign } from 'lucide-react';
 import { getMonthName } from '../../utils/functions/dateFuncs'
 import { formatNumber } from '../../utils/functions/numFuncs'
 
-const InfoCard = ({ title, value, plan, plan_status, icon, date }) => {
+const InfoCard = ({ title, value, plan, plan_status, icon, date, unit }) => {
 
   return (
     <div className='w-1/4 border border-gray bg-white p-4 rounded-lg shadow'>
@@ -16,11 +16,11 @@ const InfoCard = ({ title, value, plan, plan_status, icon, date }) => {
                     <div className='flex flex-col gap-y-3'>
                         <span className='flex flex-col gap-0'>
                             <p className='text-sm font-semibold font-inter text-fprimary'>{title + ' (план)'}</p>
-                            <p className='text-lg font-semibold font-inter text-sprimary'>{formatNumber(value) + ' сом'}</p>
+                            <p className='text-lg font-semibold font-inter text-sprimary'>{formatNumber(value) + unit}</p>
                         </span>
                         <span className='flex flex-col gap-0'>
                             <p className='text-sm font-semibold font-inter text-fprimary'>{title + ' (факт)'}</p>
-                            <p className='text-lg font-semibold font-inter text-sprimary'>{formatNumber(plan) + ' сом'}</p>
+                            <p className='text-lg font-semibold font-inter text-sprimary'>{formatNumber(plan) + unit}</p>
                         </span>
                     </div>
                     <div className='flex flex-col justify-between gap-y-12'>
@@ -36,7 +36,7 @@ const InfoCard = ({ title, value, plan, plan_status, icon, date }) => {
                 <div className='flex justify-between items-end'>
                     <div className='flex flex-col gap-y-5'>
                         <p className='text-base font-semibold font-inter text-fprimary'>{title}</p>
-                        <p className='text-xl font-semibold font-inter text-sprimary'>{formatNumber(value) + ' сом'}</p>
+                        <p className='text-xl font-semibold font-inter text-sprimary'>{formatNumber(value) + unit}</p>
                         <p className='text-xs font-medium font-inter text-fprimary'>
                             {'От: ' + date?.from_date + ' До: ' + date?.to_date}
                         </p>

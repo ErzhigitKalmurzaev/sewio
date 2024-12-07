@@ -40,7 +40,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
               className='rounded-xl h-full'
               rowHeight={50}
             >
-              <Column width={60} align="center" fixed>
+              <Column width={50} align="center" fixed>
                   <HeaderCell>ID</HeaderCell>
                   <Cell dataKey="id" />
               </Column>
@@ -54,7 +54,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                   </Cell>
               </Column>
 
-              <Column width={120}>
+              <Column width={100}>
                   <HeaderCell>Компания</HeaderCell>
                   <Cell dataKey="company">
                     {rowData => (
@@ -63,7 +63,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                   </Cell>
               </Column>
 
-              <Column width={100}>
+              <Column width={90}>
                   <HeaderCell>Статус</HeaderCell>
                   <Cell dataKey="is_active">
                     {rowData => (
@@ -98,17 +98,8 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                     )}
                   </Cell>
               </Column>
-
-              <Column width={120}>
-                  <HeaderCell>Дата создания</HeaderCell>
-                  <Cell dataKey="created_at">
-                    {rowData => (
-                        <p>{formatedToDDMMYYYY(rowData.created_at)}</p>
-                    )}
-                  </Cell>
-              </Column>
-
-              <Column width={120}>
+              
+              <Column width={110}>
                   <HeaderCell>Дата сдачи</HeaderCell>
                   <Cell dataKey="deadline">
                     {rowData => (
@@ -117,7 +108,16 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                   </Cell>
               </Column>
 
-              <Column width={100} align='center'>
+              <Column width={110}>
+                  <HeaderCell>Дата создания</HeaderCell>
+                  <Cell dataKey="created_at">
+                    {rowData => (
+                        <p>{formatedToDDMMYYYY(rowData.created_at)}</p>
+                    )}
+                  </Cell>
+              </Column>
+
+              <Column width={90} align='center' fixed='right'>
                   <HeaderCell>Выполнено</HeaderCell>
                   <Cell style={{ padding: '4px' }}>
                     {rowData => (
