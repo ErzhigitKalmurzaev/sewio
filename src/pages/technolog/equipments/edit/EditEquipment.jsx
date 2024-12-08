@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Title from '../../../../components/ui/title'
-import { useDispatch } from 'react-redux';
-import { Description } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
 import MultiImagePicker from '../../../../components/ui/imagePickers/multiImagePicker';
 import Input from '../../../../components/ui/inputs/input';
 import NumInput from '../../../../components/ui/inputs/numInput';
@@ -9,17 +8,20 @@ import DataPicker from '../../../../components/ui/inputs/dataPicker';
 import Textarea from '../../../../components/ui/inputs/textarea';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getEquipmentById, patchEquipment, postEquipment, postEquipmentFiles } from '../../../../store/technolog/equipment';
+import { getEquipmentById, getEquipmentServices, patchEquipment, postEquipment, postEquipmentFiles } from '../../../../store/technolog/equipment';
 import Button from '../../../../components/ui/button';
 import { formatedToDDMMYYYY, formatedYYYYMMDD } from '../../../../utils/functions/dateFuncs';
-import { formatNumber } from '../../../../utils/functions/numFuncs';
 import { Toggle } from 'rsuite';
+import ServiceTable from '../tables/serviceTable';
+import CreateService from '../modals/createService';
 
 const EditEquipment = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
+
+  const { equipment_services, equipment_services_status } = useSelector(state => state.equipment);
 
   const [equipment, setEquipment] = useState({
     title: '',
@@ -37,6 +39,8 @@ const EditEquipment = () => {
     service_date: false,
     guarantee: false
   });
+  const [modals, setModals] = useState({ create_service: false });
+  const [update, setUpdate] = useState(false);
 
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
@@ -56,6 +60,10 @@ const EditEquipment = () => {
         })
       })
   }, [id]);
+
+  useEffect(() => {
+    dispatch(getEquipmentServices())
+  }, [update])
 
   const getValue = (name, value) => {
     setEquipment({
@@ -85,8 +93,8 @@ const EditEquipment = () => {
             id: Number(id),
             props: {
                 ...equipment,
-                service_date: formatedYYYYMMDD(equipment.service_date, '-', 'YYYY-MM-DD'),
-                guarantee: formatedYYYYMMDD(equipment.guarantee, '-', 'YYYY-MM-DD'),
+                service_date: formatedYYYYMMDD(equipment.service_date, '.'),
+                guarantee: formatedYYYYMMDD(equipment.guarantee, '.'),
             }
         }))
             .then(res => {
@@ -98,7 +106,6 @@ const EditEquipment = () => {
                     })).then(res => {
                         if(res.meta.requestStatus === 'fulfilled') {
                             toast.success('Оборудование успешно изменено!');
-                            navigate(-1);
                         }
                     })
                 }
@@ -107,12 +114,13 @@ const EditEquipment = () => {
         toast.error('Заполните все поля!');
     }
   }
-  console.log(equipment)
+  
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-5'>
         
         <div className='flex justify-between items-center'>
             <Title text="Создание оборудования" />
+            <Button width='120px' onClick={onSubmit}>Сохранить</Button>
         </div>
 
         <div className='bg-white p-6 px-8 rounded-lg flex flex-col gap-y-3'>
@@ -147,7 +155,7 @@ const EditEquipment = () => {
         </div>
 
         <div className='bg-white p-6 px-8 rounded-lg flex flex-col gap-y-3 mt-5'>
-            <p className='font-semibold font-inter'>Дополнительная информация</p>
+            <p className='font-semibold font-inter mb-2'>Дополнительная информация</p>
             <div className='flex gap-x-6'>
                 <DataPicker
                     label='Срок использования'
@@ -174,9 +182,24 @@ const EditEquipment = () => {
             />
         </div>
 
-        <div className='flex justify-center'>
-            <Button width='200px' onClick={onSubmit}>Создать</Button>
+        <div className='bg-white p-6 px-8 rounded-lg flex flex-col gap-y-3 mt-5'>
+            <div className='flex justify-between items-center'>
+                <p className='font-semibold font-inter mb-2'>История обслуживания</p>
+                <Button width='120px' onClick={() => setModals({ ...modals, create_service: true })}>+ Добавить</Button>
+            </div>
+            
+            <div>
+                <ServiceTable
+                    data={equipment_services}
+                    status={equipment_services_status}
+                />
+            </div>
         </div>
+        <CreateService
+            modals={modals}
+            setModals={setModals}
+            setUpdate={setUpdate}
+        />
     </div>
   )
 }

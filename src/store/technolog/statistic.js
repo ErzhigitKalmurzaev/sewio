@@ -3,9 +3,9 @@ import axiosInstance from "../../api/axios";
 
 export const getStatistic = createAsyncThunk(
     'rank/getStatistic',
-    async (_, { rejectWithValue }) => {
+    async ({ date }, { rejectWithValue }) => {
         try {
-            const { data } =  await axiosInstance.get('dashboard/statistic/');
+            const { data } =  await axiosInstance.get(`dashboard/statistic/?date=${date}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)

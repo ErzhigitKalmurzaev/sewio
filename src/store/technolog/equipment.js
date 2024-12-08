@@ -25,6 +25,30 @@ export const getEquipmentById = createAsyncThunk(
     }
 )
 
+export const getEquipmentServices = createAsyncThunk(
+    'equipment/getEquipmentServices',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.get(`equipment/services/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const postEquipmentService = createAsyncThunk(
+    'equipment/postEquipmentService',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.post(`equipment/services/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const postEquipment = createAsyncThunk(
     'equipment/postEquipment',
     async (props, { rejectWithValue }) => {
@@ -42,7 +66,7 @@ export const postEquipmentFiles = createAsyncThunk(
     async (props, { rejectWithValue }) => {
         try {
             const formData = new FormData();
-
+            
             for (const key in props) {
                 if (key === "images" || key === 'delete_ids') {
                     for (let i = 0; i < props[key].length; i++) {
@@ -53,8 +77,8 @@ export const postEquipmentFiles = createAsyncThunk(
                     formData.append(key, props[key])
                 }
             }
-
-            const { data } =  await ImageUploadingFetch.post('equipment/images/', props);
+            
+            const { data } =  await ImageUploadingFetch.post('equipment/images/', formData);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -104,7 +128,9 @@ const EquipmentSlice = createSlice({
         equipment_list: null,
         equipment_list_status: 'loading',
         equipment: null,
-        equipment_status: 'loading'
+        equipment_status: 'loading',
+        equipment_services: null,
+        equipment_services_status: 'loading'
     },
     reducers: {
 
@@ -127,6 +153,15 @@ const EquipmentSlice = createSlice({
                 state.equipment = action.payload
             }).addCase(getEquipmentById.rejected, (state) => {
                 state.equipment_status = 'error';
+            })
+            // -----------------------------------------------
+            .addCase(getEquipmentServices.pending, (state) => {
+                state.equipment_services_status = 'loading';
+            }).addCase(getEquipmentServices.fulfilled, (state, action) => {
+                state.equipment_services_status = 'success';
+                state.equipment_services = action.payload
+            }).addCase(getEquipmentServices.rejected, (state) => {
+                state.equipment_services_status = 'error';
             })
     }
 })

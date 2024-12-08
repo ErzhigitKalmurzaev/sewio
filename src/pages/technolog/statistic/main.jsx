@@ -6,8 +6,9 @@ import InfoCard from '../../../components/shared/infoCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStatistic } from '../../../store/technolog/statistic';
 import { useSearchParams } from 'react-router-dom';
-import { formatedToDDMMYYYY, getDefaultDateRange } from '../../../utils/functions/dateFuncs';
-import { ChartColumn, CircleCheckBig, CircleDollarSign, Package, Star, Wrench } from 'lucide-react';
+import { formatedToDDMMYYYY, formatedToDDMMYYYY2, getDefaultDateRange } from '../../../utils/functions/dateFuncs';
+import { ChartColumn, CircleCheckBig, CircleDollarSign, Clock, Package, Star, Wrench } from 'lucide-react';
+import DataPicker from '../../../components/ui/inputs/dataPicker';
 
 const Statistic = () => {
 
@@ -56,27 +57,30 @@ const Statistic = () => {
   const [params, setParams] = useSearchParams();
 
   const urls = {
-    from_date: params.get("from_date") || getDefaultDateRange().from_date,
-    to_date: params.get("to_date") || getDefaultDateRange().to_date,
+    date: params.get("date") || getDefaultDateRange().to_date,
   }
 
   const handleChangeFilter = (value) => {
-    params.set('from_date', formatedToDDMMYYYY(value[0], '-'));
-    params.set('to_date', formatedToDDMMYYYY(value[1], '-'));
+    console.log(value)
+    params.set('date', formatedToDDMMYYYY2(value, '-'));
     setParams(params);
   }
 
   useEffect(() => {
-    dispatch(getStatistic())
+    dispatch(getStatistic({ date: urls.date }));
   }, [])
 
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-12'>
         <div className='flex justify-between items-center'>
             <Title text="Общая статистика" />
-            <div className='flex gap-x-5'>
-                <DateRangePickerInput date={[urls.from_date, urls.to_date]} setDate={handleChangeFilter} size='medium' />
-                <Button>+ Создать план</Button>
+            <div className='w-[300px] flex gap-x-5 items-center justify-end'>
+                <DataPicker
+                  value={urls.date.split('-').join('.')}
+                  onChange={handleChangeFilter}
+                  placeholder='Дата'
+                />
+                <Button width='200px' style={{ marginBottom: '5px' }}>+ Создать план</Button>
             </div>
         </div>
 
@@ -176,13 +180,30 @@ const Statistic = () => {
                 unit=' шт.'
                 icon={<Package color='gray' size={20} />}
               />
+          </div>
+        </div>
+
+        {/* По оборудованию */}
+        <div className='flex flex-col gap-y-3'>
+          <div>
+              <Button variant='filterActive'>По оборудованиям</Button>
+          </div>
+          <div className='flex gap-x-5 my-3'>
               <InfoCard
-                title='Популярный'
+                title='Время работы'
                 plan_status={false}
-                value={statistic_list?.product?.popular || 0}
+                value={statistic_list?.machine?.time || 0}
                 date={urls}
-                unit=''
-                icon={<Star color='gold' fill='gold' size={20}/>}
+                unit=' ч.'
+                icon={<Clock color='gray' size={20} />}
+              />
+              <InfoCard
+                title='Расходы обслуживания'
+                plan_status={false}
+                value={statistic_list?.machine?.service || 0}
+                date={urls}
+                unit=' сом'
+                icon={<CircleDollarSign color='red' size={20}/>}
               />
           </div>
         </div>

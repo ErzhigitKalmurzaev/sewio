@@ -24,6 +24,14 @@ export const formatedToDDMMYYYY = (date, character = '.') => {
   return formattedDate.replace(/\./g, character);
 };
 
+export const formatedToDDMMYYYY2 = (date, character = '.') => {
+  // Разделяем строку вручную
+  const [day, month, year] = date.split('.'); // Предполагается формат DD.MM.YYYY
+
+  // Собираем строку с указанием нужного разделителя
+  return `${day}${character}${month}${character}${year}`;
+};
+
 export const formatedYYYYMMDD = (date, character = '.') => {
   const [day, month, year] = date.split(character);
   

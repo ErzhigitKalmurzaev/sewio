@@ -140,7 +140,6 @@ export const createProductImages = createAsyncThunk(
     async ({ props }, { rejectWithValue }) => {
         try {
             const formData = new FormData();
-
             for (const key in props) {
                 if (key === "images" || key === 'delete_ids') {
                     for (let i = 0; i < props[key].length; i++) {

@@ -18,7 +18,7 @@ const DataPicker = ({ label, id, value = "", onChange, placeholder, required, er
           onChange(null); 
         }
       };
-
+      console.log(value)
     return (
         <StyledDiv>
         <label htmlFor={id}>
