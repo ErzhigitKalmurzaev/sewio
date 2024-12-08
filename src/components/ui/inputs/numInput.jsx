@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 const NumInput = ({ label, id, width, value = "", onChange, placeholder, required, error, errorTitle, disabled = false }) => {
-  const [inputValue, setInputValue] = useState(value);
-
+  
   const formatNumber = (num) => {
     return num.replace(/\D/g, '')
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
+  
+  const [inputValue, setInputValue] = useState(formatNumber(value));
 
+  useEffect(() => {
+    setInputValue(formatNumber(value));
+  }, [value]);
+  
   const handleChange = (e) => {
     const { value } = e.target;
     const formattedValue = formatNumber(value);

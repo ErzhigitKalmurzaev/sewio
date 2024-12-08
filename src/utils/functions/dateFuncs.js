@@ -24,6 +24,13 @@ export const formatedToDDMMYYYY = (date, character = '.') => {
   return formattedDate.replace(/\./g, character);
 };
 
+export const formatedYYYYMMDD = (date, character = '.') => {
+  const [day, month, year] = date.split(character);
+  
+  // Формируем строку в формате YYYY-MM-DD
+  return `${year}-${month}-${day}`;
+}
+
 export const formatToLocalString = (dateString) => {
   // Преобразуем строку в объект Date
   const date = new Date(dateString);

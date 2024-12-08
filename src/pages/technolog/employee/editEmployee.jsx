@@ -37,6 +37,7 @@ const EditEmployee = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { staff_info, staff_info_status } = useSelector(state => state.staff);
   const { rank_list } = useSelector(state => state.rank);
 
@@ -53,7 +54,7 @@ const EditEmployee = () => {
                 password: res.payload?.password,
                 role: res.payload?.role,
                 rank: res.payload?.rank?.id,
-                salary: res.payload?.salary
+                salary: `${res.payload?.salary}`
             })
             setImage(res.payload?.image)
         })
@@ -69,7 +70,7 @@ const EditEmployee = () => {
     password: '',
     role: '',
     rank: '',
-    salary: 0
+    salary: ''
   })
   const [errors, setErrors] = useState({
     name: false,
@@ -114,7 +115,7 @@ const EditEmployee = () => {
     e.preventDefault();
     
     if (validateFields()) {
-      dispatch(editEmployeeInfo({ id, props: {...employee_data, image: image.blobFile} }))
+      dispatch(editEmployeeInfo({ id, props: {...employee_data, image: image?.blobFile || image} }))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
             toast("Данные сотрудника успешно изменены!");

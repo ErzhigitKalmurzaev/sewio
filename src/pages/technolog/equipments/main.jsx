@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getEquipmentList } from '../../../store/technolog/equipment'
 import { useEffect, useState } from 'react'
 import EquipmentsTable from './tables/equipmentsTable'
-import CreateEquipmentModal from './modals/createEquipmentModal'
-import EditEquipmentModal from './modals/editEquipmentModal'
+import { useNavigate } from 'react-router-dom'
 
 const Equipments = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { equipment_list, equipment_list_status } = useSelector(state => state.equipment);
 
@@ -28,7 +28,7 @@ const Equipments = () => {
         <div className='flex justify-between items-center'>
             <Title text="Оборудование" />
             <div className='flex gap-x-5'>
-                <Button onClick={() => setModals({ ...modals, create: true })}>+ Создать оборудование</Button>
+                <Button onClick={() => navigate('create')}>+ Создать оборудование</Button>
             </div>
         </div>
 
@@ -41,19 +41,6 @@ const Equipments = () => {
                 setEditEquipment={setEditEquipment}
             />
         </div>
-
-        <CreateEquipmentModal
-            modals={modals}
-            setModals={setModals}
-            setUpdate={setUpdate}
-        />
-
-        <EditEquipmentModal
-            modals={modals}
-            setModals={setModals}
-            editEquipment={editEquipment}
-            setUpdate={setUpdate}
-        />
 
     </div>
   )

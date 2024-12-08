@@ -27,7 +27,6 @@ const Sizes = () => {
           <Title text="Размеры" />
           <div className='flex gap-x-5'>
               <Button onClick={() => setModals({...modals, create_category: true})}>+ Создать категорию</Button>
-              <Button onClick={() => setModals({...modals, create_size: true})}>+ Создать размер</Button>
           </div>
       </div>   
 

@@ -40,7 +40,7 @@ const NavAccordion = ({ title, icon, active, hide, buttons }) => {
                         buttons.map((item, index) => {
                             return (
                                 <Tooltip key={index + 'nav'} className={`${hide ? 'w-[60px]' : 'w-[180px]'} h-[40px] pointer flex items-center px-5 rounded-lg ${active === item.path ? 'bg-primary' : 'bg-white'} transition-all ease-linear duration-300`}>
-                                    <div onClick={() => navigate(item.path)} className='flex items-center gap-x-3 cursor-pointer' style={{ textDecoration: 'none', color: active === item.path ? 'white' : 'black', "&:hover": { textDecoration: 'none', color: active ? 'white' : 'black' } }}>
+                                    <div onClick={() => navigate(item.path)} className='flex items-center gap-x-2 cursor-pointer' style={{ textDecoration: 'none', color: active === item.path ? 'white' : 'black', "&:hover": { textDecoration: 'none', color: active ? 'white' : 'black' } }}>
                                         <span className={`w-[30px] h-[30px] flex justify-center items-center ${active === item.path ? 'text-white' : 'text-primary'}`}>
                                             {item.icon}
                                         </span>

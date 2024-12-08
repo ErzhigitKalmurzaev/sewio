@@ -28,6 +28,8 @@ import DistOperations from '../pages/technolog/operations/distribution/distOpera
 import PaymentInfo from '../pages/technolog/employee/salary/paymentInfo'
 import Calculator from '../pages/technolog/calculator/main'
 import ModerationOperation from '../pages/technolog/operations/moderation/moderationOperation'
+import CreateEquipment from '../pages/technolog/equipments/create/createEquipment'
+import EditEquipment from '../pages/technolog/equipments/edit/EditEquipment'
 
 const TechnologRoute = () => {
   return (
@@ -77,10 +79,15 @@ const TechnologRoute = () => {
                 <Route path="moderation/:id" element={<ModerationOperation/>} />
             </Route>
             
+            <Route path="equipments" element={<Outlet/>}>
+                <Route path="" element={<Equipments />} />
+                <Route path="create" element={<CreateEquipment />} />    
+                <Route path=":id" element={<EditEquipment />} />    
+            </Route>
+            
             <Route path="discharge" element={<Discharge />} />
             <Route path="sizes" element={<Sizes />} />
             <Route path="knowledge" element={<p>База знаний</p>} />
-            <Route path="equipments" element={<Equipments />} />
             <Route path="calculator" element={<Calculator />} />
         </Route>
     </Routes>
