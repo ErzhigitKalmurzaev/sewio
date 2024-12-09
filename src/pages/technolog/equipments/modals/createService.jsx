@@ -107,7 +107,7 @@ const CreateService = ({ modals, setModals, setUpdate }) => {
                 name='price'
                 placeholder='Введите стоимость'
                 error={errors.price}
-                value={service.price}
+                value={`${service.price}`}
                 onChange={(e) => getValue('price', e)}
             />
         </div>

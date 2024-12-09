@@ -66,14 +66,14 @@ const Calculator = () => {
                 <NumInput
                     width={'300px'}
                     label="Количество клиента (шт)"
-                    value={clientData.amount}
+                    value={`${clientData.amount}`}
                     onChange={e => setClientData({...clientData, amount: e})}  
                     placeholder='0'
                 />
                 <NumInput
                     width={'300px'}
                     label="Цена клиента (сом)"
-                    value={clientData.price}
+                    value={`${clientData.price}`}
                     onChange={e => setClientData({...clientData, price: e})}  
                     placeholder='0'
                 />

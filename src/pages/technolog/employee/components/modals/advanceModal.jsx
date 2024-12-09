@@ -101,7 +101,7 @@ const AdvanceModal = ({ modals, setModals }) => {
                     label='Сумма аванса' 
                     placeholder='0' 
                     type='text'
-                    value={payment.amount}
+                    value={`${payment.amount}`}
                     onChange={e => setPayment({ ...payment, amount: e })}
                     error={errors.amount}
                 />

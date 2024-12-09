@@ -102,7 +102,7 @@ const RejectMaterialsTable = ({ data, status }) => {
                                 <NumInputForTable
                                     name='amount'
                                     placeholder='0'
-                                    value={rowData.amount}
+                                    value={`${rowData.amount}`}
                                     onChange={(value) => getValue('amount', value, rowData.id)}
                                 />
                             )

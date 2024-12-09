@@ -244,7 +244,7 @@ const EditEmployee = () => {
               name='salary'
               placeholder='Введите зарплату'
               error={errors.salary}
-              value={employee_data?.salary}
+              value={`${employee_data?.salary}`}
               onChange={e => getValue({ target: { value: e, name: 'salary' } })}
             />
           </div>

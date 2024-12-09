@@ -128,14 +128,14 @@ const EditOperationModal = ({ modals, setModals, operation, id_product }) => {
                     <NumInput
                       label="Время"
                       placeholder="Введите время"
-                      value={editOperation.time}
+                      value={`${editOperation.time}`}
                       onChange={e => getValue({ target: { value: e, name: 'time' } })}
                       error={errors.time}
                     />
                     <NumInput
                       label="Стоимость"
                       placeholder="Введите стоимость"
-                      value={editOperation.price}
+                      value={`${editOperation.price}`}
                       onChange={e => getValue({ target: { value: e, name: 'price' } })}
                       error={errors.price}
                     />

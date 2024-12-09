@@ -52,12 +52,12 @@ const ShowOperationModal = ({ modals, setModals, operation }) => {
                     <NumInput
                       label="Время"
                       placeholder="Введите время"
-                      value={operation.time}
+                      value={`${operation.time}`}
                     />
                     <NumInput
                       label="Стоимость"
                       placeholder="Введите стоимость"
-                      value={operation.price}
+                      value={`${operation.price}`}
                     />
                   </div>
                   <div className='flex gap-x-3'>

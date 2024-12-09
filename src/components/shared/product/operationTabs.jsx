@@ -22,12 +22,12 @@ const OperationTabs = ({ operation }) => {
             />
             <NumInput
                 label="Время"
-                value={operation.time || 0}
+                value={`${operation.time}` || 0}
                 disabled={true}
             />
             <NumInput
                 label="Стоимость"
-                value={operation.price}
+                value={`${operation.price}`}
                 disabled={true}
             />
         </div>

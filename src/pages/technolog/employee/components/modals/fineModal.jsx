@@ -74,7 +74,7 @@ const FineModal = ({ modals, setModals }) => {
                     label='Сумма штрафа' 
                     placeholder='0' 
                     type='text'
-                    value={payment.amount}
+                    value={`${payment.amount}`}
                     onChange={e => setPayment({ ...payment, amount: e })}
                     error={errors.amount}
                 />

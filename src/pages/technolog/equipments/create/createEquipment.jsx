@@ -116,7 +116,7 @@ const CreateEquipment = () => {
                 <NumInput
                     label='Цена (сом)'
                     placeholder='0'
-                    value={equipment.price}
+                    value={`${equipment.price}`}
                     onChange={(e) => getValue('price', e)}
                     error={errors.price}
                 />

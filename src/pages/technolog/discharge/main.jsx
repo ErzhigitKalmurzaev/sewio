@@ -115,7 +115,7 @@ const Discharge = () => {
                         label='Процент' 
                         placeholder='0%' 
                         type='text'
-                        value={newRank.percent}
+                        value={`${newRank.percent}`}
                         onChange={e => getValue({ target: { value: e, name: 'percent' } })}
                     />
                     <Toggle value={newRank.is_active} onChange={(e) => getValue({ target: { value: e, name: 'is_active' } })}>
@@ -150,7 +150,7 @@ const Discharge = () => {
                         label='Процент' 
                         placeholder='0%' 
                         type='text'
-                        value={editRank.percent}
+                        value={`${editRank.percent}`}
                         onChange={e => getEditValue({ target: { value: e, name: 'percent' } })}
                     />
                     <Toggle checked={editRank.is_active} onChange={(e) => getEditValue({ target: { value: e, name: 'is_active' } })}>

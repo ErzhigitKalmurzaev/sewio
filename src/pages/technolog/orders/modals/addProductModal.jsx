@@ -110,7 +110,7 @@ const AddProductModal = ({ modals, setModals, setOrder, order, products, status,
                     width='50%'
                     label="Цена"
                     type="number"
-                    value={product.price}
+                    value={`${product.price}`}
                     onChange={(e) => setProduct({ ...product, ['price']: e })}
                     placeholder="Введите цену"
                 />
@@ -120,7 +120,7 @@ const AddProductModal = ({ modals, setModals, setOrder, order, products, status,
                             <NumInput
                                 label={`Количество размеров ${item.title}`}
                                 type="number"
-                                value={product.amounts.find(amount => amount.size === item.id)?.amount || ''}
+                                value={`${product.amounts.find(amount => amount.size === item.id)?.amount}` || ''}
                                 onChange={(e) => getSizeValue({ target: { value: e, id: item.id }})}
                                 placeholder={`Введите количество ${item.title}`}
                             />

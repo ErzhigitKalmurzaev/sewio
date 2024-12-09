@@ -140,7 +140,7 @@ const EditProductModal = ({ modals, setModals, setOrder, order, products, editPr
                     width='50%'
                     label="Цена"
                     type="number"
-                    value={product?.price || editProd.price}
+                    value={`${product?.price || editProd.price}`}
                     onChange={(e) => setProduct({ ...product, ['price']: e })}
                     placeholder="Введите цену"
                 />
@@ -150,7 +150,7 @@ const EditProductModal = ({ modals, setModals, setOrder, order, products, editPr
                             <NumInput
                                 label={`Количество размеров ${item.title}`}
                                 type="number"
-                                value={product?.amounts?.find(amount => amount.size === item.id)?.amount || ''}
+                                value={`${product?.amounts?.find(amount => amount.size === item.id)?.amount || ''}`}
                                 onChange={(e) => getSizeValue({ target: { value: e, id: item.id }})}
                                 placeholder={`Введите количество ${item.title}`}
                             />

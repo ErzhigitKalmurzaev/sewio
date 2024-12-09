@@ -39,7 +39,7 @@ const ModalOperationsTable = ({ data, status, setData }) => {
                     {(rowData, index) => (
                         <div>
                             <NumInputForTable
-                                value={rowData.amount}
+                                value={`${rowData.amount}`}
                                 placeholder='0'
                                 onChange={(value) => setData(data.map((item, i) => (i === index ? { ...item, amount: value } : item)))}
                             />

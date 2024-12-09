@@ -52,7 +52,7 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
     if(name === 'price' || name === 'time') {
       setNewOperation({
         ...newOperation,
-        [name]: Number(value)
+        [name]: value
       })
     } else {
       setNewOperation({
@@ -112,14 +112,14 @@ const CreateOperationModal = ({ modals, setModals, id_product }) => {
                     <NumInput
                       label="Время"
                       placeholder="Введите время"
-                      value={newOperation.time}
+                      value={`${newOperation.time}`}
                       onChange={e => getValue({ target: { value: e, name: 'time' } })}
                       error={errors.time}
                     />
                     <NumInput
                       label="Стоимость"
                       placeholder="Введите стоимость"
-                      value={newOperation.price}
+                      value={`${newOperation.price}`}
                       onChange={e => getValue({ target: { value: e, name: 'price' } })}
                       error={errors.price}
                     />
