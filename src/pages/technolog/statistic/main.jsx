@@ -192,7 +192,7 @@ const Statistic = () => {
               <InfoCard
                 title='Время работы'
                 plan_status={false}
-                value={statistic_list?.machine?.time || 0}
+                value={(statistic_list?.machine?.time / 3600) || 0}
                 date={urls}
                 unit=' ч.'
                 icon={<Clock color='gray' size={20} />}
