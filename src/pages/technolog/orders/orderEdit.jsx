@@ -13,6 +13,8 @@ import OrderProductInfo from './components/orderProductInfo';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getSizeCategoryList } from '../../../store/technolog/size';
+import { getStatistic } from './../../../store/technolog/statistic';
+import { OrderStatuses } from './../../../utils/constants/statuses';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -30,7 +32,8 @@ const OrderEdit = () => {
   const [order, setOrder] = useState({
     deadline: '',
     client: '',
-    products: []
+    products: [],
+    status: 1
   });
   const [error, setError] = useState({
     deadline: false,
@@ -51,7 +54,8 @@ const OrderEdit = () => {
                 setOrder({
                     deadline: res.payload.deadline,
                     client: res.payload.client,
-                    products: res.payload.products
+                    products: res.payload.products,
+                    status: res.payload.status
                 });
             }
         })
@@ -69,6 +73,62 @@ const OrderEdit = () => {
     const { name, value } = e.target;
     setOrder(prev => ({ ...prev, [name]: value }));
   };
+  
+  const getStatistic = (type) => {
+    switch (type) {
+      case 'total_count':
+        return order.products.reduce((sum, product) => {
+          const productTotal = product.amounts.reduce((productSum, item) => productSum + item.amount, 0);
+          return sum + productTotal;
+        }, 0);
+      case 'total_income': 
+        return order.products.reduce((total, product) => {
+          const productIncome = product.amounts.reduce((productSum, item) => {
+            return productSum + item.amount * product.price; // Умножаем amount на price
+          }, 0);
+          return total + productIncome;
+        }, 0);
+      case 'total_consumption':
+        return order?.products?.reduce((total, product) => {
+          // Найти продукт по nomenclature в массиве productDetails
+          const productDetail = product_list?.find(
+            (detail) => detail.id === product.nomenclature
+          );
+        
+          if (!productDetail) {
+            return total;
+          }
+        
+          const productCost = product.amounts.reduce((productSum, item) => {
+            return productSum + item.amount * productDetail.cost_price;
+          }, 0);
+        
+          return total + productCost;
+        }, 0);
+      case 'total_time': 
+        return order?.products?.reduce((total, product) => {
+          // Найти товар в productDetails
+          const productDetail = product_list?.find(
+            (detail) => detail.id === product.nomenclature
+          );
+        
+          if (!productDetail) {
+            return total;
+          }
+        
+          const productTime = product?.amounts?.reduce((productSum, item) => {
+            return productSum + item.amount * productDetail.time; // Умножаем количество на время
+          }, 0);
+        
+          return total + productTime;
+        }, 0) / 3600;
+      case 'status': 
+        return OrderStatuses[order?.status]?.label
+      default:
+        return 0;
+    }
+
+  }
 
   const validateFields = () => {
     const newErrors = {
@@ -147,14 +207,14 @@ const OrderEdit = () => {
 
             <div className='flex flex-col justify-center gap-y-8'>
               <div className='flex justify-between gap-x-5'>
-                <OrderInfoItem label='Общее кол-во:' value={120} measure='шт.' />
-                <OrderInfoItem label='Общий доход:' value={12000} measure='сом' />
-                <OrderInfoItem label='Общие расходы:' value={12000} measure='сом' />
+                <OrderInfoItem label='Общее кол-во:' value={getStatistic('total_count')} measure='шт.' />
+                <OrderInfoItem label='Общий доход:' value={getStatistic('total_income')} measure='сом' />
+                <OrderInfoItem label='Общие расходы:' value={getStatistic('total_consumption')} measure='сом' />
               </div>
               <div className='flex justify-between gap-x-5'>
-                <OrderInfoItem label='Общая прибыль:' value={12000} measure='сом' />
-                <OrderInfoItem label='Время выполнения:' value={120} measure='ч' />
-                <OrderInfoItem label='Статус заказа:' value='Новый' measure='' />
+                <OrderInfoItem label='Общая прибыль:' value={getStatistic('total_income') - getStatistic('total_consumption')} measure='сом' />
+                <OrderInfoItem label='Время выполнения:' value={getStatistic('total_time').toFixed(1)} measure='ч.' />
+                <OrderInfoItem label='Статус заказа:' value={getStatistic('status')} measure='' />
               </div>
               <div className='flex justify-center'>
                 <Button width='250px' onClick={() => setModals({ ...modals, add: true })}>+ Добавить товар</Button>

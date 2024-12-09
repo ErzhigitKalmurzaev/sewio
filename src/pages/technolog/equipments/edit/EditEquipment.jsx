@@ -21,7 +21,7 @@ const EditEquipment = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { equipment_services, equipment_services_status } = useSelector(state => state.equipment);
+  const { equipment_info, equipment_info_status } = useSelector(state => state.equipment);
 
   const [equipment, setEquipment] = useState({
     title: '',
@@ -59,11 +59,7 @@ const EditEquipment = () => {
           guarantee: formatedToDDMMYYYY(payload.guarantee, '.')
         })
       })
-  }, [id]);
-
-  useEffect(() => {
-    dispatch(getEquipmentServices())
-  }, [update])
+  }, [id, update]);
 
   const getValue = (name, value) => {
     setEquipment({
@@ -190,8 +186,8 @@ const EditEquipment = () => {
             
             <div>
                 <ServiceTable
-                    data={equipment_services}
-                    status={equipment_services_status}
+                    data={equipment_info?.services}
+                    status={equipment_info_status}
                 />
             </div>
         </div>

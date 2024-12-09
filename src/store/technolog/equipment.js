@@ -127,8 +127,8 @@ const EquipmentSlice = createSlice({
     initialState: {
         equipment_list: null,
         equipment_list_status: 'loading',
-        equipment: null,
-        equipment_status: 'loading',
+        equipment_info: null,
+        equipment_info_status: 'loading',
         equipment_services: null,
         equipment_services_status: 'loading'
     },
@@ -147,12 +147,12 @@ const EquipmentSlice = createSlice({
             })
             // -----------------------------------------------
             .addCase(getEquipmentById.pending, (state) => {
-                state.equipment_status = 'loading';
+                state.equipment_info_status = 'loading';
             }).addCase(getEquipmentById.fulfilled, (state, action) => {
-                state.equipment_status = 'success';
-                state.equipment = action.payload
+                state.equipment_info_status = 'success';
+                state.equipment_info = action.payload
             }).addCase(getEquipmentById.rejected, (state) => {
-                state.equipment_status = 'error';
+                state.equipment_info_status = 'error';
             })
             // -----------------------------------------------
             .addCase(getEquipmentServices.pending, (state) => {
