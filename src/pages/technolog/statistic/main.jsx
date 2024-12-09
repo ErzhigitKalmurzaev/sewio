@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getStatistic } from '../../../store/technolog/statistic';
 import { useSearchParams } from 'react-router-dom';
 import { formatedToDDMMYYYY, formatedToDDMMYYYY2, getDefaultDateRange } from '../../../utils/functions/dateFuncs';
-import { ChartColumn, CircleCheckBig, CircleDollarSign, Clock, Package, Star, Wrench } from 'lucide-react';
+import { ChartColumn, CircleCheckBig, CircleDollarSign, Clock, Package, Pickaxe, Star, Wrench } from 'lucide-react';
 import DataPicker from '../../../components/ui/inputs/dataPicker';
 
 const Statistic = () => {
@@ -156,9 +156,19 @@ const Statistic = () => {
                 icon={<CircleDollarSign color='red' size={20}/>}
               />
               <InfoCard
-                title='Работа машин'
+                title='Произведено операций'
                 plan_status={false}
-                value={statistic_list?.staff?.machine || 0}
+                value={statistic_list?.staff?.performance || 0}
+                date={urls}
+                unit=' ч.'
+                icon={<Pickaxe color='gray' size={20} />}
+              />
+          </div>
+          <div className='flex gap-x-5'>
+              <InfoCard
+                title='Время работы'
+                plan_status={false}
+                value={statistic_list?.staff?.time || 0}
                 date={urls}
                 unit=' ч.'
                 icon={<Wrench color='gray' size={20} />}

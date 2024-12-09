@@ -93,8 +93,8 @@ const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, s
                   </Cell>
               </Column>
 
-              <Column width={100} fixed="right">
-                  <HeaderCell>Действия</HeaderCell>
+              <Column width={100} align='center'>
+                  <HeaderCell>Заведующий</HeaderCell>
 
                   <Cell style={{ padding: '6px' }}>
                     {(rowData, index) => (

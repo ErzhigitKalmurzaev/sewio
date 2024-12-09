@@ -38,7 +38,7 @@ const PaymentInfo = () => {
 
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
-        <MyBreadcrums items={breadcrumbs}/>
+        {/* <MyBreadcrums items={breadcrumbs}/> */}
         <Title text="Информация о выплате"/>
 
         <div className='w-2/3'>

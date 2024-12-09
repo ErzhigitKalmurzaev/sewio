@@ -11,6 +11,8 @@ import { formatedToDDMMYYYY, getDefaultDateRange } from '../../../../utils/funct
 
 const SalaryHistory = () => {
 
+  const { id } = useParams()
+
   const breadcrumbs = [
     {
         label: 'Сотрудники',
@@ -19,7 +21,7 @@ const SalaryHistory = () => {
     },
     {
         label: 'Редактирование сотрудника',
-        path: '/employee/info',
+        path: `/employee/${id}`,
         active: false
     },
     {
@@ -67,7 +69,6 @@ const SalaryHistory = () => {
     }
   ]
 
-  const { id } = useParams()
   const dispatch = useDispatch();
 
   const { salary_history, salary_history_status } = useSelector(state => state.staff);
@@ -106,13 +107,13 @@ const SalaryHistory = () => {
           </div>
         </div>
 
-        <div className='flex gap-x-5'>
+        {/* <div className='flex gap-x-5'>
             {
                 statistics.map(item => (
                     <InfoCard data={item}/>
                   ))
             }
-        </div>
+        </div> */}
 
         <div>
             <SalaryHistoryTable 

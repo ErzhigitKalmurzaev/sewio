@@ -8,6 +8,8 @@ import { getStaffPaymentInfo } from '../../../../store/technolog/staff'
 
 const SalaryPayment = () => {
 
+  const { id } = useParams();
+
   const breadcrumbs = [
     {
         label: 'Сотрудники',
@@ -16,7 +18,7 @@ const SalaryPayment = () => {
     },
     {
         label: 'Редактирование сотрудника',
-        path: '/employee/info',
+        path: `/employee/${id}`,
         active: false
     },
     {
@@ -26,7 +28,6 @@ const SalaryPayment = () => {
     }
   ]
 
-  const { id } = useParams();
   const dispatch = useDispatch();
 
   const { payment_info, payment_info_status } = useSelector(state => state.staff);

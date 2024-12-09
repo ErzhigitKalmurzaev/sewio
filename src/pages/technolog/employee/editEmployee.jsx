@@ -115,7 +115,10 @@ const EditEmployee = () => {
     e.preventDefault();
     
     if (validateFields()) {
-      dispatch(editEmployeeInfo({ id, props: {...employee_data, image: image?.blobFile || image} }))
+      const props = image ? image?.blobFile ? { ...employee_data, image: image?.blobFile } 
+      : employee_data : { ...employee_data, image_delete: true } 
+
+      dispatch(editEmployeeInfo({ id, props }))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
             toast("Данные сотрудника успешно изменены!");

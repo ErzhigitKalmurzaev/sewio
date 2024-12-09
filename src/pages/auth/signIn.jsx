@@ -6,6 +6,7 @@ import Button from "../../components/ui/button";
 import { Link } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../store/auth/auth";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
 
@@ -17,6 +18,13 @@ const SignIn = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(logIn({ username: login, password }))
+      .then(res => {
+        if(res.meta.requestStatus === 'fulfilled') {
+          toast.success('Добро пожаловать!');
+        } else {
+          toast.error('Не правильный логин или пароль!');
+        }
+      })
   }
 
   return (

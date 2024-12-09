@@ -35,7 +35,7 @@ const EditCategory = ({ modals, setModals, data, setUpdate }) => {
         setSizes([...data?.sizes])
     }
   }, [data.title])
-
+  
   const getValue = (e) => {
     const { name, value } = e.target;
     setCategory({
@@ -57,6 +57,17 @@ const EditCategory = ({ modals, setModals, data, setUpdate }) => {
     setSizes(prev => [...prev, newSize]);
     setNewSize({ title: '' });
     setAddSize(false);
+  }
+
+  const getNewSizeValue = (value) => {
+    if(value?.length < 6) {
+        setNewSize({
+            ...newSize,
+            title: value
+        })
+    } else {
+        toast.error('Слишком длинное название!')
+    }
   }
   
   const onSubmit = () => {
@@ -93,7 +104,7 @@ const EditCategory = ({ modals, setModals, data, setUpdate }) => {
                     name='title'
                     placeholder='Введите название'
                     type='text'
-                    value={category.title}
+                    value={category.title || data?.title}
                     error={errors.username}
                     onChange={getValue}
                 />
@@ -129,7 +140,7 @@ const EditCategory = ({ modals, setModals, data, setUpdate }) => {
                                 placeholder='Введите название размера'
                                 type='text'
                                 value={newSize.title}
-                                onChange={(e) => setNewSize({ ...newSize, title: e.target.value })}
+                                onChange={(e) => getNewSizeValue(e.target.value)}
                             />
                             <Button width='100px' style={{ marginBottom: '4.5px', height: '35.6px' }} onClick={addNewSize}>
                                 Добавить

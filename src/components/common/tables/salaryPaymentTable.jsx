@@ -10,6 +10,7 @@ const SalaryPaymentTable = ({ data, status }) => {
       const advances = data?.payments?.filter(item => item.status === 5 || item.status === 3);
     
       const calculateTotal = (items) => items?.reduce((total, item) => total + item.amount, 0);
+      const calculateOperationTotal = (items) => items?.reduce((total, item) => total + (item?.total_amount * item.operation?.price), 0);
     
       return (
         <div className="bg-[#EDEDED] rounded-xl border border-borderGray font-inter">
@@ -19,9 +20,9 @@ const SalaryPaymentTable = ({ data, status }) => {
               <tr>
                 <th className="border border-borderGray px-4 py-2">ID</th>
                 <th className="border border-borderGray px-4 py-2">Название</th>
+                <th className="border border-borderGray px-4 py-2">Цена</th>
                 <th className="border border-borderGray px-4 py-2">Количество</th>
                 <th className="border border-borderGray px-4 py-2">Сумма (сом)</th>
-                <th className="border border-borderGray px-4 py-2">Дата</th>
               </tr>
             </thead>
             <tbody>
@@ -29,11 +30,11 @@ const SalaryPaymentTable = ({ data, status }) => {
               operations?.length > 0 ? 
               operations?.map((op, index) => (
                 <tr key={op.id} className={'bg-green-50'}>
-                  <td className="border border-borderGray px-4 py-2 text-center">{op.id}</td>
-                  <td className="border border-borderGray px-4 py-2">{op.name}</td>
-                  <td className="border border-borderGray px-4 py-2">{op.quantity}</td>
-                  <td className="border border-borderGray px-4 py-2">{op.amount}</td>
-                  <td className="border border-borderGray px-4 py-2">{op.date}</td>
+                  <td className="border border-borderGray px-4 py-2 text-center">{op?.operation?.id}</td>
+                  <td className="border border-borderGray px-4 py-2">{op?.operation?.title}</td>
+                  <td className="border border-borderGray px-4 py-2">{op.operation?.price}</td>
+                  <td className="border border-borderGray px-4 py-2">{formatNumber(op?.total_amount)}</td>
+                  <td className="border border-borderGray px-4 py-2">{formatNumber(op.total_amount * op?.operation?.price)}</td>
                 </tr>
               )) : 
               <tr className='bg-green-50 w-full' >
@@ -45,9 +46,9 @@ const SalaryPaymentTable = ({ data, status }) => {
               </tr>
               }
               <tr>
-                <td colSpan="3" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
-                <td colSpan='2' className="border border-borderGray px-4 py-2 font-bold text-green-600">
-                  +{formatNumber(calculateTotal(operations))}
+                <td colSpan="4" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
+                <td colSpan='1' className="border border-borderGray px-4 py-2 font-bold text-green-600">
+                  +{formatNumber(calculateOperationTotal(operations))}
                 </td>
                 <td></td>
               </tr>
@@ -124,7 +125,7 @@ const SalaryPaymentTable = ({ data, status }) => {
     
           <div className="flex justify-between items-center font-inter bg-white text-lg font-semibold rounded-b-xl px-4 py-3">
             <p>К выплате:</p> 
-            <p>{formatNumber((calculateTotal(operations) - calculateTotal(fines) - calculateTotal(advances)))}</p>
+            <p>{formatNumber((calculateOperationTotal(operations) - calculateTotal(fines) - calculateTotal(advances)))} сом</p>
           </div>
         </div>
       );

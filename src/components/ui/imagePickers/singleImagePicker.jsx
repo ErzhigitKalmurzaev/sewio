@@ -1,6 +1,7 @@
 import { Uploader, Message, Loader, useToaster } from 'rsuite';
 import AvatarIcon from '@rsuite/icons/legacy/Avatar';
 import React, { useState } from 'react';
+import { CircleX } from 'lucide-react';
 
 function previewFile(file, callback) {
   const reader = new FileReader();
@@ -44,7 +45,10 @@ const SingleImagePicker = ({ fileInfo, setFileInfo }) => {
       <button type='button' style={{ width: 150, height: 150 }}>
         {uploading && <Loader backdrop center />}
         {fileInfo ? (
-          <img src={image || fileInfo} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <div className='w-full h-full relative'>
+            <img src={image || fileInfo} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <CircleX  fill='white' color='red' size={25} className='absolute top-0 right-0' onClick={(e) => {e.stopPropagation(); setFileInfo(null)}}/>
+          </div>
         ) : (
           <AvatarIcon style={{ fontSize: 80 }} />
         )}

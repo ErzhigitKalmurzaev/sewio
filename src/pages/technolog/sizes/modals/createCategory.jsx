@@ -44,6 +44,17 @@ const CreateCategory = ({ modals, setModals, setUpdate }) => {
     }
   }
 
+  const getNewSizeValue = (value) => {
+    if(value?.length < 6) {
+        setNewSize({
+            ...newSize,
+            title: value
+        })
+    } else {
+        toast.error('Слишком длинное название!')
+    }
+  }
+
   const onSubmit = () => {
     dispatch(createSizeCategory({
         title: category.title,
@@ -114,7 +125,7 @@ const CreateCategory = ({ modals, setModals, setUpdate }) => {
                                 placeholder='Введите название размера'
                                 type='text'
                                 value={newSize.title}
-                                onChange={(e) => setNewSize({ ...newSize, title: e.target.value })}
+                                onChange={(e) => getNewSizeValue(e.target.value)}
                             />
                             <Button width='100px' style={{ marginBottom: '4.5px', height: '35.6px' }} onClick={addNewSize}>
                                 Добавить

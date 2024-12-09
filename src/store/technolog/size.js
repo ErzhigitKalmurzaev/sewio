@@ -29,6 +29,7 @@ export const editSizeCategory = createAsyncThunk(
     'size/editSizeCategory',
     async ({ id, props }, { rejectWithValue }) => {
         try {
+            console.log(props)
             const { data } = await axiosInstance.patch(`general/size/category/crud/${id}/`, props);
             return data;
         } catch (err) {
