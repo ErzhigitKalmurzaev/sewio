@@ -12,33 +12,32 @@ const FillProduct = () => {
 
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { product, product_status } = useSelector(state => state.product);
+  const { product, product_status, update_product } = useSelector(state => state.product);
 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true)
+    if(!product) {
+      setLoading(true)
+    }
     dispatch(getProductById({ id }))
       .then(res => {
         setLoading(false)
     })
-  }, [id, dispatch]);
+  }, [id, dispatch, update_product]);
 
   return (
     <div>
         {
             loading && <BackDrop open={loading}/>
         }
-        {
-            product_status === 'success' && 
-            <div className='flex flex-col gap-y-6'>
+        <div className='flex flex-col gap-y-6'>
 
-                <EditMainInfo product={product} setLoading={setLoading}/>
-                <ProductImages id_product={id}/>
-                <Combinations combinations={product.combinations} operations={product.operations} id_product={id}/>
-                <EditOperations operations={product.operations} id_product={id} />
-            </div>
-        }
+            <EditMainInfo product={product} setLoading={setLoading}/>
+            <ProductImages id_product={id}/>
+            <Combinations combinations={product.combinations} operations={product.operations} id_product={id}/>
+            <EditOperations operations={product.operations} id_product={id} />
+        </div>
     </div>
   )
 }

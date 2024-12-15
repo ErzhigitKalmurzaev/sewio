@@ -7,18 +7,18 @@ import { toast } from 'react-toastify';
 
 const ProductImages = ({ id_product }) => {
   const dispatch = useDispatch();
-  const { product_images } = useSelector(state => state.product);  // Получаем изображения из Redux
 
   const [images, setImages] = useState([]);         // Новые загруженные изображения
   const [existingImages, setExistingImages] = useState([]);  // Изображения с сервера
   const [deleteImages, setDeleteImages] = useState([]); // Удалённые изображения
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     dispatch(getProductImages({ id: id_product }))
       .then(({ payload }) => {
         setExistingImages(payload);  // Записываем изображения с сервера в состояние
       });
-  }, [dispatch, id_product]);
+  }, [dispatch, id_product, update]);
 
   const onSubmit = () => {
     const imagesBlob = images.map(image => image.blobFile); // Преобразуем новые изображения в Blob
@@ -32,6 +32,7 @@ const ProductImages = ({ id_product }) => {
       if (res.meta.requestStatus === 'fulfilled') {
         toast("Изображения успешно обновлены!");
         setImages([]);
+        setUpdate(!update);
         setDeleteImages([]);
       }
     });

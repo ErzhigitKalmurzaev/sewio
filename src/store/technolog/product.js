@@ -168,9 +168,12 @@ const TechnologProductSlice = createSlice({
         product_status: 'loading',
         product_images: [],
         product_images_status: 'loading',
+        update_product: false
     },
     reducers: {
-
+        setUpdateProduct: (state) => {
+            state.update_product = !state.update_product
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -204,5 +207,5 @@ const TechnologProductSlice = createSlice({
     }
 })
 
-export const TechnologProductActions = TechnologProductSlice.actions;
+export const { setUpdateProduct } = TechnologProductSlice.actions;
 export default TechnologProductSlice;

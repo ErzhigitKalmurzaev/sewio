@@ -79,6 +79,7 @@ const Orders = () => {
                 limit={Number(urls.page_size) || 0}
                 activePage={Number(urls.page)}
                 setPage={handleChangeFilter}
+                type='order'
             />
         </div>
     </div>

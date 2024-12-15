@@ -115,8 +115,12 @@ const EditEmployee = () => {
     e.preventDefault();
     
     if (validateFields()) {
-      const props = image ? image?.blobFile ? { ...employee_data, image: image?.blobFile } 
-      : employee_data : { ...employee_data, image_delete: true } 
+      const { password, ...datas} = employee_data
+      const finalData = password ? { ...datas, password } : datas
+
+
+      const props = image ? image?.blobFile ? { ...finalData, image: image?.blobFile } 
+      : finalData : { ...finalData, image_delete: true } 
 
       dispatch(editEmployeeInfo({ id, props }))
         .then(res => {

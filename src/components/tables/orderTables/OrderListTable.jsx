@@ -13,7 +13,7 @@ import { MessageCircle } from 'lucide-react';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const OrderListTable = ({ data, status, total, activePage, limit, setPage, moderation_list }) => {
+const OrderListTable = ({ data, status, total, activePage, limit, setPage, moderation_list, type='order' }) => {
 
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                 <Badge content={count}>
                   <MessageCircle onClick={() => navigate(`moderation/${data.id}`)}/>
                 </Badge> :
-                <MessageCircle onClick={() => navigate(`moderation/${data.id}`)}/>
+                <MessageCircle/>
                 
   }
 
@@ -128,7 +128,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                   </Cell>
               </Column>
 
-              <Column width={120} fixed="right">
+              <Column width={type === 'operations' ? 120 : 80} fixed="right">
                   <HeaderCell>Действия</HeaderCell>
 
                   <Cell style={{ padding: '6px' }}>
@@ -137,9 +137,12 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                           <div className='flex items-center px-3 py-1 cursor-pointer'>
                             <Pencil onClick={() => navigate(`${rowData.id}`)}/>
                           </div>
-                          <div className='flex items-center px-3 py-1 cursor-pointer'>
-                            {getModerationCount(rowData)}
-                          </div>
+                          {
+                            type === 'operations' &&
+                            <div className='flex items-center px-3 py-1 cursor-pointer'>
+                              {getModerationCount(rowData)}
+                            </div>
+                          }
                         </div>
                     )}
                   </Cell>

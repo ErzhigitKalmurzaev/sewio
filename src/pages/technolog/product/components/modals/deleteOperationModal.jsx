@@ -1,5 +1,5 @@
 import React from 'react'
-import { deactivateOperationById, getProductById } from '../../../../../store/technolog/product';
+import { deactivateOperationById, getProductById, setUpdateProduct } from '../../../../../store/technolog/product';
 import { useDispatch } from 'react-redux';
 import { Modal } from 'rsuite';
 import { toast } from 'react-toastify';
@@ -15,7 +15,7 @@ const DeleteOperationModal = ({ modals, setModals, operation, id_product }) => {
         if(res.meta.requestStatus === 'fulfilled') {
           toast("Операция удалена успешно!");
           setModals({ ...modals, delete: false }); 
-          dispatch(getProductById({ id: id_product })); 
+          dispatch(setUpdateProduct()); 
         }
       })
   }

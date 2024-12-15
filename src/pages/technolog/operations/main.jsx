@@ -85,6 +85,7 @@ const Operations = () => {
                 activePage={Number(urls.page)}
                 setPage={handleChangeFilter}
                 moderation_list={moderation_list}
+                type='operations'
             />
         </div>
     </div>

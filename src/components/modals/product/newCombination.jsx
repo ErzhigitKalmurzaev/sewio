@@ -4,7 +4,7 @@ import Input from '../../ui/inputs/input'
 import Checkbox from '../../ui/inputs/checkbox'
 import Button from '../../ui/button'
 import { useDispatch } from 'react-redux'
-import { createCombination, getProductById } from './../../../store/technolog/product';
+import { createCombination, getProductById, setUpdateProduct } from './../../../store/technolog/product';
 import { toast } from 'react-toastify'
 import { create } from '@mui/material/styles/createTransitions'
 import { get } from 'react-hook-form'
@@ -42,7 +42,7 @@ const NewCombination = ({ modals, setModals, operations, id_product }) => {
                 if(res.meta.requestStatus === 'fulfilled') {
                     toast('Комбинация создана успешно!');
                     setModals({ ...modals, create: false })
-                    dispatch(getProductById({ id: id_product }))
+                    dispatch(setUpdateProduct())
                 }
             })
     } else {

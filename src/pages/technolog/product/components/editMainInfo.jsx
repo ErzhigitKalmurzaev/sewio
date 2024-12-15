@@ -34,6 +34,15 @@ const EditMainInfo = ({ product, setLoading }) => {
     dispatch(getSizeCategoryList());
   }, [])
 
+  useEffect(() => {
+    setEditProduct({
+      title: product?.title || '',
+      vendor_code: product?.vendor_code || '',
+      category: product?.category || '',
+      is_active: product?.is_active || true
+    })
+  }, [product?.title])
+
   const getValue = (e) => {
     const { name, value } = e.target;
     setEditProduct({

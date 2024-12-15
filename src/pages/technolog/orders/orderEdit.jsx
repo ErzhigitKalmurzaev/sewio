@@ -64,7 +64,7 @@ const OrderEdit = () => {
 
   useEffect(() => {
     if (order.client) {
-      const clientInfo = client_list.find(client => client.id === order.client);
+      const clientInfo = client_list?.find(client => client.id === order.client);
       setSelectedClient(clientInfo);
     }
   }, [order.client, client_list]);

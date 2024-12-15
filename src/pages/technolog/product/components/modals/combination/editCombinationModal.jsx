@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import Input from '../../../../../../components/ui/inputs/input';
 import Checkbox from '../../../../../../components/ui/inputs/checkbox';
 import Button from '../../../../../../components/ui/button';
-import { editCombinationById, getProductById } from '../../../../../../store/technolog/product';
+import { editCombinationById, getProductById, setUpdateProduct } from '../../../../../../store/technolog/product';
 
 const EditCombinationModal = ({ modals, setModals, combination, operations, id_product }) => {
 
@@ -52,7 +52,7 @@ const EditCombinationModal = ({ modals, setModals, combination, operations, id_p
                 if(res.meta.requestStatus === 'fulfilled') {
                     toast('Комбинация изменена успешно!');
                     setModals({ ...modals, edit: false })
-                    dispatch(getProductById({ id: id_product }))
+                    dispatch(setUpdateProduct())
                 }
             })
     } else {

@@ -7,7 +7,7 @@ import { getRankList } from '../../../../../store/technolog/rank'
 import { getEquipmentList } from '../../../../../store/technolog/equipment'
 import NumInput from '../../../../../components/ui/inputs/numInput'
 import MaterialActions from '../shared/materialActions'
-import { createOperation, editOperationById, getProductById } from '../../../../../store/technolog/product'
+import { createOperation, editOperationById, getProductById, setUpdateProduct } from '../../../../../store/technolog/product'
 import { toast } from 'react-toastify'
 import Button from '../../../../../components/ui/button'
 import MaterialActionsEdit from '../shared/materialActionsEdit'
@@ -96,7 +96,7 @@ const EditOperationModal = ({ modals, setModals, operation, id_product }) => {
           if(res.meta.requestStatus === 'fulfilled') {
             toast("Операция изменена успешно!");
             setModals({ ...modals, edit: false })
-            dispatch(getProductById({ id: id_product }))
+            dispatch(setUpdateProduct())
           }
         })
 

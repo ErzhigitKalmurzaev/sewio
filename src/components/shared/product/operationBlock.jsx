@@ -20,7 +20,7 @@ const OperationBlock = ({ operation, index, id_product }) => {
   }
 
   return (
-    <div className={`flex flex-col gap-y-3 py-4 px-6 rounded-lg ${operation.is_active ? 'bg-white' : 'bg-red-100'}`}>
+    <div className={`flex flex-col gap-y-0 py-4 px-6 rounded-lg ${operation.is_active ? 'bg-white' : 'bg-red-100'}`}>
       <div className={`flex justify-between items-center`}>
         <p className='text-base font-semibold font-inter'>Операция: {operation.title}</p>
         <div className='flex gap-x-3'>
@@ -43,11 +43,11 @@ const OperationBlock = ({ operation, index, id_product }) => {
 
       {/* Контейнер для плавного сворачивания */}
       <div
-        className={`overflow-hidden mt-3 transition-[max-height] ease-in-out duration-700 ${
+        className={`overflow-hidden transition-[max-height] ease-in-out duration-700 ${
           collapse ? 'max-h-0' : 'max-h-screen'
         }`}
         >
-        <div className='flex flex-col gap-y-4'>
+        <div className='flex flex-col'>
           <OperationTabs operation={operation} index={index} />
         </div>
       </div>

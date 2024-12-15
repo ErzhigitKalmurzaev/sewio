@@ -3,7 +3,7 @@ import { Modal } from 'rsuite'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import Button from '../../../../../../components/ui/button';
-import { deleteCombinationById, getProductById } from '../../../../../../store/technolog/product';
+import { deleteCombinationById, getProductById, setUpdateProduct } from '../../../../../../store/technolog/product';
 import { get } from 'react-hook-form';
 
 const DeleteCombinationModal = ({ modals, setModals, combination, id_product }) => {
@@ -16,7 +16,7 @@ const DeleteCombinationModal = ({ modals, setModals, combination, id_product }) 
         if(res.meta.requestStatus === 'fulfilled') {
           toast("Комбинация удалена успешно!");
           setModals({ ...modals, delete: false }); 
-          dispatch(getProductById({ id: id_product })); 
+          dispatch(setUpdateProduct()); 
         }
       })
   }
