@@ -80,7 +80,7 @@ const Statistic = () => {
                   onChange={handleChangeFilter}
                   placeholder='Дата'
                 />
-                <Button width='200px' style={{ marginBottom: '5px' }}>+ Создать план</Button>
+                {/* <Button width='200px' style={{ marginBottom: '5px' }}>+ Создать план</Button> */}
             </div>
         </div>
 

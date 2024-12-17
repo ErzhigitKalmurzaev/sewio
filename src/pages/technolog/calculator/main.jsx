@@ -11,18 +11,64 @@ import { CircleMinus, Plus } from 'lucide-react';
 
 const { Cell, Column, HeaderCell } = Table;
 
+const staticDatas = [
+    {
+        title: 'Материал',
+        price: ''
+    },
+    {
+        title: 'Крой',
+        price: ''
+    },
+    {
+        title: 'Пошив',
+        price: ''
+    },
+    {
+        title: 'Утюг',
+        price: ''
+    },
+    {
+        title: 'Чистка, упаковка',
+        price: ''
+    },
+    {
+        title: 'Технолог, ОТК',
+        price: ''
+    },
+    {
+        title: 'Фурнитура',
+        price: ''
+    },
+    {
+        title: 'Манжет',
+        price: ''
+    },
+    {
+        title: 'Петля пуговица',
+        price: ''
+    },
+    {
+        title: 'Прочие',
+        price: ''
+    },
+    {
+        title: 'Услуги байера',
+        price: ''
+    },
+    {
+        title: 'Услуги М',
+        price: ''
+    },
+]
+
 const Calculator = () => {
 
   const [clientData, setClientData] = useState({
     amount: '',
     price: ''
   })
-  const [costs, setCosts] = useState([
-    {
-        title: '',
-        price: ''
-    }
-  ]);
+  const [costs, setCosts] = useState([...staticDatas]);
 
   const getValue = (value, name, index) => {
     const new_costs = [...costs];
@@ -81,10 +127,10 @@ const Calculator = () => {
             <div className='flex flex-col gap-y-4'>
                 <p className='font-inter text-lg font-semibold'>Калькулятор расходов</p>
                 <div className='flex gap-x-5'>
-                    <div className='flex flex-col gap-y-4 w-3/4 h-[400px] overflow-y-auto'>
+                    <div className='flex flex-col gap-y-4 w-3/4 h-auto overflow-y-auto'>
                         <Table
                             data={costs}
-                            height={400}
+                            minHeight={700}
                             bordered
                             cellBordered
                         >
@@ -186,26 +232,3 @@ const Calculator = () => {
 
 export default Calculator
 
-
-// {
-//     costs.map((item, index) => (
-//         <div className='flex gap-x-4 items-center' key={index + 'sap'}>
-//             <Input
-//                 width={'300px'}
-//                 type='text'
-//                 label='Название'
-//                 value={item.title}
-//                 placeholder='Название'
-//                 onChange={(e) => getValue(e.target.value, 'title', index)}
-//             />
-//             <NumInput
-//                 width={'300px'}
-//                 label="Цена (сом)"
-//                 value={item.price}
-//                 onChange={e => getValue(e, 'price', index)}  
-//                 placeholder='0'
-//             />
-//             <p className='font-inter text-lg font-semibold mt-3'> x {clientData?.amount || 0 } = {clientData?.amount * item.price} </p>
-//         </div>
-//     ))
-// }
