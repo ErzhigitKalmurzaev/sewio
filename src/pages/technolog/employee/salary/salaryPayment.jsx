@@ -45,6 +45,7 @@ const SalaryPayment = () => {
           <SalaryPaymentTable
             data={payment_info}
             status={payment_info_status}
+            staff_id={Number(id)}
           />
         </div>
     </div>

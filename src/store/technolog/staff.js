@@ -111,6 +111,18 @@ export const postPaymentFiles = createAsyncThunk(
     }
 )
 
+export const postSalary = createAsyncThunk(
+    'technologStaff/postSalary',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.post(`payment/salary/create/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const getStaffSalaryHistory = createAsyncThunk(
     'technologStaff/getStaffSalaryHistory',
     async ({ id, urls }, { rejectWithValue }) => {
