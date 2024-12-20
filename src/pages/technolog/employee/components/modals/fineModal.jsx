@@ -41,6 +41,7 @@ const FineModal = ({ modals, setModals }) => {
         dispatch(postPayment({ ...payment, amount: Number(payment.amount) }))
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
+               if(files.length > 0) {
                 const dataWithFiles = {
                     payment_id: res.payload.id,
                     files: files.map(item => (item.blobFile))
@@ -53,9 +54,13 @@ const FineModal = ({ modals, setModals }) => {
                             toast('Штраф успешно оформлен!')
                         }
                     })
+               } else {
+                    setModals({ ...modals, fine: false });
+                    toast('Штраф успешно оформлен!')
+               }
             }
         })
-        // console.log(files)
+        
     } else {
         toast('Заполните все поля!')
     }

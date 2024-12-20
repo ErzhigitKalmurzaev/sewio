@@ -155,6 +155,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                 first
                 last
                 ellipsis
+                lang='ru'
                 boundaryLinks
                 maxButtons={5}
                 size="xs"

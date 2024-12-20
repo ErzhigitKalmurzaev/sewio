@@ -69,11 +69,13 @@ const ProductTable = ({ data, status, total, activePage, limit, setPage }) => {
                 first
                 last
                 ellipsis
+                lang='ru'
                 boundaryLinks
                 maxButtons={5}
                 size="xs"
                 layout={['total', '-', 'limit', '|', 'pager', 'skip']}
                 total={total}
+                gotoText="Перейти к странице:"
                 limitOptions={[10, 30, 50]}
                 limit={limit}
                 activePage={Number(activePage)}

@@ -140,11 +140,11 @@ const Statistic = () => {
                 icon={<ChartColumn color='blue' size={20} />}
               />
               <InfoCard
-                title='Сделано'
+                title='Зарплаты'
                 plan_status={false}
                 value={statistic_list?.staff?.done || 0}
                 date={urls}
-                unit=' шт.'
+                unit=' сом'
                 icon={<CircleCheckBig color='green' size={20}/>}
               />
               <InfoCard
@@ -160,7 +160,7 @@ const Statistic = () => {
                 plan_status={false}
                 value={statistic_list?.staff?.performance || 0}
                 date={urls}
-                unit=' ч.'
+                unit=' шт.'
                 icon={<Pickaxe color='gray' size={20} />}
               />
           </div>
@@ -168,7 +168,7 @@ const Statistic = () => {
               <InfoCard
                 title='Время работы'
                 plan_status={false}
-                value={statistic_list?.staff?.time || 0}
+                value={(statistic_list?.staff?.time / 3600).toFixed(1) || 0}
                 date={urls}
                 unit=' ч.'
                 icon={<Wrench color='gray' size={20} />}
