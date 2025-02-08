@@ -15,6 +15,7 @@ import OperationSlice from "./technolog/operations";
 import ShveyaOperationSlice from "./shveya/operation";
 import ShveyaSalarySlice from "./shveya/salary";
 import StatisticSlice from "./technolog/statistic";
+import CalculationSlice from "./technolog/calculation";
 
 const store = configureStore({
     reducer: {
@@ -34,6 +35,7 @@ const store = configureStore({
         warehouse: WarehouseSlice.reducer,
         operation: OperationSlice.reducer,
         statistic: StatisticSlice.reducer,
+        calculation: CalculationSlice.reducer,
 
         //Warehouse
         ware_materials: WarehouseMaterialSlice.reducer,

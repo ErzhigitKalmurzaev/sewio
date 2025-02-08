@@ -1,234 +1,77 @@
-import React, { useState } from 'react'
-import Title from '../../../components/ui/title'
-import NumInput from '../../../components/ui/inputs/numInput';
-import Input from '../../../components/ui/inputs/input';
-import Button from '../../../components/ui/button';
-import { Table } from 'rsuite';
-import NumInputForTable from '../../../components/ui/inputs/numInputForTable';
-import TextInputForTable from '../../../components/ui/inputs/textInputForTable';
-import { formatNumber } from '../../../utils/functions/numFuncs';
-import { CircleMinus, Plus } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import Title from "../../../components/ui/title";
+import NumInput from "../../../components/ui/inputs/numInput";
+import Input from "../../../components/ui/inputs/input";
+import { Table } from "rsuite";
+import CalcTable from "./tables/calcTable";
+import Button from "../../../components/ui/button";
+import { MoveRight } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { getCalculateList } from "../../../store/technolog/calculation";
 
 const { Cell, Column, HeaderCell } = Table;
 
-const staticDatas = [
-    {
-        title: 'Материал',
-        price: ''
-    },
-    {
-        title: 'Крой',
-        price: ''
-    },
-    {
-        title: 'Пошив',
-        price: ''
-    },
-    {
-        title: 'Утюг',
-        price: ''
-    },
-    {
-        title: 'Чистка, упаковка',
-        price: ''
-    },
-    {
-        title: 'Технолог, ОТК',
-        price: ''
-    },
-    {
-        title: 'Фурнитура',
-        price: ''
-    },
-    {
-        title: 'Манжет',
-        price: ''
-    },
-    {
-        title: 'Петля пуговица',
-        price: ''
-    },
-    {
-        title: 'Прочие',
-        price: ''
-    },
-    {
-        title: 'Услуги байера',
-        price: ''
-    },
-    {
-        title: 'Услуги М',
-        price: ''
-    },
-]
-
 const Calculator = () => {
 
+  const dispatch = useDispatch();
+
+  const [costs, setCosts] = useState([]);
   const [clientData, setClientData] = useState({
-    amount: '',
-    price: ''
-  })
-  const [costs, setCosts] = useState([...staticDatas]);
-
-  const getValue = (value, name, index) => {
-    const new_costs = [...costs];
-    new_costs[index][name] = value;
-    setCosts(new_costs)
-  }
-
-  const addOne = () => {
-    setCosts([...costs, {
-        title: '',
-        price: ''
-    }])
-  }
-
-  const deleteRow = (i) => {
-    setCosts(costs.filter((item, index) => index !== i));
-  }
-
-  const getTotal = (type) => {
-    switch (type) {
-      case 'payment':
-        return formatNumber(clientData?.amount * clientData?.price);
-      case 'expenditure':
-        return formatNumber(costs.reduce((sum, cost) => { return sum + (clientData.amount * cost.price); }, 0));
-      case 'expenditure_one':
-        return formatNumber(costs.reduce((sum, cost) => { return Number(sum) + Number(cost.price); }, 0));
-      case 'income':
-        return formatNumber((clientData?.amount * clientData?.price) - costs.reduce((sum, cost) => { return Number(sum) + (Number(clientData.amount) * Number(cost.price)); }, 0))
-      default:
-        return 0;
-    }
-  }
-
+    title: "",
+    cost_price: "",
+    price: "",
+  });
+  
+  const onSubmit = () => {
+    
+  };
 
   return (
-    <div className='w-full min-h-[100vh] flex flex-col gap-y-5'>
-        <Title text="Калькулятор" />
+    <div className="w-full min-h-[100vh] flex flex-col gap-y-5">
+      <Title text="Калькулятор" />
 
-        <div className='w-full bg-white rounded-lg px-6 py-8 flex flex-col gap-y-5'>
-            <div className='flex gap-x-5'>
-                <NumInput
-                    width={'300px'}
-                    label="Количество клиента (шт)"
-                    value={`${clientData.amount}`}
-                    onChange={e => setClientData({...clientData, amount: e})}  
-                    placeholder='0'
-                />
-                <NumInput
-                    width={'300px'}
-                    label="Цена клиента (сом)"
-                    value={`${clientData.price}`}
-                    onChange={e => setClientData({...clientData, price: e})}  
-                    placeholder='0'
-                />
-            </div>
-            <div className='flex flex-col gap-y-4'>
-                <p className='font-inter text-lg font-semibold'>Калькулятор расходов</p>
-                <div className='flex gap-x-5'>
-                    <div className='flex flex-col gap-y-4 w-3/4 h-auto overflow-y-auto'>
-                        <Table
-                            data={costs}
-                            minHeight={700}
-                            bordered
-                            cellBordered
-                        >
-                            <Column width={250}>
-                                <HeaderCell>Название</HeaderCell>
-                                <Cell style={{ padding: '7px 6px'}}>
-                                    {
-                                        (rowData, index) => (
-                                            <TextInputForTable
-                                                type='text'
-                                                value={rowData.title}
-                                                placeholder='Название'
-                                                onChange={(e) => getValue(e.target.value, 'title', index)}
-                                            />
-                                        )
-                                    }
-                                </Cell>
-                            </Column>
-                            <Column width={200}>
-                                <HeaderCell>Цена</HeaderCell>
-                                <Cell style={{ padding: '7px 6px'}}>
-                                    {
-                                        (rowData, index) => (
-                                            <NumInputForTable
-                                                value={rowData.price}
-                                                placeholder='0'
-                                                onChange={(e) => getValue(e, 'price', index)}
-                                            />
-                                        )
-                                    }
-                                </Cell>
-                            </Column>
-                            <Column width={200}>
-                                <HeaderCell>Итог расход</HeaderCell>
-                                <Cell>
-                                    {
-                                        (rowData, index) => (
-                                            <p>{formatNumber(Number(rowData.price) * Number(clientData.amount))}</p>
-                                        )
-                                    }
-                                </Cell>
-                            </Column>
-                            <Column width={100} align='center'>
-                                <HeaderCell>Действия</HeaderCell>
-                                <Cell>
-                                    {
-                                        (rowData, index) => (
-                                            <div onClick={() => deleteRow(index)} className='cursor-pointer'>
-                                                <CircleMinus color='red' />
-                                            </div>
-                                        )
-                                    }
-                                </Cell>
-                            </Column>
-                            <Column width={100} align='center'>
-                                    <HeaderCell style={{ padding: '7px 6px'}}>
-                                        <div onClick={addOne} className='w-[40px] flex justify-center items-center border border-primary rounded-md bg-primary cursor-pointer'>
-                                            <Plus color='white'/>
-                                        </div>
-                                    </HeaderCell>
-                                    <Cell></Cell>
-                            </Column>
-                        </Table>
-                    </div>
-                    <div className='w-1/4 flex flex-col gap-y-10'>
-                        <div className='flex flex-col gap-y-4'>
-                            <p className='font-inter text-base font-semibold'>
-                                Оплата клиента: 
-                                <span className='ml-2 text-sprimary'>
-                                    {getTotal('payment')}
-                                </span>
-                            </p>
-                            <p className='font-inter text-base font-semibold'>
-                                Расход на один товар: 
-                                <span className='ml-2 text-sprimary'>
-                                    {getTotal('expenditure_one')}
-                                </span>
-                            </p>
-                            <p className='font-inter text-base font-semibold'>
-                                Общий расход: 
-                                <span className='ml-2 text-redd'>
-                                    {getTotal('expenditure')}
-                                </span>
-                            </p>
-                            <p className='font-inter text-base font-semibold'>
-                                Прибыль: 
-                                <span className='ml-2 text-emerald-600'>
-                                    {getTotal('income')}
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div className="w-full bg-white rounded-lg px-6 py-6 flex flex-col gap-y-5">
+        <div className="flex flex-col gap-y-4">
+          <p className="font-inter text-lg font-semibold">Данные о заказе</p>
+          <div className="flex gap-x-5">
+            <Input
+              width={"350px"}
+              type='text'
+              label="Название товара"
+              placeholder={"Название товара"}
+              value={`${clientData.title}`}
+              onChange={(e) => setClientData({ ...clientData, title: e.target.value })}
+            />
+            <NumInput
+              width={"350px"}
+              label="Себестоимость товара (сом)"
+              value={`${clientData.cost_price}`}
+              onChange={(e) => setClientData({ ...clientData, cost_price: e })}
+              placeholder="0"
+            />
+            <NumInput
+              width={"350px"}
+              label="Цена товара для клиента (сом)"
+              value={`${clientData.price}`}
+              onChange={(e) => setClientData({ ...clientData, price: e })}
+              placeholder="0"
+            />
+          </div>
         </div>
+
+        <div className="flex flex-col gap-y-4">
+          <p className="font-inter text-lg font-semibold">Калькулятор расходов</p>
+
+          <CalcTable clientData={clientData}/>
+        </div>
+        <div className="flex justify-end">
+          <Button width='180px' onClick={onSubmit}>
+              Далее <MoveRight className="ml-2" />
+          </Button>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Calculator
-
+export default Calculator;

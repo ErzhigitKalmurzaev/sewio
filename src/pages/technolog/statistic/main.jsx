@@ -93,10 +93,11 @@ const Statistic = () => {
               <InfoCard
                 title='Доход'
                 plan={statistic_list?.order?.plan?.income || 0}
-                plan_status={true}
+                plan_status={false}
                 value={statistic_list?.order?.fact?.income || 0}
                 date={urls}
                 unit=' сом'
+                icon={<CircleDollarSign color='green' size={20}/>}
               />
               <InfoCard
                 title='Расход'
@@ -117,10 +118,11 @@ const Statistic = () => {
               <InfoCard
                 title='Заказы'
                 plan={statistic_list?.order?.plan?.orders || 0}
-                plan_status={true}
+                plan_status={false}
                 value={statistic_list?.order?.fact?.orders || 0}
                 date={urls}
                 unit=''
+                icon={<ChartColumn color='blue' size={20} />}
               />
           </div>
         </div>

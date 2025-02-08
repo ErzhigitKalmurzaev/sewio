@@ -1,6 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axios";
 
+export const getConsumablesTitleList = createAsyncThunk(
+    'material/getConsumablesTitleList',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`calculation/consumables/titles/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const getMateralList = createAsyncThunk(
     'material/getMateralList',
     async ({ title }, { rejectWithValue }) => {
@@ -77,7 +89,9 @@ const MaterialSlice = createSlice({
     name: 'material',
     initialState: {
         materials_list: null,
-        materials_list_status: 'loading'
+        materials_list_status: 'loading',
+        consumables_title_list: null,
+        consumables_title_list_status: 'loading',
     },
     reducers: {
 
@@ -91,6 +105,14 @@ const MaterialSlice = createSlice({
                 state.materials_list = action.payload
             }).addCase(getMateralList.rejected, (state) => {
                 state.materials_list_status = 'error';
+            })
+            .addCase(getConsumablesTitleList.pending, (state) => {
+                state.consumables_title_list_status = 'loading';
+            }).addCase(getConsumablesTitleList.fulfilled, (state, action) => {
+                state.consumables_title_list_status = 'success';
+                state.consumables_title_list = action.payload
+            }).addCase(getConsumablesTitleList.rejected, (state) => {
+                state.consumables_title_list_status = 'error';
             })
     }
 })

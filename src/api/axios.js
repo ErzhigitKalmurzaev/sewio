@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { changetoken } from "./EndSession";
+import { changetoken } from "./endSession";
 
 export const API_DOMAIN = "194.31.52.244"
 export const Base_URL = `http://${API_DOMAIN}`; // base
@@ -16,9 +16,20 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  ({ response }) => {
-    if (response?.status === 401 && localStorage.getItem("token")) {
-      // changetoken();
+  async ({ response }) => {
+    const refresh = localStorage.getItem("sewio_refresh_token");
+    if (response?.status === 401 && refresh) {
+      try {
+        const { data } = await axios.post(`${Base_URL}/api/v1/token/refresh/`, {
+          refresh: refresh,
+        });
+        console.log(data)
+        localStorage.setItem("sewio_token", data.access);
+        window.location.reload();
+        return;
+      } catch (error) {
+        return Promise.reject(error);
+      }
     }
     return Promise.reject(
       (response && response.data) || "При запросе произошла ошибка"

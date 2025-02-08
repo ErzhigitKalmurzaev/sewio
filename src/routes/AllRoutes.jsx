@@ -1,27 +1,34 @@
 // components/AllRoutes.js
 import React, { useEffect } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import TechnologRoute from './technologRoute';
 import { checkAuth, getProfile } from '../store/auth/auth';
 import SignIn from './../pages/auth/signIn';
 import WarehouseRoute from './warehouseRoute';
 import ShveyaRoute from './shveyaRoutes';
+import ForemanRoutes from './foremanRoutes';
 
 const AllRoutes = () => {
   const { isAuthenticated, me_info } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(checkAuth());
-    dispatch(getProfile());
+    if(!me_info?.role && isAuthenticated === 'success') {
+      dispatch(getProfile());
+    }
+    if(isAuthenticated === 'error') {
+      navigate('/');
+    }
   }, [isAuthenticated]);
 
   const routes = {
     director: <TechnologRoute/>,
     technolog: <TechnologRoute/>,
     shveya: <ShveyaRoute />,
-    warehouse: <WarehouseRoute/>,
+    warehouse: <ForemanRoutes/>,
   }
 
   const allowedCRMRoles = ['', 'director', 'technolog', 'warehouse', 'shveya'];

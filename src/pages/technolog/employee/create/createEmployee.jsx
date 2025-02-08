@@ -30,7 +30,6 @@ const CreateEmployee = () => {
     surname: '',
     username: '',
     phone: '',
-    email: '',
     password: '',
     role: '',
     rank: '',
@@ -39,7 +38,6 @@ const CreateEmployee = () => {
   const [errors, setErrors] = useState({
     full_name: false,
     phone: false,
-    email: false,
     password: false,
     role: false,
     rank: false,
@@ -66,7 +64,7 @@ const CreateEmployee = () => {
       surname: !employee_data.surname,
       username: !employee_data.username,
       phone: !employee_data.phone || !/^\+?\d{10,13}$/.test(employee_data.phone),
-      email: !employee_data.email || !/\S+@\S+\.\S+/.test(employee_data.email),
+      // email: !employee_data.email || !/\S+@\S+\.\S+/.test(employee_data.email),
       password: employee_data.password.length < 6,
       role: !employee_data.role,
       rank: !employee_data.rank
@@ -149,19 +147,27 @@ const CreateEmployee = () => {
             </div>
 
             <div className='flex gap-x-6'>
-              <Input
+              {/* <Input
                 label='Email'
                 name='email'
                 placeholder='technolog@gmail.com'
                 type='email'
                 error={errors.email}
                 onChange={getValue}
-              />
+              /> */}
               <TelInput
-                label='Телефон'
+                label='Телефон (WhatsApp)'
                 value={employee_data.phone}
                 error={errors.phone}
                 onChange={e => getValue({ target: { value: e, name: 'phone' } })}
+              />
+              
+              <NumInput
+                label='Зарплата'
+                name='salary'
+                placeholder='Введите зарплату'
+                error={errors.salary}
+                onChange={e => getValue({ target: { value: e, name: 'salary' } })}
               />
             </div>
 
@@ -185,14 +191,6 @@ const CreateEmployee = () => {
                 onChange={e => getValue({ target: { value: e, name: 'rank' } })}
               />
             </div>
-
-            <NumInput
-              label='Зарплата'
-              name='salary'
-              placeholder='Введите зарплату'
-              error={errors.salary}
-              onChange={e => getValue({ target: { value: e, name: 'salary' } })}
-            />
           </div>
         </div>
 

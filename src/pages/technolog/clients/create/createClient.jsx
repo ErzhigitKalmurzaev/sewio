@@ -30,7 +30,6 @@ const CreateClient = () => {
     surname: '',
     username: '',
     phone: '',
-    email: '',
     password: '',
     company_title: '',
     address: ''
@@ -38,7 +37,6 @@ const CreateClient = () => {
   const [errors, setErrors] = useState({
     full_name: false,
     phone: false,
-    email: false,
     password: false,
     company_title: false,
     address: false
@@ -65,7 +63,6 @@ const CreateClient = () => {
       surname: !employee_data.surname,
       username: !employee_data.username,
       phone: !employee_data.phone || !/^\+?\d{10,13}$/.test(employee_data.phone),
-      email: !employee_data.email || !/\S+@\S+\.\S+/.test(employee_data.email),
       password: employee_data.password.length < 6,
       company_title: !employee_data.company_title,
       address: !employee_data.address,
@@ -158,33 +155,26 @@ const CreateClient = () => {
               </div>
             </div>
 
-            <div className='flex gap-x-6'>
-              <Input
-                label='Email'
-                name='email'
-                placeholder='technolog@gmail.com'
-                type='email'
-                error={errors.email}
-                onChange={getValue}
-              />
+            <div className='flex gap-x-6 items-center'>
               <TelInput
                 label='Телефон'
                 value={employee_data.phone}
                 error={errors.phone}
                 onChange={e => getValue({ target: { value: e, name: 'phone' } })}
               />
+              <Input
+                  label='Компания'
+                  name='company_title'
+                  placeholder='Введите название компании'
+                  type='text'
+                  error={errors.company_title}
+                  onChange={getValue}
+              />
             </div>
 
             <div className='flex gap-x-6'>
                 <Input
-                    label='Компания'
-                    name='company_title'
-                    placeholder='Введите название компании'
-                    type='text'
-                    error={errors.company_title}
-                    onChange={getValue}
-                />
-                <Input
+                    width='49%'
                     label='Адрес'
                     name='address'
                     placeholder='Введите адрес'

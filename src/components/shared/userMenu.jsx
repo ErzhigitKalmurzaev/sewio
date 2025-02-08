@@ -20,12 +20,14 @@ const UserMenu = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
-    const { me_info } = useSelector(state => state.auth);
+    const { me_info, isAuthenticated } = useSelector(state => state.auth);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getProfile());
+        if(!me_info?.role && isAuthenticated === 'success') {
+            dispatch(getProfile())  
+        }
     }, [])
 
     const handleClick = (event) => {

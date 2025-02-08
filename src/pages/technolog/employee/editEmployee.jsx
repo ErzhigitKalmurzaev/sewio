@@ -50,7 +50,6 @@ const EditEmployee = () => {
                 surname: res.payload?.surname,
                 username: res.payload?.user?.username,
                 phone: res.payload?.phone,
-                email: res.payload?.email,
                 password: res.payload?.password,
                 role: res.payload?.role,
                 rank: res.payload?.rank?.id,
@@ -66,7 +65,6 @@ const EditEmployee = () => {
     surname: '',
     username: '',
     phone: '',
-    email: '',
     password: '',
     role: '',
     rank: '',
@@ -77,7 +75,6 @@ const EditEmployee = () => {
     surname: false,
     username: false,
     phone: false,
-    email: false,
     password: false,
     role: false,
     rank: false,
@@ -100,7 +97,6 @@ const EditEmployee = () => {
       surname: !employee_data.surname,
       username: !employee_data.username,
       phone: !employee_data.phone || !/^\+?\d{10,13}$/.test(employee_data.phone),
-      email: !employee_data.email || !/\S+@\S+\.\S+/.test(employee_data.email),
       role: !employee_data.role,
       rank: !employee_data.rank,
     };
@@ -206,7 +202,7 @@ const EditEmployee = () => {
             </div>
 
             <div className='flex gap-x-6'>
-              <Input
+              {/* <Input
                 label='Email'
                 name='email'
                 placeholder='technolog@gmail.com'
@@ -214,12 +210,21 @@ const EditEmployee = () => {
                 error={errors.email}
                 value={employee_data.email}
                 onChange={getValue}
-              />
+              /> */}
               <TelInput
-                label='Телефон'
+                label='Телефон (WhatsApp)'
                 value={employee_data?.phone}
                 error={errors.phone}
                 onChange={e => getValue({ target: { value: e, name: 'phone' } })}
+              />
+
+              <NumInput
+                label='Зарплата'
+                name='salary'
+                placeholder='Введите зарплату'
+                error={errors.salary}
+                value={`${employee_data?.salary}`}
+                onChange={e => getValue({ target: { value: e, name: 'salary' } })}
               />
             </div>
 
@@ -245,15 +250,6 @@ const EditEmployee = () => {
                 onChange={e => getValue({ target: { value: e, name: 'rank' } })}
               />
             </div>
-
-            <NumInput
-              label='Зарплата'
-              name='salary'
-              placeholder='Введите зарплату'
-              error={errors.salary}
-              value={`${employee_data?.salary}`}
-              onChange={e => getValue({ target: { value: e, name: 'salary' } })}
-            />
           </div>
         </div>
 

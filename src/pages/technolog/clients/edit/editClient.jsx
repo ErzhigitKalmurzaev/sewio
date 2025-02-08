@@ -42,7 +42,6 @@ const EditClient = () => {
                 surname: res.payload?.surname,
                 username: res.payload?.user?.username,
                 phone: res.payload?.phone,
-                email: res.payload?.email,
                 password: res.payload?.password,
                 company_title: res.payload?.company_title,
                 address: res.payload?.address,
@@ -57,7 +56,6 @@ const EditClient = () => {
     surname: '',
     username: '',
     phone: '',
-    email: '',
     password: '',
     company_title: '',
     address: ''
@@ -67,7 +65,6 @@ const EditClient = () => {
     surname: false,
     username: false,
     phone: false,
-    email: false,
     password: false,
     company_title: false,
     address: false
@@ -93,7 +90,6 @@ const EditClient = () => {
       surname: !client_data.surname,
       username: !client_data.username,
       phone: !client_data.phone || !/^\+?\d{10,13}$/.test(client_data.phone),
-      email: !client_data.email || !/\S+@\S+\.\S+/.test(client_data.email),
       company_title: !client_data.company_title,
       address: !client_data.address,
     };
@@ -192,35 +188,27 @@ const EditClient = () => {
               </div>
             </div>
 
-            <div className='flex gap-x-6'>
-              <Input
-                label='Email'
-                name='email'
-                placeholder='technolog@gmail.com'
-                type='email'
-                error={errors.email}
-                value={client_data.email}
-                onChange={getValue}
-              />
+            <div className='flex gap-x-6 items-center'>
               <TelInput
                 label='Телефон'
                 value={client_data.phone}
                 error={errors.phone}
                 onChange={e => getValue({ target: { value: e, name: 'phone' } })}
               />
+              <Input
+                  label='Компания'
+                  name='company_title'
+                  placeholder='Введите название компании'
+                  type='text'
+                  value={client_data.company_title}
+                  error={errors.company_title}
+                  onChange={getValue}
+              />
             </div>
 
             <div className='flex gap-x-6'>
                 <Input
-                    label='Компания'
-                    name='company_title'
-                    placeholder='Введите название компании'
-                    type='text'
-                    value={client_data.company_title}
-                    error={errors.company_title}
-                    onChange={getValue}
-                />
-                <Input
+                    width='49%'
                     label='Адрес'
                     name='address'
                     placeholder='Введите адрес'

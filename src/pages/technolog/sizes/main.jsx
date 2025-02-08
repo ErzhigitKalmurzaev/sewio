@@ -17,10 +17,6 @@ const Sizes = () => {
   const [update, setUpdate] = useState(false);
   const [editSize, setEditSize] = useState({})
 
-  useEffect(() => {
-    dispatch(getSizeCategoryList());
-  }, [update])
-
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-3'>
       <div className='flex justify-between items-center'>

@@ -18,7 +18,7 @@ const ClentsTable = ({ data, status }) => {
               height={450}
               className='rounded-xl'
               >
-              <Column width={60} align="center" fixed>
+              <Column width={70} align="center" fixed>
                   <HeaderCell>ID</HeaderCell>
                   <Cell dataKey="id" />
               </Column>
@@ -36,11 +36,6 @@ const ClentsTable = ({ data, status }) => {
               <Column width={200}>
                   <HeaderCell>Телефон</HeaderCell>
                   <Cell dataKey="phone" />
-              </Column>
-
-              <Column width={200}>
-                  <HeaderCell>Email</HeaderCell>
-                  <Cell dataKey="email" />
               </Column>
 
               <Column width={200}>

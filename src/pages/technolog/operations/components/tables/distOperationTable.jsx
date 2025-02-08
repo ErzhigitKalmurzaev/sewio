@@ -25,7 +25,8 @@ function renameKeys(obj, parentType = null) {
     return newObj;
 }
 
-const DistOperationTable = ({ data, status, operations, setOperations }) => {
+const 
+DistOperationTable = ({ data, status, operations, setOperations }) => {
 
     const dataWithChildren = data.map(item => renameKeys(item));
 
