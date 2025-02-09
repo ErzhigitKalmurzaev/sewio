@@ -27,6 +27,10 @@ export const materialUnits = [
     {
         label: 'литр',
         value: 4
+    },
+    {
+        label: 'шт.',
+        value: 5
     }
 ]
 

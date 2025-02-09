@@ -5,7 +5,55 @@ export const getCalculateList = createAsyncThunk(
     'calculationSlice/getCalculateList',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get(`calculation/crud/1/`);
+            const { data } = await axiosInstance.get(`calculation/list/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getOperationsTitlesList = createAsyncThunk(
+    'calculationSlice/getOperationsTitlesList',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`calculation/operations/titles/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getOperation = createAsyncThunk(
+    'calculationSlice/getOperation',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`calculation/operations/detail/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getClientsNames = createAsyncThunk(
+    'calculationSlice/getClientsNames',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`calculation/clients/names/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const createCalculation = createAsyncThunk(
+    'calculationSlice/createCalculation',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.post(`calculation/crud/`, props);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -36,7 +84,9 @@ const CalculationSlice = createSlice({
             {
                 nomenclature: '',
                 title: '',
-                consumption: ''
+                consumption: '',
+                unit: '',
+                price: ''
             }
         ],
         prices: [
@@ -44,7 +94,12 @@ const CalculationSlice = createSlice({
                 title: '',
                 price: ''
             }
-        ]
+        ],
+
+        operations_list: null,
+        clients: null,
+        calc_history: null,
+        calc_history_status: 'loading'
     },
     reducers: {
         addOperation: (state) => {
@@ -56,8 +111,21 @@ const CalculationSlice = createSlice({
             })
         },
         getValueOperation: (state, action) => {
-            console.log(action.payload)
-            state.operations[action.payload.key][action.payload.name] = action.payload.value;
+            if(action.payload.name === 'rank') {
+                const rank_kef = action.payload.rank_list.find(item => item.id === action.payload.value)?.percent;
+                state.operations[action.payload.key][action.payload.name] = action.payload.value;
+                state.operations[action.payload.key]['price'] = rank_kef * state.operations[action.payload.key]['time'] || '';
+            } else if(action.payload.name === 'time') {
+                const rank_kef = action.payload.rank_list.find(item => item.id === state.operations[action.payload.key]['rank'])?.percent;
+                state.operations[action.payload.key][action.payload.name] = action.payload.value;
+                state.operations[action.payload.key]['price'] = action.payload.value * rank_kef || '';
+            }
+             else {
+                state.operations[action.payload.key][action.payload.name] = action.payload.value;
+            }
+        },
+        fillOperation: (state, action) => {
+            state.operations[action.payload.key] = action.payload.value;    
         },
         deleteOperation: (state, action) => {
             state.operations.splice(action.payload, 1);
@@ -67,11 +135,16 @@ const CalculationSlice = createSlice({
             state.consumables.push({
                 nomenclature: '',
                 title: '',
-                consumption: ''
+                consumption: '',
+                unit: '',
+                price: ''
             })
         },
         getValueConsumable: (state, action) => {
             state.consumables[action.payload.key][action.payload.name] = action.payload.value;
+        },
+        fillConsumable: (state, action) => {
+            state.consumables[action.payload.key] = action.payload.value;
         },
         deleteConsumable: (state, action) => {
             state.consumables.splice(action.payload, 1);
@@ -83,16 +156,28 @@ const CalculationSlice = createSlice({
                 price: ''
             })
         },
+        getValuePrice: (state, action) => {
+            state.prices[action.payload.key][action.payload.name] = action.payload.value;
+        },
+        deletePrice: (state, action) => {
+            state.prices.splice(action.payload, 1);
+        },
     },
     extraReducers: (builder) => {
         builder
             .addCase(getCalculateList.pending, (state) => {
-                state.client_list_status = 'loading';
+                state.calc_history_status = 'loading';
             }).addCase(getCalculateList.fulfilled, (state, action) => {
-                state.client_list_status = 'success';
-                state.client_list = action.payload
+                state.calc_history_status = 'success';
+                state.calc_history = action.payload
             }).addCase(getCalculateList.rejected, (state) => {
-                state.client_list_status = 'error';
+                state.calc_history_status = 'error';
+            })
+            .addCase(getOperationsTitlesList.fulfilled, (state, action) => {
+                state.operations_list = action.payload
+            })
+            .addCase(getClientsNames.fulfilled, (state, action) => {
+                state.clients = action.payload
             })
     }
 })
@@ -100,5 +185,6 @@ const CalculationSlice = createSlice({
 export const { addOperation, addConsumable, 
                addPrice, getValueOperation, 
                deleteOperation, getValueConsumable, 
-               deleteConsumable } = CalculationSlice.actions;
+               deleteConsumable, fillConsumable,
+               fillOperation, getValuePrice, deletePrice } = CalculationSlice.actions;
 export default CalculationSlice;

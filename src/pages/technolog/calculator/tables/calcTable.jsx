@@ -7,6 +7,7 @@ import { Panel, PanelGroup, Placeholder, Table } from 'rsuite';
 import { formatNumber } from "../../../../utils/functions/numFuncs";
 import OperationsTable from './operationsTable';
 import ConsumablesTable from './consumablesTable';
+import OtherExpensesTable from './otherExpensesTable';
 
 const { Cell, Column, HeaderCell } = Table;
 
@@ -57,11 +58,11 @@ const CalcTable = ({ clientData}) => {
       <Panel header="Операции" defaultExpanded>
         <OperationsTable/>
       </Panel>
-      <Panel header="Материалы">
+      <Panel header="Материалы" defaultExpanded>
         <ConsumablesTable/>
       </Panel>
-      <Panel header="Прочие">
-        <Placeholder.Paragraph />
+      <Panel header="Прочие" defaultExpanded>
+        <OtherExpensesTable/>
       </Panel>
     </PanelGroup>
   </div>

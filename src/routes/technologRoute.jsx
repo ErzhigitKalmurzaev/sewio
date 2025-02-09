@@ -30,6 +30,7 @@ import Calculator from '../pages/technolog/calculator/main'
 import ModerationOperation from '../pages/technolog/operations/moderation/moderationOperation'
 import CreateEquipment from '../pages/technolog/equipments/create/createEquipment'
 import EditEquipment from '../pages/technolog/equipments/edit/EditEquipment'
+import CalcHistory from '../pages/technolog/calculator/history/calcHistory'
 
 const TechnologRoute = () => {
   return (
@@ -88,7 +89,10 @@ const TechnologRoute = () => {
             <Route path="discharge" element={<Discharge />} />
             <Route path="sizes" element={<Sizes />} />
             <Route path="knowledge" element={<p>База знаний</p>} />
-            <Route path="calculator" element={<Calculator />} />
+            <Route path="calculator" element={<Outlet/>}>
+                <Route path="" element={<Calculator />} />
+                <Route path="history" element={<CalcHistory />} />
+            </Route>
         </Route>
     </Routes>
   )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder, required, error, errorTitle, disabled = false }) => {
@@ -24,7 +24,7 @@ const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder,
         id={id}
         name=''
         type="text"
-        value={inputValue}
+        value={inputValue || value}
         onChange={handleChange}
         disabled={disabled}
         placeholder={placeholder}

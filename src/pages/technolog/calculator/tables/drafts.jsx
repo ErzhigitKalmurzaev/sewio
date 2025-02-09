@@ -207,7 +207,7 @@
 //           </Column>
 //         </Table>
 //       </div>
-//       {/* <div className="w-1/4 flex flex-col gap-y-10">
+//       <div className="w-1/4 flex flex-col gap-y-10">
 //           <div className="flex flex-col gap-y-4">
 //               <p className="font-inter text-base font-semibold">
 //               Оплата клиента:{" "}
@@ -226,7 +226,7 @@
 //               <span className="ml-2 text-emerald-600">{getTotal("income")}</span>
 //               </p>
 //           </div>
-//       </div> */}
+//       </div>
 //     </div>
 //   )
 // }

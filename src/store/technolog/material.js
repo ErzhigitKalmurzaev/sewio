@@ -25,6 +25,18 @@ export const getMateralList = createAsyncThunk(
     }
 )
 
+export const getMaterial = createAsyncThunk(
+    'material/getMaterial',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.get(`calculation/consumables/detail/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const postMaterial = createAsyncThunk(
     'material/postMaterial',
     async (props, { rejectWithValue }) => {

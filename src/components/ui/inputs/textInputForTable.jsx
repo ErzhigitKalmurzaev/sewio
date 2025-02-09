@@ -4,19 +4,6 @@ import styled from '@emotion/styled';
 const TextInputForTable = ({ label, id, width, value = "", onChange, placeholder, required, error, errorTitle, disabled = false }) => {
   const [inputValue, setInputValue] = useState(value);
 
-  const formatNumber = (num) => {
-    return num.replace(/\D/g, '')
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  };
-
-  const handleChange = (e) => {
-    const { value } = e.target;
-    const formattedValue = formatNumber(value);
-    setInputValue(formattedValue);
-    if (onChange) {
-      onChange(formattedValue.replace(/\s+/g, ''));
-    }
-  };
 
   return (
     <StyledDiv width={width}>

@@ -3,7 +3,7 @@ import { SelectPicker } from 'rsuite'
 
 const Select = ({ width, label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false, disabled = false }) => {
   return (
-    <div className={`${width ? `w-${width}` : 'w-full'} flex flex-col gap-y-1 z-0`}>
+    <div className={`${width ? `w-[${width}]` : 'w-full'} flex flex-col gap-y-1 z-0`}>
         <label style={{ fontSize: '13px', fontFamily: 'Inter', fontWeight: '400', color: 'rgba(52, 64, 84, 1)'}}>
           {label} 
           {required && <span style={ error && { color: 'red' }}> *</span>}

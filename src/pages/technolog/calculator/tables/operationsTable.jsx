@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { addOperation, deleteOperation, getValueOperation } from '../../../../store/technolog/calculation';
+import { addOperation, deleteOperation, fillOperation, getOperation, getOperationsTitlesList, getValueOperation } from '../../../../store/technolog/calculation';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,19 +9,25 @@ import NumInputForTable from '../../../../components/ui/inputs/numInputForTable'
 import SelectForTable from '../../../../components/ui/inputs/selectForTable';
 import { CircleMinus, Plus } from 'lucide-react';
 import { getRankList } from '../../../../store/technolog/rank';
+import InputWithSuggestions from '../../../../components/ui/inputs/inputWithSuggestions';
 
 const { Column, HeaderCell, Cell } = Table;
 
 const OperationsTable = () => {
 
-  const { operations } = useSelector(state => state.calculation);
+  const { operations, operations_list } = useSelector(state => state.calculation);
   const { rank_list } = useSelector(state => state.rank);
 
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if(!rank_list) {
         dispatch(getRankList());
+    } 
+    if(!operations_list) {
+        dispatch(getOperationsTitlesList());
     }
   }, [])
 
@@ -34,7 +40,25 @@ const OperationsTable = () => {
   }
 
   const getValue = (value, name, key) => {
-    dispatch(getValueOperation({ key, name, value }))
+    dispatch(getValueOperation({ key, name, value, rank_list }))
+  }
+
+  const handleSelect = (id, index) => {
+    setLoading(true);
+    dispatch(getOperation({ id })).then(res => {
+      if(res.meta.requestStatus === 'fulfilled') {
+
+          const rank_kef = rank_list.find(item => item.id === res.payload.rank?.id)?.percent;
+
+          dispatch(fillOperation({ key: index, value: {
+                title: res.payload.title,
+                time:  res.payload.time,
+                rank: res.payload.rank?.id,
+                price: res.payload.time * rank_kef 
+          }}))
+      }
+      setLoading(false);
+    })  
   }
 
   return (
@@ -42,16 +66,20 @@ const OperationsTable = () => {
         <Table
             data={operations}
             bordered
+            loading={loading}
             cellBordered
+            autoHeight
         >
             <Column width={250}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
-                        <TextInputForTable
+                        <InputWithSuggestions
                             value={rowData.title}
                             placeholder="Название"
                             onChange={(e) => getValue(e.target.value, "title", index)}
+                            onSelect={(id) => handleSelect(id, index)}
+                            suggestions={operations_list}
                         />
                     }
                 </Cell>
