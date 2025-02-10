@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { addConsumable, deleteConsumable, getValueConsumable, fillConsumable } from '../../../../store/technolog/calculation';
+import { addConsumable, deleteConsumable, getValueConsumable, fillConsumable } from '../../../../../store/technolog/calculation';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Table } from 'rsuite'
-import TextInputForTable from '../../../../components/ui/inputs/textInputForTable';
-import NumInputForTable from '../../../../components/ui/inputs/numInputForTable';
-import SelectForTable from '../../../../components/ui/inputs/selectForTable';
+import NumInputForTable from '../../../../../components/ui/inputs/numInputForTable';
+import SelectForTable from '../../../../../components/ui/inputs/selectForTable';
 import { CircleMinus, Plus } from 'lucide-react';
-import InputWithSuggestions from '../../../../components/ui/inputs/inputWithSuggestions';
+import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
 
-import { getConsumablesTitleList } from '../../../../store/technolog/material';
-import { materialUnits } from '../../../../utils/selectDatas/productDatas';
-import { getMaterial } from './../../../../store/technolog/material';
+import { getConsumablesTitleList } from '../../../../../store/technolog/material';
+import { materialUnits } from '../../../../../utils/selectDatas/productDatas';
+import { getMaterial } from './../../../../../store/technolog/material';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const ConsumablesTable = () => {
+const ConsumablesTable = ({ type }) => {
 
-  const { consumables } = useSelector(state => state.calculation);
+  const { consumables, calc_status } = useSelector(state => state.calculation);
   const { consumables_title_list } = useSelector(state => state.material);
 
   const dispatch = useDispatch();
@@ -66,7 +65,7 @@ const ConsumablesTable = () => {
             data={consumables}
             autoHeight
             bordered
-            loading={loading}
+            loading={loading || (type === 'edit' && calc_status === 'loading')}
             cellBordered
         >
             <Column width={250}>

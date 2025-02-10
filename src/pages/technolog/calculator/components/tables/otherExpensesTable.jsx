@@ -3,17 +3,17 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Table } from 'rsuite'
-import TextInputForTable from '../../../../components/ui/inputs/textInputForTable';
-import NumInputForTable from '../../../../components/ui/inputs/numInputForTable';
+import TextInputForTable from '../../../../../components/ui/inputs/textInputForTable';
+import NumInputForTable from '../../../../../components/ui/inputs/numInputForTable';
 import { CircleMinus, Plus } from 'lucide-react';
-import { addPrice, deletePrice, getValuePrice } from '../../../../store/technolog/calculation';
+import { addPrice, deletePrice, getValuePrice } from '../../../../../store/technolog/calculation';
 
 
 const { Column, HeaderCell, Cell } = Table;
 
-const OtherExpensesTable = () => {
+const OtherExpensesTable = ({ type }) => {
 
-  const { prices } = useSelector(state => state.calculation);
+  const { prices, calc_status } = useSelector(state => state.calculation);
 
   const dispatch = useDispatch();
 
@@ -33,6 +33,7 @@ const OtherExpensesTable = () => {
     <div>
         <Table
             data={prices}
+            loading={type === 'edit' && calc_status === 'loading'}
             autoHeight
             bordered
             cellBordered

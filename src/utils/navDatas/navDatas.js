@@ -14,12 +14,6 @@ export const technologNav = [
         elements: false
     },
     {
-        title: 'Операции',
-        path: 'operations',
-        icon: <ClipboardList />,
-        elements: false
-    },
-    {
         title: 'Склады',
         path: 'sklad',
         icon: <Warehouse />,
@@ -46,6 +40,12 @@ export const technologNav = [
                 title: 'Товары',
                 path: 'product',
                 icon: <ShoppingBasket />,
+                elements: false
+            },
+            {
+                title: 'Операции',
+                path: 'operations',
+                icon: <ClipboardList />,
                 elements: false
             },
             {

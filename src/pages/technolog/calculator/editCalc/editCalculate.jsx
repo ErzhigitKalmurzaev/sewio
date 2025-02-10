@@ -1,34 +1,44 @@
-import React, { useEffect, useState } from "react";
-import Title from "../../../components/ui/title";
-import NumInput from "../../../components/ui/inputs/numInput";
-import Input from "../../../components/ui/inputs/input";
-import CalcTable from "./components/tables/calcTable";
-import Button from "../../../components/ui/button";
-import { MoveRight, Notebook, NotepadText } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { createCalculation, getClientsNames } from "../../../store/technolog/calculation";
-import StickyBox from "../../../components/ui/stickyBox";
-import SelectUser from "../../../components/ui/inputs/selectUser";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { editCalculationById, getCalculateById, getClientsNames } from '../../../../store/technolog/calculation';
+import { useNavigate, useParams } from 'react-router-dom';
+import Title from '../../../../components/ui/title';
+import Input from '../../../../components/ui/inputs/input';
+import SelectUser from '../../../../components/ui/inputs/selectUser';
+import NumInput from '../../../../components/ui/inputs/numInput';
+import CalcTable from '../components/tables/calcTable';
+import Button from '../../../../components/ui/button';
 import { toast } from 'react-toastify';
 
-const Calculator = () => {
+const EditCalculate = () => {
 
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { clients, operations, consumables, prices } = useSelector(state => state.calculation);
-
   useEffect(() => {
     dispatch(getClientsNames())
-  }, [])
+    dispatch(getCalculateById({ id })).then(res => {
+      if(res.meta.requestStatus === 'fulfilled') {
+        setClientData({
+          title: res.payload.title,
+          count: res.payload.count,
+          price: res.payload.price,
+          client: res.payload.client,
+          vendor_code: res.payload.vendor_code
+        })
+      }
+    })
+  }, [id])
+
+  const { clients, operations, consumables, prices,  } = useSelector(state => state.calculation);
 
   const [clientData, setClientData] = useState({
     title: "",
     count: "",
     price: "",
     client: "",
-    vendor_code: "1221087"
+    vendor_code: ""
   });
   const [errors, setErrors] = useState({});
 
@@ -61,13 +71,13 @@ const Calculator = () => {
         const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
         const cost = (Number(operationsTotal) + Number(consumablesTotal) + Number(pricesTotal)) || 0;
 
-        dispatch(createCalculation({
+        dispatch(editCalculationById({ id, props: {
           ...clientData,
           cost_price: cost,
           cal_operations: [...operations],
           cal_consumables: [...consumables],
           cal_prices: [...prices]
-        }))
+        }}))
       } else {
         toast.error('Заполните правильно данные о товаре!');
       }
@@ -77,14 +87,9 @@ const Calculator = () => {
   };
 
   return (
-    <>
-      <StickyBox count={clientData.count} price={clientData.price}/>
-      <div className="w-full min-h-[100vh] flex flex-col gap-y-5 position-relative">
+    <div className="w-full min-h-[100vh] flex flex-col gap-y-5">
         <div className="flex justify-between items-center">
-          <Title text="Калькулятор" />
-          <Button onClick={() => navigate('history')}>
-            <NotepadText className="mr-1" /> История
-          </Button>
+          <Title text="История" />
         </div>
 
         <div className="w-full bg-white rounded-lg px-6 py-6 flex flex-col gap-y-5">
@@ -105,6 +110,7 @@ const Calculator = () => {
                 label="Клиент"
                 placeholder="Клиент"
                 data={clients || []}
+                value={clientData.client}
                 onChange={(e) => setClientData({ ...clientData, client: e })}
                 error={errors.client}
                 searchable={true}
@@ -133,7 +139,7 @@ const Calculator = () => {
           <div className="flex flex-col gap-y-4">
             <p className="font-inter text-lg font-semibold">Калькулятор расходов</p>
 
-            <CalcTable type='new'/>
+            <CalcTable type='edit'/>
           </div>
           <div className="flex justify-end">
             <Button width='180px' onClick={onSubmit}>
@@ -141,9 +147,8 @@ const Calculator = () => {
             </Button>
           </div>
         </div>
-      </div>
-    </>
-  );
-};
+    </div>
+  )
+}
 
-export default Calculator;
+export default EditCalculate

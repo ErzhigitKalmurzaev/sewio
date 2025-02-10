@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { addOperation, deleteOperation, fillOperation, getOperation, getOperationsTitlesList, getValueOperation } from '../../../../store/technolog/calculation';
+import { addOperation, deleteOperation, fillOperation, getOperation, getOperationsTitlesList, getValueOperation } from '../../../../../store/technolog/calculation';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Table } from 'rsuite'
-import TextInputForTable from '../../../../components/ui/inputs/textInputForTable';
-import NumInputForTable from '../../../../components/ui/inputs/numInputForTable';
-import SelectForTable from '../../../../components/ui/inputs/selectForTable';
+import NumInputForTable from '../../../../../components/ui/inputs/numInputForTable';
+import SelectForTable from '../../../../../components/ui/inputs/selectForTable';
 import { CircleMinus, Plus } from 'lucide-react';
-import { getRankList } from '../../../../store/technolog/rank';
-import InputWithSuggestions from '../../../../components/ui/inputs/inputWithSuggestions';
+import { getRankList } from '../../../../../store/technolog/rank';
+import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const OperationsTable = () => {
+const OperationsTable = ({ type }) => {
 
-  const { operations, operations_list } = useSelector(state => state.calculation);
+  const { operations, operations_list, calc_status } = useSelector(state => state.calculation);
   const { rank_list } = useSelector(state => state.rank);
 
   const dispatch = useDispatch();
@@ -36,11 +35,22 @@ const OperationsTable = () => {
   }
 
   const deleteRow = (key) => {
-    dispatch(deleteOperation(key))
+      dispatch(deleteOperation(key))
   }
 
   const getValue = (value, name, key) => {
-    dispatch(getValueOperation({ key, name, value, rank_list }))
+    if(name === 'rank') {
+        dispatch(getValueOperation({ key, name, value }));
+        const rank_kef = rank_list.find(item => item.id === value)?.percent;
+        dispatch(getValueOperation({ key, name: 'price', value: rank_kef * operations[key].time }));
+    } else if(name === 'time') {
+        dispatch(getValueOperation({ key, name, value }));
+        const rank_kef = rank_list.find(item => item.id === operations[key].rank)?.percent;
+        dispatch(getValueOperation({ key, name: 'price', value: rank_kef * value }));
+    } else {
+        dispatch(getValueOperation({ key, name, value }));
+    }
+    console.log(operations)
   }
 
   const handleSelect = (id, index) => {
@@ -64,9 +74,9 @@ const OperationsTable = () => {
   return (
     <div>
         <Table
-            data={operations}
+            data={operations || []}
             bordered
-            loading={loading}
+            loading={loading || (type === 'edit' && calc_status === 'loading')}
             cellBordered
             autoHeight
         >

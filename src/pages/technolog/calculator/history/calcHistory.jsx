@@ -64,7 +64,7 @@ const CalcHistory = () => {
                 <Cell style={{ padding: '6px' }}>
                   {rowData => (
                       <div className='flex items-center px-3 py-1 cursor-pointer'>
-                        <Pencil size={18} />
+                        <Pencil onClick={() => navigate(`/crm/calculator/${rowData.id}`)} size={18} />
                       </div>
                   )}
                 </Cell>

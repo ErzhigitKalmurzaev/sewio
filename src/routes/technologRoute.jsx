@@ -31,6 +31,8 @@ import ModerationOperation from '../pages/technolog/operations/moderation/modera
 import CreateEquipment from '../pages/technolog/equipments/create/createEquipment'
 import EditEquipment from '../pages/technolog/equipments/edit/EditEquipment'
 import CalcHistory from '../pages/technolog/calculator/history/calcHistory'
+import EditCalculate from '../pages/technolog/calculator/editCalc/editCalculate'
+import OperationDirectory from '../pages/technolog/operationsDirectory/main'
 
 const TechnologRoute = () => {
   return (
@@ -75,9 +77,10 @@ const TechnologRoute = () => {
             </Route>
 
             <Route path="operations" element={<Outlet/>}>
-                <Route path="" element={<Operations />} />
+                {/* <Route path="" element={<Operations />} />
                 <Route path=":id" element={<DistOperations/>} />
-                <Route path="moderation/:id" element={<ModerationOperation/>} />
+                <Route path="moderation/:id" element={<ModerationOperation/>} /> */}
+                <Route path="" element={<OperationDirectory />} />
             </Route>
             
             <Route path="equipments" element={<Outlet/>}>
@@ -92,6 +95,7 @@ const TechnologRoute = () => {
             <Route path="calculator" element={<Outlet/>}>
                 <Route path="" element={<Calculator />} />
                 <Route path="history" element={<CalcHistory />} />
+                <Route path=':id' element={<EditCalculate/>}/>
             </Route>
         </Route>
     </Routes>

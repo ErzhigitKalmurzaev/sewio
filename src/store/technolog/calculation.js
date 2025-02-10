@@ -1,11 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance, { ImageUploadingFetch } from "../../api/axios";
+import { act } from "react";
 
 export const getCalculateList = createAsyncThunk(
     'calculationSlice/getCalculateList',
     async (_, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.get(`calculation/list/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getCalculateById = createAsyncThunk(
+    'calculationSlice/getCalculateById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`calculation/crud/${id}/`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -61,6 +74,18 @@ export const createCalculation = createAsyncThunk(
     }
 )
 
+export const editCalculationById = createAsyncThunk(
+    'calculationSlice/editCalculationById',
+    async ({ id, props }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.patch(`calculation/crud/${id}/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const CalculationSlice = createSlice({
     name: 'calculationSlice',
     initialState: {
@@ -99,7 +124,8 @@ const CalculationSlice = createSlice({
         operations_list: null,
         clients: null,
         calc_history: null,
-        calc_history_status: 'loading'
+        calc_history_status: 'loading',
+        calc_status: 'loading'
     },
     reducers: {
         addOperation: (state) => {
@@ -111,18 +137,7 @@ const CalculationSlice = createSlice({
             })
         },
         getValueOperation: (state, action) => {
-            if(action.payload.name === 'rank') {
-                const rank_kef = action.payload.rank_list.find(item => item.id === action.payload.value)?.percent;
-                state.operations[action.payload.key][action.payload.name] = action.payload.value;
-                state.operations[action.payload.key]['price'] = rank_kef * state.operations[action.payload.key]['time'] || '';
-            } else if(action.payload.name === 'time') {
-                const rank_kef = action.payload.rank_list.find(item => item.id === state.operations[action.payload.key]['rank'])?.percent;
-                state.operations[action.payload.key][action.payload.name] = action.payload.value;
-                state.operations[action.payload.key]['price'] = action.payload.value * rank_kef || '';
-            }
-             else {
-                state.operations[action.payload.key][action.payload.name] = action.payload.value;
-            }
+            state.operations[action.payload.key][action.payload.name] = action.payload.value;
         },
         fillOperation: (state, action) => {
             state.operations[action.payload.key] = action.payload.value;    
@@ -179,6 +194,45 @@ const CalculationSlice = createSlice({
             .addCase(getClientsNames.fulfilled, (state, action) => {
                 state.clients = action.payload
             })
+            .addCase(getCalculateById.pending, (state) => {
+                state.calc_status = 'loading';
+                state.operations = [];
+                state.consumables = [];
+                state.prices = [];
+            })
+            .addCase(getCalculateById.fulfilled, (state, action) => {
+                state.calc_status = 'success';
+                const calc = action.payload;
+                state.mainFields = {
+                    vendor_code: calc.vendor_code,
+                    title: calc.title,
+                    count: calc.count,
+                    is_active: calc.is_active,
+                    price: calc.price,
+                    cost_price: calc.cost_price
+                };
+                state.operations = action.payload.cal_operations.map(item => ({
+                    title: item.title,
+                    time: item.time,
+                    rank: item.rank,
+                    price: item.price
+                }));
+                state.consumables = action.payload.cal_consumables.map(item => ({
+                    title: item.title,
+                    consumption: item.consumption,
+                    unit: item.unit,
+                    price: item.price,
+                    nomenclature: item.nomenclature
+                }));
+                state.prices = action.payload.cal_prices.map(item => ({
+                    title: item.title,
+                    price: item.price    
+                }));
+            })
+            .addCase(getCalculateById.rejected, (state) => {
+                state.calc_status = 'error';
+            })
+
     }
 })
 

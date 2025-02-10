@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder, required, error, errorTitle, disabled = false }) => {
+  
   const [inputValue, setInputValue] = useState(value);
+
+  useEffect(() => {
+    if(value === '') {
+      setInputValue(value);
+    }
+  }, [value]);
 
   const formatNumber = (num) => {
     return num.replace(/\D/g, '')

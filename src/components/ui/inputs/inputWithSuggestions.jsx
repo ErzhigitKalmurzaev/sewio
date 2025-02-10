@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "@emotion/styled";
 import { createPortal } from "react-dom";
 
@@ -16,6 +16,12 @@ const TextInputForTable = ({
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const inputRef = useRef(null);
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
+
+  useEffect(() => {
+    if(value === '') {
+      setInputValue(value);
+    }
+  }, [value]);
 
   const handleChange = (e) => {
     const text = e.target.value;
