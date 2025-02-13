@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { addOperation, deleteOperation, fillOperation, getOperation, getOperationsTitlesList, getValueOperation } from '../../../../../store/technolog/calculation';
+import { addOperation, deleteOperation, fillOperation, getValueOperation } from '../../../../../store/technolog/product';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,12 +9,14 @@ import SelectForTable from '../../../../../components/ui/inputs/selectForTable';
 import { CircleMinus, Plus } from 'lucide-react';
 import { getRankList } from '../../../../../store/technolog/rank';
 import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
+import { getOperation, getOperationsTitlesList } from '../../../../../store/technolog/calculation';
 
 const { Column, HeaderCell, Cell } = Table;
 
 const OperationsTable = ({ type }) => {
 
-  const { operations, operations_list, calc_status } = useSelector(state => state.calculation);
+  const { operations_list } = useSelector(state => state.calculation);
+  const { operations, product_status  } = useSelector(state => state.product);
   const { rank_list } = useSelector(state => state.rank);
 
   const dispatch = useDispatch();
@@ -75,7 +77,7 @@ const OperationsTable = ({ type }) => {
         <Table
             data={operations || []}
             bordered
-            loading={loading || (type === 'edit' && calc_status === 'loading')}
+            loading={loading || (type === 'edit' && product_status === 'loading')}
             cellBordered
             autoHeight
         >

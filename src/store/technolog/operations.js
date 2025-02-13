@@ -3,9 +3,9 @@ import axiosInstance from "../../api/axios";
 
 export const getOperationList = createAsyncThunk(
     'operation/getOperationList',
-    async ({ id }, { rejectWithValue }) => {
+    async ({ search }, { rejectWithValue }) => {
         try {
-            const { data } =  await axiosInstance.get(`work/order-operations/${id}/`);
+            const { data } =  await axiosInstance.get(`sample/operations/list/?title=${search}&page_size=${1000}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -15,9 +15,21 @@ export const getOperationList = createAsyncThunk(
 
 export const getFolderList = createAsyncThunk(
     'operation/getFolderList',
-    async (_, { rejectWithValue }) => {
+    async ({ search }, { rejectWithValue }) => {
         try {
-            const { data } =  await axiosInstance.get(`sample/combination-files/crud/`);
+            const { data } =  await axiosInstance.get(`sample/combination-files/crud/?title=${search}&page_size=${1000}`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const createFolder = createAsyncThunk(
+    'operation/createFolder',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.post(`sample/combination-files/crud/`, props);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -27,9 +39,33 @@ export const getFolderList = createAsyncThunk(
 
 export const getCombinationList = createAsyncThunk(
     'operation/getCombinationList',
-    async (_, { rejectWithValue }) => {
+    async ({ search }, { rejectWithValue }) => {
         try {
-            const { data } =  await axiosInstance.get(`sample/combinations/list/`);
+            const { data } =  await axiosInstance.get(`sample/combinations/list/?title=${search}&page_size=${1000}`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getFolderById = createAsyncThunk(
+    'operation/getFolderById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.get(`sample/combination-files/crud/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const editFolderById = createAsyncThunk(
+    'operation/editFolderById',
+    async ({ id, props }, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.patch(`sample/combination-files/crud/${id}/`, props);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -49,6 +85,18 @@ export const getCombinationById = createAsyncThunk(
     }
 )
 
+export const getOperationById = createAsyncThunk(
+    'operation/getOperationById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.get(`sample/operations/list/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const OperationSlice = createSlice({
     name: 'operation',
     initialState: {
@@ -58,12 +106,22 @@ const OperationSlice = createSlice({
         folders_list_status: 'loading',
         combinations_list: null,
         combinations_list_status: 'loading',
+        folder: null,
+        folder_status: 'loading',
         combination: null,
-        combination_status: 'loading'
+        combination_status: 'loading',
+        operation: null,
+        operation_status: 'loading'
     },
     reducers: {
+        changeFolderValue: (state, action) => {
+            state.folder[action.payload.name] = action.payload.value
+        },
         changeCombinationValue: (state, action) => {
             state.combination[action.payload.name] = action.payload.value
+        },
+        changeOperationValue: (state, action) => {
+            state.operation[action.payload.name] = action.payload.value
         }
     },
     extraReducers: (builder) => {
@@ -94,8 +152,35 @@ const OperationSlice = createSlice({
             }).addCase(getCombinationById.rejected, (state) => {
                 state.combination_status = 'error';
             })
+            //---------------------------------------------------------
+            .addCase(getOperationList.pending, (state) => {
+                state.operaitions_list_status = 'loading';
+            }).addCase(getOperationList.fulfilled, (state, action) => {
+                state.operaitions_list_status = 'success';
+                state.operaitions_list = action.payload
+            }).addCase(getOperationList.rejected, (state) => {
+                state.operaitions_list_status = 'error';
+            })
+            //---------------------------------------------------------
+            .addCase(getOperationById.pending, (state) => {
+                state.operation_status = 'loading';
+            }).addCase(getOperationById.fulfilled, (state, action) => {
+                state.operation_status = 'success';
+                state.operation = action.payload
+            }).addCase(getOperationById.rejected, (state) => {
+                state.operation_status = 'error';
+            })
+            //---------------------------------------------------------
+            .addCase(getFolderById.pending, (state) => {
+                state.folder_status = 'loading';
+            }).addCase(getFolderById.fulfilled, (state, action) => {
+                state.folder_status = 'success';
+                state.folder = action.payload
+            }).addCase(getFolderById.rejected, (state) => {
+                state.folder_status = 'error';
+            })
     }
 })
 
-export const { changeCombinationValue } = OperationSlice.actions;
+export const { changeCombinationValue, changeOperationValue, changeFolderValue } = OperationSlice.actions;
 export default OperationSlice;

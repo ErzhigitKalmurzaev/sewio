@@ -1,37 +1,103 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Table } from 'rsuite'
-import { getFolderList } from '../../../../../store/technolog/operations';
+import { getCombinationById, getFolderById, getFolderList } from '../../../../../store/technolog/operations';
+import { ExternalLink, FolderClosed } from 'lucide-react';
+import FolderOpenModal from '../modals/folderOpenModal';
+import { useSearchParams } from 'react-router-dom';
+import OperationOpenModal from '../modals/operationOpenModal';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const FolderTable = () => {
+const FolderTable = ({ urls, params, setParams }) => {
 
   const dispatch = useDispatch();
 
-  const { folders_list, folders_list_status } = useSelector(state => state.operation);
+  const { folders_list, folders_list_status, folder, folder_status, combination, combination_status } = useSelector(state => state.operation);
+
+  const [modals, setModals] = useState({ operation: false, id: null });
 
   useEffect(() => {
-    dispatch(getFolderList())
+    if(urls.stage == 1) {
+      dispatch(getFolderList({ search: urls.search }))
+    } else if(urls.stage == 2) {
+      dispatch(getFolderById({ id: urls.folder }))
+    } else if(urls.stage == 3) {
+      dispatch(getCombinationById({ id: urls.folder }))
+    }
   }, [])
 
-  return (
-    <Table
-        minHeight={480}
-        data={folders_list || []}
-        loading={folders_list_status === 'loading'}
-        bordered
-    >
-      <Column width={80} align='center'>
-        <HeaderCell>ID</HeaderCell>
-        <Cell dataKey="id" />
-      </Column>
+  const openFolder = (id) => {
+    params.set('stage', 2);
+    params.set('folder', id);
+    setParams(params)
+    dispatch(getFolderById({ id }))
+  }
 
-      <Column width={300}>
-        <HeaderCell>Название</HeaderCell>
-        <Cell dataKey="title" />
-      </Column>
-    </Table>
+  const openCombinationFolder = (id) => {
+    params.set('stage', 3);
+    params.set('folder', id);
+    setParams(params)
+    dispatch(getCombinationById({ id }))
+  }
+
+  const openOperation = (id) => {
+    setModals({ ...modals, operation: true, id: id})
+  }
+
+  return (
+    <div className='w-full'>
+        <div className='flex flex-col gap-y-3'>
+          {
+            urls.stage == 1 && folders_list?.length > 0 && 
+            folders_list?.map((folder, index) => (
+              <button 
+                className='flex items-center gap-x-1 hover:bg-zinc-200 pl-2' 
+                onDoubleClick={() => openFolder(folder.id)} 
+                key={index + " folder"}>
+                  <span className='text-2xl'>📁</span>
+                  <span className='font-medium font-inter m-0'>{folder.title}</span>
+              </button>
+            ))
+          }
+          {
+            urls.stage == 2 &&
+            (
+              folder_status === 'success' && 
+              folder?.combinations?.length > 0 ?
+                folder?.combinations?.map((combination, index) => (
+                  <button 
+                    className='flex items-center gap-x-1 hover:bg-zinc-200 pl-2' 
+                    onDoubleClick={() => openCombinationFolder(combination.id)} 
+                    key={index + " folder"}>
+                      <span className='text-2xl'>📁</span>
+                      <span className='font-medium font-inter m-0'>{combination.title}</span>
+                  </button>
+                )) :
+                <p className='font-inter text-center'>(Пусто)</p>
+            )
+          }
+          {
+            urls.stage == 3 &&
+            (
+              combination_status === 'success' && 
+              combination?.operations?.length > 0 ?
+                combination?.operations?.map((operation, index) => (
+                  <button 
+                    className='flex items-center gap-x-1 hover:bg-zinc-200 pl-2' 
+                    onDoubleClick={() => openOperation(operation.id)} 
+                    key={index + " folder"}>
+                      <span className='text-2xl'>📁</span>
+                      <span className='font-medium font-inter m-0'>{operation.title}</span>
+                  </button>
+                )) : 
+                <p className='font-inter text-center'>(Пусто)</p>
+            )
+          }
+        </div>
+
+        <OperationOpenModal modals={modals} setModals={setModals}/>
+    </div>
   )
 }
 

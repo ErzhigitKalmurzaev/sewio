@@ -135,6 +135,29 @@ export const getProductImages = createAsyncThunk(
     }
 )
 
+export const getCombinationsList = createAsyncThunk(
+    'technologProduct/getCombinationsList',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`sample/combinations/list/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+export const getCombinationById = createAsyncThunk(
+    'technologProduct/getCombinationById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`sample/combinations/list/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const createProductImages = createAsyncThunk(
     'technologProduct/createProductImages',
     async ({ props }, { rejectWithValue }) => {
@@ -168,12 +191,157 @@ const TechnologProductSlice = createSlice({
         product_status: 'loading',
         product_images: [],
         product_images_status: 'loading',
-        update_product: false
+        update_product: false,
+        combinations_list: null,
+        combination: null,
+        combination_status: 'loading',
+
+        operations: [
+            {
+                title: '',
+                time: '',
+                rank: '',
+                price: ''
+            }
+        ],
+        combinations: [
+
+        ],
+        consumables: [
+            {
+                material_nomenclature: '',
+                title: '',
+                consumption: '',
+                color: ''
+            }
+        ],
+        prices: [
+            {
+                title: '',
+                price: ''
+            }
+        ],
     },
     reducers: {
         setUpdateProduct: (state) => {
             state.update_product = !state.update_product
-        }
+        },
+
+        clearAll: (state) => {
+            state.operations = [
+                {
+                    title: '',
+                    time: '',
+                    rank: '',
+                    price: ''
+                }
+            ]
+            state.combinations = [
+    
+            ]
+            state.consumables = [
+                {
+                    material_nomenclature: '',
+                    title: '',
+                    consumption: '',
+                    color: ''
+                }
+            ]
+            state.prices = [
+                {
+                    title: '',
+                    price: ''
+                }
+            ]
+        },
+
+        addOperation: (state) => {
+            state.operations.push({
+                title: '',
+                time: '',
+                rank: '',
+                price: ''
+            })
+        },
+        getValueOperation: (state, action) => {
+            state.operations[action.payload.key][action.payload.name] = action.payload.value;
+        },
+        fillOperation: (state, action) => {
+            state.operations[action.payload.key] = action.payload.value;    
+        },
+        deleteOperation: (state, action) => {
+            state.operations.splice(action.payload, 1);
+        },
+
+
+        addCombination: (state, action) => {
+            state.combinations.push(action.payload);
+        },
+        editCombination: (state, action) => {
+            const { index, value } = action.payload;
+
+            state.combinations[index].title = value;
+        },
+        getValueOperationInCombination: (state, action) => {
+            const { value, name, parentIndex, childIndex } = action.payload;
+            
+            state.combinations[parentIndex].children[childIndex][name] = value;
+        },
+        addOperationInCombination: (state, action) => {
+            state.combinations[action.payload.key].children.push({
+                title: '',
+                time: '',
+                rank: '',
+                price: '',
+                id: crypto.randomUUID()
+            })
+        },
+        fillCombination: (state, action) => {
+            const { childIndex, parentIndex, value} = action.payload;
+
+            state.combinations[parentIndex].children[childIndex] = value;    
+        },
+        deleteOperationInCombination: (state, action) => {
+            const { parentIndex, childIndex } = action.payload;
+
+            state.combinations[parentIndex]?.children?.splice(childIndex, 1);
+        },
+        deleteCombination: (state, action) => {
+            state.combinations.splice(action.payload, 1);
+        },
+
+
+        addConsumable: (state) => {
+            state.consumables.push({
+                nomenclature: '',
+                title: '',
+                consumption: '',
+                unit: '',
+                price: ''
+            })
+        },
+        getValueConsumable: (state, action) => {
+            state.consumables[action.payload.key][action.payload.name] = action.payload.value;
+        },
+        fillConsumable: (state, action) => {
+            state.consumables[action.payload.key] = action.payload.value;
+        },
+        deleteConsumable: (state, action) => {
+            state.consumables.splice(action.payload, 1);
+        },
+        
+        addPrice: (state) => {
+            state.prices.push({
+                title: '',
+                price: ''
+            })
+        },
+        getValuePrice: (state, action) => {
+            state.prices[action.payload.key][action.payload.name] = action.payload.value;
+        },
+        deletePrice: (state, action) => {
+            state.prices.splice(action.payload, 1);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -190,7 +358,19 @@ const TechnologProductSlice = createSlice({
                 state.product_status = 'loading';
             }).addCase(getProductById.fulfilled, (state, action) => {
                 state.product_status = 'success';
-                state.product = action.payload
+                state.operations = action.payload.nom_operations;
+                state.combinations = action.payload.combinations.map(item => ({
+                    title: item.title,
+                    id: item.id,
+                    children: item.operations
+                }))
+                state.consumables = action.payload.consumables.map(item => ({
+                    color: item.color?.id,
+                    material_nomenclature: item?.material_nomenclature?.id,
+                    consumption: item.consumption,
+                    title: item.material_nomenclature?.title,
+                }));
+                state.prices = action.payload.prices;
             }).addCase(getProductById.rejected, (state) => {
                 state.product_status = 'error';
             })
@@ -204,8 +384,29 @@ const TechnologProductSlice = createSlice({
                 state.product_images_status = 'error';
             })
             // ------------------------------------------
+            .addCase(getCombinationsList.fulfilled, (state, action) => {
+                state.combinations_list = action.payload
+            })
+            // ------------------------------------------
+            .addCase(getCombinationById.pending, (state) => {
+                state.combination_status = 'loading';
+            })
+            .addCase(getCombinationById.fulfilled, (state, action) => {
+                state.combination = action.payload
+            })
+            .addCase(getCombinationById.rejected, (state) => {
+                state.combination_status = 'error';
+            })
     }
 })
 
-export const { setUpdateProduct } = TechnologProductSlice.actions;
+export const { setUpdateProduct, getValueOperation, 
+               addOperation, fillOperation, 
+               deleteOperation, addPrice, 
+               getValuePrice, deletePrice,
+               getValueOperationInCombination, addCombination, 
+               fillCombination, deleteCombination,
+               addOperationInCombination, deleteOperationInCombination,
+               editCombination, addConsumable, fillConsumable,
+               deleteConsumable, getValueConsumable, clearAll } = TechnologProductSlice.actions;
 export default TechnologProductSlice;

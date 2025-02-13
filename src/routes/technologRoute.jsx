@@ -20,7 +20,6 @@ import Clients from '../pages/technolog/clients/main'
 import CreateClient from '../pages/technolog/clients/create/createClient'
 import EditClient from '../pages/technolog/clients/edit/editClient'
 import Sizes from '../pages/technolog/sizes/main'
-import FillProduct from '../pages/technolog/product/fillProduct'
 import OrderEdit from '../pages/technolog/orders/orderEdit'
 import CreateWarehouse from '../pages/technolog/warehouse/create/createWarehouse'
 import EditWarehouse from '../pages/technolog/warehouse/edit/EditWarehouse'
@@ -33,6 +32,7 @@ import EditEquipment from '../pages/technolog/equipments/edit/EditEquipment'
 import CalcHistory from '../pages/technolog/calculator/history/calcHistory'
 import EditCalculate from '../pages/technolog/calculator/editCalc/editCalculate'
 import OperationDirectory from '../pages/technolog/operationsDirectory/main'
+import EditProduct from '../pages/technolog/product/editProduct'
 
 const TechnologRoute = () => {
   return (
@@ -67,7 +67,7 @@ const TechnologRoute = () => {
             <Route path="product" element={<Outlet />}>
                 <Route path="" element={<Products />} />
                 <Route path="create" element={<CreateProduct />} />
-                <Route path=":id" element={<FillProduct/>}/>
+                <Route path=":id" element={<EditProduct/>}/>
             </Route>
             
             <Route path="sklad" element={<Outlet />}>

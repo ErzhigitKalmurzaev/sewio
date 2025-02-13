@@ -52,7 +52,6 @@ const TechnologRankSlice = createSlice({
                 state.rank_list_status = 'loading';
             }).addCase(getRankList.fulfilled, (state, action) => {
                 state.rank_list_status = 'success';
-                // console.log(action)
                 state.rank_list = action.payload
             }).addCase(getRankList.rejected, (state) => {
                 state.rank_list_status = 'error';

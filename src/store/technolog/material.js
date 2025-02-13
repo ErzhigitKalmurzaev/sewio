@@ -97,6 +97,18 @@ export const editingRank = createAsyncThunk(
     }
 )
 
+export const getColors = createAsyncThunk(
+    'material/getColors',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`general/color/crud/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const MaterialSlice = createSlice({
     name: 'material',
     initialState: {
@@ -104,6 +116,7 @@ const MaterialSlice = createSlice({
         materials_list_status: 'loading',
         consumables_title_list: null,
         consumables_title_list_status: 'loading',
+        colors_list: null
     },
     reducers: {
 
@@ -126,6 +139,10 @@ const MaterialSlice = createSlice({
             }).addCase(getConsumablesTitleList.rejected, (state) => {
                 state.consumables_title_list_status = 'error';
             })
+            .addCase(getColors.fulfilled, (state, action) => {
+                state.colors_list = action.payload;
+            })
+
     }
 })
 

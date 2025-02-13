@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Table } from 'rsuite';
-import { getCombinationList } from '../../../../../store/technolog/operations';
+import { getOperationList } from '../../../../../store/technolog/operations';
 import { ExternalLink } from 'lucide-react';
 import CombinationOpenModal from '../modals/combinationOpenModal';
+import OperationOpenModal from '../modals/operationOpenModal';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const CombinationTable = ({ urls }) => {
+const OperationTable = ({ urls }) => {
 
   const dispatch = useDispatch();
 
-  const { combinations_list, combinations_list_status } = useSelector(state => state.operation);
+  const { operaitions_list, operaitions_list_status } = useSelector(state => state.operation);
 
   const [modals, setModals] = useState({ combination: false, id: null });
   
   useEffect(() => {
-    dispatch(getCombinationList({ search: urls.search }))
+    dispatch(getOperationList({ search: urls.search }))
   }, [])
 
-  const openCombination = (id) => {
-    setModals({ ...modals, combination: true, id: id });
+  const openOperation = (id) => {
+    setModals({ ...modals, operation: true, id: id });
   }
   
   return (
     <>
         <Table
             minHeight={480}
-            data={combinations_list?.results || []}
-            loading={combinations_list_status === 'loading'}
+            data={operaitions_list?.results || []}
+            loading={operaitions_list_status === 'loading'}
             bordered
             cellBordered
         >
@@ -43,19 +44,10 @@ const CombinationTable = ({ urls }) => {
             </Column>
 
             <Column width={300}>
-                <HeaderCell>В папке</HeaderCell>
-                <Cell>
-                    {(rowData) => (
-                        <p>{rowData?.file?.title}</p>
-                    )}
-                </Cell>
-            </Column>
-
-            <Column width={300}>
                 <HeaderCell>Действия</HeaderCell>
                 <Cell>
                     {(rowData) => (
-                        <div className="pl-1 flex items-center hover:text-cyan-700 cursor-pointer" onClick={() => openCombination(rowData?.id)}>
+                        <div className="pl-1 flex items-center hover:text-cyan-700 cursor-pointer" onClick={() => openOperation(rowData?.id)}>
                             <p className='text-sx font-medium font-inter'>Открыть</p>
                             <ExternalLink size={18} className='ml-2' />
                         </div>
@@ -64,9 +56,9 @@ const CombinationTable = ({ urls }) => {
             </Column>
             
         </Table>
-        <CombinationOpenModal modals={modals} setModals={setModals} />
+        <OperationOpenModal modals={modals} setModals={setModals} />
     </>
   )
 }
 
-export default CombinationTable
+export default OperationTable

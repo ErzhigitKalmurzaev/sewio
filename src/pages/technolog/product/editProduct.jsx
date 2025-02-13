@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import Input from "../../../components/ui/inputs/input";
 import Button from "../../../components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import ProductImages from "./components/shared/productImages";
-import { clearAll, createProduct, createProductImages } from "../../../store/technolog/product";
+import { createProduct, createProductImages, editProductById, getProductById, getProductImages } from "../../../store/technolog/product";
 import { Toggle } from "rsuite";
 import Title from "../../../components/ui/title";
 import ProdTable from "./components/shared/prodTable";
 
-const CreateProduct = () => {
+const EditProduct = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { id } = useParams();
   const { operations, combinations, consumables, prices, } = useSelector(state => state.product);
 
   const [images, setImages] = useState([]);
@@ -28,7 +29,15 @@ const CreateProduct = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    dispatch(clearAll())
+    dispatch(getProductById({ id })).then(res => {
+        if(res.meta.requestStatus === 'fulfilled') {
+            setProductData({
+                title: res.payload.title,
+                is_active: res.payload.is_active,
+                vendor_code: res.payload.vendor_code
+            })
+        }
+    })
   }, [])
 
   const isObjectFilled = (obj) => Object.values(obj).every(value => value !== '');
@@ -65,24 +74,27 @@ const CreateProduct = () => {
       }, 0);
         const cost = (Number(operationsTotal) + Number(pricesTotal)) + Number(combinationsTotal) || 0;
 
-        dispatch(createProduct({
-          ...productData,
-          cost_price: cost,
-          prices,
-          operations,
-          combinations: combinations.map(item => ({
-            title: item.title,
-            is_sample: false,
-            operations: item.children.map(op => op)
-          })),
-          consumables
+        dispatch(editProductById({
+            id,
+            props: {
+                ...productData,
+                cost_price: cost,
+                prices,
+                operations: operations.map(({ equipment, nomenclature, ...op}) => op),
+                combinations: combinations.map(item => ({
+                  title: item.title,
+                  operations: item.children.map(({ equipment, nomenclature, ...op}) => op)
+                })),
+                consumables
+            }
         })).then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
             dispatch(createProductImages({ props: {
               images: images.map(item => item.blobFile),
+              deleteImages,
               product_id: res.payload.id
             }}))
-            toast.success("Товар создан успешно!")
+            toast.success("Изменения сохранены!")
             navigate(-1)
           }
         })
@@ -99,11 +111,11 @@ const CreateProduct = () => {
     <>
       <div className="w-full min-h-[100vh] flex flex-col gap-y-5 position-relative">
         <div className="flex justify-between items-center">
-          <Title text="Создание товара" />
+          <Title text="Редактирование товара" />
         </div>
 
         <ProductImages 
-          id_product={''}
+          id_product={id}
           images={images}
           setImages={setImages}
           deleteImages={deleteImages}
@@ -156,4 +168,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default EditProduct;
