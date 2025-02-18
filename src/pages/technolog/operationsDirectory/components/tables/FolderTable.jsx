@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Table } from 'rsuite'
+import { Loader, Table } from 'rsuite'
 import { getCombinationById, getFolderById, getFolderList } from '../../../../../store/technolog/operations';
 import { ExternalLink, FolderClosed } from 'lucide-react';
 import FolderOpenModal from '../modals/folderOpenModal';
@@ -45,20 +45,38 @@ const FolderTable = ({ urls, params, setParams }) => {
     setModals({ ...modals, operation: true, id: id})
   }
 
+  const getLoader = (stage) => {
+    switch(stage) {
+      case 1:
+        return folders_list_status === 'loading';
+      case 2: 
+        return folder_status === 'loading';
+      case 3: 
+        return combination_status === 'loading';
+      default: 
+        return false
+    }
+  }
+
   return (
     <div className='w-full'>
         <div className='flex flex-col gap-y-3'>
           {
-            urls.stage == 1 && folders_list?.length > 0 && 
-            folders_list?.map((folder, index) => (
-              <button 
-                className='flex items-center gap-x-1 hover:bg-zinc-200 pl-2' 
-                onDoubleClick={() => openFolder(folder.id)} 
-                key={index + " folder"}>
-                  <span className='text-2xl'>📁</span>
-                  <span className='font-medium font-inter m-0'>{folder.title}</span>
-              </button>
-            ))
+            urls.stage == 1 && 
+            (
+              folders_list_status === 'success' &&
+              folders_list?.length > 0 ? 
+                folders_list?.map((folder, index) => (
+                  <button 
+                    className='flex items-center gap-x-1 hover:bg-zinc-200 pl-2' 
+                    onDoubleClick={() => openFolder(folder.id)} 
+                    key={index + " folder"}>
+                      <span className='text-2xl'>📁</span>
+                      <span className='font-medium font-inter m-0'>{folder.title}</span>
+                  </button>
+                )) :
+                <p className='font-inter text-center'>(Пусто)</p>
+            )
           }
           {
             urls.stage == 2 &&
@@ -93,6 +111,10 @@ const FolderTable = ({ urls, params, setParams }) => {
                 )) : 
                 <p className='font-inter text-center'>(Пусто)</p>
             )
+          }
+          {
+            getLoader(urls.stage) &&
+            <Loader center vertical content="Loading..." />
           }
         </div>
 

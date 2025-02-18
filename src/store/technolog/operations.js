@@ -109,7 +109,7 @@ const OperationSlice = createSlice({
         folder: null,
         folder_status: 'loading',
         combination: null,
-        combination_status: 'loading',
+        combination_status: '',
         operation: null,
         operation_status: 'loading'
     },

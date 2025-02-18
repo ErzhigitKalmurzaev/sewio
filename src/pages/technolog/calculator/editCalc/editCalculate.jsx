@@ -77,7 +77,12 @@ const EditCalculate = () => {
           cal_operations: [...operations],
           cal_consumables: [...consumables],
           cal_prices: [...prices]
-        }}))
+        }})).then(res => {
+          if(res.meta.requestStatus === 'fulfilled') {
+            navigate(-1);
+            toast.success('Изменения сохранены!');
+          }
+        })
       } else {
         toast.error('Заполните правильно данные о товаре!');
       }

@@ -85,6 +85,14 @@ const CreateOperation = ({ modals, setModals }) => {
                 if(res?.meta?.requestStatus === 'fulfilled') {
                     dispatch(getOperationList({ search: '' }))
                     toast.success("Операция создана!")
+                    setModals({ ...modals, operation: false })
+                    setOperation({
+                        title: '',
+                        equipment: '',
+                        time: '',
+                        rank: '',
+                        price: ''
+                    })
                 } else {
                     toast.error("Произошла ошибка!")
                 }

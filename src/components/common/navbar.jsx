@@ -31,7 +31,7 @@ const Navbar = ({ role }) => {
     ]
 
     return (
-        <div className={`${hide ? 'w-[80px]' : 'w-[270px]'} h-[100vh] relative border-r border-gray flex flex-col items-center gap-1 py-10 transition-all ease-linear duration-300`}>
+        <div className={`${hide ? 'w-[80px]' : 'w-[270px]'} h-[100vh] relative border-r border-gray flex flex-col items-center gap-1 py-8 transition-all ease-linear duration-300`}>
             {
                 navs[role].map((item, index) => {
                     return (
@@ -42,7 +42,7 @@ const Navbar = ({ role }) => {
                     )
                 })
             }
-            <button className='absolute top-2 right-[-16px] border bg-white rounded-full w-[32px] h-[32px] bg-white hover:drop-shadow-2xl' onClick={() => setHide(!hide)}>
+            <button className='absolute top-1 right-[-16px] border bg-white rounded-full w-[32px] h-[32px] bg-white hover:drop-shadow-2xl' onClick={() => setHide(!hide)}>
                 <ChevronLeft size={28} color='#2F4F4F' className={`${hide ? 'rotate-180' : ''} transition-transform ease-out duration-300`} />
             </button>
         </div>

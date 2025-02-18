@@ -10,6 +10,7 @@ import { CircleMinus, Plus } from 'lucide-react';
 import { getRankList } from '../../../../../store/technolog/rank';
 import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
 import { getOperation, getOperationsTitlesList } from '../../../../../store/technolog/calculation';
+import { getEquipmentList } from './../../../../../store/technolog/equipment';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -18,6 +19,7 @@ const OperationsTable = ({ type }) => {
   const { operations_list } = useSelector(state => state.calculation);
   const { operations, product_status  } = useSelector(state => state.product);
   const { rank_list } = useSelector(state => state.rank);
+  const { equipment_list } = useSelector(state => state.equipment);
 
   const dispatch = useDispatch();
 
@@ -29,6 +31,9 @@ const OperationsTable = ({ type }) => {
     } 
     if(!operations_list) {
         dispatch(getOperationsTitlesList());
+    }
+    if(!equipment_list) {
+        dispatch(getEquipmentList());
     }
   }, [])
 
@@ -95,7 +100,7 @@ const OperationsTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={250}>
+            <Column width={180}>
                 <HeaderCell>Время (сек)</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
@@ -107,7 +112,7 @@ const OperationsTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={250}>
+            <Column width={180}>
                 <HeaderCell>Разряд</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
@@ -122,7 +127,7 @@ const OperationsTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={200}>
+            <Column width={180}>
                 <HeaderCell>Цена (сом)</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
@@ -130,6 +135,21 @@ const OperationsTable = ({ type }) => {
                             value={rowData.price}
                             placeholder="0"
                             onChange={(e) => getValue(e, "price", index)}
+                        />
+                    }
+                </Cell>
+            </Column>
+            <Column width={180}>
+                <HeaderCell>Оборудование</HeaderCell>
+                <Cell style={{ padding: '7px 6px'}}>
+                    {(rowData, index) =>
+                        <SelectForTable
+                            value={rowData.equipment}
+                            data={equipment_list}
+                            labelKey="title"
+                            valueKey="id"
+                            onChange={(e) => getValue(e, "equipment", index)}
+                            placeholder="Оборудование"
                         />
                     }
                 </Cell>

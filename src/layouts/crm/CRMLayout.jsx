@@ -10,16 +10,21 @@ const CRMLayout = () => {
   const { me_info } = useSelector((state) => state.auth);
 
   return (
-    <div className='w-full min-h-[100vh] flex flex-col'>
-        <Header/>
-        <div className='flex'>
-            <Navbar role={me_info?.role}/>
-            <div className='p-10 w-full' style={{ background: "#F5F5FA"}}>
-                <Suspense fallback={<BackDrop />}>
-                    <Outlet />
-                </Suspense>
-            </div>
+    <div className="w-full h-screen flex flex-col">
+      {/* Фиксированный Header */}
+      <Header className="flex-shrink-0" />
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Фиксированный Navbar */}
+        <Navbar role={me_info?.role} className="flex-shrink-0" />
+
+        {/* Скролящаяся основная часть */}
+        <div className="p-10 w-full overflow-auto" style={{ background: "#F5F5FA" }}>
+          <Suspense fallback={<BackDrop />}>
+            <Outlet />
+          </Suspense>
         </div>
+      </div>
     </div>
   )
 }

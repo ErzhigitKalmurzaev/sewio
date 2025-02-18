@@ -10,6 +10,7 @@ import { getEquipmentList } from './../../../../../store/technolog/equipment';
 import { getRankList } from '../../../../../store/technolog/rank';
 import NumInput from './../../../../../components/ui/inputs/numInput';
 import { editOperationById } from '../../../../../store/technolog/product';
+import { ShieldAlert } from 'lucide-react';
 
 const OperationOpenModal = ({ modals, setModals }) => {
 
@@ -68,6 +69,7 @@ const OperationOpenModal = ({ modals, setModals }) => {
                 if(res?.meta?.requestStatus === 'fulfilled') {
                     dispatch(getOperationList())
                     toast.success("Изменения сохранены")
+                    setModals({ ...modals, operation: false })
                 } else {
                     toast.error("Произошла ошибка!")
                 }
@@ -156,6 +158,13 @@ const OperationOpenModal = ({ modals, setModals }) => {
                     </Modal.Footer>
                 </>
             )
+        }
+        {
+            operation_status === 'error' && 
+            <div className='flex flex-col justify-center items-center gap-y-1 py-4'>
+                <ShieldAlert color='red' size={30}/>
+                <p className='font-inter text-redd'>Произошла ошибка!</p>
+            </div>
         }
     </Modal>
   )

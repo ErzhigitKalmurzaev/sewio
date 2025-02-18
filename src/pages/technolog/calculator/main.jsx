@@ -67,7 +67,12 @@ const Calculator = () => {
           cal_operations: [...operations],
           cal_consumables: [...consumables],
           cal_prices: [...prices]
-        }))
+        })).then(res => {
+          if(res.meta.requestStatus === 'fulfilled') {
+            navigate(`history`);
+            toast.success('Товар успешно сохранен!');
+          }
+        })
       } else {
         toast.error('Заполните правильно данные о товаре!');
       }
@@ -82,8 +87,9 @@ const Calculator = () => {
       <div className="w-full min-h-[100vh] flex flex-col gap-y-5 position-relative">
         <div className="flex justify-between items-center">
           <Title text="Калькулятор" />
-          <Button onClick={() => navigate('history')}>
-            <NotepadText className="mr-1" /> История
+          <Button width='120px' onClick={() => navigate('history')}>
+              <NotepadText className="mr-2" size={22} />
+              <p className="font-inter">История</p>
           </Button>
         </div>
 

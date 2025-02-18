@@ -50,7 +50,7 @@ const StickyBox = ({ count, price }) => {
                 <Label>📊 Общий расход:</Label>
                 <Value>{formatNumber(getTotal('total'))} с</Value>
               </Item>
-              <Item profit={true}>
+              <Item profit={getTotal('profit') >= 0}>
                 <Label>💵 Прибыль:</Label>
                 <Value>{formatNumber(getTotal('profit'))} с</Value>
               </Item>

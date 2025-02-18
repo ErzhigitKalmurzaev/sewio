@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { List, Modal } from 'rsuite'
+import { List, Loader, Modal } from 'rsuite'
 import { getCombinationById, getCombinationList } from '../../../../../store/technolog/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
@@ -7,14 +7,13 @@ import Select from '../../../../../components/ui/inputs/select';
 import { getOperationsTitlesList } from './../../../../../store/technolog/calculation';
 import Button from '../../../../../components/ui/button';
 import { addCombination, createCombination, editCombinationById, getCombinationsList } from './../../../../../store/technolog/product';
-import { toast } from 'react-toastify';
 
 const AddCombination = ({ modals, setModals }) => {
 
   const dispatch = useDispatch();
 
   const { operations_list } = useSelector(state => state.calculation);
-  const { combinations_list, combination, combination_status } = useSelector(state => state.product);
+  const { combinations_list } = useSelector(state => state.product);
 
   const [newCombination, setNewCombination] = useState({
     title: '',
@@ -25,6 +24,7 @@ const AddCombination = ({ modals, setModals }) => {
     title: false,
     operations: false,
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if(!operations_list) {
@@ -41,23 +41,14 @@ const AddCombination = ({ modals, setModals }) => {
 
   const handleSelect = (id) => {
     if(id === 0 || id) {
+        setLoading(true);
         dispatch(getCombinationById({ id })).then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
                 setNewCombination(res.payload)
-                console.log(res.payload)
+                setLoading(false);
             }
         })
     }
-  }
-
-  const validateField = () => {
-    const newErrors = {
-      title: !combination?.title,
-      file: !combination?.file,
-      operations: combination?.operations?.length === 0,
-    };
-    setErrors(newErrors);
-    return !Object.values(newErrors).some(Boolean);
   }
 
   const onSubmit = () => {
@@ -103,7 +94,9 @@ const AddCombination = ({ modals, setModals }) => {
                 </div>
 
                 <div>
-                    {
+                    {   
+                        loading ?
+                        <Loader  center/> :
                         newCombination?.operations?.length > 0 && (
                             <div className="w-full mt-4">
                                 <h3 className="text-base font-medium mb-2">Операции в комбинации</h3>

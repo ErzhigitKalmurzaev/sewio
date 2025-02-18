@@ -60,6 +60,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
             if(res?.meta?.requestStatus === 'fulfilled') {
                 toast.success('Изменения сохранены!')
                 dispatch(getCombinationList())
+                setModals({ ...modals, combination: false })
             } else {
                 toast.error('Произошла ошибка!')
             }
@@ -130,17 +131,23 @@ const CombinationOpenModal = ({ modals, setModals }) => {
                                             <div>
                                                 <h3 className="text-lg font-medium mb-2">Все операции</h3>
                                                 <ul className="border border-borderGray rounded p-2 h-60 overflow-y-auto">
-                                                    {operations_list.map((operation) => (
+                                                    {(() => {
+                                                    const selectedOperations = new Set(combination?.operations?.map(op => op.id));
+
+                                                    return operations_list
+                                                        .filter(op => !selectedOperations.has(op.id)) // O(1) проверка в Set
+                                                        .map((operation) => (
                                                         <li key={operation.id} className="flex justify-between items-center p-1 px-3 border border-borderGray rounded mb-2">
                                                             <span>{operation.title}</span>
                                                             <button 
-                                                                className="text-green-500 hover:text-green-700"
-                                                                onClick={() => handleAddOperation(operation)}
+                                                            className="text-green-500 hover:text-green-700"
+                                                            onClick={() => handleAddOperation(operation)}
                                                             >
-                                                                ➕
+                                                            ➕
                                                             </button>
                                                         </li>
-                                                    ))}
+                                                        ));
+                                                    })()}
                                                 </ul>
                                             </div>
                                         </div>

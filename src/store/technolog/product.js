@@ -194,14 +194,15 @@ const TechnologProductSlice = createSlice({
         update_product: false,
         combinations_list: null,
         combination: null,
-        combination_status: 'loading',
+        combination_status: '',
 
         operations: [
             {
                 title: '',
                 time: '',
                 rank: '',
-                price: ''
+                price: '',
+                equipment: ''
             }
         ],
         combinations: [
@@ -260,7 +261,8 @@ const TechnologProductSlice = createSlice({
                 title: '',
                 time: '',
                 rank: '',
-                price: ''
+                price: '',
+                equipment: ''
             })
         },
         getValueOperation: (state, action) => {
