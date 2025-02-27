@@ -122,14 +122,14 @@ const ConsumablesTable = ({ type }) => {
             <Column width={100}>
                 <HeaderCell align="center">
                     <button onClick={addRow} className="cursor-pointer">
-                         <Plus color="green" />
+                         <Plus color="#00796B" />
                     </button>
                 </HeaderCell>
                 <Cell>
                     {(rowData, index) =>
                         <div className='flex justify-center'>
                             <button onClick={() => deleteRow(index)} className="cursor-pointer">
-                                <CircleMinus color="red" />
+                                <CircleMinus color="#C2185B" />
                             </button>
                         </div>
                     }

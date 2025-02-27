@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from 'rsuite'
-import { changeCombinationValue, getCombinationById, getCombinationList, getFolderList } from '../../../../../store/technolog/operations';
+import { changeCombinationValue, getCombinationById, getCombinationList, getFolderList, getOperationList } from '../../../../../store/technolog/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../../components/ui/inputs/input';
 import Select from '../../../../../components/ui/inputs/select';
@@ -13,8 +13,7 @@ const CreateCombination = ({ modals, setModals }) => {
 
   const dispatch = useDispatch();
 
-  const { folders_list } = useSelector(state => state.operation);
-  const { operations_list } = useSelector(state => state.calculation);
+  const { folders_list, operaitions_list } = useSelector(state => state.operation);
 
   const [combination, setCombination] = useState({
     title: '',
@@ -32,8 +31,8 @@ const CreateCombination = ({ modals, setModals }) => {
     if(!folders_list) {
         dispatch(getFolderList())
     }
-    if(!operations_list) {
-        dispatch(getOperationsTitlesList())
+    if(!operaitions_list?.results) {
+        dispatch(getOperationList({ search: '' }))
     }
   }, [modals.id])
 
@@ -120,7 +119,7 @@ const CreateCombination = ({ modals, setModals }) => {
 
                 <div>
                     {
-                        operations_list?.length > 0 && (
+                        operaitions_list?.results?.length > 0 && (
                             <div className="mt-4 grid grid-cols-2 gap-6">
                                 {/* ✅ Список операций в комбинации */}
                                 <div>
@@ -147,8 +146,8 @@ const CreateCombination = ({ modals, setModals }) => {
                                         {(() => {
                                         const selectedOperations = new Set(combination?.operations?.map(op => op.id));
 
-                                        return operations_list
-                                            .filter(op => !selectedOperations.has(op.id)) // O(1) проверка в Set
+                                        return operaitions_list?.results
+                                            ?.filter(op => !selectedOperations.has(op.id)) // O(1) проверка в Set
                                             .map((operation) => (
                                             <li key={operation.id} className="flex justify-between items-center p-1 px-3 border border-borderGray rounded mb-2">
                                                 <span>{operation.title}</span>

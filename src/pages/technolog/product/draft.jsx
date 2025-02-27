@@ -159,7 +159,7 @@ import { createProduct } from "../../../store/technolog/product";
 import BackDrop from "../../../components/ui/backdrop";
 import { useNavigate } from "react-router-dom";
 import Select from "../../../components/ui/inputs/select";
-import { getSizeCategoryList } from "../../../store/technolog/size";
+import { getSizesList } from "../../../store/technolog/size";
 
 const CreateProduct = () => {
   const breadcrumbs = [
@@ -195,7 +195,7 @@ const CreateProduct = () => {
   })
 
   useEffect(() => {
-    dispatch(getSizeCategoryList());
+    dispatch(getSizesList());
   }, [])
 
   const getValue = (e) => {

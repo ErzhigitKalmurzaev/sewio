@@ -54,13 +54,9 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                   </Cell>
               </Column>
 
-              <Column width={100}>
+              <Column width={100} fullText>
                   <HeaderCell>Компания</HeaderCell>
-                  <Cell dataKey="company">
-                    {rowData => (
-                        <p>{rowData.client.company_title}</p>
-                    )}
-                  </Cell>
+                  <Cell dataKey="client.company_title"/>
               </Column>
 
               <Column width={90}>

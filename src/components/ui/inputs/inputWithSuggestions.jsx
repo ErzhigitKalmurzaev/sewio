@@ -17,13 +17,13 @@ const TextInputForTable = ({
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const inputRef = useRef(null);
   const listRef = useRef(null);
-  const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
-
+  const positionRef = useRef({ top: 0, left: 0, width: 0 });
+  
+  // Обновление inputValue при изменении value
   useEffect(() => {
-    if (value === "") {
-      setInputValue(value);
-    }
+    setInputValue(value);
   }, [value]);
+
 
   const handleChange = (e) => {
     const text = e.target.value;
@@ -37,15 +37,16 @@ const TextInputForTable = ({
     }
 
     const filtered = suggestions
-      .filter((item) => item.title.toLowerCase().includes(text.toLowerCase()))
+      ?.filter((item) => item.title.toLowerCase().includes(text.toLowerCase()))
       .slice(0, 5);
 
     setFilteredSuggestions(filtered);
     setHighlightedIndex(-1);
-
+    
+    // Обновляем позицию, но не вызываем ререндер
     if (inputRef.current) {
       const rect = inputRef.current.getBoundingClientRect();
-      setPosition({ top: rect.bottom + window.scrollY, left: rect.left, width: rect.width });
+      positionRef.current = { top: rect.bottom + window.scrollY, left: rect.left, width: rect.width };
     }
   };
 
@@ -61,7 +62,7 @@ const TextInputForTable = ({
     if (filteredSuggestions.length === 0) return;
 
     if (e.key === "ArrowDown") {
-      e.preventDefault(); // предотвращаем скролл страницы
+      e.preventDefault();
       setHighlightedIndex((prevIndex) =>
         prevIndex < filteredSuggestions.length - 1 ? prevIndex + 1 : 0
       );
@@ -107,7 +108,7 @@ const TextInputForTable = ({
 
       {filteredSuggestions.length > 0 &&
         createPortal(
-          <SuggestionsList ref={listRef} style={{ top: position.top, left: position.left, width: position.width }}>
+          <SuggestionsList ref={listRef} style={{ top: positionRef.current.top, left: positionRef.current.left, width: positionRef.current.width }}>
             {filteredSuggestions.map((suggestion, index) => (
               <SuggestionItem
                 key={suggestion.id}
@@ -147,6 +148,11 @@ const StyledInput = styled.input`
   &:focus {
     border-color: #2F4F4F;
   }
+  &::placeholder {
+    font-weight: 300;
+    font-size: 14px;
+  }
+
 `;
 
 const SuggestionsList = styled.ul`

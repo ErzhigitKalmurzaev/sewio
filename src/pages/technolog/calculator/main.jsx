@@ -6,7 +6,7 @@ import CalcTable from "./components/tables/calcTable";
 import Button from "../../../components/ui/button";
 import { MoveRight, Notebook, NotepadText } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { createCalculation, getClientsNames } from "../../../store/technolog/calculation";
+import { clearAll, createCalculation, getClientsNames } from "../../../store/technolog/calculation";
 import StickyBox from "../../../components/ui/stickyBox";
 import SelectUser from "../../../components/ui/inputs/selectUser";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,8 @@ const Calculator = () => {
   const { clients, operations, consumables, prices } = useSelector(state => state.calculation);
 
   useEffect(() => {
-    dispatch(getClientsNames())
+    dispatch(getClientsNames());
+    dispatch(clearAll());
   }, [])
 
   const [clientData, setClientData] = useState({

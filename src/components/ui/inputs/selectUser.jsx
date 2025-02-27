@@ -1,9 +1,9 @@
 import React from 'react';
 import { SelectPicker } from 'rsuite';
 
-const SelectUser = ({ width = '100%', label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false, disabled = false }) => {
+const SelectUser = ({ width = '100%', label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false, disabled = false, className }) => {
   return (
-    <div className={`flex flex-col gap-y-1 z-0`} style={{ width: width }}>
+    <div className={`flex flex-col gap-y-1 z-0 ${className}`} style={{ width: width }}>
       <label style={{ fontSize: '13px', fontFamily: 'Inter', fontWeight: '400', color: 'rgba(52, 64, 84, 1)'}}>
         {label} 
         {required && <span style={ error && { color: 'red' }}> *</span>}

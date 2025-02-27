@@ -1,32 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Button } from 'rsuite';
+import { Table, Button, Checkbox } from 'rsuite';
 
 import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
+import { Trash, Trash2 } from 'lucide-react';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const SizeTable = ({ data, setModals, modals, setEditSize, size_category_list_status }) => {
+const SizeTable = ({ data, setModals, modals, status }) => {
 
     const editSize = (data) => {
-        setModals({ ...modals, edit: true})
-        setEditSize(data)
+        setModals({ ...modals, edit: true, edit_data: data })
     }
 
     return (
         <div className='min-h-[550px] font-inter bg-white rounded-xl'>
         <Table
             height={530}
-            loading={size_category_list_status === 'loading'}
-            data={data}
-            className='rounded-xl'
+            loading={status === 'loading'}
+            data={data || []}
+            className='rounded-lg'
         >
-                <Column width={90} align="center" fixed>
+                <Column width={60} align="center" fixed>
                     <HeaderCell>ID</HeaderCell>
                     <Cell dataKey="id" />
                 </Column>
 
-                <Column width={300}>
+                <Column width={180}>
                     <HeaderCell>Название</HeaderCell>
                     <Cell dataKey="title" />
                 </Column>
@@ -42,30 +42,14 @@ const SizeTable = ({ data, setModals, modals, setEditSize, size_category_list_st
                     </Cell>
                 </Column>
 
-                <Column width={220}>
-                    <HeaderCell>Размеры</HeaderCell>
-                    <Cell dataKey="sizes">
-                        {
-                            rowData => (
-                                <p>
-                                    {
-                                        rowData.sizes.map((item, index) => (
-                                            `${item.title}${index !== rowData.sizes.length - 1 ? ', ' : ''} `
-                                        ))
-                                    }
-                                </p>
-                            )
-                        }
-                    </Cell>
-                </Column>
-
-                <Column width={400} fixed="right">
+                <Column width={100} align='center' fixed="right">
                     <HeaderCell>Действия</HeaderCell>
 
                     <Cell style={{ padding: '6px' }}>
                         {rowData => (
-                            <div className='flex items-center px-3 py-1 cursor-pointer'>
+                            <div className='flex items-center gap-x-3 px-3 py-1 cursor-pointer'>
                                 <Pencil onClick={() => editSize(rowData)}/>
+                                <Trash2 size={20} color='red' onClick={() => setModals({ ...modals, delete: true, id: rowData.id })}/>
                             </div>
                         )}
                     </Cell>

@@ -128,6 +128,33 @@ const CalculationSlice = createSlice({
         calc_status: 'loading'
     },
     reducers: {
+        clearAll: (state) => {
+            state.operations = [
+                {
+                    title: '',
+                    time: '',
+                    rank: '',
+                    price: ''
+                }
+            ]
+            state.combinations = [
+    
+            ]
+            state.consumables = [
+                {
+                    material_nomenclature: '',
+                    title: '',
+                    consumption: '',
+                    color: ''
+                }
+            ]
+            state.prices = [
+                {
+                    title: '',
+                    price: ''
+                }
+            ]
+        },
         addOperation: (state) => {
             state.operations.push({
                 title: '',
@@ -240,5 +267,6 @@ export const { addOperation, addConsumable,
                addPrice, getValueOperation, 
                deleteOperation, getValueConsumable, 
                deleteConsumable, fillConsumable,
-               fillOperation, getValuePrice, deletePrice } = CalculationSlice.actions;
+               fillOperation, getValuePrice, deletePrice,
+               clearAll } = CalculationSlice.actions;
 export default CalculationSlice;

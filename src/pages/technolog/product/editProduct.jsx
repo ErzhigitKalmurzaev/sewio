@@ -155,7 +155,7 @@ const EditProduct = () => {
 
           <div className="flex flex-col gap-y-4">
 
-            <ProdTable type='new'/>
+            <ProdTable type='edit'/>
           </div>
           <div className="flex justify-center">
             <Button width='180px' onClick={onSubmit}>

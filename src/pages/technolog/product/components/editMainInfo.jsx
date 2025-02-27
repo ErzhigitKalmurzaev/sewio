@@ -9,7 +9,7 @@ import { styled } from '@mui/material';
 import { editProductById } from '../../../../store/technolog/product';
 import BackDrop from '../../../../components/ui/backdrop';
 import Select from '../../../../components/ui/inputs/select';
-import { getSizeCategoryList } from '../../../../store/technolog/size';
+import { getSizesList } from '../../../../store/technolog/size';
 
 const EditMainInfo = ({ product, setLoading }) => {
 
@@ -31,7 +31,7 @@ const EditMainInfo = ({ product, setLoading }) => {
   })
 
   useEffect(() => {
-    dispatch(getSizeCategoryList());
+    dispatch(getSizesList());
   }, [])
 
   useEffect(() => {

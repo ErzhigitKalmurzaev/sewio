@@ -16,7 +16,7 @@ const { Column, HeaderCell, Cell } = Table;
 
 const ConsumablesTable = ({ type }) => {
 
-  const { consumables } = useSelector(state => state.product);
+  const { consumables, product_status } = useSelector(state => state.product);
   const { consumables_title_list, colors_list } = useSelector(state => state.material);
 
   const dispatch = useDispatch();
@@ -61,18 +61,20 @@ const ConsumablesTable = ({ type }) => {
     })
   }
 
+  console.log(consumables)
+
   return (
     <div>
         <Table
-            data={consumables}
+            data={consumables || []}
             autoHeight
             bordered
-            loading={loading}
+            loading={loading || (type === 'edit' && product_status === 'loading')}
             cellBordered
         >
             <Column width={250}>
                 <HeaderCell>Название</HeaderCell>
-                <Cell style={{ padding: '7px 6px'}}>
+                <Cell style={{ padding: '7px 6px' }}>
                     {(rowData, index) =>
                         <InputWithSuggestions
                             value={rowData.title}
@@ -114,14 +116,14 @@ const ConsumablesTable = ({ type }) => {
             <Column width={100}>
                 <HeaderCell align="center">
                     <button onClick={addRow} className="cursor-pointer">
-                         <Plus color="green" />
+                         <Plus color="#00796B" />
                     </button>
                 </HeaderCell>
                 <Cell>
                     {(rowData, index) =>
                         <div className='flex justify-center'>
                             <button onClick={() => deleteRow(index)} className="cursor-pointer">
-                                <CircleMinus color="red" />
+                                <CircleMinus color="#C2185B" />
                             </button>
                         </div>
                     }

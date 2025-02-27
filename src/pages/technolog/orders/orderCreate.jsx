@@ -7,13 +7,13 @@ import Button from '../../../components/ui/button';
 import DataPicker from '../../../components/ui/inputs/dataPicker';
 import SelectUser from '../../../components/ui/inputs/selectUser';
 import { useDispatch, useSelector } from 'react-redux';
-import { createOrder, getOrderClientList, getOrderProductList } from '../../../store/technolog/order';
+import { clearAll, createOrder, getOrderClientList, getOrderProductList } from '../../../store/technolog/order';
 import AddProductModal from './modals/addProductModal';
 import OrderProductInfo from './components/orderProductInfo';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getSizeCategoryList } from '../../../store/technolog/size';
 import { OrderStatuses } from '../../../utils/constants/statuses';
+import AmountsTable from './components/amountsTable';
 
 const OrderCreate = () => {
   const breadcrumbs = [
@@ -23,9 +23,8 @@ const OrderCreate = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { client_list, client_list_status, product_list, product_list_status  } = useSelector(state => state.order);
-  const { size_category_list } = useSelector(state => state.size);
-
+  const { client_list, client_list_status, product_list, product_list_status, products_to_order  } = useSelector(state => state.order);
+  
   const [order, setOrder] = useState({
     deadline: '',
     client: '',
@@ -40,11 +39,11 @@ const OrderCreate = () => {
 
   const [selectedClient, setSelectedClient] = useState(null);
   const [modals, setModals] = useState({ add: false, edit: false});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch(getOrderClientList());
     dispatch(getOrderProductList());
-    dispatch(getSizeCategoryList());
   }, []);
 
   useEffect(() => {
@@ -119,7 +118,7 @@ const OrderCreate = () => {
     const newErrors = {
       deadline: !order.deadline,
       client: !order.client,
-      products: !order.products?.length > 0,
+      products: !products_to_order?.length > 0,
     };
 
     setError(newErrors);
@@ -132,9 +131,20 @@ const OrderCreate = () => {
     if(validateFields()) {
       dispatch(createOrder({
         ...order,
+        products: products_to_order.map(item => ({
+          ...item,
+          amounts: item.amounts.flatMap(amount => 
+              amount.sizes.map(size => ({
+                  color: amount.color,
+                  sizes: size.size,  // Переносим `size` в строку
+                  amount: size.amount
+              }))
+          )
+        })),
         deadline: new Date(order.deadline.split('.').reverse().join('-')).toISOString()
       })).then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
+          dispatch(clearAll())
           setOrder({...order, deadline: '', client: '', products: []});
           setSelectedClient(null);
           navigate(-1)
@@ -151,9 +161,9 @@ const OrderCreate = () => {
       <MyBreadcrums items={breadcrumbs} />
       <Title text="Создание заказа" />
 
-      <div className='w-full flex gap-x-7'>
-        <div className='w-1/2 flex flex-col gap-y-2 bg-white rounded-lg px-8 py-5'>
-          <p className='text-base font-bold font-inter mb-3'>Основная информация</p>
+      
+      <div className='w-full min-h-[100vh] bg-white flex flex-col gap-y-5 p-6 rounded-lg'>
+        <div className='w-[60%] flex justify-between items-center gap-x-5'>
           <DataPicker
             label='Дата сдачи заказа'
             placeholder='Выберите дату'
@@ -171,71 +181,19 @@ const OrderCreate = () => {
             onChange={e => getMainValue({ target: { name: 'client', value: e } })}
             valueKey='id'
             labelKey='name'
+            className={'mb-1'}
           />
-
-          {/* Карточка с информацией о клиенте */}
-          <div className='p-4 mt-4 border border-borderGray rounded-lg shadow-sm'>
-            {selectedClient ? (
-              <div className='flex flex-col gap-y-1'>
-                <p className='font-inter text-primary'>Имя: {selectedClient.name} {selectedClient.surname}</p>
-                <p className='font-inter text-primary'>Email: {selectedClient.email}</p>
-                <p className='font-inter text-primary'>Телефон: {selectedClient.phone}</p>
-                <p className='font-inter text-primary'>Адрес: {selectedClient.address}</p>
-              </div>
-            ) : (
-              <p className='text-gray-500'>Выберите клиента, чтобы увидеть информацию</p>
-            )}
-          </div>
         </div>
 
-        <div className='w-1/2 flex flex-col gap-y-4'>
-          <div className='flex flex-col gap-y-5 bg-white rounded-lg px-8 py-8'>
-            <p className='text-base font-bold font-inter text-center'>Информация о заказе:</p>
+        <AmountsTable/>
+      </div>
 
-            <div className='flex flex-col justify-center gap-y-8'>
-              <div className='flex justify-between gap-x-5'>
-                <OrderInfoItem label='Общее кол-во:' value={getStatistic('total_count')} measure='шт.' />
-                <OrderInfoItem label='Общий доход:' value={getStatistic('total_income')} measure='сом' />
-                <OrderInfoItem label='Общие расходы:' value={getStatistic('total_consumption')} measure='сом' />
-              </div>
-              <div className='flex justify-between gap-x-5'>
-                <OrderInfoItem label='Общая прибыль:' value={getStatistic('total_income') - getStatistic('total_consumption')} measure='сом' />
-                <OrderInfoItem label='Время выполнения:' value={getStatistic('total_time').toFixed(1)} measure='ч.' />
-                <OrderInfoItem label='Статус заказа:' value={getStatistic('status')} measure='' />
-              </div>
-              <div className='flex justify-center'>
-                <Button width='250px' onClick={() => setModals({ ...modals, add: true })}>+ Добавить товар</Button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
+      <div className='flex justify-center items-center gap-x-5'>
+        <Button width={'180px'} onClick={onSubmit}>Создать</Button>
       </div>
-      <div className='bg-white w-full p-3 rounded-xl'>
-        <OrderProductInfo
-            products={order.products}
-            product_list={product_list}
-            modals={modals}
-            setModals={setModals}
-            order={order}
-            setOrder={setOrder}
-            size_category_list={size_category_list}
-        />
-      </div>
-      <div className='flex justify-center'>
-        <Button width='250px' onClick={onSubmit}>Создать заказ</Button>
-      </div>
-      <AddProductModal
-        modals={modals}
-        setModals={setModals}
-        order={order}
-        setOrder={setOrder}
-        products={product_list}
-        status={product_list_status}
-        size_category_list={size_category_list}
-      />
     </div>
   );
 };
 
 export default OrderCreate;
+

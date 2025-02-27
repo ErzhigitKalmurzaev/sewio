@@ -5,7 +5,7 @@ import Input from '../../../../components/ui/inputs/input';
 import Button from '../../../../components/ui/button';
 import NumInput from '../../../../components/ui/inputs/numInput';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSizeCategoryList } from '../../../../store/technolog/size';
+import { getSizesList } from '../../../../store/technolog/size';
 import { toast } from 'react-toastify';
 
 const EditProductModal = ({ modals, setModals, setOrder, order, products, editProd, setEditProd, size_category_list }) => {

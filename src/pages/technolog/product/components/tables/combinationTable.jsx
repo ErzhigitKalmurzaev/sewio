@@ -193,7 +193,7 @@ const CombinationsTable = ({ type }) => {
             <Column width={150}>
                 <HeaderCell align="center">
                     <button onClick={addRow} className="cursor-pointer">
-                         <Plus color="green" />
+                         <Plus color="#00796B" />
                     </button>
                 </HeaderCell>
                 <Cell>
@@ -201,16 +201,16 @@ const CombinationsTable = ({ type }) => {
                         rowData.children ? 
                             <div className='flex justify-evenly gap-x-4'>
                                 <button onClick={() => addOperationRow(rowData)} className="cursor-pointer">
-                                    <Plus color="blue" />
+                                    <Plus color="#0D47A1" />
                                 </button>
                                 <button onClick={() => editCombination(rowData)} className="cursor-pointer">
-                                    <PencilLine color='gray'/>
+                                    <PencilLine color='#616161'/>
                                 </button>
                             </div>
                         : (
                             <div className='flex justify-center'>
                                 <button onClick={() => deleteRow(rowData)} className="cursor-pointer">
-                                    <CircleMinus color="red" />
+                                    <CircleMinus color="#C2185B" />
                                 </button>
                             </div>
                         )

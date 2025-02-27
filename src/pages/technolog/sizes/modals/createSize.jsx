@@ -3,22 +3,19 @@ import { Modal, Toggle } from 'rsuite'
 import Input from '../../../../components/ui/inputs/input'
 import Button from '../../../../components/ui/button'
 import { useDispatch } from 'react-redux'
-import { createSize } from '../../../../store/technolog/size'
+import { createSize, getSizesList } from '../../../../store/technolog/size'
 import { toast } from 'react-toastify'
-import Select from '../../../../components/ui/inputs/select'
 
-const CreateSize = ({ modals, setModals, categories, setUpdate }) => {
+const CreateSize = ({ modals, setModals, setUpdate }) => {
 
   const dispatch = useDispatch();
 
   const [size, setSize] = useState({
     title: '',
-    category: '',
     is_active: true
   })
   const [errors, setErrors] = useState({
     title: false,
-    category: false,
     is_active: false
   })
 
@@ -34,9 +31,10 @@ const CreateSize = ({ modals, setModals, categories, setUpdate }) => {
     dispatch(createSize(size))
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
-                toast("Категория создана успешно!");
-                setModals({ ...modals, create_size: false })
+                toast("Размер создан успешно!");
+                setModals({ ...modals, create: false })
                 setUpdate(prev => !prev)
+                dispatch(getSizesList());
                 setSize({
                     title: '',
                     is_active: true
@@ -46,7 +44,7 @@ const CreateSize = ({ modals, setModals, categories, setUpdate }) => {
   }
 
   return (
-    <Modal open={modals.create_size} onClose={() => setModals({ ...modals, create_size: false })} className='my-auto'>
+    <Modal open={modals.create} onClose={() => setModals({ ...modals, create: false })} className='my-auto'>
         <Modal.Header>
             <Modal.Title>
                 <p className='text-lg font-bold font-inter'>Создание размера</p>
@@ -54,17 +52,6 @@ const CreateSize = ({ modals, setModals, categories, setUpdate }) => {
         </Modal.Header>
         <Modal.Body className='flex flex-col gap-y-5'>
             <div className='flex flex-col gap-y-4'>
-                <Select
-                    label='Категория' 
-                    name='category' 
-                    placeholder='Выберите категорию' 
-                    data={categories} 
-                    value={size.category}
-                    error={errors.category} 
-                    labelKey='title'
-                    valueKey='id'
-                    onChange={e => getValue({ target: { value: e, name: 'category' } })}
-                />
                 <Input
                     label='Название'
                     name='title'

@@ -109,9 +109,98 @@ const TechnologOrderSlice = createSlice({
         order_list_status: 'loading',
         moderation_list: null,
         moderation_list_status: 'loading',
-        accept_operation_status: 'loading'
+        accept_operation_status: 'loading',
+
+        products_to_order: [
+            {
+                nomenclature: '',
+                price: '',
+                cost_price: '',
+                amounts: [
+                    {
+                        color: '',
+                        sizes: []
+                    }
+                ]
+            }
+        ]
     },
     reducers: {
+        addProduct: (state) => {
+            state.products_to_order.push({
+                nomenclature: '',
+                price: '',
+                cost_price: '',
+                amounts: [
+                    {
+                        color: '',
+                        sizes: []
+                    }
+                ]
+            })
+        },
+        deleteProduct: (state, action) => {
+            const { index } = action.payload;
+            state.products_to_order.splice(index, 1);
+        },
+        change_prod_main: (state, action) => {
+            const { index, name, value } = action.payload;
+
+            state.products_to_order[index][name] = value;
+        },
+        change_prod_amounts: (state, action) => {
+            const { id, index, name, value, sizeId } = action.payload;
+
+            if (name === "size") {
+                const sizesArray = state.products_to_order[id].amounts[index].sizes;
+                
+                // Ищем существует ли уже этот размер
+                const sizeIndex = sizesArray.findIndex(s => s.size === sizeId);
+        
+                if (parseInt(value) > 0) {
+                    if (sizeIndex === -1) {
+                        // Если размер не найден, добавляем новый
+                        sizesArray.push({ size: sizeId, amount: value });
+                    } else {
+                        // Если размер уже есть, обновляем количество
+                        sizesArray[sizeIndex].amount = value;
+                    }
+                } else {
+                    // Если значение = 0, удаляем размер из массива
+                    if (sizeIndex !== -1) {
+                        sizesArray.splice(sizeIndex, 1);
+                    }
+                }
+            } else {
+                state.products_to_order[id].amounts[index][name] = value;
+            }
+        },
+        addAmount: (state) => {
+            state.products_to_order[0].amounts.push({
+                color: '',
+                sizes: []
+            })
+        },
+        deleteAmount: (state, action) => {
+            const { id, index } = action.payload;
+            state.products_to_order[id].amounts.splice(index, 1);
+        },
+        clearAll: (state) => {
+            state.products_to_order = [
+                {
+                    nomenclature: '',
+                    price: '',
+                    cost_price: '',
+                    amounts: [
+                        {
+                            color: '',
+                            size: '',
+                            amount: ''
+                        }
+                    ]
+                }
+            ]
+        }
 
     },
     extraReducers: (builder) => {
@@ -162,5 +251,5 @@ const TechnologOrderSlice = createSlice({
     }
 })
 
-export const TechnologOrderActions = TechnologOrderSlice.actions;
+export const { change_prod_amounts, change_prod_main, addAmount, deleteAmount, clearAll, addProduct, deleteProduct } = TechnologOrderSlice.actions;
 export default TechnologOrderSlice;

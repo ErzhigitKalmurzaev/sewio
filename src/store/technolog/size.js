@@ -1,36 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axios";
 
-export const getSizeCategoryList = createAsyncThunk(
+export const getSizesList = createAsyncThunk(
     'size/getSizeList',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } =  await axiosInstance.get('general/size/categories/');
-            return data;
-        } catch (err) {
-            return rejectWithValue(err)
-        }
-    }
-)
-
-export const createSizeCategory = createAsyncThunk(
-    'size/createSizeCategory',
-    async (props, { rejectWithValue }) => {
-        try {
-            const { data } = await axiosInstance.post('general/size/category/crud/', props);
-            return data;
-        } catch (err) {
-            return rejectWithValue(err)
-        }
-    }
-)
-
-export const editSizeCategory = createAsyncThunk(
-    'size/editSizeCategory',
-    async ({ id, props }, { rejectWithValue }) => {
-        try {
-            console.log(props)
-            const { data } = await axiosInstance.patch(`general/size/category/crud/${id}/`, props);
+            const { data } =  await axiosInstance.get('general/sizes/');
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -50,11 +25,23 @@ export const createSize = createAsyncThunk(
     }
 )
 
-export const editingSizeCategory = createAsyncThunk(
-    'size/editingSizeCategory',
-    async ({id, props}, { rejectWithValue }) => {
+export const editSize = createAsyncThunk(
+    'size/editSize',
+    async (props, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.patch(`general/rank/crud/${id}/`, props);
+            const { data } = await axiosInstance.patch(`general/size/crud/${props.id}`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const deleteSize = createAsyncThunk(
+    'size/deleteSize',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.delete(`general/size/crud/${props.id}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -65,21 +52,21 @@ export const editingSizeCategory = createAsyncThunk(
 const TechnologSizeSlice = createSlice({
     name: 'size',
     initialState: {
-        size_category_list: [],
-        size_category_list_status: 'loading'
+        sizes_list: null,
+        sizes_list_status: 'loading'
     },
     reducers: {
 
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getSizeCategoryList.pending, (state) => {
-                state.size_category_list_status = 'loading';
-            }).addCase(getSizeCategoryList.fulfilled, (state, action) => {
-                state.size_category_list_status = 'success';
-                state.size_category_list = action.payload
-            }).addCase(getSizeCategoryList.rejected, (state) => {
-                state.size_category_list_status = 'error';
+            .addCase(getSizesList.pending, (state) => {
+                state.sizes_list_status = 'loading';
+            }).addCase(getSizesList.fulfilled, (state, action) => {
+                state.sizes_list_status = 'success';
+                state.sizes_list = action.payload
+            }).addCase(getSizesList.rejected, (state) => {
+                state.sizes_list_status = 'error';
             })
     }
 })

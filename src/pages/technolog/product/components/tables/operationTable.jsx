@@ -88,7 +88,7 @@ const OperationsTable = ({ type }) => {
         >
             <Column width={250}>
                 <HeaderCell>Название</HeaderCell>
-                <Cell style={{ padding: '7px 6px'}}>
+                <Cell style={{ padding: '7px 6px' }}>
                     {(rowData, index) =>
                         <InputWithSuggestions
                             value={rowData.title}
@@ -157,14 +157,14 @@ const OperationsTable = ({ type }) => {
             <Column width={100}>
                 <HeaderCell align="center">
                     <button onClick={addRow} className="cursor-pointer">
-                         <Plus color="green" />
+                         <Plus color="#00796B" />
                     </button>
                 </HeaderCell>
                 <Cell>
                     {(rowData, index) =>
                         <div className='flex justify-center'>
                             <button onClick={() => deleteRow(index)} className="cursor-pointer">
-                                <CircleMinus color="red" />
+                                <CircleMinus color="#C2185B" />
                             </button>
                         </div>
                     }
