@@ -40,16 +40,16 @@ const UserMenu = () => {
     }
     
   return (
-    <div>
-        <Tooltip title="Account settings">
-          <IconButton
+    <Tooltip title="Account settings" >
+        <div>
+            <IconButton
             onClick={handleClick}
             size="small"
             sx={{ ml: 2, borderRadius: 5 }}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
-          >
+            >
             {
                 me_info?.image ? 
                     <Avatar alt={me_info?.first_name} src={me_info?.image}/>
@@ -57,8 +57,8 @@ const UserMenu = () => {
                     <Avatar sx={{ width: 32, height: 32 }}>{me_info?.first_name?.length > 0 ? me_info?.first_name[0] : ''}</Avatar>
             }
             <KeyboardArrowDownIcon sx={{ ml: 1 }}/>
-          </IconButton>
-          <Menu
+            </IconButton>
+            <Menu
             anchorEl={anchorEl}
             id="account-menu"
             open={open}
@@ -122,9 +122,9 @@ const UserMenu = () => {
                 </ListItemIcon>
                 Выйти
             </MenuItem>
-        </Menu>
-        </Tooltip>
-    </div>
+            </Menu>
+        </div>
+    </Tooltip>
   )
 }
 

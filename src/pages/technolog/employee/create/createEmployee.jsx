@@ -23,6 +23,7 @@ const CreateEmployee = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { rank_list } = useSelector(state => state.rank);
 
   const [employee_data, setEmployee_data] = useState({
@@ -44,9 +45,11 @@ const CreateEmployee = () => {
     salary: false
   })
   const [image, setImage] = useState(null);
-
+  
   useEffect(() => {
-    dispatch(getRankList())
+    if(!rank_list) {
+      dispatch(getRankList())
+    }
   }, [])
 
   const getValue = (e) => {
@@ -173,17 +176,16 @@ const CreateEmployee = () => {
 
             <div className='flex gap-x-6'>
               <Select 
-                label='Роль' 
-                name='role' 
-                placeholder='Выберите роль' 
-                data={employeeRole} 
-                error={errors.role} 
+                label='Роль'
+                data={employeeRole}
                 onChange={e => getValue({ target: { value: e, name: 'role' } })}
+                error={errors.role} 
+                placeholder='Выберите роль' 
               />
               <Select 
-                label='Разряд' 
-                name='rank'
-                placeholder='Выберите разряд' 
+                label='Разряд'
+                placeholder='Выберите разряд'
+                value={employee_data.rank}
                 data={rank_list} 
                 error={errors.rank} 
                 labelKey='title'

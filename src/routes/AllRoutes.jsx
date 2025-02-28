@@ -8,6 +8,7 @@ import SignIn from './../pages/auth/signIn';
 import WarehouseRoute from './warehouseRoute';
 import ShveyaRoute from './shveyaRoutes';
 import ForemanRoutes from './foremanRoutes';
+import KroiRoute from './kroiRoutes';
 
 const AllRoutes = () => {
   const { isAuthenticated, me_info } = useSelector((state) => state.auth);
@@ -29,9 +30,10 @@ const AllRoutes = () => {
     technolog: <TechnologRoute/>,
     shveya: <ShveyaRoute />,
     warehouse: <ForemanRoutes/>,
+    kroi: <KroiRoute/>
   }
 
-  const allowedCRMRoles = ['', 'director', 'technolog', 'warehouse', 'shveya'];
+  const allowedCRMRoles = ['', 'director', 'technolog', 'warehouse', 'shveya', 'kroi'];
   
   return (
     <Routes>

@@ -136,7 +136,7 @@ const OrderCreate = () => {
           amounts: item.amounts.flatMap(amount => 
               amount.sizes.map(size => ({
                   color: amount.color,
-                  sizes: size.size,  // Переносим `size` в строку
+                  size: size.size,  // Переносим `size` в строку
                   amount: size.amount
               }))
           )

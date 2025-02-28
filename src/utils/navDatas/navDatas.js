@@ -105,3 +105,18 @@ export const shveyaNav = [
         elements: false
     }
 ]
+
+export const kroiNav = [
+    {
+        title: 'Заработная плата',
+        path: 'salary',
+        icon: <CircleDollarSign/>,
+        elements: false
+    },
+    {
+        title: 'Заказы',
+        path: 'orders',
+        icon: <ClipboardList/>,
+        elements: false
+    }
+]

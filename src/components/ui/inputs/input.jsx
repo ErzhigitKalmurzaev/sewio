@@ -34,19 +34,6 @@ const Input = ({
   const [isOpen, setIsOpen] = useState(false);
   const textFieldRef = useRef(null);
 
-  useEffect(() => {
-    const handleWheel = (e) => {
-      if (!disabled && textFieldRef.current.contains(e.target)) {
-        e.preventDefault();
-      }
-    };
-
-    document.addEventListener("wheel", handleWheel);
-    return () => {
-      document.removeEventListener("wheel", handleWheel);
-    };
-  }, [disabled]);
-
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && searchicon) {
       searchHandle();

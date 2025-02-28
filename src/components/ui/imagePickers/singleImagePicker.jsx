@@ -31,6 +31,7 @@ const SingleImagePicker = ({ fileInfo, setFileInfo }) => {
       autoUpload={false}
       fileListVisible={false}
       listType="picture"
+      action=''
       onChange={(fileList) => {
         if (fileList.length > 0) {
           handleUpload(fileList[0]);

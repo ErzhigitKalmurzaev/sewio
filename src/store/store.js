@@ -16,6 +16,7 @@ import ShveyaOperationSlice from "./shveya/operation";
 import ShveyaSalarySlice from "./shveya/salary";
 import StatisticSlice from "./technolog/statistic";
 import CalculationSlice from "./technolog/calculation";
+import KroiOrderSlice from "./kroi/order";
 
 const store = configureStore({
     reducer: {
@@ -43,7 +44,10 @@ const store = configureStore({
 
         //Shveya 
         sh_operation: ShveyaOperationSlice.reducer,
-        sh_salary: ShveyaSalarySlice.reducer
+        sh_salary: ShveyaSalarySlice.reducer,
+
+        //Kroi
+        kroi_order: KroiOrderSlice.reducer
     }
 })
 
