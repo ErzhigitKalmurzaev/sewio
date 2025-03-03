@@ -10,7 +10,7 @@ const CRMLayout = () => {
   const { me_info } = useSelector((state) => state.auth);
 
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div className="w-full min-h-screen flex flex-col">
       {/* Фиксированный Header */}
       <Header className="flex-shrink-0" />
 

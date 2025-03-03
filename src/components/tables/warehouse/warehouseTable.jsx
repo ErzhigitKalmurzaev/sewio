@@ -12,12 +12,13 @@ const WarehouseTable = ({ data, status }) => {
   const navigate = useNavigate();
 
   return (
-    <div className='font-inter'>
+    <div className='min-h-[500px] font-inter bg-white rounded-xl'>
         <Table
             height={600}
             loading={status === 'loading'}
             data={data}
             className='rounded-xl'
+            bordered
         >
             <Column width={90} align="center" fixed>
                 <HeaderCell>ID</HeaderCell>

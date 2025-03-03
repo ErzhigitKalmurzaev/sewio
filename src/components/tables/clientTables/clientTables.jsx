@@ -17,6 +17,7 @@ const ClentsTable = ({ data, status }) => {
               data={data}
               minHeight={450}
               className='rounded-xl'
+              bordered
               >
               <Column width={70} align="center" fixed>
                   <HeaderCell>ID</HeaderCell>

@@ -31,6 +31,7 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
               loading={status === 'loading'}
               data={getData()}
               className='rounded-xl'
+              bordered
             >
               <Column width={70} align="center" fixed>
                   <HeaderCell>ID</HeaderCell>

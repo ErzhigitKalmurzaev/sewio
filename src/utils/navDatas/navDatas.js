@@ -55,7 +55,7 @@ export const technologNav = [
                 elements: false,
             },
             {
-                title: 'Размеры',
+                title: 'Атрибуты',
                 path: 'sizes',
                 icon: <PencilRuler/>,
                 elements: false,

@@ -94,7 +94,7 @@ const CreateEmployee = () => {
   };
 
   return (
-    <div className='flex flex-col gap-y-5 mb-5'>
+    <div className='flex h-auto flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs} />
       <Title text="Создание сотрудника" />
 
@@ -182,7 +182,7 @@ const CreateEmployee = () => {
                 error={errors.role} 
                 placeholder='Выберите роль' 
               />
-              <Select 
+              <Select
                 label='Разряд'
                 placeholder='Выберите разряд'
                 value={employee_data.rank}

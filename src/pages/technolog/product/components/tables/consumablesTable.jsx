@@ -93,6 +93,7 @@ const ConsumablesTable = ({ type }) => {
                         <SelectForTable
                             value={rowData.color}
                             data={colors_list}
+                            colors={true}
                             onChange={(e) => getValue(e, "color", index)}
                             placeholder="Цвет"
                             labelKey='title'

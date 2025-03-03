@@ -20,6 +20,8 @@ const RankTable = ({ data, setModals, modals, setEditRank, rank_list_status }) =
             loading={rank_list_status === 'loading'}
             data={data || []}
             className='rounded-xl'
+            bordered
+            cellBordered
         >
             <Column width={90} align="center" fixed>
                 <HeaderCell>ID</HeaderCell>
@@ -32,7 +34,7 @@ const RankTable = ({ data, setModals, modals, setEditRank, rank_list_status }) =
             </Column>
 
             <Column width={150}>
-                <HeaderCell>Процент</HeaderCell>
+                <HeaderCell>Коэффициент</HeaderCell>
                 <Cell dataKey="percent" />
             </Column>
 

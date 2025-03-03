@@ -19,7 +19,7 @@ const Sklad = () => {
   }, [])
 
   return (
-    <div className='flex flex-col gap-y-5 mb-5'>
+    <div className='flex flex-col gap-y-3 mb-5'>
         <Title text="Склады"/>
 
         <div className='flex items-center justify-between my-2 gap-x-6'>

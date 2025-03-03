@@ -95,6 +95,7 @@ const ProdPanel = ({ product, id }) => {
                                 placeholder="Цвет"
                                 labelKey={'title'}
                                 valueKey={'id'}
+                                colors={true}
                                 onChange={(e) => getValue(e, "color", index)}
                             />
                         }

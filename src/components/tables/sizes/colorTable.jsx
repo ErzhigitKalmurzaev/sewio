@@ -7,9 +7,9 @@ import { Trash, Trash2 } from 'lucide-react';
 
 const { Column, HeaderCell, Cell } = Table;
 
-const SizeTable = ({ data, setModals, modals, status }) => {
+const ColorTable = ({ data, setModals, modals, status }) => {
 
-    const editSize = (data) => {
+    const editColor = (data) => {
         setModals({ ...modals, edit: true, edit_data: data })
     }
 
@@ -33,6 +33,19 @@ const SizeTable = ({ data, setModals, modals, status }) => {
                     <Cell dataKey="title" />
                 </Column>
 
+                <Column width={80} align="center">
+                    <HeaderCell>Цвет</HeaderCell>
+                    <Cell dataKey="code">
+                        {
+                            rowData => (
+                                <div style={{ backgroundColor: rowData.code, width: '20px', height: '20px', borderRadius: '50%' }}>
+                                    
+                                </div>
+                            )
+                        }
+                    </Cell>
+                </Column>
+
                 <Column width={200}>
                     <HeaderCell>Статус</HeaderCell>
                     <Cell dataKey="is_active">
@@ -50,7 +63,7 @@ const SizeTable = ({ data, setModals, modals, status }) => {
                     <Cell style={{ padding: '6px' }}>
                         {rowData => (
                             <div className='flex items-center gap-x-3 px-3 py-1 cursor-pointer'>
-                                <Pencil onClick={() => editSize(rowData)}/>
+                                <Pencil onClick={() => editColor(rowData)}/>
                             </div>
                         )}
                     </Cell>
@@ -60,4 +73,4 @@ const SizeTable = ({ data, setModals, modals, status }) => {
     )
 }
 
-export default SizeTable
+export default ColorTable

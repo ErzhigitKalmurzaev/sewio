@@ -9,8 +9,8 @@ const NavButton = ({ title, path, icon, active, hide }) => {
   const navigate = useNavigate();
 
   return (
-    <Tooltip className={`${hide ? 'w-[60px]' : 'w-[210px]'} h-[46px] pointer flex items-center px-5 rounded-lg ${active ? 'bg-primary' : 'bg-white'} transition-all ease-linear duration-300`}> 
-      <div onClick={() => navigate(path)} className='flex items-center gap-x-3 cursor-pointer' style={{ textDecoration: 'none', color: active ? 'white' : 'black', "&:hover": { textDecoration: 'none', color: active ? 'white' : 'black' } }}>
+    <Tooltip className={`${hide ? 'w-[60px]' : 'w-[210px]'} h-[46px] pointer flex items-center px-5 rounded-lg ${active ? 'bg-primary' : 'bg-white hover:bg-slate-200'} transition-all ease-linear duration-300`}> 
+      <div onClick={() => navigate(path)} className='flex items-center gap-x-3 cursor-pointer' style={{ textDecoration: 'none', color: active ? 'white' : 'black'}}>
           <span className={`w-[30px] h-[30px] flex justify-center items-center ${active ? 'text-white' : 'text-primary'}`}>
               {icon}
           </span>

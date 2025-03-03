@@ -112,8 +112,8 @@ const Discharge = () => {
                         onChange={getValue}
                     />
                     <NumInput 
-                        label='Процент' 
-                        placeholder='0%' 
+                        label='Коэффициент' 
+                        placeholder='0' 
                         type='text'
                         value={`${newRank.percent}`}
                         onChange={e => getValue({ target: { value: e, name: 'percent' } })}
@@ -147,8 +147,8 @@ const Discharge = () => {
                         onChange={getEditValue}
                     />
                     <NumInput 
-                        label='Процент' 
-                        placeholder='0%' 
+                        label='Коэффициент' 
+                        placeholder='0' 
                         type='text'
                         value={`${editRank.percent}`}
                         onChange={e => getEditValue({ target: { value: e, name: 'percent' } })}

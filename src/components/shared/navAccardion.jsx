@@ -20,7 +20,7 @@ const NavAccordion = ({ title, icon, active, hide, buttons }) => {
 
     return (
         <div className='flex flex-col'>
-            <Tooltip className={`${hide ? 'w-[60px]' : 'w-[210px]'} h-[46px] pointer flex items-center px-5 rounded-lg transition-all ease-linear duration-300`}>
+            <Tooltip className={`${hide ? 'w-[60px]' : 'w-[210px]'} h-[46px] pointer flex items-center px-5 rounded-lg transition-all ease-linear duration-300 hover:bg-slate-200`}>
                 <div onClick={() => setHideDirectory(!hideDirectory)} className='flex items-center gap-x-3' style={{ textDecoration: 'none', cursor: 'pointer', "&:hover": { textDecoration: 'none' } }}>
                     <span className={`w-[30px] h-[30px] flex justify-center items-center`}>
                         {icon}
@@ -35,11 +35,11 @@ const NavAccordion = ({ title, icon, active, hide, buttons }) => {
                 className={`transition-all ease-in-out duration-300 ${hideDirectory ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}
                 style={{ transform: hideDirectory ? 'translateY(0)' : 'translateY(-20px)' }}
             >
-                <div className={`flex flex-col ${hide ? 'w-full' : 'w-4/5'} mx-auto my-2 gap-y-2`}>
+                <div className={`flex flex-col ${hide ? 'w-full' : 'w-4/5'} mx-auto my-2 gap-y-1`}>
                     {
                         buttons.map((item, index) => {
                             return (
-                                <Tooltip key={index + 'nav'} className={`${hide ? 'w-[60px]' : 'w-[180px]'} h-[40px] pointer flex items-center px-5 rounded-lg ${active === item.path ? 'bg-primary' : 'bg-white'} transition-all ease-linear duration-300`}>
+                                <Tooltip key={index + 'nav'} className={`${hide ? 'w-[60px]' : 'w-[180px]'} h-[44px] pointer flex items-center px-5 rounded-lg ${active === item.path ? 'bg-primary' : 'bg-white hover:bg-slate-200'} transition-all ease-linear duration-300`}>
                                     <div onClick={() => navigate(item.path)} className='flex items-center gap-x-2 cursor-pointer' style={{ textDecoration: 'none', color: active === item.path ? 'white' : 'black', "&:hover": { textDecoration: 'none', color: active ? 'white' : 'black' } }}>
                                         <span className={`w-[30px] h-[30px] flex justify-center items-center ${active === item.path ? 'text-white' : 'text-primary'}`}>
                                             {item.icon}
