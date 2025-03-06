@@ -18,12 +18,30 @@ const TextInputForTable = ({
   const inputRef = useRef(null);
   const listRef = useRef(null);
   const positionRef = useRef({ top: 0, left: 0, width: 0 });
-  
-  // Обновление inputValue при изменении value
+
+  // Обработчик клика вне инпута и списка
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target) &&
+        listRef.current &&
+        !listRef.current.contains(event.target)
+      ) {
+        setFilteredSuggestions([]);
+        setHighlightedIndex(-1);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   useEffect(() => {
     setInputValue(value);
   }, [value]);
-
 
   const handleChange = (e) => {
     const text = e.target.value;
@@ -42,8 +60,7 @@ const TextInputForTable = ({
 
     setFilteredSuggestions(filtered);
     setHighlightedIndex(-1);
-    
-    // Обновляем позицию, но не вызываем ререндер
+
     if (inputRef.current) {
       const rect = inputRef.current.getBoundingClientRect();
       positionRef.current = { top: rect.bottom + window.scrollY, left: rect.left, width: rect.width };
@@ -152,7 +169,6 @@ const StyledInput = styled.input`
     font-weight: 300;
     font-size: 14px;
   }
-
 `;
 
 const SuggestionsList = styled.ul`

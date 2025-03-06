@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Title from '../../../../components/ui/title'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { fillPartyAmounts, getOrdersList } from '../../../../store/kroi/order';
+import { fillPartyAmounts, getOrdersList, getProductInfo, postParty } from '../../../../store/kroi/order';
 import NumInputForTable from '../../../../components/ui/inputs/numInputForTable';
 import PartyAmountTable from '../components/tables/partyAmountTable';
 import Button from '../../../../components/ui/button';
+import ConsumablesTable from '../components/tables/consumablesTable';
+import { toast } from 'react-toastify';
 
 const CreateParty = () => {
 
@@ -14,7 +16,7 @@ const CreateParty = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { orders_list, orders_list_status, party_amounts } = useSelector(state => state.kroi_order);
+  const { product_info, product_info_status, party_amounts, party_consumables } = useSelector(state => state.kroi_order);
 
   const [party, setParty] = useState({
     number: '',
@@ -22,38 +24,46 @@ const CreateParty = () => {
   });
 
   useEffect(() => {
-    if(!orders_list) {
-        dispatch(getOrdersList());
-    } else {
-        const order = orders_list.find(item => item.id === Number(orderId));
-        const product = order?.products.find(item => item.nomenclature.id === Number(id));
-        setParty({...party, product: product.nomenclature});
-        const groupedData = Object.values(
-            product?.amounts.reduce((acc, item) => {
-              const colorId = item.color.id;
-          
-              if (!acc[colorId]) {
-                acc[colorId] = {
-                  color: item.color,
-                  sizes: [],
-                  totalAmount: 0
-                };
-              }
-          
-              acc[colorId].sizes.push({
-                size: item.size,
-                plan_amount: item.amount,
-                true_amount: ''
-              });
-          
-              acc[colorId].totalAmount += item.amount;
-          
-              return acc;
-            }, {})
-          );
-        dispatch(fillPartyAmounts(groupedData));
-    }
+    dispatch(getProductInfo({ product: id, order: orderId }));
   }, [])
+
+  const validateField = () => {
+    if(party.number === '' && id && orderId) {
+      return false;
+    }
+    return true;
+  }
+
+  const onSubmit = () => {
+    if(validateField()) {
+      const new_party = {
+        order: Number(orderId),
+        nomenclature: Number(id),
+        number: Number(party.number),
+        details: party_amounts.flatMap(item => (
+          item.sizes.map(sizeData => ({
+            color: item.color.id,
+            size: sizeData.size.id,
+            plan_amount: sizeData.plan_amount,
+            true_amount: Number(sizeData.true_amount)
+          }))
+        )),
+        consumables: party_consumables.map(item => ({
+          nomenclature: item.id,
+          consumption: Number(item.consumption),
+          defect: Number(item.defect),
+          left: Number(item.left)
+        }))
+      }
+      dispatch(postParty(new_party)).then(res => {
+        if(res.meta.requestStatus === 'fulfilled') {
+          toast.success('Партия успешно создана!');
+        }
+      })
+    } else {
+      toast.error('Заполните поле № партии!')
+    }
+  }
 
   return (
     <div className='flex flex-col gap-y-4 mb-5'>
@@ -62,8 +72,8 @@ const CreateParty = () => {
         <div className='flex flex-col gap-y-10 bg-white rounded-lg p-4'>
             <div className='flex gap-x-16 items-center border-b border-borderGray py-2'>
                 <div className='flex items-center gap-x-4'>
-                    <span className='text-lg font-semibold font-inter'>Заказ-Наряд</span>
-                    <span className='text-lg font-semibold font-inter text-fprimary'>№ {orderId}</span>
+                    <span className='text-base font-semibold font-inter'>Заказ-Наряд</span>
+                    <span className='text-base font-semibold font-inter text-fprimary'>№ {orderId}</span>
                     <span className='text-base font-semibold font-inter'> партия</span>
                     <span>
                         <NumInputForTable
@@ -77,19 +87,21 @@ const CreateParty = () => {
                 <div className='flex items-center gap-x-6'>
                     <span className='text-base font-semibold font-inter'>
                         Товар: 
-                        <span className='text-fprimary ml-3'>{party.product?.title}</span>
+                        <span className='text-fprimary ml-3'>{product_info?.nomenclature?.title}</span>
                     </span>
                     <span className='text-base font-semibold font-inter'>
                         Артикул: 
-                        <span className='text-fprimary ml-3'>{party.product?.vendor_code}</span>
+                        <span className='text-fprimary ml-3'>{product_info?.nomenclature?.vendor_code}</span>
                     </span>
                 </div>
             </div>
 
             <PartyAmountTable data={party_amounts} />
 
-            <div>
-                <Button onClick={() => console.log(party_amounts)}>Save</Button>
+            <ConsumablesTable />
+
+            <div className='flex justify-center'>
+                <Button width='180px' onClick={onSubmit}>Создать</Button>
             </div>
         </div>
 

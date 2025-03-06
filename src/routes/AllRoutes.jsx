@@ -29,7 +29,7 @@ const AllRoutes = () => {
     director: <TechnologRoute/>,
     technolog: <TechnologRoute/>,
     shveya: <ShveyaRoute />,
-    warehouse: <ForemanRoutes/>,
+    warehouse: <WarehouseRoute/>,
     kroi: <KroiRoute/>
   }
 

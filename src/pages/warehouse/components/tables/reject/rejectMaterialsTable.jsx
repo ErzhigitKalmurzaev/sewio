@@ -27,13 +27,13 @@ const RejectMaterialsTable = ({ data, setMaterials }) => {
               <HeaderCell>ID</HeaderCell>
               <Cell dataKey="id" />
             </Column>
-            <Column width={120}>
-              <HeaderCell>Артикул</HeaderCell>
-              <Cell dataKey="vendor_code" />
-            </Column>
             <Column width={200}>
               <HeaderCell>Название</HeaderCell>
               <Cell dataKey="title" />
+            </Column>
+            <Column width={150}>
+              <HeaderCell>Артикул</HeaderCell>
+              <Cell dataKey="vendor_code" />
             </Column>
             <Column width={150}>
               <HeaderCell>Количество</HeaderCell>

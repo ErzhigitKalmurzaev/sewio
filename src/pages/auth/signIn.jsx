@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
-import wallpaper from "../../assets/images/wallpaper.jpg";
+import wallpaper from "../../assets/images/wallpaper.avif";
 import Input from "../../components/ui/inputs/input";
 import Button from "../../components/ui/button";
 import { Link } from "@mui/material";
@@ -31,7 +31,7 @@ const SignIn = () => {
     <Wrapper>
       <div className="w-[430px] h-[500px] bg-white rounded-2xl flex justify-center items-center">
         <form className="w-4/5 flex flex-col gap-y-5" onSubmit={handleSubmit}>
-          <h1 className="text-2xl font-bold text-center mb-5">SEWIO</h1>
+          <h1 className="text-2xl font-bold text-center mb-5">SewMaster</h1>
           <p className="text-xl font-bold">Добро пожаловать!</p>
           <div className="flex flex-col gap-y-4">
             <Input label="Логин" value={login} onChange={(e) => setLogin(e.target.value)} type="text"/>

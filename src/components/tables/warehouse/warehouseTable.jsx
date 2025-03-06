@@ -19,23 +19,38 @@ const WarehouseTable = ({ data, status }) => {
             data={data}
             className='rounded-xl'
             bordered
+            cellBordered
         >
             <Column width={90} align="center" fixed>
                 <HeaderCell>ID</HeaderCell>
                 <Cell dataKey="id" />
             </Column>
 
-            <Column width={300}>
+            <Column width={220}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell dataKey="title" />
             </Column>
 
-            <Column width={350}>
+            <Column width={220}>
+                <HeaderCell>Зав. складом</HeaderCell>
+                <Cell>
+                  {
+                    rowData => (
+                      rowData?.staffs?.length > 0 ? 
+                        <p className='font-inter'>{rowData?.staffs[0]?.name} {rowData?.staffs[0]?.surname}</p>
+                        :
+                        <p className='font-inter text-redd'>(Отсутствует)</p>
+                    )
+                  }
+                </Cell>
+            </Column>
+
+            <Column width={220}>
                 <HeaderCell>Адрес</HeaderCell>
                 <Cell dataKey="address" />
             </Column>
             
-            <Column width={470} fixed="right">
+            <Column flexGrow={1} fixed="right">
                 <HeaderCell>Действия</HeaderCell>
 
                 <Cell style={{ padding: '6px' }}>

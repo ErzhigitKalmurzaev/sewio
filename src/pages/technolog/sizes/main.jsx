@@ -56,7 +56,7 @@ const Sizes = () => {
           >
             Размеры
           </Button>
-          <Button 
+          <Button
             variant={urls.page === 'color' ? 'filterActive' : 'filter'}
             onClick={() => handleChangeFilter('page', 'color')}
           >

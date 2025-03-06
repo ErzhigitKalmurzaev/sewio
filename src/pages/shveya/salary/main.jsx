@@ -83,7 +83,7 @@ const MySalary = () => {
           <DateRangePickerInput 
             date={[urls.from_date, urls.to_date]} 
             setDate={handleChangeFilter} 
-            placement='bottomLeft'
+            placement='bottomStart'
             size='sm'
           />
         </div>

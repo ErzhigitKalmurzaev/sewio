@@ -17,6 +17,8 @@ const ComingsTable = ({ data, status }) => {
             loading={status === 'loading'}
             data={data || []}
             className='rounded-xl'
+            bordered
+            cellBordered
         >
             <Column width={90} align="center" fixed>
                 <HeaderCell>ID</HeaderCell>

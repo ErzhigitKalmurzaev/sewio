@@ -7,19 +7,6 @@ import { formatToLocalString } from '../../../utils/functions/dateFuncs';
 
 const DateRangePickerInput = ({ date = [], setDate, placement = 'bottomStart', size = 'lg' }) => {
 
-  // const [dateRange, setDateRange] = useState([null, null]);
-  // const [currentMonth, setCurrentMonth] = useState(new Date());
-
-  // const handleDateChange = (value) => {
-  //   // Оставляем текущий месяц при выборе первой даты
-  //   if (!dateRange[0]) {
-  //     setCurrentMonth(value[0]);
-  //   }
-
-  //   setDateRange(value);
-  // };
-
-
   const dateValues = date?.map(dateString => {
     const [day, month, year] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day); // Month is 0-indexed

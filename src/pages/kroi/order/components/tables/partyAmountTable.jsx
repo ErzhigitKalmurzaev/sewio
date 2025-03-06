@@ -7,8 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 const { Column, HeaderCell, Cell, ColumnGroup } = Table;
 
 const PartyAmountTable = ({ data }) => {
+
   const dispatch = useDispatch();
-  const { party_amounts } = useSelector(state => state.kroi_order);
+  const { party_amounts, product_info_status } = useSelector(state => state.kroi_order);
 
   if (!data || data.length === 0) {
     return <p>Нет данных для отображения</p>;
@@ -28,12 +29,13 @@ const PartyAmountTable = ({ data }) => {
 
 
   return (
-    <div className="rounded-lg">
+    <div className="flex flex-col gap-y-1">
       <Table
         bordered
         cellBordered
         autoHeight
         headerHeight={70}
+        loading={product_info_status === 'loading'}
         data={[...party_amounts] || []}
         className="rounded-lg border-2 border-borderGray"
       >
@@ -44,14 +46,20 @@ const PartyAmountTable = ({ data }) => {
         </Column>
 
         {party_amounts[0]?.sizes?.map((sItem, sIndex) => (
-          <ColumnGroup key={sIndex} header={sItem.size.title} verticalAlign="center" align="center">
-            <Column width={70} colSpan={2}>
+          <ColumnGroup key={sIndex} header={sItem.size.title} verticalAlign="middle" align="center">
+            <Column width={80} colSpan={2}>
               <HeaderCell>План</HeaderCell>
-              <Cell dataKey={`sizes[${sIndex}].plan_amount`} />
+              <Cell>
+                {
+                  rowData => (
+                    <p className="font-inter">{rowData.sizes[sIndex].plan_amount}</p>
+                  )
+                }
+              </Cell>
             </Column>
-            <Column width={70}>
+            <Column width={80}>
               <HeaderCell>Факт</HeaderCell>
-              <Cell style={{ padding: '7px 6px' }}>
+              <Cell style={{ padding: '6px' }}>
                 {(rowData, rowIndex) => (
                   <NumInputForTable
                     value={rowData.sizes[sIndex]?.true_amount || ''}
@@ -63,20 +71,27 @@ const PartyAmountTable = ({ data }) => {
             </Column>
           </ColumnGroup>
         ))}
+        
 
-        {/* Итоги по строкам */}
-        <Column width={100} align="center" verticalAlign="center">
-          <HeaderCell>ИТОГО</HeaderCell>
-          <Cell>
-            {(rowData, rowIndex) => (
-              <p>
-                {totalByColor[rowIndex].plan} / {totalByColor[rowIndex].fact}
-              </p>
-            )}
-          </Cell>
-        </Column>
+        <ColumnGroup header={'ИТОГО'} verticalAlign="middle" align="center" fixed='right'>
+            <Column width={70} colSpan={2}>
+              <HeaderCell>План</HeaderCell>
+              <Cell style={{ background: '#f9fbff' }}>
+                {(rowData, rowIndex) => (
+                  <p className="font-inter">{totalByColor[rowIndex].plan}</p>
+                )}
+              </Cell>
+            </Column>
+            <Column width={80}>
+              <HeaderCell>Факт</HeaderCell>
+              <Cell style={{ background: '#f9fbff' }}>
+                {(rowData, rowIndex) => (
+                  <p>{totalByColor[rowIndex].fact}</p>
+                )}
+              </Cell>
+            </Column>
+        </ColumnGroup>
       </Table>
-
     </div>
   );
 };

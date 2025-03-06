@@ -17,12 +17,14 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
   }
 
   return (
-    <div className='min-h-[400px] bg-white rounded-xl'>
+    <div className='min-h-[500px] bg-white rounded-xl'>
         <Table
-            height={500}
+            height={600}
             loading={status === 'loading'}
             data={data || []}
             className='rounded-xl'
+            bordered
+            cellBordered
         >
             <Column width={60} align="center" fixed>
                 <HeaderCell>ID</HeaderCell>

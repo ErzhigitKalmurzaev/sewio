@@ -18,7 +18,9 @@ const MainTable = ({ data, status }) => {
                 idRowSpan: productIndex === 0 ? entry.products?.length : 0,
                 productId: product.nomenclature.id,
                 productTitle: product.nomenclature.title,
-                vendorCode: product.nomenclature.vendor_code
+                vendorCode: product.nomenclature.vendor_code,
+                company: entry.client.company_title,
+                client: `${entry.client.name} ${entry.client.surname}`
             });
         });
     });
@@ -38,15 +40,26 @@ const MainTable = ({ data, status }) => {
                 <Cell dataKey="id" />
             </Column>
 
+            <Column width={200} verticalAlign='middle' rowSpan={rowData => rowData.idRowSpan}>
+                <HeaderCell>Клиент</HeaderCell>
+                <Cell dataKey="client" />
+            </Column>
+
+            <Column width={150} verticalAlign='middle' rowSpan={rowData => rowData.idRowSpan}>
+                <HeaderCell>Компания</HeaderCell>
+                <Cell dataKey="company" />
+            </Column>
+
             <Column width={220}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell dataKey="productTitle" />
             </Column>
 
-            <Column width={220}>
+            <Column width={200}>
                 <HeaderCell>Артикул</HeaderCell>
                 <Cell dataKey="vendorCode" />
             </Column>
+
 
             <Column flexGrow={1} verticalAlign='center'>
                 <HeaderCell>Действия</HeaderCell>

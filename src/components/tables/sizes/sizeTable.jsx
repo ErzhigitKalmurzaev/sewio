@@ -38,7 +38,7 @@ const SizeTable = ({ data, setModals, modals, status }) => {
                     <Cell dataKey="is_active">
                         {
                             rowData => (
-                                <p>{rowData.is_active ? 'Активный' : 'Деактивный'}</p>
+                                <p className='font-inter text-sm' style={rowData.is_active ? { color: '#2F4F4F' } : { color: 'rgba(188, 193, 201, 1)' }}>{rowData.is_active ? 'Активный' : 'Деактивный'}</p>
                             )
                         }
                     </Cell>

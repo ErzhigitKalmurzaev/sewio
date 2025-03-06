@@ -43,12 +43,12 @@ const UserMenu = () => {
     <Tooltip title="Account settings" >
         <div>
             <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2, borderRadius: 5 }}
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                size="small"
+                sx={{ ml: 2, borderRadius: 5 }}
+                aria-controls={open ? 'account-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
             >
             {
                 me_info?.image ? 
@@ -109,9 +109,8 @@ const UserMenu = () => {
                         </div>
                     </div>
                     <div>
-                        <p className='text-[13px] font-inter'>Уровень: {me_info?.rank?.title}</p>
+                        <p className='text-[13px] font-inter'>Разряд: {me_info?.rank?.title}</p>
                         <p className='text-[13px] font-inter'>Телефон: {me_info?.phone}</p>
-                        <p className='text-[13px] font-inter'>Email: {me_info?.email}</p>
                     </div>
                 </div>
             </MenuItem>
