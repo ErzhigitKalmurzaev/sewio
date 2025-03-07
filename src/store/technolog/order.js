@@ -66,7 +66,7 @@ export const getOrderById = createAsyncThunk(
     'order/getOrderById',
     async ({ id }, { rejectWithValue }) => {
         try {
-            const { data } =  await axiosInstance.get(`order/crud/${id}/`);
+            const { data } =  await axiosInstance.get(`order/list/${id}/`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -112,6 +112,19 @@ const TechnologOrderSlice = createSlice({
         accept_operation_status: 'loading',
 
         products_to_order: [
+            {
+                nomenclature: '',
+                price: '',
+                cost_price: '',
+                amounts: [
+                    {
+                        color: '',
+                        sizes: []
+                    }
+                ]
+            }
+        ],
+        edit_products_in_order: [
             {
                 nomenclature: '',
                 price: '',
@@ -200,8 +213,40 @@ const TechnologOrderSlice = createSlice({
                     ]
                 }
             ]
-        }
+        },
 
+        change_edit_prod_amounts: (state, action) => {
+            const { index, colorId, sizeId, value } = action.payload;
+
+            state.edit_products_in_order = state.edit_products_in_order.map((product, i) => {
+                if (i !== index) return product;
+    
+                return {
+                    ...product,
+                    amounts: product.amounts.map(colorGroup => {
+                        if (colorGroup.color !== colorId) return colorGroup;
+    
+                        return {
+                            ...colorGroup,
+                            sizes: colorGroup.sizes.map(sizeItem => {
+                                if (sizeItem.size.id !== sizeId) return sizeItem;
+    
+                                return {
+                                    ...sizeItem,
+                                    amount: value
+                                };
+                            })
+                        };
+                    })
+                };
+            })
+    
+        },
+        change_edit_prod_main: (state, action) => {
+            const { index, name, value } = action.payload;
+    
+            state.edit_products_in_order[index][name] = value;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -248,8 +293,46 @@ const TechnologOrderSlice = createSlice({
             }).addCase(acceptOperation.rejected, (state) => {
                 state.accept_operation_status = 'error';
             })
+            // --------------------------------------------------
+            .addCase(getOrderById.pending, (state) => {
+                state.order_status = 'loading';
+            }).addCase(getOrderById.fulfilled, (state, action) => {
+                state.order_status = 'success';
+                state.edit_products_in_order = action.payload?.products?.map(item => ({
+                    nomenclature: item?.nomenclature?.id,
+                    title: item?.nomenclature?.title,
+                    price: item?.price,
+                    cost_price: item?.cost_price,
+                    true_price: item?.true_price,
+                    true_cost_price: item?.true_cost_price,
+                    amounts: Object.values(
+                      item.amounts.reduce((acc, amount) => {
+                        const colorId = amount.color.id;
+                  
+                        if (!acc[colorId]) {
+                          acc[colorId] = {
+                            color: colorId,
+                            sizes: []
+                          };
+                        }
+                  
+                        acc[colorId].sizes.push({
+                          size: amount.size ?? { id: null, title: "Нет размера" }, // Если size=null, добавляем заглушку
+                          amount: amount.amount,
+                          cut: amount.cut,
+                          done: amount.done
+                        });
+                  
+                        return acc;
+                      }, {})
+                    )
+                  }));
+                  
+            }).addCase(getOrderById.rejected, (state) => {
+                state.order_status = 'error';
+            })
     }
 })
 
-export const { change_prod_amounts, change_prod_main, addAmount, deleteAmount, clearAll, addProduct, deleteProduct } = TechnologOrderSlice.actions;
+export const { change_prod_amounts, change_prod_main, change_edit_prod_main, addAmount, deleteAmount, clearAll, addProduct, deleteProduct, change_edit_prod_amounts } = TechnologOrderSlice.actions;
 export default TechnologOrderSlice;

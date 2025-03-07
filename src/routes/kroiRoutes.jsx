@@ -6,6 +6,7 @@ import ShveyaMobileLayout from '../layouts/mobile/ShveyaMobileLayout';
 import MySalaryDetail from '../pages/shveya/salary/mySalaryDetail';
 import OrdersList from '../pages/kroi/order/main';
 import CreateParty from '../pages/kroi/order/party/createParty';
+import PartyHistory from '../pages/kroi/order/party/partyHistory';
 
 const KroiRoute = () => {
 
@@ -27,6 +28,7 @@ const KroiRoute = () => {
 
             <Route path='orders' element={<Outlet/>}>
                 <Route path='' element={<OrdersList/>}/>
+                <Route path='history' element={<PartyHistory/>}/>
                 <Route path=':orderId/:id' element={<CreateParty/>}/>
             </Route>
         </Route>

@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axios";
+import { addConsumable } from "../technolog/product";
 
 export const getOrdersList = createAsyncThunk(
-    'operation/getOrdersList',
+    'order/getOrdersList',
     async (_, { rejectWithValue }) => {
         try {
             const { data } =  await axiosInstance.get(`work/order-info/list/`);
@@ -14,7 +15,7 @@ export const getOrdersList = createAsyncThunk(
 )
 
 export const getProductInfo = createAsyncThunk(
-    'operation/getProductInfo',
+    'order/getProductInfo',
     async (props, { rejectWithValue }) => {
         try {
             const { data } =  await axiosInstance.post(`work/product-info/`, props);
@@ -26,10 +27,22 @@ export const getProductInfo = createAsyncThunk(
 )
 
 export const postParty = createAsyncThunk(
-    'operation/postParty',
+    'order/postParty',
     async (props, { rejectWithValue }) => {
         try {
             const { data } =  await axiosInstance.post(`work/party/create/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getPartyList = createAsyncThunk(
+    'order/getPartyList',
+    async ({ page, page_size }, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.get(`work/party/list/?page=${page}&page_size=${page_size}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -45,7 +58,17 @@ const KroiOrderSlice = createSlice({
         product_info: null,
         product_info_status: 'loading',
         party_amounts: [],
-        party_consumables: []
+        party_consumables: [
+            {
+                title: '',
+                consumption: '',
+                defect: '',
+                left: '',
+                unit: ''
+            }
+        ],
+        party_list: null,
+        party_list_status: 'loading'
     },
     reducers: {
         fillPartyAmounts: (state, action) => {
@@ -60,6 +83,32 @@ const KroiOrderSlice = createSlice({
             const { index, name, value } = action.payload;
             
             state.party_consumables[index][name] = value;
+        },
+        fillPartyConsumables: (state, action) => {
+            state.party_consumables[action.payload.key] = action.payload.value;
+        },
+        addPartyConsumable: (state) => {
+            state.party_consumables.push({
+                title: '',
+                consumption: '',
+                defect: '',
+                left: '',
+                unit: ''
+            })
+        },
+        deletePartyConsumable: (state, action) => {
+            state.party_consumables.splice(action.payload, 1);
+        },
+        clearAll: (state) => {
+            state.party_consumables = [
+                {
+                    title: '',
+                    consumption: '',
+                    defect: '',
+                    left: '',
+                    unit: ''
+                }
+            ]
         }
     },
     extraReducers: (builder) => {
@@ -101,19 +150,23 @@ const KroiOrderSlice = createSlice({
                       return acc;
                     }, {})
                 );
-                state.party_consumables = action.payload?.nomenclature?.consumables.map(item => ({
-                    id: item?.material_nomenclature?.id,
-                    title: item?.material_nomenclature?.title,
-                    vendor_code: item.material_nomenclature?.vendor_code,
-                    consumption: '',
-                    defect: '',
-                    left: ''
-                }))
             }).addCase(getProductInfo.rejected, (state) => {
                 state.product_info_status = 'error';
+            })
+            //---------------------------------------------------------
+            .addCase(getPartyList.pending, (state) => {
+                state.party_list_status = 'loading';
+            }).addCase(getPartyList.fulfilled, (state, action) => {
+                state.party_list_status = 'success';
+                state.party_list = action.payload
+            }).addCase(getPartyList.rejected, (state) => {
+                state.party_list_status = 'error';
             })
     }
 })
 
-export const { fillPartyAmounts, getValueAmount, getValueConsumables } = KroiOrderSlice.actions;
+export const { fillPartyAmounts, getValueAmount, 
+               fillPartyConsumables, addPartyConsumable, 
+               deletePartyConsumable, getValueConsumables,
+               clearAll } = KroiOrderSlice.actions;
 export default KroiOrderSlice;

@@ -79,7 +79,7 @@ const EditColor = ({ modals, setModals }) => {
               </div>
           </Modal.Body>
           <Modal.Footer className='flex justify-center'>
-              <Button width='385px' onClick={onSubmit}>Создать</Button>
+              <Button width='250px' onClick={onSubmit}>Сохранить</Button>
           </Modal.Footer>
       </Modal>
     )

@@ -4,7 +4,7 @@ import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { DatePicker } from 'rsuite';
 
-const DataPicker = ({ label, id, value = "", onChange, placeholder, required, error, errorTitle }) => {
+const DataPicker = ({ width = '100%', label, id, value = "", onChange, placeholder, required, error, errorTitle }) => {
 
     const handleDateChange = (date) => {
         if (date) {
@@ -20,21 +20,21 @@ const DataPicker = ({ label, id, value = "", onChange, placeholder, required, er
       };
       
     return (
-        <StyledDiv>
-        <label htmlFor={id}>
-            {label}
-            {required && <span className="required"> *</span>}
-        </label>
-        <DatePicker
-            placeholder={placeholder}
-            value={value ? new Date(value.split('.').reverse().join('-')) : null}
-            onChange={handleDateChange}
-            format="dd.MM.yyyy"
-            style={{ width: '100%' }}
-        />
-        <p className='text-redd text-xs font-inter mt-1'>
-            {error && (errorTitle ? errorTitle : '(Заполните поле правильно!)')}
-        </p>
+        <StyledDiv width={width}>
+          <label htmlFor={id}>
+              {label}
+              {required && <span className="required"> *</span>}
+          </label>
+          <DatePicker
+              placeholder={placeholder}
+              value={value ? new Date(value.split('.').reverse().join('-')) : null}
+              onChange={handleDateChange}
+              format="dd.MM.yyyy"
+              style={{ width: width }}
+          />
+          <p className='text-redd text-xs font-inter mt-1'>
+              {error && (errorTitle ? errorTitle : '(Заполните поле правильно!)')}
+          </p>
         </StyledDiv>
     );
 };
@@ -42,7 +42,7 @@ const DataPicker = ({ label, id, value = "", onChange, placeholder, required, er
 export default DataPicker;
 
 const StyledDiv = styled("div")`
-  width: 100%;
+  width: ${(props) => props.width || "100%"};
   display: flex;
   flex-direction: column;
   gap: 4px;

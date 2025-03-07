@@ -34,6 +34,7 @@ const PartyAmountTable = ({ data }) => {
         bordered
         cellBordered
         autoHeight
+        // minHeight={200}
         headerHeight={70}
         loading={product_info_status === 'loading'}
         data={[...party_amounts] || []}

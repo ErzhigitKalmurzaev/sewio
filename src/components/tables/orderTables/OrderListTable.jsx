@@ -54,12 +54,12 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                   </Cell>
               </Column>
 
-              <Column width={100} fullText>
+              <Column width={150} fullText>
                   <HeaderCell>Компания</HeaderCell>
                   <Cell dataKey="client.company_title"/>
               </Column>
 
-              <Column width={90}>
+              <Column width={130}>
                   <HeaderCell>Статус</HeaderCell>
                   <Cell dataKey="is_active">
                     {rowData => (
@@ -67,35 +67,8 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                     )}
                   </Cell>
               </Column>
-
-              <Column width={130}>
-                  <HeaderCell>Общий доход</HeaderCell>
-                  <Cell dataKey="created_at">
-                    {rowData => (
-                        <p>{formatNumber(rowData.total_revenue)} сом</p>
-                    )}
-                  </Cell>
-              </Column>
-
-              <Column width={130}>
-                  <HeaderCell>Расход</HeaderCell>
-                  <Cell dataKey="created_at">
-                    {rowData => (
-                        <p>{formatNumber(rowData.total_cost)} сом</p>
-                    )}
-                  </Cell>
-              </Column>
               
-              <Column width={130}>
-                  <HeaderCell>Прибыль</HeaderCell>
-                  <Cell dataKey="created_at">
-                    {rowData => (
-                        <p>{formatNumber(rowData.total_revenue - rowData.total_cost)} сом</p>
-                    )}
-                  </Cell>
-              </Column>
-              
-              <Column width={110}>
+              <Column width={120}>
                   <HeaderCell>Дата сдачи</HeaderCell>
                   <Cell dataKey="deadline">
                     {rowData => (
@@ -104,7 +77,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                   </Cell>
               </Column>
 
-              <Column width={110}>
+              <Column width={120}>
                   <HeaderCell>Дата создания</HeaderCell>
                   <Cell dataKey="created_at">
                     {rowData => (
@@ -112,7 +85,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                     )}
                   </Cell>
               </Column>
-
+{/* 
               <Column width={90} align='center' fixed='right'>
                   <HeaderCell>Выполнено</HeaderCell>
                   <Cell style={{ padding: '4px' }}>
@@ -122,7 +95,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
                         </div>
                     )}
                   </Cell>
-              </Column>
+              </Column> */}
 
               <Column width={type === 'operations' ? 120 : 80} fixed="right">
                   <HeaderCell>Действия</HeaderCell>

@@ -162,9 +162,10 @@ const OrderCreate = () => {
       <Title text="Создание заказа" />
 
       
-      <div className='w-full min-h-[100vh] bg-white flex flex-col gap-y-5 p-6 rounded-lg'>
-        <div className='w-[60%] flex justify-between items-center gap-x-5'>
+      <div className='w-full h-auto bg-white flex flex-col gap-y-5 p-6 rounded-lg'>
+        <div className='flex gap-x-5'>
           <DataPicker
+            width='350px'
             label='Дата сдачи заказа'
             placeholder='Выберите дату'
             value={order.deadline}
@@ -172,6 +173,7 @@ const OrderCreate = () => {
             onChange={e => getMainValue({ target: { name: 'deadline', value: e } })}
           />
           <SelectUser
+            width='350px'
             label='Клиент'
             placeholder='Выберите клиента'
             data={client_list || []}

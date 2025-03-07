@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { getSizesList } from '../../../store/technolog/size';
 import { getStatistic } from './../../../store/technolog/statistic';
 import { OrderStatuses } from './../../../utils/constants/statuses';
+import EditAmountsTable from './components/editAmountsTable';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -26,7 +27,7 @@ const OrderEdit = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { client_list, client_list_status, product_list, product_list_status  } = useSelector(state => state.order);
+  const { client_list, edit_products_in_order, product_list, product_list_status  } = useSelector(state => state.order);
   const { size_category_list } = useSelector(state => state.size);
 
   const [order, setOrder] = useState({
@@ -144,20 +145,21 @@ const OrderEdit = () => {
   }
 
   const onSubmit = () => {
-    if(validateFields()) {
-        dispatch(editOrderById({ id, props: {
-            ...order,
-            deadline: new Date(order.deadline.split('.').reverse().join('-')).toISOString()
-          }})).then(res => {
-            if (res.meta.requestStatus === 'fulfilled') {
-              setOrder({...order, deadline: '', client: '', products: []});
-              setSelectedClient(null);
-              navigate(-1)
-            }
-          })
-    } else {
-        toast('Заполните все поля и выберите минимум 1 товар!');
-    }
+    // if(validateFields()) {
+    //     dispatch(editOrderById({ id, props: {
+    //         ...order,
+    //         deadline: new Date(order.deadline.split('.').reverse().join('-')).toISOString()
+    //       }})).then(res => {
+    //         if (res.meta.requestStatus === 'fulfilled') {
+    //           setOrder({...order, deadline: '', client: '', products: []});
+    //           setSelectedClient(null);
+    //           navigate(-1)
+    //         }
+    //       })
+    // } else {
+    //     toast('Заполните все поля и выберите минимум 1 товар!');
+    // }
+    console.log(edit_products_in_order)
   }
 
 
@@ -225,15 +227,7 @@ const OrderEdit = () => {
         
       </div>
       <div className='bg-white w-full p-3 rounded-xl'>
-        <OrderProductInfo
-            products={order.products}
-            product_list={product_list}
-            modals={modals}
-            setModals={setModals}
-            order={order}
-            setOrder={setOrder}
-            size_category_list={size_category_list}
-        />
+        <EditAmountsTable/>
       </div>
       <div className='flex justify-center'>
         <Button width='250px' onClick={onSubmit}>Сохранить</Button>
@@ -252,3 +246,4 @@ const OrderEdit = () => {
 };
 
 export default OrderEdit;
+

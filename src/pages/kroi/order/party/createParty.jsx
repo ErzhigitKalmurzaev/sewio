@@ -48,16 +48,20 @@ const CreateParty = () => {
             true_amount: Number(sizeData.true_amount)
           }))
         )),
-        consumables: party_consumables.map(item => ({
-          nomenclature: item.id,
-          consumption: Number(item.consumption),
-          defect: Number(item.defect),
-          left: Number(item.left)
-        }))
+        consumptions: party_consumables
+          .filter(item => item.nomenclature)  // Отфильтровываем элементы без nomenclature
+          .map(item => ({
+            nomenclature: item.nomenclature,
+            consumption: Number(item.consumption),
+            defect: Number(item.defect),
+            left: Number(item.left)
+          }))
+      
       }
       dispatch(postParty(new_party)).then(res => {
         if(res.meta.requestStatus === 'fulfilled') {
           toast.success('Партия успешно создана!');
+          navigate(-1)
         }
       })
     } else {
