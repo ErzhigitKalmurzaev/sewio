@@ -16,7 +16,7 @@ const CRMLayout = () => {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Фиксированный Navbar */}
-        <Navbar role={me_info?.role} className="flex-shrink-0" />
+        <Navbar role={me_info?.role}/>
 
         {/* Скролящаяся основная часть */}
         <div className="p-10 w-full overflow-auto" style={{ background: "#F5F5FA" }}>

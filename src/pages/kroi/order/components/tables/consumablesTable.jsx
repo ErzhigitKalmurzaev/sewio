@@ -10,11 +10,11 @@ import { materialUnits } from "../../../../../utils/selectDatas/productDatas";
 
 const { Column, HeaderCell, Cell, ColumnGroup } = Table;
 
-const ConsumablesTable = ({  }) => {
+const ConsumablesTable = ({ status }) => {
 
   const dispatch = useDispatch();
   const { materials_list } = useSelector(state => state.material);
-  const { party_consumables, product_info_status } = useSelector(state => state.kroi_order); 
+  const { party_consumables } = useSelector(state => state.kroi_order); 
 
   const [loading, setLoading] = useState(false);
 
@@ -62,7 +62,7 @@ const ConsumablesTable = ({  }) => {
             bordered
             cellBordered
             autoHeight
-            loading={loading || product_info_status === 'loading'}
+            loading={loading || status === 'loading'}
             data={party_consumables || []}
             className="rounded-lg border-2 border-borderGray"
         >

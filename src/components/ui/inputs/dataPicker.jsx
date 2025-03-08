@@ -4,7 +4,7 @@ import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { DatePicker } from 'rsuite';
 
-const DataPicker = ({ width = '100%', label, id, value = "", onChange, placeholder, required, error, errorTitle }) => {
+const DataPicker = ({ width = '100%', label, id, value = "", onChange, placeholder, required, error, disabled = false, errorTitle }) => {
 
     const handleDateChange = (date) => {
         if (date) {
@@ -30,6 +30,7 @@ const DataPicker = ({ width = '100%', label, id, value = "", onChange, placehold
               value={value ? new Date(value.split('.').reverse().join('-')) : null}
               onChange={handleDateChange}
               format="dd.MM.yyyy"
+              disabled={disabled}
               style={{ width: width }}
           />
           <p className='text-redd text-xs font-inter mt-1'>

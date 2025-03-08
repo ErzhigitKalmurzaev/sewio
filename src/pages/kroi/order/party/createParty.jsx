@@ -100,9 +100,9 @@ const CreateParty = () => {
                 </div>
             </div>
 
-            <PartyAmountTable data={party_amounts} />
+            <PartyAmountTable data={party_amounts} status={product_info_status} />
 
-            <ConsumablesTable />
+            <ConsumablesTable status={product_info_status} />
 
             <div className='flex justify-center'>
                 <Button width='180px' onClick={onSubmit}>Создать</Button>

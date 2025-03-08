@@ -109,7 +109,7 @@ const ProdPanel = ({ product, id }) => {
                         <Table.Cell style={{ padding: '7px 6px' }}>
                             {(rowData, index) => (
                                 <NumInputForTable
-                                    value={rowData.sizes.find(s => s.size === sizeItem.id)?.amount || ""}
+                                    value={rowData.sizes?.find(s => s.size === sizeItem.id)?.amount || ""}
                                     placeholder={'0'}
                                     onChange={(e) => getValue(e, 'size', index, sizeItem.id)}
                                 />

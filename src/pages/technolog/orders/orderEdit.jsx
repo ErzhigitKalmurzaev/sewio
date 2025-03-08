@@ -16,6 +16,7 @@ import { getSizesList } from '../../../store/technolog/size';
 import { getStatistic } from './../../../store/technolog/statistic';
 import { OrderStatuses } from './../../../utils/constants/statuses';
 import EditAmountsTable from './components/editAmountsTable';
+import { Building, Phone, User } from 'lucide-react';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -27,8 +28,7 @@ const OrderEdit = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { client_list, edit_products_in_order, product_list, product_list_status  } = useSelector(state => state.order);
-  const { size_category_list } = useSelector(state => state.size);
+  const { client_list, edit_products_in_order, product_list, edit_order  } = useSelector(state => state.order);
 
   const [order, setOrder] = useState({
     deadline: '',
@@ -46,9 +46,7 @@ const OrderEdit = () => {
   const [modals, setModals] = useState({ add: false, edit: false});
 
   useEffect(() => {
-    dispatch(getOrderClientList());
     dispatch(getOrderProductList());
-    dispatch(getSizesList());
     dispatch(getOrderById({ id}))
         .then(res => {
             if (res.meta.requestStatus === 'fulfilled') {
@@ -62,13 +60,6 @@ const OrderEdit = () => {
         })
 
   }, []);
-
-  useEffect(() => {
-    if (order.client) {
-      const clientInfo = client_list?.find(client => client.id === order.client);
-      setSelectedClient(clientInfo);
-    }
-  }, [order.client, client_list]);
 
   const getMainValue = (e) => {
     const { name, value } = e.target;
@@ -92,16 +83,10 @@ const OrderEdit = () => {
       case 'total_consumption':
         return order?.products?.reduce((total, product) => {
           // Найти продукт по nomenclature в массиве productDetails
-          const productDetail = product_list?.find(
-            (detail) => detail.id === product.nomenclature
-          );
-        
-          if (!productDetail) {
-            return total;
-          }
+          
         
           const productCost = product.amounts.reduce((productSum, item) => {
-            return productSum + item.amount * productDetail.cost_price;
+            return productSum + item.amount * product.cost_price;
           }, 0);
         
           return total + productCost;
@@ -145,21 +130,31 @@ const OrderEdit = () => {
   }
 
   const onSubmit = () => {
-    // if(validateFields()) {
-    //     dispatch(editOrderById({ id, props: {
-    //         ...order,
-    //         deadline: new Date(order.deadline.split('.').reverse().join('-')).toISOString()
-    //       }})).then(res => {
-    //         if (res.meta.requestStatus === 'fulfilled') {
-    //           setOrder({...order, deadline: '', client: '', products: []});
-    //           setSelectedClient(null);
-    //           navigate(-1)
-    //         }
-    //       })
-    // } else {
-    //     toast('Заполните все поля и выберите минимум 1 товар!');
-    // }
-    console.log(edit_products_in_order)
+    if(validateFields()) {
+        dispatch(editOrderById({ id, props: {
+          ...order,
+          client: order.client.id,
+          products: edit_products_in_order.map(item => ({
+            ...item,
+            amounts: item.amounts.flatMap(amount => 
+                amount.sizes.map(size => ({
+                    color: amount.color,
+                    size: size.size.id,  // Переносим `size` в строку
+                    amount: size.amount
+                }))
+            )
+          })),
+        }})).then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+              setOrder({...order, deadline: '', client: '', products: []});
+              setSelectedClient(null);
+              toast.success('Заказ успешно отредактирован!');
+              navigate(-1)
+            }
+          })
+    } else {
+        toast('Заполните все поля и выберите минимум 1 товар!');
+    }
   }
 
 
@@ -175,32 +170,28 @@ const OrderEdit = () => {
             label='Дата сдачи заказа'
             placeholder='Выберите дату'
             value={order.deadline}
+            disabled={true}
             onChange={e => getMainValue({ target: { name: 'deadline', value: e } })}
           />
-          <SelectUser
-            label='Клиент'
-            placeholder='Выберите клиента'
-            data={client_list || []}
-            searchable={true}
-            value={order.client}
-            onChange={e => getMainValue({ target: { name: 'client', value: e } })}
-            valueKey='id'
-            labelKey='name'
-          />
 
-          {/* Карточка с информацией о клиенте */}
-          <div className='p-4 mt-4 border border-borderGray rounded-lg shadow-sm'>
-            {selectedClient ? (
-              <div className='flex flex-col gap-y-1'>
-                <p className='font-inter text-primary'>Имя: {selectedClient.name} {selectedClient.surname}</p>
-                <p className='font-inter text-primary'>Email: {selectedClient.email}</p>
-                <p className='font-inter text-primary'>Телефон: {selectedClient.phone}</p>
-                <p className='font-inter text-primary'>Адрес: {selectedClient.address}</p>
-              </div>
-            ) : (
-              <p className='text-gray-500'>Выберите клиента, чтобы увидеть информацию</p>
-            )}
-          </div>
+          <div className="border border-borderGray rounded-lg bg-white p-4 shadow-sm text-sm">
+              <p className="text-gray-600 font-semibold mb-3">🔹 Информация о заказчике </p>
+
+              {order.client?.id ? (
+                <div className="grid grid-cols-[auto_1fr] gap-y-2 gap-x-3">
+                  <User className="w-4 h-4 text-gray-500 mt-0.5" />
+                  <p className="font-medium">{order.client?.name} {order.client?.surname}</p>
+
+                  <Building className="w-4 h-4 text-gray-500 mt-0.5" />
+                  <p className="font-medium">{order.client?.company_title || "Not specified"}</p>
+
+                  <Phone className="w-4 h-4 text-gray-500 mt-0.5" />
+                  <p className="font-medium">{order.client?.phone}</p>
+                </div>
+              ) : (
+                <p className="text-gray-500 text-center">No customer selected</p>
+              )}
+            </div>
         </div>
 
         <div className='w-1/2 flex flex-col gap-y-4'>
@@ -210,7 +201,7 @@ const OrderEdit = () => {
             <div className='flex flex-col justify-center gap-y-8'>
               <div className='flex justify-between gap-x-5'>
                 <OrderInfoItem label='Общее кол-во:' value={getStatistic('total_count')} measure='шт.' />
-                <OrderInfoItem label='Общий доход:' value={getStatistic('total_income')} measure='сом' />
+                <OrderInfoItem label='Общая сумма:' value={getStatistic('total_income')} measure='сом' />
                 <OrderInfoItem label='Общие расходы:' value={getStatistic('total_consumption')} measure='сом' />
               </div>
               <div className='flex justify-between gap-x-5'>
@@ -218,29 +209,17 @@ const OrderEdit = () => {
                 <OrderInfoItem label='Время выполнения:' value={getStatistic('total_time').toFixed(1)} measure='ч.' />
                 <OrderInfoItem label='Статус заказа:' value={getStatistic('status')} measure='' />
               </div>
-              <div className='flex justify-center'>
-                <Button width='250px' onClick={() => setModals({ ...modals, add: true })}>+ Добавить товар</Button>
-              </div>
             </div>
           </div>
         </div>
         
       </div>
-      <div className='bg-white w-full p-3 rounded-xl'>
+      <div className='bg-white w-full p-3 rounded-lg'>
         <EditAmountsTable/>
       </div>
       <div className='flex justify-center'>
         <Button width='250px' onClick={onSubmit}>Сохранить</Button>
       </div>
-      <AddProductModal
-        modals={modals}
-        setModals={setModals}
-        order={order}
-        size_category_list={size_category_list}
-        setOrder={setOrder}
-        products={product_list}
-        status={product_list_status}
-      />
     </div>
   );
 };

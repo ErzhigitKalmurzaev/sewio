@@ -301,6 +301,7 @@ const TechnologOrderSlice = createSlice({
                 state.edit_products_in_order = action.payload?.products?.map(item => ({
                     nomenclature: item?.nomenclature?.id,
                     title: item?.nomenclature?.title,
+                    vendor_code: item?.nomenclature?.vendor_code,
                     price: item?.price,
                     cost_price: item?.cost_price,
                     true_price: item?.true_price,

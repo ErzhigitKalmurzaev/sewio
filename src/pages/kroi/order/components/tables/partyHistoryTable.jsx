@@ -2,10 +2,15 @@ import React from 'react'
 import { Pagination, Table } from 'rsuite'
 import { OrderStatuses } from '../../../../../utils/constants/statuses';
 import { formatedToDDMMYYYY } from '../../../../../utils/functions/dateFuncs';
+import { useNavigate } from 'react-router-dom';
+import { ReactComponent as Pencil } from '../../../../../assets/icons/pencil.svg';
 
 const { Cell, HeaderCell, Column } = Table;
 
 const PartyHistoryTable = ({ data, status, urls, handleChangeFilter }) => {
+
+  const navigate = useNavigate();
+
   return (
     <div className='min-h-[500px] bg-white rounded-lg'>
         <Table
@@ -63,6 +68,18 @@ const PartyHistoryTable = ({ data, status, urls, handleChangeFilter }) => {
                     {
                         rowData => (
                             <p>{formatedToDDMMYYYY(rowData.created_at)}</p>
+                        )
+                    }
+                </Cell>
+            </Column>
+            <Column width={70} align='center'>
+                <HeaderCell>Действие</HeaderCell>
+                <Cell style={{ padding: '6px' }}>
+                    {
+                        rowData => (
+                            <div className='flex items-center px-3 py-1 cursor-pointer'>
+                                <Pencil onClick={() => navigate(`${rowData.id}`)}/>
+                            </div>
                         )
                     }
                 </Cell>

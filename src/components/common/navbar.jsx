@@ -32,7 +32,7 @@ const Navbar = ({ role }) => {
     ]
 
     return (
-        <div className={`${hide ? 'w-[80px]' : 'w-[270px]'} h-[100vh] relative border-r border-gray flex flex-col items-center gap-1 py-8 transition-all ease-linear duration-300`}>
+        <div className={`${hide ? 'w-[80px]' : 'w-[270px]'} h-screen relative border-r border-gray flex flex-col items-center gap-1 py-8 transition-all ease-linear duration-300`}>
             {
                 navs[role].map((item, index) => {
                     return (

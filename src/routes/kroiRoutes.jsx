@@ -7,6 +7,7 @@ import MySalaryDetail from '../pages/shveya/salary/mySalaryDetail';
 import OrdersList from '../pages/kroi/order/main';
 import CreateParty from '../pages/kroi/order/party/createParty';
 import PartyHistory from '../pages/kroi/order/party/partyHistory';
+import EditParty from '../pages/kroi/order/party/editParty';
 
 const KroiRoute = () => {
 
@@ -29,6 +30,7 @@ const KroiRoute = () => {
             <Route path='orders' element={<Outlet/>}>
                 <Route path='' element={<OrdersList/>}/>
                 <Route path='history' element={<PartyHistory/>}/>
+                <Route path='history/:id' element={<EditParty/>}/>
                 <Route path=':orderId/:id' element={<CreateParty/>}/>
             </Route>
         </Route>
