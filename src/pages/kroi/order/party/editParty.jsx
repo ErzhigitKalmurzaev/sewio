@@ -36,7 +36,7 @@ const EditParty = () => {
     if(validateField()) {
         const new_party = {
           order: Number(party.order),
-          nomenclature: Number(id),
+          nomenclature: party.nomenclature.id,
           number: Number(party.number),
           details: party_amounts.flatMap(item => (
             item.sizes.map(sizeData => ({
@@ -58,7 +58,7 @@ const EditParty = () => {
         }
         dispatch(patchParty({ id, props: new_party })).then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
-            toast.success('Партия успешно создана!');
+            toast.success('Партия успешно изменена!');
             navigate(-1)
           }
         })

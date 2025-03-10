@@ -17,6 +17,7 @@ import ShveyaSalarySlice from "./shveya/salary";
 import StatisticSlice from "./technolog/statistic";
 import CalculationSlice from "./technolog/calculation";
 import KroiOrderSlice from "./kroi/order";
+import ForemanOrderSlice from "./foreman/order";
 
 const store = configureStore({
     reducer: {
@@ -47,7 +48,10 @@ const store = configureStore({
         sh_salary: ShveyaSalarySlice.reducer,
 
         //Kroi
-        kroi_order: KroiOrderSlice.reducer
+        kroi_order: KroiOrderSlice.reducer,
+
+        //Foreman
+        foreman_order: ForemanOrderSlice.reducer
     }
 })
 

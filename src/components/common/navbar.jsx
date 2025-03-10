@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { kroiNav, shveyaNav, technologNav, warehouseNav } from '../../utils/navDatas/navDatas'
+import { foremanNav, kroiNav, shveyaNav, technologNav, warehouseNav } from '../../utils/navDatas/navDatas'
 import NavButton from '../shared/navButton'
 import { useLocation } from 'react-router-dom';
 
@@ -28,7 +28,8 @@ const Navbar = ({ role }) => {
         technologNav,
         warehouseNav,
         shveyaNav,
-        kroiNav
+        kroiNav,
+        foremanNav
     ]
 
     return (

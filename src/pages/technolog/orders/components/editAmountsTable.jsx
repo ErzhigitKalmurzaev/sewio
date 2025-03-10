@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProduct, deleteProduct, getOrderProductList } from '../../../../store/technolog/order';
-import NumInputForTable from '../../../../components/ui/inputs/numInputForTable';
-import { CircleMinus, Plus, Trash } from 'lucide-react';
 import { Panel, PanelGroup, Table } from 'rsuite';
-import InputWithSuggestions from '../../../../components/ui/inputs/inputWithSuggestions';
-import ProdPanel from './prodPanel';
-import Button from '../../../../components/ui/button';
 import EditProdPanel from './editProdPanel';
+import { motion, AnimatePresence } from "framer-motion";
 
 const { Cell, Column, HeaderCell } = Table;
 
@@ -35,20 +31,27 @@ const EditAmountsTable = () => {
         </div>
 
         <PanelGroup accordion bordered>
-            {
-                edit_products_in_order.map((product, index) => (
+          <AnimatePresence>
+            {edit_products_in_order.map((product) => (
+                <motion.div 
+                    key={product.id} // Уникальный ключ
+                    initial={{ opacity: 0, y: -10 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    exit={{ opacity: 0, y: -10, transition: { duration: 0.3 } }} 
+                >
                     <Panel header={
                         <div className="flex justify-between items-center w-full pr-2">
                           <span className='flex items-center gap-x-3'>
-                            {product.title || `Продукт №${index + 1}`} 
+                            {product.title || `Продукт №${product.id}`} 
                             <span className='ml-3 font-semibold text-sm text-fprimary'>Арт: {product.vendor_code}</span>
                           </span>
                         </div>
-                      }  key={index} defaultExpanded>
-                        <EditProdPanel product={product} id={index}/>
+                      } key={product.id} defaultExpanded> {/* Измени key на product.id */}
+                        <EditProdPanel product={product} id={product.id}/> {/* Тоже передай id */}
                     </Panel>
-                ))
-            }
+                </motion.div>
+            ))}
+          </AnimatePresence>
         </PanelGroup>
     </div>
   )

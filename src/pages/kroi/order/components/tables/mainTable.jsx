@@ -26,7 +26,7 @@ const MainTable = ({ data, status }) => {
     });
 
   return (
-    <div className='min-h-[500px] bg-white rounded-lg'>
+    <div className='min-h-[500px] bg-white rounded-lg overflow-x-auto'>
         <Table
             data={transformedData || []}
             loading={status === 'loading'}
@@ -35,7 +35,7 @@ const MainTable = ({ data, status }) => {
             cellBordered
             className='rounded-lg'
         >
-            <Column width={80} align="center" fixed verticalAlign='center' rowSpan={rowData => rowData.idRowSpan}>
+            <Column width={60} fixed align="center" verticalAlign='middle' rowSpan={rowData => rowData.idRowSpan}>
                 <HeaderCell>ID</HeaderCell>
                 <Cell dataKey="id" />
             </Column>
@@ -61,7 +61,7 @@ const MainTable = ({ data, status }) => {
             </Column>
 
 
-            <Column flexGrow={1} verticalAlign='center'>
+            <Column flexGrow={1} minWidth={130} verticalAlign='center'>
                 <HeaderCell>Действия</HeaderCell>
                 <Cell style={{ padding: '7px 6px' }}>
                     {(rowData) => (

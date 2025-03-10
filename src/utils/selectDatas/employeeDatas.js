@@ -37,5 +37,9 @@ export const employeeRole = [
     {
         label: 'Кройщик',
         value: 5
+    },
+    {
+        label: 'Контроллер',
+        value: 6
     }
 ]

@@ -30,10 +30,11 @@ const AllRoutes = () => {
     technolog: <TechnologRoute/>,
     shveya: <ShveyaRoute />,
     warehouse: <WarehouseRoute/>,
-    kroi: <KroiRoute/>
+    kroi: <KroiRoute/>,
+    foreman: <ForemanRoutes/>
   }
 
-  const allowedCRMRoles = ['', 'director', 'technolog', 'warehouse', 'shveya', 'kroi'];
+  const allowedCRMRoles = ['', 'director', 'technolog', 'warehouse', 'shveya', 'kroi', 'foreman'];
   
   return (
     <Routes>

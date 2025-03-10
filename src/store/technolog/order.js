@@ -246,7 +246,12 @@ const TechnologOrderSlice = createSlice({
             const { index, name, value } = action.payload;
     
             state.edit_products_in_order[index][name] = value;
-        }
+        },
+        delete_edit_prod: (state, action) => {
+            const { index } = action.payload;
+    
+            state.edit_products_in_order.splice(index, 1);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -335,5 +340,5 @@ const TechnologOrderSlice = createSlice({
     }
 })
 
-export const { change_prod_amounts, change_prod_main, change_edit_prod_main, addAmount, deleteAmount, clearAll, addProduct, deleteProduct, change_edit_prod_amounts } = TechnologOrderSlice.actions;
+export const { change_prod_amounts, delete_edit_prod, change_prod_main, change_edit_prod_main, addAmount, deleteAmount, clearAll, addProduct, deleteProduct, change_edit_prod_amounts } = TechnologOrderSlice.actions;
 export default TechnologOrderSlice;

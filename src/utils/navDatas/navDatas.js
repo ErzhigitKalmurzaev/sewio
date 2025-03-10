@@ -120,3 +120,12 @@ export const kroiNav = [
         elements: false
     }
 ]
+
+export const foremanNav = [
+    {
+        title: 'Операции',
+        path: 'operations',
+        icon: <ClipboardList/>,
+        elements: false
+    }
+]

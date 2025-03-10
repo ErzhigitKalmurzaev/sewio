@@ -30,7 +30,7 @@ export const postParty = createAsyncThunk(
     'order/postParty',
     async (props, { rejectWithValue }) => {
         try {
-            const { data } =  await axiosInstance.post(`work/party/create/`, props);
+            const { data } =  await axiosInstance.post(`work/party/crud/`, props);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -66,7 +66,7 @@ export const patchParty = createAsyncThunk(
     'order/patchParty',
     async ({ id, props }, { rejectWithValue }) => {
         try {
-            const { data } =  await axiosInstance.patch(`work/party/list/${id}/`, props);
+            const { data } =  await axiosInstance.patch(`work/party/crud/${id}/`, props);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -199,6 +199,7 @@ const KroiOrderSlice = createSlice({
                 state.party = action.payload;
                 state.party_consumables = action.payload.consumptions.map(item => ({
                     title: item.nomenclature?.title,
+                    nomenclature: item.nomenclature.id,
                     consumption: item.consumption,
                     defect: item.defect,
                     left: item.left,

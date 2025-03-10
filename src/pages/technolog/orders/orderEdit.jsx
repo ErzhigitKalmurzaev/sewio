@@ -17,6 +17,7 @@ import { getStatistic } from './../../../store/technolog/statistic';
 import { OrderStatuses } from './../../../utils/constants/statuses';
 import EditAmountsTable from './components/editAmountsTable';
 import { Building, Phone, User } from 'lucide-react';
+import BackDrop from '../../../components/ui/backdrop';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -28,7 +29,7 @@ const OrderEdit = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { client_list, edit_products_in_order, product_list, edit_order  } = useSelector(state => state.order);
+  const { edit_products_in_order, product_list, order_status  } = useSelector(state => state.order);
 
   const [order, setOrder] = useState({
     deadline: '',
@@ -42,8 +43,6 @@ const OrderEdit = () => {
     products: false
   });
 
-  const [selectedClient, setSelectedClient] = useState(null);
-  const [modals, setModals] = useState({ add: false, edit: false});
 
   useEffect(() => {
     dispatch(getOrderProductList());
@@ -147,7 +146,6 @@ const OrderEdit = () => {
         }})).then(res => {
             if (res.meta.requestStatus === 'fulfilled') {
               setOrder({...order, deadline: '', client: '', products: []});
-              setSelectedClient(null);
               toast.success('Заказ успешно отредактирован!');
               navigate(-1)
             }
@@ -162,6 +160,9 @@ const OrderEdit = () => {
     <div className='flex flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs} />
       <Title text={`Редактирование заказа #${id}`} />
+      {
+        order_status === 'loading' && <BackDrop />
+      }
 
       <div className='w-full flex gap-x-7'>
         <div className='w-1/2 flex flex-col gap-y-2 bg-white rounded-lg px-8 py-5'>
@@ -191,7 +192,7 @@ const OrderEdit = () => {
               ) : (
                 <p className="text-gray-500 text-center">No customer selected</p>
               )}
-            </div>
+          </div>
         </div>
 
         <div className='w-1/2 flex flex-col gap-y-4'>
@@ -214,7 +215,7 @@ const OrderEdit = () => {
         </div>
         
       </div>
-      <div className='bg-white w-full p-3 rounded-lg'>
+      <div className='bg-white w-full p-3 rounded-lg shadow-sm'>
         <EditAmountsTable/>
       </div>
       <div className='flex justify-center'>
