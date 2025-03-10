@@ -69,7 +69,7 @@ const EditParty = () => {
 
   return (
     <div className='flex flex-col gap-y-4 mb-5'>
-        <Title text={`Редактирование партии ${id}`}/>
+        <Title text={`Редактирование партии №${party?.number}`}/>
         
         <div className='flex flex-col gap-y-10 bg-white rounded-lg p-4'>
             <div className='flex gap-x-16 items-center border-b border-borderGray py-2'>

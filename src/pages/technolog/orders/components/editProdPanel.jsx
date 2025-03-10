@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import InputWithSuggestions from '../../../../components/ui/inputs/inputWithSuggestions';
 import { useDispatch, useSelector } from 'react-redux';
-import { change_edit_prod_amounts, change_edit_prod_main, getOrderProductList } from '../../../../store/technolog/order';
+import { change_edit_prod_amounts, change_edit_prod_main, deleteProduct, getOrderProductList } from '../../../../store/technolog/order';
 import NumInputForTable from '../../../../components/ui/inputs/numInputForTable';
 import { Table } from 'rsuite';
 import { getColors } from '../../../../store/technolog/material';
 import SelectForTable from '../../../../components/ui/inputs/selectForTable';
+import Button from '../../../../components/ui/button';
 
 const EditProdPanel = ({ product, id }) => {
 
@@ -35,6 +36,10 @@ const EditProdPanel = ({ product, id }) => {
   const getValueMain = (name, value) => {
     dispatch(change_edit_prod_main({ index: id, name, value }))
   };
+
+  const deleteRow = (index) => {
+    dispatch(deleteProduct({ index }));
+  }
 
   return (
     <div className='flex flex-col gap-y-4'>
@@ -104,7 +109,7 @@ const EditProdPanel = ({ product, id }) => {
           {product.amounts[0]?.sizes?.map((sizeItem, sIndex) => (
             <Table.ColumnGroup header={sizeItem?.size?.title} key={sIndex} verticalAlign='middle' align='center'>
               {/* Колонка для "План" */}
-              <Table.Column key={sIndex} width={60}>
+              <Table.Column key={sIndex} flexGrow={1} minWidth={60}>
                 <Table.HeaderCell>План</Table.HeaderCell>
                 <Table.Cell style={{ padding: '6px' }}>
                   {(rowData, index) => (
@@ -118,7 +123,7 @@ const EditProdPanel = ({ product, id }) => {
               </Table.Column>
 
               {/* Колонка для "Вырезано" */}
-              <Table.Column key={sIndex} width={60}>
+              <Table.Column key={sIndex} minWidth={60} flexGrow={1}>
                 <Table.HeaderCell>Вырезано</Table.HeaderCell>
                 <Table.Cell style={{ padding: '6px' }}>
                   {(rowData, index) => (
@@ -128,7 +133,7 @@ const EditProdPanel = ({ product, id }) => {
               </Table.Column>
 
               {/* Колонка для "Готово" */}
-              <Table.Column key={sIndex} width={60}>
+              <Table.Column key={sIndex} minWidth={60} >
                 <Table.HeaderCell>Готово</Table.HeaderCell>
                 <Table.Cell style={{ padding: '6px' }}>
                   {(rowData, index) => (
@@ -139,6 +144,9 @@ const EditProdPanel = ({ product, id }) => {
             </Table.ColumnGroup>
           ))}
         </Table>
+      </div>
+      <div className='flex justify-end'>
+          <Button width='120px' variant='red' onClick={() => deleteRow(id)}>Удалить</Button>
       </div>
     </div>
   );

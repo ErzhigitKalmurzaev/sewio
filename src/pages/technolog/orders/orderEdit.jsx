@@ -175,18 +175,18 @@ const OrderEdit = () => {
           />
 
           <div className="border border-borderGray rounded-lg bg-white p-4 shadow-sm text-sm">
-              <p className="text-gray-600 font-semibold mb-3">🔹 Информация о заказчике </p>
+              <p className="text-gray-600 font-semibold mb-3">Информация о заказчике </p>
 
               {order.client?.id ? (
                 <div className="grid grid-cols-[auto_1fr] gap-y-2 gap-x-3">
                   <User className="w-4 h-4 text-gray-500 mt-0.5" />
-                  <p className="font-medium">{order.client?.name} {order.client?.surname}</p>
+                  <p className="font-medium font-inter">{order.client?.name} {order.client?.surname}</p>
 
                   <Building className="w-4 h-4 text-gray-500 mt-0.5" />
-                  <p className="font-medium">{order.client?.company_title || "Not specified"}</p>
+                  <p className="font-medium font-inter">{order.client?.company_title || "Not specified"}</p>
 
                   <Phone className="w-4 h-4 text-gray-500 mt-0.5" />
-                  <p className="font-medium">{order.client?.phone}</p>
+                  <p className="font-medium font-inter">{order.client?.phone}</p>
                 </div>
               ) : (
                 <p className="text-gray-500 text-center">No customer selected</p>

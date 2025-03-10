@@ -27,9 +27,6 @@ const EditAmountsTable = () => {
     dispatch(addProduct());
   }
 
-  const deleteRow = (index) => {
-    dispatch(deleteProduct({ index }));
-  }
   return (
     <div className='flex flex-col gap-y-4 px-3 py-2'>
         <div className='flex justify-between items-center'>
@@ -46,8 +43,6 @@ const EditAmountsTable = () => {
                             {product.title || `Продукт №${index + 1}`} 
                             <span className='ml-3 font-semibold text-sm text-fprimary'>Арт: {product.vendor_code}</span>
                           </span>
-
-                          <Button variant='red' onClick={() => deleteRow(index)}>Удалить</Button>
                         </div>
                       }  key={index} defaultExpanded>
                         <EditProdPanel product={product} id={index}/>
