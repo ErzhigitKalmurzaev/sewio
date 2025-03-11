@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { SelectPicker } from 'rsuite';
 
-const SelectUser = ({ width = '100%', label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false, disabled = false, className }) => {
+const SelectUser = ({ width = '100%', label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false, disabled = false, className, size = 'md' }) => {
   
   const memoizedData = useMemo(() => data || [], [data]);
   
@@ -15,7 +15,7 @@ const SelectUser = ({ width = '100%', label, placeholder, data, onChange, error,
         data={memoizedData || []}
         onChange={(e) => onChange(e)}
         searchable={searchable}
-        size="md"
+        size={size}
         value={value}
         labelKey={labelKey ? labelKey : 'label'}
         valueKey={valueKey ? valueKey : 'value'}

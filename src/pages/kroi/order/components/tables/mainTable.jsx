@@ -25,6 +25,11 @@ const MainTable = ({ data, status }) => {
         });
     });
 
+    const handleNavigate = (rowData) => {
+        navigate(`${rowData.id}/${rowData.productId}`);
+        localStorage.setItem('order', JSON.stringify(rowData));
+    }
+
   return (
     <div className='min-h-[500px] bg-white rounded-lg overflow-x-auto'>
         <Table
@@ -66,7 +71,7 @@ const MainTable = ({ data, status }) => {
                 <Cell style={{ padding: '7px 6px' }}>
                     {(rowData) => (
                         <span className=''>
-                            <Button size='xs' color='blue' appearance="primary" onClick={() => navigate(`${rowData.id}/${rowData.productId}`)}>
+                            <Button size='xs' color='blue' appearance="primary" onClick={() => handleNavigate(rowData)}>
                                 <span className='flex items-center gap-x-1'>
                                     <p className='text-xs'>Перейти</p>
                                     <ChevronsRight size={22}/>

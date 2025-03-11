@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { SelectPicker } from 'rsuite'
 
-const Select = ({ width, label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false, disabled = false, props }) => {
+const Select = ({ width, label, placeholder, data, onChange, error, required, labelKey, valueKey, value, size = 'md', searchable = false, disabled = false, colors = false }) => {
  
   const memoizedData = useMemo(() => data || [], [data]);
   
@@ -15,13 +15,24 @@ const Select = ({ width, label, placeholder, data, onChange, error, required, la
             data={memoizedData || []}
             onChange={(e) => onChange(e)}
             searchable={searchable}
-            size='md'
+            size={size}
             value={value}
             labelKey={labelKey ? labelKey : 'label'}
             valueKey={valueKey ? valueKey : 'value'}
             placeholder={placeholder}
             disabled={disabled}
             virtualized={false}
+            renderMenuItem={(label, item) => (
+              <div className="flex items-center gap-2">
+                {colors && (
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: item?.code }}
+                  />
+                )}
+                <span>{label}</span>
+              </div>
+            )}
         />
         <p className='text-redd text-xs font-inter'>
           {error && '(Заполните поле правильно!)'}

@@ -138,7 +138,7 @@ export const getStaffSalaryHistory = createAsyncThunk(
 const TechnologStaffSlice = createSlice({
     name: 'technologStaff',
     initialState: {
-        staff_list: [],
+        staff_list: null,
         staff_list_status: 'loading',
         staff_info: {},
         staff_info_status: '',

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
-const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder, required, error, errorTitle, disabled = false }) => {
+const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder, required, error, errorTitle, disabled = false, max = 10000000000000 }) => {
   
   const [inputValue, setInputValue] = useState(value);
 
@@ -35,6 +35,7 @@ const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder,
         onChange={handleChange}
         disabled={disabled}
         placeholder={placeholder}
+        max={max}
       />
       <p className='text-redd text-xs font-inter mt-1'>
           {error && (errorTitle ? errorTitle : '(Заполните поле правильно!)')}
@@ -66,6 +67,12 @@ const StyledInput = styled("input")`
     font-size: 14px;
   }
 
+  @media screen and (max-width: 1000px) {
+    &::placeholder {
+      font-weight: 300;
+      font-size: 13px;
+    }
+  }
   &:focus {
     border-color: #2F4F4F;
   }
