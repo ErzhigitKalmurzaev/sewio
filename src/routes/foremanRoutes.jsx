@@ -4,6 +4,7 @@ import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import ForemanMain from '../pages/foreman/operations/main';
 import ForemanTabletLayout from '../layouts/tablet/foremanTabletLayout';
 import CreateAccWork from '../pages/foreman/operations/works/createAccWork';
+import WorkHistory from '../pages/foreman/operations/works/workHistory';
 
 const ForemanRoutes = () => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -19,7 +20,10 @@ const ForemanRoutes = () => {
               
               <Route path="operations" element={<Outlet/>}>
                   <Route path="" element={<ForemanMain />} />
-                  <Route path=":orderId/:id" element={<CreateAccWork />} />
+                  <Route path=":orderId/:id" element={<Outlet/>}>
+                      <Route path="" element={<CreateAccWork />} />
+                      <Route path="history" element={<WorkHistory />} />
+                  </Route>
               </Route>
 
           </Route>

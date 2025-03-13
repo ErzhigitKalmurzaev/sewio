@@ -49,6 +49,18 @@ export const postAcceptOperation = createAsyncThunk(
     }
 )
 
+export const getWorksHistory = createAsyncThunk(
+    'foreman/postAcceptOperation',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`work/read/?page=${props.page}&page_size=${props.page_size}`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const ForemanOrderSlice = createSlice({
   name: 'foreman',
   initialState: {
@@ -70,6 +82,8 @@ const ForemanOrderSlice = createSlice({
     ],
     operations_list_status: 'loading',
     parties: null,
+    works_history: null,
+    works_history_status: 'loading'
   },
   reducers: {
     addDetail: (state, action) => {
@@ -132,6 +146,16 @@ const ForemanOrderSlice = createSlice({
         }).addCase(getStaffList.rejected, (state) => {
             state.staff_list_status = 'error';
         })
+        //---------------------------------------------------------
+        .addCase(getWorksHistory.pending, (state) => {
+            state.works_history_status = 'loading';
+        }).addCase(getWorksHistory.fulfilled, (state, action) => {
+            state.works_history = action.payload;
+            state.works_history_status = 'success';
+        }).addCase(getWorksHistory.rejected, (state) => {
+            state.works_history_status = 'error';
+        })
+
     }
 });
 

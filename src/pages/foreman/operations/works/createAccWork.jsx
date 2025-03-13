@@ -149,28 +149,25 @@ const CreateAccWork = () => {
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-5'>
       <MyBreadcrums items={breadcrumbs} />
-      <p className='text-lg font-inter font-semibold'>Прием работы</p>
+      <div className='flex justify-between items-center'>
+        <p className='text-lg font-inter font-semibold'>Прием работы</p>
+        <Button onClick={() => navigate('history')}>История работ</Button>
+      </div>
 
       <div className='bg-white rounded-lg p-4 flex flex-col gap-y-3'>
         <div className='flex items-center border-b border-borderGray py-2'>
-          <div className='flex items-end gap-x-12 flex-wrap gap-y-3'>
-              <span className='text-base font-semibold font-inter'>
-                  Заказ: 
-                  <span className='text-fprimary ml-3'>№ {orderInfo?.id}</span>
-              </span>
-              <span className='text-base font-semibold font-inter'>
-                  Компания: 
-                  <span className='text-fprimary ml-3'>{orderInfo?.company}</span>
-              </span>
-              <span className='text-base font-semibold font-inter'>
-                  Товар: 
-                  <span className='text-fprimary ml-3'>{orderInfo?.productTitle}</span>
-              </span>
-              <span className='text-base font-semibold font-inter'>
-                  Артикул: 
-                  <span className='text-fprimary ml-3'>{orderInfo?.vendorCode}</span>
-              </span>
-          </div>
+        <div className="w-full overflow-x-auto">
+          <table className="w-full">
+            <tbody>
+              <tr className="flex justify-between flex-wrap">
+                <td className="border border-borderGray p-2 font-semibold flex">Заказ: <span className="text-fprimary ml-2">№ {orderInfo?.id}</span></td>
+                <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Компания: <span className="text-fprimary ml-2">{orderInfo?.company}</span></td>
+                <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Товар: <span className="text-fprimary ml-2">{orderInfo?.productTitle}</span></td>
+                <td className="flex-1 border border-borderGray p-2 font-semibold flex">Артикул: <span className="text-fprimary ml-2">{orderInfo?.vendorCode}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         </div>
 
         <div className='flex items-center gap-x-4'>
