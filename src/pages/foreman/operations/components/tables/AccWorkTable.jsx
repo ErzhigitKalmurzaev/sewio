@@ -5,6 +5,7 @@ import NumInputForTable from '../../../../../components/ui/inputs/numInputForTab
 import { addDetail, getStaffList, removeDetail, updateDetail } from '../../../../../store/foreman/order';
 import { CircleMinus, Plus } from 'lucide-react';
 import EmployeeIdInput from '../../../../../components/ui/inputs/employeeIdInput';
+import { toast } from 'react-toastify';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -18,6 +19,15 @@ const AccWorkTable = ({ data, status, amount }) => {
       dispatch(getStaffList())
     }
   }, []);
+
+  const getAmountValue = (value, rowData, index) => {
+      if (value > amount) {
+        toast.error(`Максимально допустимое количество: ${amount}`);
+        dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value: '' }));
+      } else {
+        dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value }));
+      }
+  }
 
   const maxDetails = Math.max(...data.map((op) => op.details.length));
   
@@ -61,17 +71,9 @@ const AccWorkTable = ({ data, status, amount }) => {
               <Cell style={{ padding: '6.5px' }}>
                 {(rowData) => rowData.details[index] ? (
                   <NumInputForTable
-                    type="number"
                     placeholder="Кол-во"
                     value={rowData.details[index]?.count || ""}
-                    onChange={(value) => {
-                      if (value > amount) {
-                        alert(`Максимально допустимое количество: ${amount}`);
-                        dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value: '' }));
-                      } else {
-                        dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value }));
-                      }
-                    }}
+                    onChange={(value) => getAmountValue(value, rowData, index)}
                     max={amount}
                     className="w-full"
                   />
@@ -87,9 +89,8 @@ const AccWorkTable = ({ data, status, amount }) => {
                   <Button
                     size="xs"
                     appearance="subtle"
-                    color="red"
                     onClick={() => dispatch(removeDetail({ operationId: rowData.id, index }))}
-                    className="p-1 rounded-md shadow-sm active:scale-95"
+                    className="p-1 rounded-md shadow-sm"
                   >
                     <CircleMinus size={18} color='#C2185B' />
                   </Button>
@@ -107,7 +108,6 @@ const AccWorkTable = ({ data, status, amount }) => {
               <Button
                 size="xs"
                 appearance="subtle"
-                color="green"
                 onClick={() => dispatch(addDetail({ operationId: rowData.id }))}
                 className="p-1 rounded-md shadow-sm bg-green-100 active:scale-95"
               >

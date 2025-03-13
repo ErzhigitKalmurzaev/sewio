@@ -29,7 +29,7 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
               virtualized
               height={600}
               loading={status === 'loading'}
-              data={getData()}
+              data={getData() || []}
               className='rounded-xl'
               bordered
             >

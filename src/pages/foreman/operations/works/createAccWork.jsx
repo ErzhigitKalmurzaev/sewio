@@ -22,7 +22,7 @@ const CreateAccWork = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { party_list, party_list_status, parties, operations_list, operations_list_status } = useSelector(state => state.foreman_order);
+  const { party_list, party_list_status, parties, operations_list, operations_list_status, staff_list} = useSelector(state => state.foreman_order);
 
   const [orderInfo, setOrderInfo] = useState({});
   const [colors, setColors] = useState([]);
@@ -88,25 +88,54 @@ const CreateAccWork = () => {
       color: !urls.color || urls.color === 'null',
       size: !urls.size || urls.size === 'null',
     };
+  
+    const staffIds = staff_list.map(staff => Number(staff.id)); // Получаем список ID сотрудников
+    const maxAmount = orderInfo?.amount || 0;
+  
+    let hasInvalidData = false;
+  
+    const validatedDetails = operations_list?.flatMap(item =>
+      item?.details?.map(detail => {
+        const staff = Number(detail.staff);
+        const amount = Number(detail.count);
+  
+        if (!staffIds.includes(staff)) {
+          hasInvalidData = true;
+          toast.error(`Ошибка: Сотрудник ${staff} отсутствует в сотрудниках!`);
+        }
+  
+        if (amount > maxAmount) {
+          hasInvalidData = true;
+          toast.error(`Ошибка: Количество ${amount} превышает допустимое ${maxAmount}`);
+        }
+  
+        return { operation: item.id, staff, amount };
+      })
+    );
+  
+    if (hasInvalidData) {
+      // toast.error('Некорректные данные! Проверьте сотрудников и количество.');
+      return false;
+    }
+  
     setErrors(newErrors);
     return !Object.values(newErrors).some(Boolean);
-  }
+  };
+  
 
   const onSubmit = () => {
     if(validateField()) {
       dispatch(postAcceptOperation({
-        works: [{
-          party: party_list[Number(urls.party)].id,
-          color: Number(urls.color),
-          size: Number(urls.size),
-          details: operations_list?.flatMap(item => 
-            item?.details?.map(detail => ({
-              operation: item.id,
-              staff: Number(detail.staff),
-              amount: Number(detail.count)
-            }))
-          )
-        }]
+        party: party_list[Number(urls.party)].id,
+        color: Number(urls.color),
+        size: Number(urls.size),
+        details: operations_list?.flatMap(item => 
+          item?.details?.map(detail => ({
+            operation: item.id,
+            staff: Number(detail.staff),
+            amount: Number(detail.count)
+          }))
+        )
       })).then(res => {
         if(res.meta.requestStatus === 'fulfilled') {
           toast.success('Работа успешно принята!');
@@ -114,8 +143,6 @@ const CreateAccWork = () => {
           toast.error('Произошла ошибка!');
         }
       })
-    } else {
-      toast.error('Заполните правильно данные!');
     }
   }
 
@@ -126,10 +153,14 @@ const CreateAccWork = () => {
 
       <div className='bg-white rounded-lg p-4 flex flex-col gap-y-3'>
         <div className='flex items-center border-b border-borderGray py-2'>
-          <div className='flex items-center gap-x-12'>
+          <div className='flex items-end gap-x-12 flex-wrap gap-y-3'>
               <span className='text-base font-semibold font-inter'>
                   Заказ: 
                   <span className='text-fprimary ml-3'>№ {orderInfo?.id}</span>
+              </span>
+              <span className='text-base font-semibold font-inter'>
+                  Компания: 
+                  <span className='text-fprimary ml-3'>{orderInfo?.company}</span>
               </span>
               <span className='text-base font-semibold font-inter'>
                   Товар: 
