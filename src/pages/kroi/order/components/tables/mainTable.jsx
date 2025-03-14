@@ -66,9 +66,9 @@ const MainTable = ({ data, status }) => {
             </Column>
 
 
-            <Column flexGrow={1} minWidth={130} verticalAlign='center'>
-                <HeaderCell>Действия</HeaderCell>
-                <Cell style={{ padding: '7px 6px' }}>
+            <Column flexGrow={1} minWidth={130} verticalAlign='center' fixed='right'>
+                <HeaderCell style={{ padding: '7px 16px' }}>Действия</HeaderCell>
+                <Cell style={{ padding: '7px 16px' }}>
                     {(rowData) => (
                         <span className=''>
                             <Button size='xs' color='blue' appearance="primary" onClick={() => handleNavigate(rowData)}>

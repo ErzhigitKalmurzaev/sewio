@@ -67,53 +67,61 @@ const OrderEdit = () => {
   
   const getStatistic = (type) => {
     switch (type) {
-      case 'total_count':
-        return order.products.reduce((sum, product) => {
-          const productTotal = product.amounts.reduce((productSum, item) => productSum + item.amount, 0);
+      case "total_count":
+        return edit_products_in_order.reduce((sum, product) => {
+          // Суммируем количество всех размеров каждого продукта
+          const productTotal = product.amounts.reduce(
+            (productSum, item) =>
+              productSum + item.sizes.reduce((sizeSum, size) => sizeSum + size.amount, 0),
+            0
+          );
           return sum + productTotal;
         }, 0);
-      case 'total_income': 
-        return order.products.reduce((total, product) => {
-          const productIncome = product.amounts.reduce((productSum, item) => {
-            return productSum + item.amount * product.price; // Умножаем amount на price
-          }, 0);
+  
+      case "total_income":
+        return edit_products_in_order.reduce((total, product) => {
+          // Суммируем доход по каждому размеру
+          const productIncome = product.amounts.reduce(
+            (productSum, item) =>
+              productSum +
+              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * product.true_price, 0),
+            0
+          );
           return total + productIncome;
         }, 0);
-      case 'total_consumption':
-        return order?.products?.reduce((total, product) => {
-          // Найти продукт по nomenclature в массиве productDetails
-          
-        
-          const productCost = product.amounts.reduce((productSum, item) => {
-            return productSum + item.amount * product.cost_price;
-          }, 0);
-        
+  
+      case "total_consumption":
+        return edit_products_in_order.reduce((total, product) => {
+          // Суммируем расход по каждому размеру
+          const productCost = product.amounts.reduce(
+            (productSum, item) =>
+              productSum +
+              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * product.true_cost_price, 0),
+            0
+          );
           return total + productCost;
         }, 0);
-      case 'total_time': 
-        return order?.products?.reduce((total, product) => {
-          // Найти товар в productDetails
-          const productDetail = product_list?.find(
-            (detail) => detail.id === product.nomenclature
-          );
-        
-          if (!productDetail) {
-            return total;
-          }
-        
-          const productTime = product?.amounts?.reduce((productSum, item) => {
-            return productSum + item.amount * productDetail.time; // Умножаем количество на время
-          }, 0);
-        
-          return total + productTime;
-        }, 0) / 3600;
+  
+      case "total_time":
+        // return edit_products_in_order.reduce((total, product) => {
+        //   // Здесь можно добавить логику для подсчета времени по каждому товару
+        //   // Если у вас есть поле `time` в каком-либо объекте, можно умножить на количество
+        //   // Например:
+        //   const productTime = product.amounts.reduce(
+        //     (productSum, item) =>
+        //       productSum +
+        //       item.sizes.reduce((sizeSum, size) => sizeSum + size.amount, 0) * 10, // Примерное время
+        //     0
+        //   );
+        //   return total + productTime;
+        // }, 0); // Вернется сумма времени в минутах или часах, в зависимости от единиц измерения
+        return 0
       case 'status': 
         return OrderStatuses[order?.status]?.label
       default:
         return 0;
     }
-
-  }
+  };
 
   const validateFields = () => {
     const newErrors = {
@@ -154,7 +162,6 @@ const OrderEdit = () => {
         toast('Заполните все поля и выберите минимум 1 товар!');
     }
   }
-
 
   return (
     <div className='flex flex-col gap-y-5 mb-5'>

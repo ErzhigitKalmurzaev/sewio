@@ -69,9 +69,13 @@ const EditProdPanel = ({ product, id }) => {
             </div>
 
             {/* Текущая себестоимость */}
-            <div className="p-3 border border-borderGray rounded-md shadow-sm bg-green-50">
+            <div className="p-3 py-2 flex flex-col gap-y-2 border border-borderGray rounded-md shadow-sm bg-green-50">
               <p className="text-xs text-gray-500">Текущая себестоимость</p>
-              <p className="text-sm font-medium text-green-600">{product.true_cost_price} сом</p>
+              <NumInputForTable
+                value={product.true_cost_price}
+                onChange={(value) => getValueMain('true_cost_price', value)}
+                placeholder='Текущая себестоимость'
+              />
             </div>
           </div>
 

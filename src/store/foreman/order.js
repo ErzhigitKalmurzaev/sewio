@@ -49,17 +49,86 @@ export const postAcceptOperation = createAsyncThunk(
     }
 )
 
-export const getWorksHistory = createAsyncThunk(
-    'foreman/postAcceptOperation',
-    async (props, { rejectWithValue }) => {
+export const patchAcceptOperation = createAsyncThunk(
+    'foreman/patchAcceptOperation',
+    async ({ id, props }, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get(`work/read/?page=${props.page}&page_size=${props.page_size}`);
+            const { data } = await axiosInstance.patch(`work/crud/${id}/`, props);
             return data;
         } catch (err) {
             return rejectWithValue(err)
         }
     }
 )
+
+export const getWorksHistory = createAsyncThunk(
+    'foreman/postAcceptOperation',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`work/get-works/?product=${props.product}&order=${props.order}`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getWorkById = createAsyncThunk(
+    'foreman/getWorkById',
+    async ({ work, product }, { rejectWithValue }) => {
+        try {
+            const works = await axiosInstance.get(`work/get-works/${work}/`);
+            const operations = await axiosInstance.post('work/get-product-operations/', product);
+            return { work: works.data, operations: operations.data };
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+function groupOperations(data = [], allOperations = []) {
+    const grouped = {};
+
+    if (!Array.isArray(data)) {
+        return [];
+    }
+
+    data.forEach(({ staff, operation, amount }) => {
+        if (!operation || !staff) return;
+        
+        if (!grouped[operation.id]) {
+            grouped[operation.id] = {
+                id: operation.id,
+                title: operation.title,
+                details: []
+            };
+        }
+
+        grouped[operation.id].details.push({
+            staff: `${staff.id}`,
+            count: amount
+        });
+    });
+
+    if (Array.isArray(allOperations)) {
+        allOperations.forEach(op => {
+            if (!grouped[op.id]) {
+                grouped[op.id] = {
+                    id: op.id,
+                    title: op.title,
+                    details: [
+                        {
+                            staff: '',
+                            count: ''
+                        }
+                    ]
+                };
+            }
+        });
+    }
+
+    return Object.values(grouped);
+}
 
 const ForemanOrderSlice = createSlice({
   name: 'foreman',
@@ -83,7 +152,9 @@ const ForemanOrderSlice = createSlice({
     operations_list_status: 'loading',
     parties: null,
     works_history: null,
-    works_history_status: 'loading'
+    works_history_status: 'loading',
+    work: null,
+    work_status: 'loading'
   },
   reducers: {
     addDetail: (state, action) => {
@@ -107,6 +178,18 @@ const ForemanOrderSlice = createSlice({
           operation.details[index][field] = value;
         }
     },
+    clearOperationsList: (state) => {
+        state.operations_list = [{
+            id: '',
+            title: '',
+            details: [
+                {
+                    staff: '',
+                    count: '',
+                }
+            ]
+        }];
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -114,7 +197,7 @@ const ForemanOrderSlice = createSlice({
             state.party_list_status = 'loading';
         }).addCase(getPartyList.fulfilled, (state, action) => {
             state.party_list = action.payload;
-            state.parties = action.payload?.map((item, index) => ({ title: item.number, value: index }));
+            state.parties = action.payload?.map((item, index) => ({ title: item.number, value: index, id: item.id }));
             state.party_list_status = 'success';
         }).addCase(getPartyList.rejected, (state) => {
             state.party_list_status = 'error';
@@ -155,9 +238,19 @@ const ForemanOrderSlice = createSlice({
         }).addCase(getWorksHistory.rejected, (state) => {
             state.works_history_status = 'error';
         })
+        //---------------------------------------------------------
+        .addCase(getWorkById.pending, (state) => {
+            state.work_status = 'loading';
+        }).addCase(getWorkById.fulfilled, (state, action) => {
+            state.work = action.payload.work;
+            state.operations_list = groupOperations(action.payload?.work?.details || [], action.payload?.operations || []) || [];
+            state.work_status = 'success';
+        }).addCase(getWorkById.rejected, (state) => {
+            state.work_status = 'error';
+        })
 
     }
 });
 
-export const { addDetail, removeDetail, updateDetail } = ForemanOrderSlice.actions;
+export const { addDetail, removeDetail, updateDetail, clearOperationsList } = ForemanOrderSlice.actions;
 export default ForemanOrderSlice;

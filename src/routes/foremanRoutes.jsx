@@ -5,6 +5,7 @@ import ForemanMain from '../pages/foreman/operations/main';
 import ForemanTabletLayout from '../layouts/tablet/foremanTabletLayout';
 import CreateAccWork from '../pages/foreman/operations/works/createAccWork';
 import WorkHistory from '../pages/foreman/operations/works/workHistory';
+import EditAccWork from '../pages/foreman/operations/works/editAccWork';
 
 const ForemanRoutes = () => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -23,6 +24,7 @@ const ForemanRoutes = () => {
                   <Route path=":orderId/:id" element={<Outlet/>}>
                       <Route path="" element={<CreateAccWork />} />
                       <Route path="history" element={<WorkHistory />} />
+                      <Route path="history/:workId" element={<EditAccWork />} />
                   </Route>
               </Route>
 

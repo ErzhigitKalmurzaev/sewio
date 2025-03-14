@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Title from '../../../../components/ui/title'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { getPartyList, getProductOperations, postAcceptOperation } from '../../../../store/foreman/order';
+import { clearOperationsList, getPartyList, getProductOperations, postAcceptOperation } from '../../../../store/foreman/order';
 import AccWorkTable from '../components/tables/AccWorkTable';
 import Select from '../../../../components/ui/inputs/select';
 import Button from '../../../../components/ui/button';
@@ -42,6 +42,7 @@ const CreateAccWork = () => {
   useEffect(() => {
     dispatch(getPartyList({ order: orderId, product: id }));
     dispatch(getProductOperations({ product: id }));
+    dispatch(clearOperationsList())
 
     setOrderInfo(JSON.parse(localStorage.getItem('order')))
   }, [])

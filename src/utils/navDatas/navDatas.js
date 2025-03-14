@@ -67,12 +67,6 @@ export const technologNav = [
                 elements: false
             },
             {
-                title: 'База знаний',
-                path: 'knowledge',
-                icon: <GraduationCap />,
-                elements: false,
-            },
-            {
                 title: 'Калькулятор',
                 path: 'calculator',
                 icon: <Calculator />,

@@ -32,7 +32,7 @@ const EditAmountsTable = () => {
 
         <PanelGroup accordion bordered>
           <AnimatePresence>
-            {edit_products_in_order.map((product) => (
+            {edit_products_in_order.map((product, index) => (
                 <motion.div 
                     key={product.id} // Уникальный ключ
                     initial={{ opacity: 0, y: -10 }} 
@@ -47,7 +47,7 @@ const EditAmountsTable = () => {
                           </span>
                         </div>
                       } key={product.id} defaultExpanded> {/* Измени key на product.id */}
-                        <EditProdPanel product={product} id={product.id}/> {/* Тоже передай id */}
+                        <EditProdPanel product={product} id={index}/> {/* Тоже передай id */}
                     </Panel>
                 </motion.div>
             ))}

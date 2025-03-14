@@ -12,13 +12,15 @@ const { Column, HeaderCell, Cell } = Table;
 const AccWorkTable = ({ data, status, amount }) => {
 
   const dispatch = useDispatch();
-  const { staff_list } = useSelector(state => state.foreman_order);
+  const { staff_list, staff_list_status } = useSelector(state => state.foreman_order);
 
   useEffect(() => {
     if (!staff_list) {
       dispatch(getStaffList())
     }
   }, []);
+
+  console.log(data)
 
   const getAmountValue = (value, rowData, index) => {
       if (value > amount) {
@@ -35,7 +37,7 @@ const AccWorkTable = ({ data, status, amount }) => {
     <div className="min-h-[300px] rounded-lg">
       <Table
         data={data || []}
-        loading={status === 'loading'}
+        loading={status === 'loading' || staff_list_status === 'loading'}
         autoHeight
         bordered
         cellBordered
@@ -54,7 +56,7 @@ const AccWorkTable = ({ data, status, amount }) => {
               <Cell style={{ padding: '6.5px' }}>
                 {(rowData) => rowData.details[index] ? (
                   <EmployeeIdInput
-                    employees={staff_list}
+                    employees={staff_list || []}
                     value={rowData.details[index]?.staff || ""}
                     onChange={(value) =>
                       dispatch(updateDetail({ operationId: rowData.id, index, field: "staff", value }))
@@ -71,7 +73,7 @@ const AccWorkTable = ({ data, status, amount }) => {
               <Cell style={{ padding: '6.5px' }}>
                 {(rowData) => rowData.details[index] ? (
                   <NumInputForTable
-                    placeholder="Кол-во"
+                    placeholder={`${rowData.details[index]?.count}`}
                     value={rowData.details[index]?.count || ""}
                     onChange={(value) => getAmountValue(value, rowData, index)}
                     max={amount}

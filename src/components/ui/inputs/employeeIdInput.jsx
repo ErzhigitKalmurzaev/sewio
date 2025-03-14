@@ -6,7 +6,7 @@ const EmployeeIdInput = ({ value, onChange, employees }) => {
   const [employee, setEmployee] = useState(null);
   const [error, setError] = useState("");
   const [showTooltip, setShowTooltip] = useState(false);
-  const [debounceTimeout, setDebounceTimeout] = useState(null);
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
   const positionRef = useRef({ top: 0, left: 0, width: 0 });
 
@@ -15,12 +15,12 @@ const EmployeeIdInput = ({ value, onChange, employees }) => {
     if (value.trim() === "") {
       setEmployee(null);
       setError("");
-      setShowTooltip(false);
+      setShowTooltip(false);  // Скрываем подсказку, если значение пустое
       return;
     }
 
     // Поиск сотрудника по ID
-    const foundEmployee = employees.find((emp) => emp.id.toString() === value.trim());
+    const foundEmployee = employees?.find((emp) => emp?.id.toString() === value.trim());
 
     if (foundEmployee) {
       setEmployee(foundEmployee);
@@ -33,32 +33,33 @@ const EmployeeIdInput = ({ value, onChange, employees }) => {
     // Позиционирование окна подсказки
     if (inputRef.current) {
       const rect = inputRef.current.getBoundingClientRect();
-      positionRef.current = { top: rect.bottom + window.scrollY, left: rect.left, width: rect.width };
+      positionRef.current = { 
+        top: rect.bottom + window.scrollY, 
+        left: rect.left, 
+        width: rect.width 
+      };
     }
 
-    // Устанавливаем дебаунс для показа окна подсказки
-    if (debounceTimeout) clearTimeout(debounceTimeout);
-    const timeout = setTimeout(() => {
+    // Показываем подсказку, если есть ошибка или сотрудник найден
+    if ((employee || error) && isFocused) {
       setShowTooltip(true);
-    }, 700);
-
-    setDebounceTimeout(timeout);
-
-    // Очистка дебаунса
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [value, employees]);
+    } else {
+      setShowTooltip(false);
+    }
+  }, [value, employees, employee, error]);
 
   // Закрытие окна подсказки при потере фокуса
   const handleBlur = () => {
-    setShowTooltip(false);
+    setTimeout(() => setShowTooltip(false), 200);
+    setIsFocused(false);
   };
 
-  // Отмена закрытия окна при фокусе
+  // Отображение окна подсказки при фокусе
   const handleFocus = () => {
-    if (debounceTimeout) clearTimeout(debounceTimeout);
-    setShowTooltip(true);
+    if (employee || error) {
+      setShowTooltip(true);
+    }
+    setIsFocused(true);
   };
 
   return (
@@ -74,9 +75,14 @@ const EmployeeIdInput = ({ value, onChange, employees }) => {
         borderColor={employee ? "green" : error ? "red" : "rgba(208, 213, 221, 1)"}
       />
 
-      {showTooltip && (employee || error) &&
+      {showTooltip &&
         createPortal(
-          <SuggestionBox style={{ top: positionRef.current.top, left: positionRef.current.left, width: positionRef.current.width, color: '#2F4F4F' }}>
+          <SuggestionBox style={{
+            top: positionRef.current.top, 
+            left: positionRef.current.left, 
+            width: positionRef.current.width, 
+            color: '#2F4F4F'
+          }}>
             {employee ? `${employee.name} ${employee?.surname?.charAt(0)}.` : error}
           </SuggestionBox>,
           document.body
