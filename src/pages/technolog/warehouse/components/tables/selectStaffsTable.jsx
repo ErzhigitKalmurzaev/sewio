@@ -37,7 +37,7 @@ const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, s
               virtualized
               height={400}
               loading={status === 'loading'}
-              data={getData()}
+              data={getData() || []}
               className='rounded-xl'
             >
               <Column width={60} align="center" fixed>

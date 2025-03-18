@@ -65,7 +65,7 @@ const CreateWarehouse = () => {
   }
 
   const validateField = () => {
-    if(warehouse.staffs.length < 1) {
+    if(warehouse?.staffs?.length < 1) {
       toast.error('Выберите минимум 1го сотрудника!')
       return false
     }

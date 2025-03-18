@@ -12,45 +12,6 @@ import DataPicker from '../../../components/ui/inputs/dataPicker';
 
 const Statistic = () => {
 
-  const statistics = [
-    {
-      plan: true,
-      title: 'Доход',
-      planSum: 320000,
-      factSum: 200000,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    },
-    {
-      plan: false,
-      title: 'Расход',
-      planSum: 0,
-      factSum: 200000,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    },
-    {
-      plan: false,
-      title: 'Прибыль',
-      planSum: 320000,
-      factSum: 200000,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    },
-    {
-      plan: true,
-      title: 'Заказы',
-      planSum: 2000,
-      factSum: 1950,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    }
-  ]
-
   const dispatch = useDispatch();
 
   const { statistic_list, statistic_list_status } = useSelector(state => state.statistic);
@@ -136,7 +97,7 @@ const Statistic = () => {
               <InfoCard
                 title='Ср. производительность'
                 plan_status={false}
-                value={statistic_list?.staff?.avg_performance || 0}
+                value={statistic_list?.staff?.avg_performance.toFixed(1) || 0}
                 date={urls}
                 unit=' шт.'
                 icon={<ChartColumn color='blue' size={20} />}
@@ -204,7 +165,7 @@ const Statistic = () => {
               <InfoCard
                 title='Время работы'
                 plan_status={false}
-                value={(statistic_list?.machine?.time / 3600) || 0}
+                value={(statistic_list?.machine?.time / 3600)?.toFixed(1) || 0}
                 date={urls}
                 unit=' ч.'
                 icon={<Clock color='gray' size={20} />}
