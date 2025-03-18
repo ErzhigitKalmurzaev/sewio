@@ -40,6 +40,7 @@ const EditEmployee = () => {
 
   const { staff_info, staff_info_status } = useSelector(state => state.staff);
   const { rank_list } = useSelector(state => state.rank);
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     dispatch(getRankList());
@@ -261,10 +262,13 @@ const EditEmployee = () => {
       <AdvanceModal
         modals={modals}
         setModals={setModals}
+        update={update}
+        setUpdate={setUpdate}
       />
       <FineModal
         modals={modals}
         setModals={setModals}
+        setUpdate={setUpdate}
       />
     </div>
   )

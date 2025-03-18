@@ -137,7 +137,8 @@ const KroiOrderSlice = createSlice({
             ]
         },
         changePartyNumber: (state, action) => {
-            state.party.number = Number(action.payload.value)
+            console.log(action.payload.value)
+            state.party.number = action.payload.value
         }
     },
     extraReducers: (builder) => {

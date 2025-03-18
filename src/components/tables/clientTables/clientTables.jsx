@@ -4,6 +4,7 @@ import { Table, Button } from 'rsuite';
 import { employeeRole } from '../../../utils/selectDatas/employeeDatas';
 
 import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
+import { formatPhoneNumber } from '../../../utils/functions/numFuncs';
 const { Column, HeaderCell, Cell } = Table;
 
 const ClentsTable = ({ data, status }) => {
@@ -18,6 +19,7 @@ const ClentsTable = ({ data, status }) => {
               minHeight={450}
               className='rounded-xl'
               bordered
+              cellBordered
               >
               <Column width={70} align="center" fixed>
                   <HeaderCell>ID</HeaderCell>
@@ -36,15 +38,23 @@ const ClentsTable = ({ data, status }) => {
 
               <Column width={200}>
                   <HeaderCell>Телефон</HeaderCell>
-                  <Cell dataKey="phone" />
+                  <Cell>
+                    {
+                      rowData => (
+                        <div className='flex items-center'>
+                          <span className='font-inter'>{formatPhoneNumber(rowData?.phone)}</span>
+                        </div>
+                      )
+                    }
+                  </Cell>
               </Column>
 
-              <Column width={200}>
+              <Column width={150} fullText>
                   <HeaderCell>Компания</HeaderCell>
                   <Cell dataKey="company_title"/>
               </Column>
 
-              <Column width={150}>
+              <Column width={200}>
                   <HeaderCell>Адрес</HeaderCell>
                   <Cell dataKey="address"/>
               </Column>

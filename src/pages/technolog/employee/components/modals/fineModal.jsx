@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux'
 import { postPayment, postPaymentFiles } from '../../../../../store/technolog/staff'
 import { toast } from 'react-toastify'
 
-const FineModal = ({ modals, setModals }) => {
+const FineModal = ({ modals, setModals, setUpdate }) => {
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const FineModal = ({ modals, setModals }) => {
   const validateField = () => {
     const newErrors = {
       amount: !payment.amount,
-      comment: !payment.comment
+    //   comment: !payment.comment
     }
     setErrors(newErrors);
     return !Object.values(newErrors).some(item => item);
@@ -41,6 +41,7 @@ const FineModal = ({ modals, setModals }) => {
         dispatch(postPayment({ ...payment, amount: Number(payment.amount) }))
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
+                setUpdate(prev => !prev);
                if(files.length > 0) {
                 const dataWithFiles = {
                     payment_id: res.payload.id,

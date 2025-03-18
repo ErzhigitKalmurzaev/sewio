@@ -9,6 +9,8 @@ import NumInput from '../../../../components/ui/inputs/numInput';
 import CalcTable from '../components/tables/calcTable';
 import Button from '../../../../components/ui/button';
 import { toast } from 'react-toastify';
+import CreateProductModal from '../components/modals/createProductModal';
+import { createProduct } from '../../../../store/technolog/product';
 
 const EditCalculate = () => {
 
@@ -40,6 +42,12 @@ const EditCalculate = () => {
     client: "",
     vendor_code: ""
   });
+  const [productData, setProductData] = useState({
+    title: "",
+    is_active: true,
+    vendor_code: ""
+  });
+  const [modals, setModals] = useState({ product: false });
   const [errors, setErrors] = useState({});
 
   const isObjectFilled = (obj) => Object.values(obj).every(value => value !== '');
@@ -90,6 +98,48 @@ const EditCalculate = () => {
       toast.error('Заполните правильно данные о заказе!');
     }
   };
+
+  const handleCreateProduct = (name) => {
+    if(isDataValid()) {
+
+      const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
+      const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
+      const cost = (Number(operationsTotal) + Number(pricesTotal)) || 0;
+
+      dispatch(createProduct({
+        ...productData,
+        cost_price: cost,
+        prices,
+        operations,
+        consumables
+      })).then(res => {
+          if(res.meta.requestStatus === 'fulfilled') {
+            toast.success("Товар создан успешно!")
+            if(name === 'order') {
+              if(res.payload?.id) {
+                navigate(`/crm/calculator/order/${res.payload?.id}`)
+              } else {
+                toast.error('Произошла ошибка с перенаправлением! Попробуйте найти товар в разделе "Товары"!')
+              }
+            } else {
+              navigate('/crm/product')
+            }
+          } else {
+            toast.error('Произошла ошибка!')
+          }
+      })
+    } else {
+      toast.error('Заполните правильно данные о товаре!');
+    }
+}
+
+  const nextMove = (name) => {
+    if(isDataValid()) {
+        setModals({ product: true, name: name });
+    } else {
+      toast.error('Заполните правильно все данные!');
+    }
+  }
 
   return (
     <div className="w-full min-h-[100vh] flex flex-col gap-y-5">
@@ -146,12 +196,26 @@ const EditCalculate = () => {
 
             <CalcTable type='edit'/>
           </div>
-          <div className="flex justify-end">
-            <Button width='180px' onClick={onSubmit}>
+          <div className="flex justify-start gap-x-8">
+            <Button width='150px' variant="blue" onClick={() => nextMove('product')}>
+                Создать товар
+            </Button>
+            <Button width='150px' variant="petrol" onClick={() => nextMove('order')}>
+                Создать заказ
+            </Button>
+            <Button width='150px' onClick={onSubmit}>
                 Сохранить
             </Button>
           </div>
         </div>
+        <CreateProductModal
+          modals={modals}
+          setModals={setModals}
+          product={productData}
+          setProduct={setProductData}
+          onSubmit={handleCreateProduct}
+          clientData={clientData}
+        />
     </div>
   )
 }

@@ -8,6 +8,7 @@ import ConsumablesTable from '../components/tables/consumablesTable';
 import NumInputForTable from '../../../../components/ui/inputs/numInputForTable';
 import Button from '../../../../components/ui/button';
 import { toast } from 'react-toastify';
+import TextInputForTable from '../../../../components/ui/inputs/textInputForTable';
 
 const EditParty = () => {
 
@@ -26,7 +27,8 @@ const EditParty = () => {
   }
 
   const validateField = () => {
-    if(party.number === '' && id) {
+    if(!party.number && id) {
+      console.log(party.number)
       return false;
     }
     return true;
@@ -37,7 +39,7 @@ const EditParty = () => {
         const new_party = {
           order: Number(party.order),
           nomenclature: party.nomenclature.id,
-          number: Number(party.number),
+          number: party.number,
           details: party_amounts.flatMap(item => (
             item.sizes.map(sizeData => ({
               color: item.color.id,
@@ -69,7 +71,7 @@ const EditParty = () => {
 
   return (
     <div className='flex flex-col gap-y-4 mb-5'>
-        <Title text={`Редактирование партии №${party?.number}`}/>
+        <Title text={`Редактирование партии № ${party?.number}`}/>
         
         <div className='flex flex-col gap-y-10 bg-white rounded-lg p-4'>
             <div className='flex gap-x-16 items-center border-b border-borderGray py-2'>
@@ -78,11 +80,11 @@ const EditParty = () => {
                     <span className='text-base font-semibold font-inter text-fprimary'>№ {party?.order}</span>
                     <span className='text-base font-semibold font-inter'> партия</span>
                     <span>
-                        <NumInputForTable
+                        <TextInputForTable
                             placeholder={'№ партии'}
                             width={'100px'}
                             value={party?.number}
-                            onChange={(e) => setParty(e)}
+                            onChange={(e) => setParty(e.target.value)}
                         />
                     </span>
                 </div>

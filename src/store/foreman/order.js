@@ -86,6 +86,18 @@ export const getWorkById = createAsyncThunk(
     }
 )
 
+export const deleteWorkById = createAsyncThunk(
+    'foreman/deleteWorkById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const data = await axiosInstance.delete(`work/crud/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 function groupOperations(data = [], allOperations = []) {
     const grouped = {};
 

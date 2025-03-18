@@ -53,21 +53,22 @@ const OperationsTable = ({ type }) => {
   }
 
   const handleSelect = (id, index) => {
-    setLoading(true);
-    dispatch(getOperation({ id })).then(res => {
-      if(res.meta.requestStatus === 'fulfilled') {
+    // setLoading(true);
+    // dispatch(getOperation({ id })).then(res => {
+    //   if(res.meta.requestStatus === 'fulfilled') {
 
-          const rank_kef = rank_list.find(item => item.id === res.payload.rank?.id)?.percent;
+    //       const rank_kef = rank_list.find(item => item.id === res.payload.rank?.id)?.percent;
 
-          dispatch(fillOperation({ key: index, value: {
-                title: res.payload.title,
-                time:  res.payload.time,
-                rank: res.payload.rank?.id,
-                price: res.payload.time * rank_kef 
-          }}))
-      }
-      setLoading(false);
-    })  
+    //       dispatch(fillOperation({ key: index, value: {
+    //             title: res.payload.title,
+    //             time:  res.payload.time,
+    //             rank: res.payload.rank?.id,
+    //             price: res.payload.time * rank_kef 
+    //       }}))
+    //   }
+    //   setLoading(false);
+    // }) 
+    console.log(id) 
   }
 
   return (
@@ -75,7 +76,7 @@ const OperationsTable = ({ type }) => {
         <Table
             data={operations || []}
             bordered
-            loading={loading || (type === 'edit' && calc_status === 'loading')}
+            loading={loading || (type === 'edit' && calc_status === 'loading') || calc_status === 'kochuruu'}
             cellBordered
             autoHeight
         >

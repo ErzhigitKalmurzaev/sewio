@@ -1,16 +1,15 @@
-import { Backdrop, CircularProgress } from '@mui/material'
-import React from 'react'
+import { Backdrop, CircularProgress } from '@mui/material';
+import React from 'react';
 
-const BackDrop = (open) => {
-
+const BackDrop = ({ open = true }) => { // Деструктурируем open
     return (
         <Backdrop
             sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
-            open={open}
+            open={Boolean(open)} // Принудительно делаем boolean (на всякий случай)
         >
             <CircularProgress color="inherit" />
         </Backdrop>
-    )
-}
+    );
+};
 
-export default BackDrop
+export default BackDrop;

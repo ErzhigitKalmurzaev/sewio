@@ -127,7 +127,7 @@ export const getStaffSalaryHistory = createAsyncThunk(
     'technologStaff/getStaffSalaryHistory',
     async ({ id, urls }, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get(`payment/history/list/${id}/?from_date=${urls.from_date}&to_date=${urls.to_date}`);
+            const { data } = await axiosInstance.get(`payment/history/list/${id}/?from_date=${urls.from_date}&to_date=${urls.to_date}&page=${urls.page}&page_size=${urls.page_size}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -150,6 +150,9 @@ const TechnologStaffSlice = createSlice({
         payment_detail_status: 'loading',
     },
     reducers: {
+        clear_payment_info: (state) => {
+            state.payment_detail = {};
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -200,5 +203,5 @@ const TechnologStaffSlice = createSlice({
     }
 })
 
-export const {  } = TechnologStaffSlice.actions;
+export const { clear_payment_info } = TechnologStaffSlice.actions;
 export default TechnologStaffSlice;

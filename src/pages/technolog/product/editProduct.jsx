@@ -9,6 +9,7 @@ import { createProduct, createProductImages, editProductById, getProductById, ge
 import { Toggle } from "rsuite";
 import Title from "../../../components/ui/title";
 import ProdTable from "./components/shared/prodTable";
+import BackDrop from "../../../components/ui/backdrop";
 
 const EditProduct = () => {
 
@@ -16,7 +17,7 @@ const EditProduct = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
-  const { operations, combinations, consumables, prices, } = useSelector(state => state.product);
+  const { operations, combinations, consumables, prices, product_status } = useSelector(state => state.product);
 
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
@@ -113,6 +114,10 @@ const EditProduct = () => {
         <div className="flex justify-between items-center">
           <Title text="Редактирование товара" />
         </div>
+
+        {
+          product_status === 'loading' && <BackDrop/>
+        }
 
         <ProductImages 
           id_product={id}

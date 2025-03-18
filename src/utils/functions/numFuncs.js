@@ -8,3 +8,8 @@ export const formatNumber = (price) => {
 
     return priceString?.join('');
 }
+
+export function formatPhoneNumber(phone) {
+    const regex = /^\+996(\d{3})(\d{3})(\d{3})$/;
+    return phone?.replace(regex, "+(996) $1 $2 $3");
+}

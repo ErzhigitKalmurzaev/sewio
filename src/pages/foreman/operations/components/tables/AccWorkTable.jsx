@@ -20,8 +20,6 @@ const AccWorkTable = ({ data, status, amount }) => {
     }
   }, []);
 
-  console.log(data)
-
   const getAmountValue = (value, rowData, index) => {
       if (value > amount) {
         toast.error(`Максимально допустимое количество: ${amount}`);

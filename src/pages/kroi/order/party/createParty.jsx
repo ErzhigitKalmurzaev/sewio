@@ -3,11 +3,11 @@ import Title from '../../../../components/ui/title'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { fillPartyAmounts, getOrdersList, getProductInfo, postParty } from '../../../../store/kroi/order';
-import NumInputForTable from '../../../../components/ui/inputs/numInputForTable';
 import PartyAmountTable from '../components/tables/partyAmountTable';
 import Button from '../../../../components/ui/button';
 import ConsumablesTable from '../components/tables/consumablesTable';
 import { toast } from 'react-toastify';
+import TextInputForTable from '../../../../components/ui/inputs/textInputForTable';
 
 const CreateParty = () => {
 
@@ -80,11 +80,11 @@ const CreateParty = () => {
                     <span className='text-base font-semibold font-inter text-fprimary'>№ {orderId}</span>
                     <span className='text-base font-semibold font-inter'> партия</span>
                     <span>
-                        <NumInputForTable
+                        <TextInputForTable
                             placeholder={'№ партии'}
                             width={'100px'}
                             value={party.number}
-                            onChange={(e) => setParty({...party, number: e})}
+                            onChange={(e) => setParty({...party, number: e.target.value})}
                         />
                     </span>
                 </div>

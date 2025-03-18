@@ -4,8 +4,9 @@ import Title from '../../../../components/ui/title'
 import SalaryPaymentTable from '../../../../components/common/tables/salaryPaymentTable'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getStaffPaymentDetail } from '../../../../store/technolog/staff'
+import { clear_payment_info, getStaffPaymentDetail } from '../../../../store/technolog/staff'
 import PaymentInfoTable from '../../../../components/common/tables/paymentInfoTable'
+import BackDrop from '../../../../components/ui/backdrop'
 
 const PaymentInfo = () => {
 
@@ -33,13 +34,18 @@ const PaymentInfo = () => {
   const { payment_detail, payment_detail_status } = useSelector(state => state.staff);
 
   useEffect(() => {
+    dispatch(clear_payment_info())
     dispatch(getStaffPaymentDetail({ id }))
   }, [id, dispatch])
 
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
-        {/* <MyBreadcrums items={breadcrumbs}/> */}
+        <MyBreadcrums items={breadcrumbs}/>
         <Title text="Информация о выплате"/>
+
+        {
+          payment_detail_status === 'loading' && <BackDrop open={true}/>
+        }
 
         <div className='w-2/3'>
           <PaymentInfoTable

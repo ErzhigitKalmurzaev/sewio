@@ -85,7 +85,7 @@ const ProdPanel = ({ product, id }) => {
                 data={product.amounts || []}
                 autoHeight
             >
-                <Table.Column width={180}>
+                <Table.Column width={180} fixed>
                     <Table.HeaderCell>Цвет</Table.HeaderCell>
                     <Table.Cell style={{ padding: '7px 6px' }}>
                         {(rowData, index) =>

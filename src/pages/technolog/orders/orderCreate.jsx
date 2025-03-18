@@ -23,7 +23,7 @@ const OrderCreate = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { client_list, client_list_status, product_list, product_list_status, products_to_order  } = useSelector(state => state.order);
+  const { client_list, product_list, products_to_order  } = useSelector(state => state.order);
   
   const [order, setOrder] = useState({
     deadline: '',
@@ -37,19 +37,19 @@ const OrderCreate = () => {
     products: false
   });
 
-  const [selectedClient, setSelectedClient] = useState(null);
-  const [modals, setModals] = useState({ add: false, edit: false});
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    dispatch(getOrderClientList());
-    dispatch(getOrderProductList());
+    if(!client_list) {
+      dispatch(getOrderClientList());
+    }
+    if(!product_list) {
+      dispatch(getOrderProductList());
+    }
+    dispatch(clearAll());
   }, []);
 
   useEffect(() => {
     if (order.client) {
       const clientInfo = client_list.find(client => client.id === order.client);
-      setSelectedClient(clientInfo);
     }
   }, [order.client, client_list]);
 
@@ -146,7 +146,6 @@ const OrderCreate = () => {
         if (res.meta.requestStatus === 'fulfilled') {
           dispatch(clearAll())
           setOrder({...order, deadline: '', client: '', products: []});
-          setSelectedClient(null);
           navigate(-1)
         }
       })

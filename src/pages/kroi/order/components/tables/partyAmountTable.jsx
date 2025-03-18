@@ -47,7 +47,7 @@ const PartyAmountTable = ({ data, status }) => {
         </Column>
 
         {party_amounts[0]?.sizes?.map((sItem, sIndex) => (
-          <ColumnGroup key={sIndex} header={sItem?.size?.title} verticalAlign="middle" align="center">
+          <ColumnGroup key={sIndex + 'tab'} header={sItem?.size?.title} verticalAlign="middle" align="center">
             <Column width={80} colSpan={2}>
               <HeaderCell>План</HeaderCell>
               <Cell>

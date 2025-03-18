@@ -10,6 +10,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #F0F0F0;
+  overflow: visible !important;
 }
 
 code {
@@ -33,4 +34,17 @@ p, h1, h2, h3, h4, h5, h6 {
   font-size: 14px !important;
   text-align: center !important;
   margin-top: 3px !important;
+}
+
+.rs-picker-menu {
+  will-change: transform;
+  z-index: 9999 !important;
+}
+
+.rs-picker {
+  position: relative !important;
+  overflow: visible !important;
+}
+body[style*="padding-right"] {
+  padding-right: 0px !important;
 }

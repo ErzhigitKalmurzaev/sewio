@@ -92,6 +92,12 @@ const CreateClient = () => {
                   toast("Клиент создан успешно!")
                 }
               })
+          } else {
+            if(res.payload?.username) {
+              toast.error('Пользователь с таким логином уже существует!')
+            } else {
+              toast.error("Произошла ошибка!")
+            }
           }
         })
     } else {

@@ -92,7 +92,6 @@ const CreateProduct = () => {
     } else {
       toast.error('Заполните правильно данные о заказе!');
     }
-    console.log(combinations)
   };
 
   return (

@@ -1,21 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Pagination, Table } from 'rsuite'
 import { OrderStatuses } from '../../../../../utils/constants/statuses';
 import { formatedToDDMMYYYY } from '../../../../../utils/functions/dateFuncs';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ReactComponent as Pencil } from '../../../../../assets/icons/pencil.svg';
+import { Trash2 } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { deleteWorkById, getWorksHistory } from '../../../../../store/foreman/order';
+import { toast } from 'react-toastify';
 
 const { Cell, HeaderCell, Column } = Table;
 
 const WorksHistoryTable = ({ data, status }) => {
 
+  const { orderId, id } = useParams();
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [deleteStatus, setDeleteStatus] = useState(false);
+
+  const onDelete = (workId) => {
+    setDeleteStatus(true);
+    dispatch(deleteWorkById({ id: workId })).then(res => {
+      if(res.meta.requestStatus === 'fulfilled') {
+        toast.success('Работа удалена!');
+        dispatch(getWorksHistory({ product: id, order: orderId }));
+        setDeleteStatus(false);
+      }
+    })
+  }
 
   return (
     <div className='min-h-[500px] bg-white rounded-lg'>
         <Table
             data={data || []}
-            loading={status === 'loading'}
+            loading={status === 'loading' || deleteStatus}
             height={500}
             bordered
             cellBordered
@@ -37,7 +57,7 @@ const WorksHistoryTable = ({ data, status }) => {
             </Column>
             <Column width={70}>
                 <HeaderCell>Партия</HeaderCell>
-                <Cell dataKey='party' />
+                <Cell dataKey='party.number' />
             </Column>
             <Column width={120} fullText>
                 <HeaderCell>Цвет</HeaderCell>
@@ -81,8 +101,9 @@ const WorksHistoryTable = ({ data, status }) => {
                 <Cell style={{ padding: '6px' }}>
                     {
                         rowData => (
-                            <div className='flex items-center px-3 py-1 cursor-pointer'>
+                            <div className='flex items-center px-3 gap-x-3 py-1 cursor-pointer'>
                                 <Pencil onClick={() => navigate(`${rowData.id}`)}/>
+                                <Trash2 size={19} color='#d0021b' onClick={() => onDelete(rowData?.id)}/>
                             </div>
                         )
                     }

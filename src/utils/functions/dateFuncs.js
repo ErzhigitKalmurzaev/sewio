@@ -50,11 +50,13 @@ export const formatToLocalString = (dateString) => {
 export const getDefaultDateRange = () => {
   const currentDate = new Date();
   const pastMonthDate = new Date();
-  
+  const tomorrowDate = new Date();
+
   pastMonthDate.setMonth(currentDate.getMonth() - 1);
-  
+  tomorrowDate.setDate(currentDate.getDate() + 1);
+
   return {
-    from_date: formatedToDDMMYYYY(pastMonthDate, '-'), // Формат dd-MM-yyyy
-    to_date: formatedToDDMMYYYY(currentDate, '-'),     // Формат dd-MM-yyyy
+    from_date: formatedToDDMMYYYY(pastMonthDate, '-'), // Дата месяц назад
+    to_date: formatedToDDMMYYYY(tomorrowDate, '-'),    // Завтрашняя дата
   };
 };

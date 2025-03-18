@@ -100,14 +100,22 @@ const CreateAccWork = () => {
         const staff = Number(detail.staff);
         const amount = Number(detail.count);
   
-        if (!staffIds.includes(staff)) {
+        // Ошибка, если сотрудник не указан, но количество введено
+        if (!staff && amount > 0 && amount !== '') {
           hasInvalidData = true;
-          toast.error(`Ошибка: Сотрудник ${staff} отсутствует в сотрудниках!`);
+          toast.error(`Ошибка: Сотрудник не указан, но количество ${amount} задано.`);
         }
   
+        // Ошибка, если количество превышает максимальное значение
         if (amount > maxAmount) {
           hasInvalidData = true;
           toast.error(`Ошибка: Количество ${amount} превышает допустимое ${maxAmount}`);
+        }
+  
+        // Ошибка, если сотрудник не найден в списке сотрудников
+        if (staff && !staffIds.includes(staff)) {
+          hasInvalidData = true;
+          toast.error(`Ошибка: Сотрудник ${staff} отсутствует в сотрудниках!`);
         }
   
         return { operation: item.id, staff, amount };
@@ -115,13 +123,13 @@ const CreateAccWork = () => {
     );
   
     if (hasInvalidData) {
-      // toast.error('Некорректные данные! Проверьте сотрудников и количество.');
       return false;
     }
   
     setErrors(newErrors);
     return !Object.values(newErrors).some(Boolean);
   };
+  
   
 
   const onSubmit = () => {
@@ -130,18 +138,33 @@ const CreateAccWork = () => {
         party: party_list[Number(urls.party)].id,
         color: Number(urls.color),
         size: Number(urls.size),
-        details: operations_list?.flatMap(item => 
-          item?.details?.map(detail => ({
-            operation: item.id,
-            staff: Number(detail.staff),
-            amount: Number(detail.count)
-          }))
+        details: operations_list?.flatMap(item =>
+          item?.details?.map(detail => {
+            const staff = Number(detail.staff);
+            const amount = Number(detail.count);
+        
+            // Фильтруем операции, где отсутствуют сотрудники или количество
+            if (!staff || amount <= 0) {
+              return null;  // Возвращаем null, чтобы в дальнейшем отфильтровать такие элементы
+            }
+        
+            return {
+              operation: item.id,
+              staff,
+              amount
+            };
+          }).filter(item => item !== null)  // Убираем null-элементы
         )
       })).then(res => {
         if(res.meta.requestStatus === 'fulfilled') {
           toast.success('Работа успешно принята!');
+          navigate('history')
         } else {
-          toast.error('Произошла ошибка!');
+          if(res.payload?.code === '100') {
+            toast.error(res.payload?.detail);
+          } else {
+            toast.error('Произошла ошибка!');
+          }
         }
       })
     }

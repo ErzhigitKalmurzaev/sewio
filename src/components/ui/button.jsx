@@ -158,6 +158,28 @@ const Button = ({ variant = "default", active, disabled, type, sx, loading, chil
             border: "1px solid #2F4F4F",
             borderRadius: "8px"
         },
+        petrol: {
+            padding: "0px 10px",
+            height: "33px",
+            background: "#0B4F6C",
+            color: "white",
+            fontSize: "13px",
+            fontWeight: "400",
+            fontFamily: "Inter",
+            textTransform: 'capitalize',
+            border: "1px solid #0B4F6C",
+            borderRadius: "6px",
+            ":hover": {
+                transition: "0.5s all ease",
+                color: "#0B4F6C",
+                background: "white",
+                border: "1px solid #0B4F6C",
+            },
+            ":disabled": {
+                background: "#dadada",
+                color: "gray"
+            }
+        }
     }
 
     return (

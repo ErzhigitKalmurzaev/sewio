@@ -8,6 +8,7 @@ import SalaryHistoryTable from '../components/tables/salaryHistoryTable'
 import { useParams, useSearchParams } from 'react-router-dom'
 import DateRangePickerInput from '../../../../components/ui/inputs/dateRangePicker'
 import { formatedToDDMMYYYY, getDefaultDateRange } from '../../../../utils/functions/dateFuncs'
+import { toast } from 'react-toastify'
 
 const SalaryHistory = () => {
 
@@ -28,44 +29,6 @@ const SalaryHistory = () => {
         label: 'История выплат',
         path: '/employee/info/salary_history',
         active: true
-    }
-  ]
-  const statistics = [
-    {
-      plan: true,
-      title: 'Доход',
-      planSum: 320000,
-      factSum: 200000,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    },
-    {
-      plan: false,
-      title: 'Расход',
-      planSum: 0,
-      factSum: 200000,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    },
-    {
-      plan: false,
-      title: 'Прибыль',
-      planSum: 320000,
-      factSum: 200000,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    },
-    {
-      plan: true,
-      title: 'Заказы',
-      planSum: 2000,
-      factSum: 1950,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
     }
   ]
 
@@ -93,27 +56,23 @@ const SalaryHistory = () => {
   }
 
   useEffect(() => {
-    dispatch(getStaffSalaryHistory({ id, urls }));
+    dispatch(getStaffSalaryHistory({ id, urls }))
+      .then(res => {
+        if(res.meta.requestStatus === 'rejected') {
+          toast.error('Произошла ошибка!')
+      }})
   }, [urls.from_date, urls.to_date, id])
 
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
         <MyBreadcrums items={breadcrumbs}/>
         
-        <div className='flex justify-between'>
+        <div className='flex justify-between items-center'>
           <Title text="История выдачи ЗП сотрудника"/>
           <div>
-            <DateRangePickerInput date={[urls.from_date, urls.to_date]} setDate={handleChangeFilter}/>
+            <DateRangePickerInput date={[urls.from_date, urls.to_date]} setDate={handleChangeFilter} size='md'/>
           </div>
         </div>
-
-        {/* <div className='flex gap-x-5'>
-            {
-                statistics.map(item => (
-                    <InfoCard data={item}/>
-                  ))
-            }
-        </div> */}
 
         <div>
             <SalaryHistoryTable 

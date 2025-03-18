@@ -7,17 +7,14 @@ import Button from '../../../components/ui/button';
 import DataPicker from '../../../components/ui/inputs/dataPicker';
 import SelectUser from '../../../components/ui/inputs/selectUser';
 import { useDispatch, useSelector } from 'react-redux';
-import { createOrder, editOrderById, getOrderById, getOrderClientList, getOrderProductList } from '../../../store/technolog/order';
-import AddProductModal from './modals/addProductModal';
-import OrderProductInfo from './components/orderProductInfo';
+import { createOrder, editOrderById, getOrderById } from '../../../store/technolog/order';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getSizesList } from '../../../store/technolog/size';
-import { getStatistic } from './../../../store/technolog/statistic';
 import { OrderStatuses } from './../../../utils/constants/statuses';
 import EditAmountsTable from './components/editAmountsTable';
 import { Building, Phone, User } from 'lucide-react';
 import BackDrop from '../../../components/ui/backdrop';
+import Select from '../../../components/ui/inputs/select';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -45,7 +42,6 @@ const OrderEdit = () => {
 
 
   useEffect(() => {
-    dispatch(getOrderProductList());
     dispatch(getOrderById({ id}))
         .then(res => {
             if (res.meta.requestStatus === 'fulfilled') {
@@ -84,7 +80,7 @@ const OrderEdit = () => {
           const productIncome = product.amounts.reduce(
             (productSum, item) =>
               productSum +
-              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * product.true_price, 0),
+              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * (product.true_price || product.price), 0),
             0
           );
           return total + productIncome;
@@ -96,7 +92,7 @@ const OrderEdit = () => {
           const productCost = product.amounts.reduce(
             (productSum, item) =>
               productSum +
-              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * product.true_cost_price, 0),
+              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * (product.true_cost_price || product.cost_price), 0),
             0
           );
           return total + productCost;
@@ -137,17 +133,19 @@ const OrderEdit = () => {
   }
 
   const onSubmit = () => {
-    if(validateFields()) {
+    if(validateFields() && order?.status) {
         dispatch(editOrderById({ id, props: {
           ...order,
           client: order.client.id,
+          status: Number(order.status),
           products: edit_products_in_order.map(item => ({
             ...item,
             amounts: item.amounts.flatMap(amount => 
                 amount.sizes.map(size => ({
                     color: amount.color,
                     size: size.size.id,  // Переносим `size` в строку
-                    amount: size.amount
+                    amount: Number(size.amount),
+                    done: Number(size.done)
                 }))
             )
           })),
@@ -174,6 +172,13 @@ const OrderEdit = () => {
       <div className='w-full flex gap-x-7'>
         <div className='w-1/2 flex flex-col gap-y-2 bg-white rounded-lg px-8 py-5'>
           <p className='text-base font-bold font-inter mb-3'>Основная информация</p>
+          <Select
+            label='Статус заказа'
+            placeholder='Выберите статус'
+            value={`${order.status}`}
+            data={OrderStatuses.slice(1) || []}
+            onChange={e => getMainValue({ target: { name: 'status', value: e } })}
+          />
           <DataPicker
             label='Дата сдачи заказа'
             placeholder='Выберите дату'

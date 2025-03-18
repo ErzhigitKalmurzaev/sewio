@@ -11,13 +11,9 @@ const EditAmountsTable = () => {
 
   const dispatch = useDispatch();    
 
-  const { edit_products_in_order, product_list } = useSelector(state => state.order);
+  const { edit_products_in_order } = useSelector(state => state.order);
 
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    dispatch(getOrderProductList());
-  }, [])
 
   const addRow = () => {
     dispatch(addProduct());
@@ -34,20 +30,25 @@ const EditAmountsTable = () => {
           <AnimatePresence>
             {edit_products_in_order.map((product, index) => (
                 <motion.div 
-                    key={product.id} // Уникальный ключ
+                    key={product.id || index} // ✅ Используем уникальный ключ
                     initial={{ opacity: 0, y: -10 }} 
                     animate={{ opacity: 1, y: 0 }} 
                     exit={{ opacity: 0, y: -10, transition: { duration: 0.3 } }} 
                 >
-                    <Panel header={
-                        <div className="flex justify-between items-center w-full pr-2">
-                          <span className='flex items-center gap-x-3'>
-                            {product.title || `Продукт №${product.id}`} 
-                            <span className='ml-3 font-semibold text-sm text-fprimary'>Арт: {product.vendor_code}</span>
-                          </span>
-                        </div>
-                      } key={product.id} defaultExpanded> {/* Измени key на product.id */}
-                        <EditProdPanel product={product} id={index}/> {/* Тоже передай id */}
+                    <Panel 
+                        header={
+                            <div className="flex justify-between items-center w-full pr-2">
+                                <span className='flex items-center gap-x-3'>
+                                    {product.title || `Продукт №${product.id}`} 
+                                    <span className='ml-3 font-semibold text-sm text-fprimary'>
+                                        Арт: {product.vendor_code}
+                                    </span>
+                                </span>
+                            </div>
+                        }
+                        defaultExpanded
+                    >
+                        <EditProdPanel product={product} id={index} /> 
                     </Panel>
                 </motion.div>
             ))}

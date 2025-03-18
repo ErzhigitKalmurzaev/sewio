@@ -8,14 +8,15 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getStaffPaymentInfo, postPayment, postPaymentFiles } from '../../../../../store/technolog/staff'
 import { toast } from 'react-toastify'
+import { set } from 'react-hook-form'
 
 function calculateTotal(works) {
     return works?.reduce((sum, work) => {
-        return sum + (work.total_amount * work.price);
+        return sum + (work?.total_amount * work?.operation?.price);
     }, 0);
 }
 
-const AdvanceModal = ({ modals, setModals }) => {
+const AdvanceModal = ({ modals, setModals, update, setUpdate }) => {
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -35,10 +36,10 @@ const AdvanceModal = ({ modals, setModals }) => {
   });
 
   useEffect(() => {
-    if(Object.keys(payment_info).length === 0) {
+    // if(Object.keys(payment_info).length === 0) {
         dispatch(getStaffPaymentInfo({ id: Number(id) }));
-    }
-  }, [id, dispatch])
+    // }
+  }, [id, update]);
 
   const validateField = () => {
     const newErrors = {
@@ -54,6 +55,7 @@ const AdvanceModal = ({ modals, setModals }) => {
         dispatch(postPayment({ ...payment, amount: Number(payment.amount) }))
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
+                setUpdate(prev => !prev);
                 if(files.length > 0) {
                     const dataWithFiles = {
                         payment_id: res.payload.id,

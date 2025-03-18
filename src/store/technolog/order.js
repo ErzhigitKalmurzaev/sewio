@@ -74,6 +74,18 @@ export const getOrderById = createAsyncThunk(
     }
 )
 
+export const getProductToOrderById = createAsyncThunk(
+    'order/getProductToOrderById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.get(`product/detail/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const editOrderById = createAsyncThunk(
     'order/editOrderById',
     async ({ id, props }, { rejectWithValue }) => {
@@ -110,6 +122,7 @@ const TechnologOrderSlice = createSlice({
         moderation_list: null,
         moderation_list_status: 'loading',
         accept_operation_status: 'loading',
+        product_status: 'loading',
 
         products_to_order: [
             {
@@ -216,7 +229,7 @@ const TechnologOrderSlice = createSlice({
         },
 
         change_edit_prod_amounts: (state, action) => {
-            const { index, colorId, sizeId, value } = action.payload;
+            const { index, colorId, sizeId, value, name } = action.payload;
 
             state.edit_products_in_order = state.edit_products_in_order.map((product, i) => {
                 if (i !== index) return product;
@@ -233,7 +246,7 @@ const TechnologOrderSlice = createSlice({
     
                                 return {
                                     ...sizeItem,
-                                    amount: value
+                                    [name]: value
                                 };
                             })
                         };
@@ -337,6 +350,30 @@ const TechnologOrderSlice = createSlice({
             }).addCase(getOrderById.rejected, (state) => {
                 state.order_status = 'error';
             })
+            // --------------------------------------------------
+            .addCase(getProductToOrderById.pending, (state) => {
+                state.product_status = 'loading';
+            }).addCase(getProductToOrderById.fulfilled, (state, action) => {
+                const prod = action.payload;
+                state.product_status = 'success';
+                state.products_to_order = [
+                    {
+                        nomenclature: prod.id,
+                        title: prod.title,
+                        price: '',
+                        cost_price: prod.cost_price,
+                        amounts: [
+                            {
+                                color: '',
+                                sizes: []
+                            }
+                        ]
+                    }
+                ];
+            }).addCase(getProductToOrderById.rejected, (state) => {
+                state.product_status = 'error';
+            })
+            
     }
 })
 

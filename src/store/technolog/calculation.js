@@ -62,6 +62,18 @@ export const getClientsNames = createAsyncThunk(
     }
 )
 
+export const getProductsNames = createAsyncThunk(
+    'calculationSlice/getProductsNames',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`calculation/get-product-titles/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const createCalculation = createAsyncThunk(
     'calculationSlice/createCalculation',
     async (props, { rejectWithValue }) => {
@@ -79,6 +91,18 @@ export const editCalculationById = createAsyncThunk(
     async ({ id, props }, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.patch(`calculation/crud/${id}/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getProductInfoById = createAsyncThunk(
+    'calculationSlice/getProductInfoById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`calculation/get-product-info/?product=${id}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -123,9 +147,11 @@ const CalculationSlice = createSlice({
 
         operations_list: null,
         clients: null,
+        products: null,
         calc_history: null,
         calc_history_status: 'loading',
-        calc_status: 'loading'
+        calc_status: 'loading',
+
     },
     reducers: {
         clearAll: (state) => {
@@ -257,6 +283,44 @@ const CalculationSlice = createSlice({
                 }));
             })
             .addCase(getCalculateById.rejected, (state) => {
+                state.calc_status = 'error';
+            })
+            .addCase(getProductsNames.fulfilled, (state, action) => {
+                state.products = action.payload
+            })
+            .addCase(getProductInfoById.pending, (state) => {
+                state.calc_status = 'kochuruu';
+            })
+            .addCase(getProductInfoById.fulfilled, (state, action) => {
+                state.calc_status = 'success';
+                const calc = action.payload;
+                state.mainFields = {
+                    vendor_code: calc.vendor_code,
+                    title: calc.title,
+                    count: calc.count,
+                    is_active: calc.is_active,
+                    price: calc.price,
+                    cost_price: calc.cost_price
+                };
+                state.operations = action.payload.operations.map(item => ({
+                    title: item.title,
+                    time: item.time,
+                    rank: item.rank.id,
+                    price: item.price
+                }));
+                state.consumables = action.payload.consumables.map(item => ({
+                    title: item.material_nomenclature?.title,
+                    consumption: item.consumption,
+                    unit: item?.material_nomenclature?.unit,
+                    price: item?.material_nomenclature?.cost_price,
+                    nomenclature: item?.material_nomenclature?.id
+                }));
+                state.prices = action.payload.prices.map(item => ({
+                    title: item.title,
+                    price: item.price    
+                }));
+            })
+            .addCase(getProductInfoById.rejected, (state) => {
                 state.calc_status = 'error';
             })
 

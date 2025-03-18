@@ -12,15 +12,16 @@ const SalaryHistoryTable = ({ data, status, activePage, limit, setPage, total })
   const navigate = useNavigate();
 
   return (
-    <div className='min-h-[400px] font-inter bg-white rounded-xl'>
+    <div className='min-h-[500px] font-inter bg-white rounded-xl'>
         <Table
             virtualized
-            height={400}
+            height={500}
             loading={status === 'loading'}
             data={data || []}
             bordered
             className='rounded-xl'
             hover
+            rowClassName={'cursor-pointer'}
             onRowClick={(rowData) => navigate(`${rowData.id}`)}
         >
             <Column width={100} align="center">
