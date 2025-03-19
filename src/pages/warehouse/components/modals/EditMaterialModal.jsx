@@ -102,7 +102,7 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
                             error={errors.vendor_code}
                         />
                         <Select
-                            width='1/2'
+                            // width='1/2'
                             label='Единица измерения'
                             placeholder='Выберите'
                             data={materialUnits}

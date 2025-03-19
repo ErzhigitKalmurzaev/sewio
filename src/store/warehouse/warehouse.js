@@ -25,11 +25,35 @@ export const getComings = createAsyncThunk(
     }
 )
 
+export const getComingHistory = createAsyncThunk(
+    'warehouse/getComingHistory',
+    async ({ page, page_size }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`warehouse/history/list/?page=${page}&page_size=${page_size}`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const getComingById = createAsyncThunk(
     'warehouse/getComingById',
     async ({ id }, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.get(`warehouse/movements/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getComingHistoryById = createAsyncThunk(
+    'warehouse/getComingHistoryById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`warehouse/history/list/${id}/`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -69,7 +93,9 @@ const WareWarehouseSlice = createSlice({
         comings_list: [],
         comings_list_status: 'loading',
         coming: null,
-        coming_status: 'loading'
+        coming_status: 'loading',
+        coming_history: null,
+        coming_history_status: 'loading'
     },
     reducers: {
 
@@ -96,11 +122,31 @@ const WareWarehouseSlice = createSlice({
             // ------------------------------------------
             .addCase(getComingById.pending, (state) => {
                 state.coming_status = 'loading';
+                state.coming = null;
             }).addCase(getComingById.fulfilled, (state, action) => {
                 state.coming_status = 'success';
                 state.coming = action.payload
             }).addCase(getComingById.rejected, (state) => {
                 state.coming_status = 'error';
+            })
+            // ------------------------------------------
+            .addCase(getComingHistoryById.pending, (state) => {
+                state.coming_status = 'loading';
+                state.coming = null;
+            }).addCase(getComingHistoryById.fulfilled, (state, action) => {
+                state.coming_status = 'success';
+                state.coming = action.payload
+            }).addCase(getComingHistoryById.rejected, (state) => {
+                state.coming_status = 'error';
+            })
+            // ------------------------------------------
+            .addCase(getComingHistory.pending, (state) => {
+                state.coming_history_status = 'loading';
+            }).addCase(getComingHistory.fulfilled, (state, action) => {
+                state.coming_history_status = 'success';
+                state.coming_history = action.payload
+            }).addCase(getComingHistory.rejected, (state) => {
+                state.coming_history_status = 'error';
             })
     }
 })

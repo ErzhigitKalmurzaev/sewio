@@ -4,12 +4,14 @@ import Title from '../../../components/ui/title'
 import ComingsTable from './components/tables/comingsTable'
 import { useDispatch, useSelector } from 'react-redux'
 import { getComings } from '../../../store/warehouse/warehouse'
+import Button from '../../../components/ui/button'
+import { useNavigate } from 'react-router-dom'
 
 const Comings = () => {
 
   const breadcrumbs = [
     {
-        label: 'Склады',
+        label: 'Главная',
         path: '/main',
         active: false
     },
@@ -21,6 +23,7 @@ const Comings = () => {
   ]
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { comings_list, comings_list_status } = useSelector(state => state.ware_warehouse);
   
@@ -36,6 +39,9 @@ const Comings = () => {
 
         <div className='flex items-center justify-between'>
             <Title text="Приход сырья"/>
+            <Button onClick={() => navigate('history')}>
+              История прихода
+            </Button>
         </div>
 
         <div>

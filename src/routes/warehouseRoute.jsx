@@ -7,6 +7,8 @@ import RejectMaterials from '../pages/warehouse/reject/rejectMaterials';
 import IssueMaterials from '../pages/warehouse/issue/issueMaterials';
 import Comings from '../pages/warehouse/coming/comings';
 import ComingDeteil from '../pages/warehouse/coming/comingDeteil';
+import ComingHistory from '../pages/warehouse/coming/comingHistory';
+import ComingHistoryDeteil from '../pages/warehouse/coming/comingHistoryDetail';
 
 const WarehouseRoute = () => {
   return (
@@ -22,6 +24,8 @@ const WarehouseRoute = () => {
                 <Route path="coming" element={<Outlet/>}>
                     <Route path="" element={<Comings/>}/>
                     <Route path=":id" element={<ComingDeteil/>}/>
+                    <Route path="history" element={<ComingHistory/>}/>
+                    <Route path="history/:id" element={<ComingHistoryDeteil/>}/>
                 </Route>
             </Route>
         </Route>

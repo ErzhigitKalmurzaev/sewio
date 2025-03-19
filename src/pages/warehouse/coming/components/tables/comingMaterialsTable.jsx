@@ -11,7 +11,7 @@ const ComingMaterialsTable = ({ data, status }) => {
   const navigate = useNavigate();
 
   return (
-    <div className='min-h-[400px] bg-white rounded-xl'>
+    <div className='min-h-[500px] font-inter bg-white rounded-xl'>
       <Table
             height={450}
             loading={status === 'loading'}
@@ -19,6 +19,7 @@ const ComingMaterialsTable = ({ data, status }) => {
             className='rounded-xl'
             bordered
             cellBordered
+            virtualized
         >
             <Column width={90} align="center" fixed>
                 <HeaderCell>ID</HeaderCell>

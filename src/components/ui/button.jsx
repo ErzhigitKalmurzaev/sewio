@@ -2,7 +2,7 @@ import React from 'react'
 import { LoadingButton } from '@mui/lab';
 import styled from '@emotion/styled'
 
-const Button = ({ variant = "default", active, disabled, type, sx, loading, children, width, onClick, icon, ...props }) => {
+const Button = ({ variant = "default", active,  , type, sx, loading, children, width, onClick, icon, ...props }) => {
     const VARIANTS = {
         default: {
             padding: "0 10px",

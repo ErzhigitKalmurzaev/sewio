@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import MyBreadcrums from '../../../components/ui/breadcrums';
 import Title from '../../../components/ui/title';
 import Button from '../../../components/ui/button';
 import ComingMaterialsTable from './components/tables/comingMaterialsTable';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getComingById, postAnswerComing } from '../../../store/warehouse/warehouse';
+import { getComingHistoryById, getComingById, postAnswerComing } from '../../../store/warehouse/warehouse';
 import RejectComingModal from './components/modals/rejectComingModal';
 import { toast } from 'react-toastify';
-import { formatedToDDMMYYYY } from '../../../utils/functions/dateFuncs';
 
-const ComingDeteil = () => {
-
+const ComingHistoryDetail = () => {
     const breadcrumbs = [
         {
             label: 'Главная',
@@ -24,11 +22,16 @@ const ComingDeteil = () => {
             active: false
         },
         {
+            label: 'История прихода сырья',
+            path: '/main/coming/history',
+            active: false
+        },
+        {
             label: 'Подробнее',
-            path: '/main/coming',
+            path: '/main/coming/history',
             active: true
         }
-    ]
+    ];
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -36,41 +39,34 @@ const ComingDeteil = () => {
     const { id } = useParams();
     const { coming, coming_status } = useSelector(state => state.ware_warehouse);
 
-    const [modals, setModals] = useState({ reject: false })
+    const [modals, setModals] = useState({ reject: false });
 
     useEffect(() => {
-        dispatch(getComingById({ id }))
-    }, [])
+        dispatch(getComingHistoryById({ id }));
+    }, []);
 
-    const onSubmit = (answer) => {
-        dispatch(postAnswerComing({ quantity_id: id, status: answer }))
-            .then(res => {
-                if(res.meta.requestStatus === 'fulfilled') {
-                    if(answer === 2) {
-                        toast("Приход сырья принят!");
-                    }  else {
-                        toast("Приход сырья отклонен!");
-                    }
-                    navigate(-2)
-                } else {
-                    toast("Произошла ошибка!")
-                }
-            })
-    }
+    // Format date function
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ru-RU', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
 
     return (
-      <div className='flex flex-col gap-y-5 mb-5'>
-          <MyBreadcrums items={breadcrumbs}/>
-  
-          <div className='flex items-center justify-between'>
-              <Title text={`Приход сырья ${coming?.id}`}/>
-              <div className='flex items-center justify-end gap-x-3'>
-                <Button variant='red' width='100px' onClick={() => setModals({ ...modals, reject: true })}>Отклонить</Button>
-                <Button variant='green' width='100px' onClick={() => onSubmit(2)}>Принять</Button>
-              </div>
-          </div>
+        <div className='flex flex-col gap-y-5 mb-5'>
+            <MyBreadcrums items={breadcrumbs} />
 
-          {coming && coming.quantity && (
+            <div className='flex items-center justify-between'>
+                <Title text={`Приход сырья №${coming?.id || ''}`} />
+            </div>
+
+            {/* Creative Warehouse Transfer Information Card */}
+            {coming && coming.quantity && (
                 <div className="bg-gradient-to-r from-slate-50 to-stone-50 rounded-xl shadow-md overflow-hidden">
                     <div className="px-6 py-4 bg-white">
                         <div className="flex justify-between items-center">
@@ -93,7 +89,7 @@ const ComingDeteil = () => {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500">Дата перемещения</p>
-                                        <p className="font-medium">{formatedToDDMMYYYY(coming.quantity.created_at)}</p>
+                                        <p className="font-medium">{formatDate(coming.quantity.created_at)}</p>
                                     </div>
                                 </div>
                                 
@@ -118,9 +114,9 @@ const ComingDeteil = () => {
                                     <div>
                                         <p className="text-xs text-gray-500">Статус</p>
                                         {coming.status === 2 ? (
-                                            <p className="text-green-600 font-medium">Принят</p>
+                                            <p className="text-red-600 font-medium">Отказан</p>
                                         ) : coming.status === 3 ? (
-                                            <p className="text-red-600 font-medium">Отклонен</p>
+                                            <p className="text-green-600 font-medium">Принят</p>
                                         ) : null}
                                     </div>
                                 </div>
@@ -177,17 +173,18 @@ const ComingDeteil = () => {
                     </div>
                 </div>
             )}
-  
-          <div>
-              <ComingMaterialsTable
-                  data={coming?.quantities}
-                  status={coming_status}
-              />
-          </div>
 
-          <RejectComingModal modals={modals} setModals={setModals} onReject={() => onSubmit(3)}/>
-      </div>
-    )
-}
+            <h3 className="text-xl font-semibold text-primary font-inter mt-2">Перемещенные материалы</h3>
+            <div className="bg-white rounded-lg shadow-md">
+                <ComingMaterialsTable
+                    data={coming?.quantity?.quantities}
+                    status={coming_status}
+                />
+            </div>
 
-export default ComingDeteil
+            {/* <RejectComingModal modals={modals} setModals={setModals} onReject={() => onSubmit(3)}/> */}
+        </div>
+    );
+};
+
+export default ComingHistoryDetail;
