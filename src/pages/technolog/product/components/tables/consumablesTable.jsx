@@ -61,8 +61,6 @@ const ConsumablesTable = ({ type }) => {
     })
   }
 
-  console.log(consumables)
-
   return (
     <div>
         <Table

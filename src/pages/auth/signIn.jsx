@@ -29,13 +29,13 @@ const SignIn = () => {
 
   return (
     <Wrapper>
-      <div className="w-[430px] h-[500px] bg-white rounded-2xl flex justify-center items-center">
+      <div className="w-[430px] h-[500px] bg-zinc-50 rounded-2xl flex justify-center items-center shadow shadow-md">
         <form className="w-4/5 flex flex-col gap-y-5" onSubmit={handleSubmit}>
-          <h1 className="text-2xl font-bold text-center mb-5">SewMaster</h1>
-          <p className="text-xl font-bold">Добро пожаловать!</p>
+          <h1 className="text-2xl font-bold text-center text-primary mb-5">SewMaster</h1>
+          <p className="text-xl font-bold text-primary">Добро пожаловать!</p>
           <div className="flex flex-col gap-y-4">
-            <Input label="Логин" value={login} onChange={(e) => setLogin(e.target.value)} type="text"/>
-            <Input label="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} type='password' eays={true} />
+            <Input label="Логин" placeholder={"Введите логин"} value={login} onChange={(e) => setLogin(e.target.value)} type="text"/>
+            <Input label="Пароль" placeholder={"Введите пароль"} value={password} onChange={(e) => setPassword(e.target.value)} type='password' eays={true} />
             <Link sx={{ color: "#2F4F4F", textDecoration: 'none', textAlign: 'right', fontSize: "14px", cursor: "pointer", "&:hover": { textDecoration: 'underline'} }}>
                 Забыли пароль?
             </Link>

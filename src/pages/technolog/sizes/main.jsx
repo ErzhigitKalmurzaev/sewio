@@ -25,6 +25,7 @@ const Sizes = () => {
   
   const [sizeModals, setSizeModals] = useState({ create: false, edit: false, id: null });
   const [colorModals, setColorModals] = useState({ create: false, edit: false, id: null });
+  
 
   useEffect(() => {
     dispatch(getSizesList());

@@ -59,7 +59,7 @@ const FolderTable = ({ urls, params, setParams }) => {
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full p-4'>
         <div className='flex flex-col gap-y-3'>
           {
             urls.stage == 1 && 

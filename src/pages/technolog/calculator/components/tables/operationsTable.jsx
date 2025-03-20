@@ -53,22 +53,21 @@ const OperationsTable = ({ type }) => {
   }
 
   const handleSelect = (id, index) => {
-    // setLoading(true);
-    // dispatch(getOperation({ id })).then(res => {
-    //   if(res.meta.requestStatus === 'fulfilled') {
+    setLoading(true);
+    dispatch(getOperation({ id })).then(res => {
+      if(res.meta.requestStatus === 'fulfilled') {
 
-    //       const rank_kef = rank_list.find(item => item.id === res.payload.rank?.id)?.percent;
+          const rank_kef = rank_list.find(item => item.id === res.payload.rank?.id)?.percent;
 
-    //       dispatch(fillOperation({ key: index, value: {
-    //             title: res.payload.title,
-    //             time:  res.payload.time,
-    //             rank: res.payload.rank?.id,
-    //             price: res.payload.time * rank_kef 
-    //       }}))
-    //   }
-    //   setLoading(false);
-    // }) 
-    console.log(id) 
+          dispatch(fillOperation({ key: index, value: {
+                title: res.payload.title,
+                time:  res.payload.time,
+                rank: res.payload.rank?.id,
+                price: res.payload.time * rank_kef 
+          }}))
+      }
+      setLoading(false);
+    })
   }
 
   return (

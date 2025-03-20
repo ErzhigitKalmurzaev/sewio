@@ -6,7 +6,7 @@ import OperationTable from '../tables/operationTable'
 
 const GeneralTables = ({ urls, params, setParams }) => {
   return (
-    <div className='min-h-[480px] font-inter bg-white rounded-xl p-4'>
+    <div className='min-h-[500px] font-inter bg-white rounded-xl'>
         {
             urls?.activePage === 'folder' && <FolderTable urls={urls} params={params} setParams={setParams}/>
         }

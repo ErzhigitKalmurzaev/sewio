@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { createSize, getSizesList } from '../../../../store/technolog/size'
 import { toast } from 'react-toastify'
 
-const CreateSize = ({ modals, setModals, setUpdate }) => {
+const CreateSize = ({ modals, setModals }) => {
 
   const dispatch = useDispatch();
 
@@ -32,9 +32,8 @@ const CreateSize = ({ modals, setModals, setUpdate }) => {
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
                 toast("Размер создан успешно!");
-                setModals({ ...modals, create: false })
-                setUpdate(prev => !prev)
                 dispatch(getSizesList());
+                setModals({ ...modals, create: false })
                 setSize({
                     title: '',
                     is_active: true
