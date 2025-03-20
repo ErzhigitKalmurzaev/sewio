@@ -20,7 +20,7 @@ const KroiRoute = () => {
   return (
     <Routes>
         <Route path="/*" element={windowWidth < 768 ? <ShveyaMobileLayout/> : <CRMLayout />}>
-            <Route index element={<Navigate to="salary" replace />} /> 
+            <Route index element={<Navigate to="orders" replace />} /> 
             
             <Route path="salary" element={<Outlet/>}>
                 <Route path="" element={<MySalary />} />

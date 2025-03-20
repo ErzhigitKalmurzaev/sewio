@@ -14,9 +14,9 @@ const RankTable = ({ data, setModals, modals, setEditRank, rank_list_status }) =
   }
 
   return (
-    <div className='min-h-[480px] font-inter bg-white rounded-xl'>
+    <div className='min-h-[500px] font-inter bg-white rounded-xl'>
         <Table
-            height={480}
+            height={500}
             loading={rank_list_status === 'loading'}
             data={data || []}
             className='rounded-xl'
@@ -48,7 +48,7 @@ const RankTable = ({ data, setModals, modals, setEditRank, rank_list_status }) =
                     }
                 </Cell>
             </Column>
-            <Column width={470} fixed="right">
+            <Column flexGrow={1} fixed="right">
                 <HeaderCell>Действия</HeaderCell>
 
                 <Cell style={{ padding: '6px' }}>
