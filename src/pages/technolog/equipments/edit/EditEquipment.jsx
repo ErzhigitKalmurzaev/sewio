@@ -72,7 +72,6 @@ const EditEquipment = () => {
     const newErrors = {
         title: !equipment.title,
         price: !equipment.price,
-        description: !equipment.description,
         service_date: !equipment.service_date,
         guarantee: !equipment.guarantee
       };

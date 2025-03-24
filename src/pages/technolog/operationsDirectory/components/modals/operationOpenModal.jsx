@@ -133,7 +133,7 @@ const OperationOpenModal = ({ modals, setModals }) => {
                                     valueKey={'id'}
                                 />
                                 <NumInput
-                                    label='Название'
+                                    label='Цена'
                                     value={`${operation?.price}`}
                                     onChange={(e) => getValue(e, 'price')}
                                     error={changed && errors?.price}

@@ -18,7 +18,9 @@ const ProductTable = ({ data, status, total, activePage, limit, setPage }) => {
               virtualized
               loading={status === 'loading'}
               data={data}
-              height={600}
+              height={500}
+              bordered
+              cellBordered
               className='rounded-xl h-full'
             >
               <Column width={60} align="center" fixed>
