@@ -26,6 +26,7 @@ const ProdPanel = ({ product, id }) => {
 
   const getValue = (value, name, index, sizeId) => {
     dispatch(change_prod_amounts({ id, index, name, value, sizeId }));
+    console.log(id, index, name, value, sizeId);
 };
 
   const getValueMain = (name, value) => {

@@ -17,7 +17,7 @@ const AmountsTable = () => {
   const { products_to_order, product_list } = useSelector(state => state.order);
 
   const [loading, setLoading] = useState(false);
-
+  console.log(products_to_order)
   useEffect(() => {
     dispatch(getOrderProductList());
   }, [])

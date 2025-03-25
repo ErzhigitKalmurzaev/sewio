@@ -178,15 +178,16 @@ const TechnologOrderSlice = createSlice({
             const { id, index, name, value, sizeId } = action.payload;
 
             if (name === "size") {
-                const sizesArray = state.products_to_order[id].amounts[index].sizes;
+                const sizesArray = state.products_to_order[id].amounts[index].sizes || [];
                 
                 // Ищем существует ли уже этот размер
-                const sizeIndex = sizesArray.findIndex(s => s.size === sizeId);
+                const sizeIndex = sizesArray?.findIndex(s => s.size === sizeId) || -1;
         
                 if (parseInt(value) > 0) {
                     if (sizeIndex === -1) {
                         // Если размер не найден, добавляем новый
                         sizesArray.push({ size: sizeId, amount: value });
+                        state.products_to_order[id].amounts[index].sizes = sizesArray;
                     } else {
                         // Если размер уже есть, обновляем количество
                         sizesArray[sizeIndex].amount = value;
