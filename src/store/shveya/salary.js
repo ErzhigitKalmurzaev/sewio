@@ -20,7 +20,7 @@ export const getMySalaryDetail = createAsyncThunk(
     async ({ id }, { rejectWithValue }) => {
         try {
 
-            const { data } =  await axiosInstance.get(`payment/history/detail/my/${id}`);
+            const { data } =  await axiosInstance.get(`payment/history/detail/my/${id}/`);
             return data;
         } catch (err) {
             return rejectWithValue(err)

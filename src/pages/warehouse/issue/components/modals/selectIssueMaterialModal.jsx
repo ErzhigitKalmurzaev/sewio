@@ -12,8 +12,8 @@ const SelectIssueMaterialModal = ({ modals, setModals, materials_list, status, u
   const [selectedMaterial, setSelectedMaterial] = useState([]);
 
   const selectMaterial = (material) => {
-    console.log(selectedMaterial, material)
-    if(selectedMaterial.find(item => item.id === material.id)){
+    console.log(selectedMaterial.find(item => item.id === material.id))
+    if(selectedMaterial.findIndex(item => item.id === material.id) !== -1){
       setSelectedMaterial(selectedMaterial.filter(item => item.id !== material.id));
     } else {
       setSelectedMaterial([...selectedMaterial, material]);
