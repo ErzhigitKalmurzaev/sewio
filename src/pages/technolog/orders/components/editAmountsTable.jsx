@@ -36,6 +36,7 @@ const EditAmountsTable = () => {
                     exit={{ opacity: 0, y: -10, transition: { duration: 0.3 } }} 
                 >
                     <Panel 
+                        key={`panel-${product.id || index}`}
                         header={
                             <div className="flex justify-between items-center w-full pr-2">
                                 <span className='flex items-center gap-x-3'>

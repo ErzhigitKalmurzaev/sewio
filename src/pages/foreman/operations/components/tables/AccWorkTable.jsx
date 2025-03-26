@@ -21,13 +21,15 @@ const AccWorkTable = ({ data, status, amount }) => {
   }, []);
 
   const getAmountValue = (value, rowData, index) => {
-      if (value > amount) {
-        toast.error(`Максимально допустимое количество: ${amount}`);
-        dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value: '' }));
-      } else {
-        dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value }));
-      }
-  }
+    const totalCount = rowData.details?.reduce((sum, detail, i) => sum + (i === index ? Number(value) : Number(detail.count)), 0) || 0;
+  
+    if (totalCount > amount) {
+      dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value: '' }));
+      toast.error(`Общее количество (${totalCount}) превышает максимально допустимое: ${amount}`);
+    } else {
+      dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value }));
+    }
+  };
 
   const maxDetails = Math.max(...data.map((op) => op.details.length));
   

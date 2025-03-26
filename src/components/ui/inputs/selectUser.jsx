@@ -21,6 +21,7 @@ const SelectUser = ({ width = '100%', label, placeholder, data, onChange, error,
         valueKey={valueKey ? valueKey : 'value'}
         placeholder={placeholder}
         disabled={disabled}
+        menuMaxHeight={250}
         renderMenuItem={(label, item) => (
           <div>
             <p className='text-sm font-inter text-fprimary'><span>{item.name}</span> <span>{item.surname}</span></p>

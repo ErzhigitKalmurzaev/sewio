@@ -48,6 +48,7 @@ const EditClient = () => {
             })
             setImage(res.payload?.image)
             setExistingFiles(res?.payload?.files)
+            setLoading(false)
         })
   }, [])
 
@@ -73,7 +74,7 @@ const EditClient = () => {
   const [existingFiles, setExistingFiles] = useState([]);
   const [files, setFiles] = useState([]);
   const [deleteFiles, setDeleteFiles] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getValue = (e) => {
     const { name, value } = e.target;

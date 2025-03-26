@@ -86,7 +86,6 @@ const EditProdPanel = ({ product, id }) => {
           cellBordered
           data={product.amounts || []}
           autoHeight
-          minHeight={200}
           headerHeight={60}
           className='mb-3'
         >
@@ -160,9 +159,9 @@ const EditProdPanel = ({ product, id }) => {
         </Table>
       </div>
 
-      <div className='flex justify-end'>
+      {/* <div className='flex justify-end'>
         <Button width='120px' variant='red' onClick={() => setModal(true)}>Удалить</Button>
-      </div>
+      </div> */}
 
       <ConfirmDeleteModal modal={modal} setModal={setModal} id={id} />
     </div>

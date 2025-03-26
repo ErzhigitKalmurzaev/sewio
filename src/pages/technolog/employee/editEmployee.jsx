@@ -18,6 +18,7 @@ import { getRankList } from '../../../store/technolog/rank'
 import { toast } from 'react-toastify'
 import AdvanceModal from './components/modals/advanceModal'
 import FineModal from './components/modals/fineModal'
+import BackDrop from '../../../components/ui/backdrop'
 
 const EditEmployee = () => {
 
@@ -135,6 +136,10 @@ const EditEmployee = () => {
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs}/>
+
+      {
+        staff_info_status === 'loading' && <BackDrop/>
+      }
       
       <div className='flex justify-between items-center'>
         <Title text="Редактирование сотрудника"/>
@@ -254,7 +259,7 @@ const EditEmployee = () => {
           </div>
         </div>
 
-        <div className='flex justify-center mt-3'>
+        <div className='flex justify-center mt-8'>
           <Button className='w-[300px]' type='submit'>Сохранить</Button>
         </div>
       </form>

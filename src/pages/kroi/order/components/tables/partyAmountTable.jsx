@@ -41,7 +41,7 @@ const PartyAmountTable = ({ data, status }) => {
         className="rounded-lg border-2 border-borderGray"
       >
         {/* Колонка "Цвет" */}
-        <Column width={100} align="center" verticalAlign="center">
+        <Column width={110} align="center" verticalAlign="center"fullText>
           <HeaderCell>Цвет</HeaderCell>
           <Cell dataKey="color.title" />
         </Column>

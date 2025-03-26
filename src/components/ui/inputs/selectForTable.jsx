@@ -16,6 +16,7 @@ const SelectForTable = ({ width, label, placeholder, data, onChange, error, requ
         valueKey={valueKey || 'value'}
         placeholder={placeholder}
         disabled={disabled}
+        menuMaxHeight={150}
         renderMenuItem={(label, item) => (
           <div className="flex items-center gap-2">
             {colors && (

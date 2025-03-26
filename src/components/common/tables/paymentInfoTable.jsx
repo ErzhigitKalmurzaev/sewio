@@ -31,7 +31,7 @@ const PaymentInfoTable = ({ data, status }) => {
                         </tr>
                         ))}
                         <tr>
-                        <td colSpan="2" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
+                        <td colSpan="3" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
                         <td className="border border-borderGray px-4 py-2 font-bold text-green-600">
                             +{data?.amount}
                         </td>

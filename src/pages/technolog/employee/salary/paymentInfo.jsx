@@ -10,6 +10,8 @@ import BackDrop from '../../../../components/ui/backdrop'
 
 const PaymentInfo = () => {
 
+  const { id, salary_id } = useParams();
+
   const breadcrumbs = [
     {
         label: 'Сотрудники',
@@ -18,7 +20,7 @@ const PaymentInfo = () => {
     },
     {
         label: 'Редактирование сотрудника',
-        path: '/employee/info',
+        path: `/employee/${id}`,
         active: false
     },
     {
@@ -28,15 +30,14 @@ const PaymentInfo = () => {
     }
   ]
 
-  const { id } = useParams();
   const dispatch = useDispatch();
 
   const { payment_detail, payment_detail_status } = useSelector(state => state.staff);
 
   useEffect(() => {
     dispatch(clear_payment_info())
-    dispatch(getStaffPaymentDetail({ id }))
-  }, [id, dispatch])
+    dispatch(getStaffPaymentDetail({ id: salary_id }))
+  }, [salary_id, dispatch])
 
   return (
     <div className='flex flex-col gap-y-5 mb-5'>

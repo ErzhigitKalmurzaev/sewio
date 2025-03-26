@@ -55,7 +55,10 @@ const Discharge = () => {
 
     const onSubmit = () => {
         if(validateFields(newRank)) {
-            dispatch(createRank(newRank))
+            dispatch(createRank({
+                ...newRank,
+                percent: Number(newRank.percent)
+            }))
                 .then(res => {
                     if(res.meta.requestStatus === 'fulfilled') {
                         setModals({ ...modals, create: false })
@@ -69,7 +72,10 @@ const Discharge = () => {
 
     const onEditSubmit = () => {
         if(validateFields(editRank)) {
-            dispatch(editingRank({id: editRank.id, props: editRank}))
+            dispatch(editingRank({id: editRank.id, props: {
+                ...editRank,
+                percent: Number(editRank.percent)
+            }}))
                 .then(res => {
                     if(res.meta.requestStatus === 'fulfilled') {
                         setModals({ ...modals, edit: false })

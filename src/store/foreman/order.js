@@ -187,7 +187,7 @@ const ForemanOrderSlice = createSlice({
         const { operationId, index, field, value } = action.payload;
         const operation = state.operations_list.find((op) => op.id === operationId);
         if (operation) {
-          operation.details[index][field] = value;
+            operation.details[index][field] = value;
         }
     },
     clearOperationsList: (state) => {

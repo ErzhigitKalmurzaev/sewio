@@ -3,23 +3,47 @@ import styled from '@emotion/styled';
 
 const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder, required, error, errorTitle, disabled = false, max = 10000000000000 }) => {
   
-  const [inputValue, setInputValue] = useState(value);
-
-  useEffect(() => {
-    if(value === '') {
-      setInputValue(value);
-    }
-  }, [value]);
-
   const formatNumber = (num) => {
-    return num.replace(/\D/g, '')
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    // Преобразуем num в строку (если он не строка)
+    let strNum = String(num || '');
+
+    // Убираем все символы, кроме цифр и точки
+    strNum = strNum.replace(/[^0-9.]/g, '');
+
+    // Разбиваем на целую и дробную части
+    let [integerPart, decimalPart] = strNum.split('.');
+
+    // Если больше одной точки — оставляем только первую
+    if (strNum.split('.').length > 2) {
+      integerPart = strNum.slice(0, strNum.indexOf('.'));
+      decimalPart = strNum.slice(strNum.indexOf('.') + 1).replace(/\./g, '');
+    }
+
+    // Форматируем целую часть числа с пробелами
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+    // Обрабатываем случай, когда пользователь вводит только "."
+    if (strNum.startsWith('.')) {
+      return '0.' + (decimalPart || '');
+    }
+
+    return decimalPart !== undefined ? `${integerPart}.${decimalPart}` : integerPart;
   };
 
+  const [inputValue, setInputValue] = useState(formatNumber(value));
+
+  useEffect(() => {
+    setInputValue(formatNumber(value));
+  }, [value]);
+
   const handleChange = (e) => {
-    const { value } = e.target;
+    let { value } = e.target;
+
+    // Форматируем ввод
     const formattedValue = formatNumber(value);
     setInputValue(formattedValue);
+
+    // Убираем пробелы перед передачей наверх
     if (onChange) {
       onChange(formattedValue.replace(/\s+/g, ''));
     }
@@ -29,16 +53,16 @@ const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder,
     <StyledDiv width={width}>
       <StyledInput
         id={id}
-        name=''
+        name=""
         type="text"
-        value={inputValue || value}
+        value={inputValue}
         onChange={handleChange}
         disabled={disabled}
         placeholder={placeholder}
         max={max}
       />
       <p className='text-redd text-xs font-inter mt-1'>
-          {error && (errorTitle ? errorTitle : '(Заполните поле правильно!)')}
+        {error && (errorTitle ? errorTitle : '(Заполните поле правильно!)')}
       </p>
     </StyledDiv>
   );

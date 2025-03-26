@@ -39,7 +39,7 @@ const CreateParty = () => {
       const new_party = {
         order: Number(orderId),
         nomenclature: Number(id),
-        number: Number(party.number),
+        number: party.number,
         details: party_amounts.flatMap(item => (
           item.sizes.map(sizeData => ({
             color: item.color.id,

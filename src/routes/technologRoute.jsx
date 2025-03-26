@@ -48,7 +48,7 @@ const TechnologRoute = () => {
                 <Route path=":id">
                   <Route path="" element={<EditEmployee />} />
                   <Route path="salary_history" element={<SalaryHistory />} />
-                  <Route path="salary_history/:id" element={<PaymentInfo />} />
+                  <Route path="salary_history/:salary_id" element={<PaymentInfo />} />
                   <Route path="salary_calculate" element={<SalaryPayment />} />
                 </Route>
             </Route>

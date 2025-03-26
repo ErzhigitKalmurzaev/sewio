@@ -176,28 +176,28 @@ const TechnologOrderSlice = createSlice({
         },
         change_prod_amounts: (state, action) => {
             const { id, index, name, value, sizeId } = action.payload;
-
+        
             if (name === "size") {
-                const sizesArray = state.products_to_order[id].amounts[index].sizes || [];
-                
-                // Ищем существует ли уже этот размер
-                const sizeIndex = sizesArray?.findIndex(s => s.size === sizeId) || -1;
+                let sizesArray = state.products_to_order[id].amounts[index].sizes || [];
+        
+                // Находим индекс существующего размера
+                let sizeIndex = sizesArray.findIndex(s => s.size === sizeId);
         
                 if (parseInt(value) > 0) {
                     if (sizeIndex === -1) {
                         // Если размер не найден, добавляем новый
                         sizesArray.push({ size: sizeId, amount: value });
-                        state.products_to_order[id].amounts[index].sizes = sizesArray;
                     } else {
                         // Если размер уже есть, обновляем количество
                         sizesArray[sizeIndex].amount = value;
                     }
-                } else {
+                } else if (sizeIndex !== -1) {
                     // Если значение = 0, удаляем размер из массива
-                    if (sizeIndex !== -1) {
-                        sizesArray.splice(sizeIndex, 1);
-                    }
+                    sizesArray.splice(sizeIndex, 1);
                 }
+        
+                // Обновляем массив без дубликатов
+                state.products_to_order[id].amounts[index].sizes = sizesArray;
             } else {
                 state.products_to_order[id].amounts[index][name] = value;
             }
@@ -259,7 +259,7 @@ const TechnologOrderSlice = createSlice({
         change_edit_prod_main: (state, action) => {
             const { index, name, value } = action.payload;
     
-            state.edit_products_in_order[index][name] = value;
+            state.edit_products_in_order[index][name] = Number(value);
         },
         delete_edit_prod: (state, action) => {
             const { index } = action.payload;

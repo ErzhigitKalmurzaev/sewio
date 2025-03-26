@@ -19,7 +19,7 @@ const CRMLayout = () => {
         <Navbar role={me_info?.role}/>
 
         {/* Скролящаяся основная часть */}
-        <div className="p-10 w-full overflow-auto" style={{ background: "#F5F5FA" }}>
+        <div className="p-10 w-full overflow-auto pb-20" style={{ background: "#F5F5FA" }}>
           <Suspense fallback={<BackDrop />}>
             <Outlet />
           </Suspense>

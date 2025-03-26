@@ -196,7 +196,7 @@ const CreateEmployee = () => {
           </div>
         </div>
 
-        <div className='flex justify-center mt-3'>
+        <div className='flex justify-center mt-8'>
           <Button className='w-[300px]' type='submit'>Сохранить</Button>
         </div>
       </form>

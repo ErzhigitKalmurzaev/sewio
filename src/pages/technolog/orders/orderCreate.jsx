@@ -131,8 +131,9 @@ const OrderCreate = () => {
     if(validateFields()) {
       dispatch(createOrder({
         ...order,
-        products: products_to_order.map(item => ({
+        products: products_to_order?.map(item => ({
           ...item,
+          price: item?.price || item?.cost_price,
           amounts: item.amounts.flatMap(amount => 
               amount.sizes.map(size => ({
                   color: amount.color,
@@ -147,6 +148,8 @@ const OrderCreate = () => {
           dispatch(clearAll())
           setOrder({...order, deadline: '', client: '', products: []});
           navigate(-1)
+        } else {
+            toast.error('Произошла ошибка! Проверьте и заполните все поля правильно!')
         }
       })
     } else {

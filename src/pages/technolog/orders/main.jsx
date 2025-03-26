@@ -20,12 +20,18 @@ const Orders = () => {
     status: params?.get("status") || "",
     search: params?.get("search") || "",
     page: params.get("page") || 1,
-    page_size: params.get("page_size") || ""
+    page_size: params.get("page_size") || 20
   };
 
   const handleChangeFilter = (name, value) => {
-    params.set(name, value);
-    setParams(params);
+    if(name === 'status') {
+        params.set(name, value);
+        params.set('page', 1);
+        setParams(params);
+    } else {
+        params.set(name, value);
+        setParams(params);
+    }
   }
 
   useEffect(() => {
