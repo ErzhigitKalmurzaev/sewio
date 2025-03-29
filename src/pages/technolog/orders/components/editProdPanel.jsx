@@ -7,10 +7,11 @@ import { getColors } from '../../../../store/technolog/material';
 import SelectForTable from '../../../../components/ui/inputs/selectForTable';
 import Button from '../../../../components/ui/button';
 import ConfirmDeleteModal from '../modals/confirmDeleteModal';
+import PartiesPanel from './partiesPanel';
 
 const EditProdPanel = ({ product, id }) => {
   const dispatch = useDispatch();
-  const { product_list } = useSelector(state => state.order);
+  const { product_list, order_parties } = useSelector(state => state.order);
   const { colors_list } = useSelector(state => state.material);
 
   const [modal, setModal] = useState(false);
@@ -42,7 +43,7 @@ const EditProdPanel = ({ product, id }) => {
   const uniqueSizes = Array.from(
     new Set(product?.amounts?.flatMap(colorItem => colorItem.sizes.map(size => size.size.id)))
   )
-    .map(sizeId => product.amounts.flatMap(colorItem => colorItem.sizes).find(size => size.size.id === sizeId)?.size)
+    .map(sizeId => product?.amounts?.flatMap(colorItem => colorItem.sizes).find(size => size.size.id === sizeId)?.size)
     .filter(Boolean); // Убираем возможные null
 
   return (
@@ -154,14 +155,38 @@ const EditProdPanel = ({ product, id }) => {
                   }}
                 </Table.Cell>
               </Table.Column>
+
+              {/* Колонка для "Брак" */}
+              <Table.Column key={`defect-${sIndex}`} width={80}>
+                <Table.HeaderCell>Брак</Table.HeaderCell>
+                <Table.Cell style={{ padding: "6px" }}>
+                  {(rowData) => {
+                    const sizeData = rowData.sizes.find(s => s.size.id === sizeItem.id);
+                    return (
+                      <NumInputForTable
+                        value={sizeData?.defect || ""}
+                        placeholder={"0"}
+                        onChange={(value) => handleAmountChange(value, id, rowData.color, sizeItem.id, "defect")}
+                      />
+                    )
+                  }}
+                </Table.Cell>
+              </Table.Column>
             </Table.ColumnGroup>
           ))}
         </Table>
       </div>
 
-      {/* <div className='flex justify-end'>
-        <Button width='120px' variant='red' onClick={() => setModal(true)}>Удалить</Button>
-      </div> */}
+      {/* Список партий */}
+
+      <div className='mt-4'>
+        <p className='font-semibold text-base text-gray-700 mb-3'>Список партий</p>
+        {
+          order_parties?.length > 0 ? 
+            <PartiesPanel/> :
+            <p className='text-sm text-gray-500'>Партий не найдено</p>
+        }
+      </div>
 
       <ConfirmDeleteModal modal={modal} setModal={setModal} id={id} />
     </div>

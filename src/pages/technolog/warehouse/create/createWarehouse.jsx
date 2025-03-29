@@ -85,8 +85,10 @@ const CreateWarehouse = () => {
       dispatch(postWarehouse(warehouse))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
-            navigate(-1)
-            toast("Склад успешно создан!")
+            toast.success("Склад успешно создан!")
+            navigate('/crm/sklad')
+          } else {
+            toast.error("Произошла ошибка!")
           }
         })
     } else {

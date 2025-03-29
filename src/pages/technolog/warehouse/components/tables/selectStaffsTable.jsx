@@ -13,14 +13,27 @@ const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, s
   const navigate = useNavigate();
 
   const getData = () => {
-    if(urls.salary_type === '1') {
-      return data.filter(item => item.salary > 0)
-    } else if(urls.salary_type === '0') {
-      return data.filter(item => item.salary === 0)
-    } else {
-      return data;
+    if (!Array.isArray(data)) return [];
+  
+    let filteredData = [...data];
+  
+    // Фильтрация по зарплате
+    if (urls.salary_type === '1') {
+      filteredData = filteredData.filter(item => item.salary > 0);
+    } else if (urls.salary_type === '0') {
+      filteredData = filteredData.filter(item => item.salary === 0);
     }
-  }
+  
+    // Сортировка: сначала выбранные, затем остальные
+    filteredData.sort((a, b) => {
+      const isASelected = warehouse.staffs.includes(a.id);
+      const isBSelected = warehouse.staffs.includes(b.id);
+      return isBSelected - isASelected; // true (1) поднимается выше false (0)
+    });
+  
+    return filteredData;
+  };
+  
 
   const selectStaff = (id, e) => {
     if(warehouse.staffs.includes(id)) {

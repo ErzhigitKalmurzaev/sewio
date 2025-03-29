@@ -96,13 +96,20 @@ const AddCombination = ({ modals, setModals }) => {
                 <div>
                     {   
                         loading ?
-                        <Loader  center/> :
+                            <Loader  center/> :
                         newCombination?.operations?.length > 0 && (
                             <div className="w-full mt-4">
                                 <h3 className="text-base font-medium mb-2">Операции в комбинации</h3>
                                 <List bordered size='sm'>
                                     {newCombination?.operations?.map((operation, index) => (
-                                            <List.Item>{operation?.title}</List.Item>
+                                            <List.Item>
+                                                <div className="flex gap-x-3 font-inter font-medium w-full">
+                                                    <span className="w-[35%] truncate">{operation?.title}</span>
+                                                    <span className="w-[20%] truncate">{operation?.rank?.title}</span>
+                                                    <span className="w-[20%] text-right">{operation?.price} сом</span>
+                                                    <span className="w-[15%] text-right">{operation?.time} сек</span>
+                                                </div>
+                                            </List.Item>
                                     ))}
                                         
                                 </List>
@@ -115,7 +122,7 @@ const AddCombination = ({ modals, setModals }) => {
         </Modal.Body>
         <Modal.Footer>
             <div className='flex justify-end'>
-                <Button onClick={onSubmit}>
+                <Button onClick={onSubmit} disabled={loading}>
                     Добавить
                 </Button>
             </div>

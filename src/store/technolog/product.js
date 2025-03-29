@@ -182,6 +182,18 @@ export const createProductImages = createAsyncThunk(
     }
 )
 
+export const getProductInfoById = createAsyncThunk(
+    'technologProduct/getProductInfoById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`calculation/get-product-info/?product=${id}`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const TechnologProductSlice = createSlice({
     name: 'technologProduct',
     initialState: {
@@ -398,6 +410,34 @@ const TechnologProductSlice = createSlice({
             })
             .addCase(getCombinationById.rejected, (state) => {
                 state.combination_status = 'error';
+            })
+            
+            .addCase(getProductInfoById.pending, (state) => {
+                state.product_status = 'kochuruu';
+            })
+            .addCase(getProductInfoById.fulfilled, (state, action) => {
+                state.product_status = 'success';
+                state.operations = action.payload?.operations?.map(item => ({
+                    title: item.title,
+                    time: item.time,
+                    rank: item.rank.id,
+                    price: item.price
+                }));
+                state.consumables = action.payload?.consumables?.map(item => ({
+                    title: item.material_nomenclature?.title,
+                    consumption: item.consumption,
+                    unit: item?.material_nomenclature?.unit,
+                    price: item?.material_nomenclature?.cost_price,
+                    material_nomenclature: item?.material_nomenclature?.id,
+                    color: item?.color?.id
+                }));
+                state.prices = action.payload?.prices?.map(item => ({
+                    title: item.title,
+                    price: item.price    
+                }));
+            })
+            .addCase(getProductInfoById.rejected, (state) => {
+                state.product_status = 'error';
             })
     }
 })

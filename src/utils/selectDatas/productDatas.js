@@ -31,6 +31,10 @@ export const materialUnits = [
     {
         label: 'шт.',
         value: 5
+    },
+    {
+        label: 'рулон',
+        value: 6
     }
 ]
 

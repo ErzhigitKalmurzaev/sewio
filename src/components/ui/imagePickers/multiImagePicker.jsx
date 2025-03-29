@@ -40,9 +40,10 @@ const MultiImagePicker = ({ existingImages, setExistingImages, setDeleteImages, 
     <div className="flex gap-y-3 pb-5">
       <Uploader
         multiple
+        action=""
         listType="picture"
         method='get'
-        fileList={fileList} // Используем fileList для управления отображением
+        fileList={fileList || []} // Используем fileList для управления отображением
         onChange={handleChange}
         onRemove={handleRemove}
         className='w-full'
@@ -53,7 +54,7 @@ const MultiImagePicker = ({ existingImages, setExistingImages, setDeleteImages, 
         </button>
       </Uploader>
 
-      <style jsx>{`
+      <style jsx="true">{`
         .rs-uploader-file-item-picture,
         .rs-uploader-file-item-status,
         .rs-uploader-file-item-icon-loading,

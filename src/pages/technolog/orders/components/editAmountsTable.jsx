@@ -26,7 +26,7 @@ const EditAmountsTable = () => {
             {/* <Button onClick={addRow}>+Добавить</Button> */}
         </div>
 
-        <PanelGroup accordion bordered>
+        <PanelGroup accordion>
           <AnimatePresence>
             {edit_products_in_order.map((product, index) => (
                 <motion.div 
@@ -47,6 +47,7 @@ const EditAmountsTable = () => {
                                 </span>
                             </div>
                         }
+                        style={{ border: '1px solid rgba(208, 213, 221, 1)' }}
                         defaultExpanded
                     >
                         <EditProdPanel product={product} id={index} /> 

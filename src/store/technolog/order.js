@@ -149,7 +149,8 @@ const TechnologOrderSlice = createSlice({
                     }
                 ]
             }
-        ]
+        ],
+        order_parties: []
     },
     reducers: {
         addProduct: (state) => {
@@ -322,6 +323,7 @@ const TechnologOrderSlice = createSlice({
                     title: item?.nomenclature?.title,
                     vendor_code: item?.nomenclature?.vendor_code,
                     price: item?.price,
+                    time: item?.time,
                     cost_price: item?.cost_price,
                     true_price: item?.true_price,
                     true_cost_price: item?.true_cost_price,
@@ -340,13 +342,39 @@ const TechnologOrderSlice = createSlice({
                           size: amount.size ?? { id: null, title: "Нет размера" }, // Если size=null, добавляем заглушку
                           amount: amount.amount,
                           cut: amount.cut,
-                          done: amount.done
+                          done: amount.done,
+                          defect: amount.defect
                         });
                   
                         return acc;
                       }, {})
                     )
-                  }));
+                }));
+                state.order_parties = action.payload?.parties?.map(item => ({
+                    created_at: item.created_at,
+                    staff: item.staff,
+                    number: item.number,
+                    amounts: Object.values(
+                        item.details.reduce((acc, amount) => {
+                          const colorId = amount.color.id;
+                    
+                          if (!acc[colorId]) {
+                            acc[colorId] = {
+                              color: colorId,
+                              sizes: []
+                            };
+                          }
+                    
+                          acc[colorId].sizes.push({
+                            size: amount.size ?? { id: null, title: "Нет размера" }, // Если size=null, добавляем заглушку
+                            plan_amount: amount.plan_amount,
+                            true_amount: amount.true_amount
+                          });
+                    
+                          return acc;
+                        }, {})
+                      )
+                }))
                   
             }).addCase(getOrderById.rejected, (state) => {
                 state.order_status = 'error';

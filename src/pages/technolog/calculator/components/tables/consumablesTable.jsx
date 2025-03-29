@@ -48,7 +48,7 @@ const ConsumablesTable = ({ type }) => {
     .then(res => {
         if(res.meta.requestStatus === 'fulfilled') {
             dispatch(fillConsumable({ key: index, value: {
-                nomenclature: res.payload.id,
+                material_nomenclature: res.payload.id,
                 title: res.payload.title,
                 consumption: '',
                 unit: res.payload.unit,

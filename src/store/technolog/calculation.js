@@ -131,7 +131,7 @@ const CalculationSlice = createSlice({
         ],
         consumables: [
             {
-                nomenclature: '',
+                material_nomenclature: '',
                 title: '',
                 consumption: '',
                 unit: '',
@@ -201,7 +201,7 @@ const CalculationSlice = createSlice({
 
         addConsumable: (state) => {
             state.consumables.push({
-                nomenclature: '',
+                material_nomenclature: '',
                 title: '',
                 consumption: '',
                 unit: '',
@@ -242,7 +242,7 @@ const CalculationSlice = createSlice({
                 state.calc_history_status = 'error';
             })
             .addCase(getOperationsTitlesList.fulfilled, (state, action) => {
-                state.operations_list = action.payload
+                state.operations_list = action.payload;
             })
             .addCase(getClientsNames.fulfilled, (state, action) => {
                 state.clients = action.payload
@@ -275,7 +275,7 @@ const CalculationSlice = createSlice({
                     consumption: item.consumption,
                     unit: item.unit,
                     price: item.price,
-                    nomenclature: item.nomenclature
+                    material_nomenclature: item.material_nomenclature
                 }));
                 state.prices = action.payload.cal_prices.map(item => ({
                     title: item.title,
@@ -313,7 +313,8 @@ const CalculationSlice = createSlice({
                     consumption: item.consumption,
                     unit: item?.material_nomenclature?.unit,
                     price: item?.material_nomenclature?.cost_price,
-                    nomenclature: item?.material_nomenclature?.id
+                    material_nomenclature: item?.material_nomenclature?.id,
+                    color: item?.color?.id
                 }));
                 state.prices = action.payload.prices.map(item => ({
                     title: item.title,

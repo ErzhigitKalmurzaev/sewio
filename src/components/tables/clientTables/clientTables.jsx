@@ -16,7 +16,7 @@ const ClentsTable = ({ data, status }) => {
             <Table
               loading={status === 'loading'}
               data={data}
-              minHeight={450}
+              minHeight={500}
               className='rounded-xl'
               bordered
               cellBordered

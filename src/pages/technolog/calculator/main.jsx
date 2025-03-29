@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../../components/ui/title";
 import NumInput from "../../../components/ui/inputs/numInput";
-import Input from "../../../components/ui/inputs/input";
 import CalcTable from "./components/tables/calcTable";
 import Button from "../../../components/ui/button";
-import { MoveRight, Notebook, NotepadText } from "lucide-react";
+import { NotepadText } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearAll, createCalculation, getClientsNames, getProductInfoById, getProductsNames } from "../../../store/technolog/calculation";
 import StickyBox from "../../../components/ui/stickyBox";
 import SelectUser from "../../../components/ui/inputs/selectUser";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
-import TextInputForTable from "../../../components/ui/inputs/inputWithSuggestions";
 import InputWithSuggestion from "../../../components/ui/inputs/inputWithSuggestion";
 import { createProduct } from "../../../store/technolog/product";
 import CreateProductModal from "./components/modals/createProductModal";
@@ -27,7 +25,7 @@ const Calculator = () => {
     dispatch(getClientsNames());
     dispatch(clearAll());
     dispatch(getProductsNames())
-  }, [])
+  }, [dispatch])
 
   const [clientData, setClientData] = useState({
     title: "",

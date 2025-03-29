@@ -33,7 +33,7 @@ const OtherExpensesTable = ({ type }) => {
     <div>
         <Table
             data={prices}
-            loading={type === 'edit' && product_status === 'loading'}
+            loading={type === 'edit' && product_status === 'loading' || product_status === 'kochuruu'}
             autoHeight
             bordered
             cellBordered

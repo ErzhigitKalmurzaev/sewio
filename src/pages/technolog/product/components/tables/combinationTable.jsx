@@ -110,20 +110,19 @@ const CombinationsTable = ({ type }) => {
       }
       setLoading(false);
     })  
-  } 
+  }
 
   return (
     <div>
         <Table
             data={combinations || []}
             bordered
-            loading={loading || (type === 'edit' && product_status === 'loading')}
+            loading={loading || (type === 'edit' && product_status === 'loading') || product_status === 'kochuruu'}
             cellBordered
             autoHeight
             isTree
             virtualized
             rowKey='id'
-            expandedRowKeys={combinations.map(item => item.id)}
         >
             <Column width={250}>
                 <HeaderCell>Название</HeaderCell>

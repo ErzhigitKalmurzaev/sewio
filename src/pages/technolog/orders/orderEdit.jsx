@@ -26,7 +26,7 @@ const OrderEdit = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { edit_products_in_order, product_list, order_status  } = useSelector(state => state.order);
+  const { edit_products_in_order, product_list, order_status, order_parties  } = useSelector(state => state.order);
 
   const [order, setOrder] = useState({
     deadline: '',
@@ -39,7 +39,6 @@ const OrderEdit = () => {
     client: false,
     products: false
   });
-
 
   useEffect(() => {
     dispatch(getOrderById({ id}))
@@ -99,19 +98,10 @@ const OrderEdit = () => {
         }, 0);
   
       case "total_time":
-        // return edit_products_in_order.reduce((total, product) => {
-        //   // Здесь можно добавить логику для подсчета времени по каждому товару
-        //   // Если у вас есть поле `time` в каком-либо объекте, можно умножить на количество
-        //   // Например:
-        //   const productTime = product.amounts.reduce(
-        //     (productSum, item) =>
-        //       productSum +
-        //       item.sizes.reduce((sizeSum, size) => sizeSum + size.amount, 0) * 10, // Примерное время
-        //     0
-        //   );
-        //   return total + productTime;
-        // }, 0); // Вернется сумма времени в минутах или часах, в зависимости от единиц измерения
-        return 0
+        return edit_products_in_order.reduce((total, product) => {
+          
+          return total + product.time;
+        }, 0) / 3600;
       case 'status': 
         return OrderStatuses[order?.status]?.label
       default:
@@ -145,7 +135,8 @@ const OrderEdit = () => {
                     color: amount.color,
                     size: size.size.id,  // Переносим `size` в строку
                     amount: Number(size.amount),
-                    done: Number(size.done)
+                    done: Number(size.done),
+                    defect: Number(size.defect)
                 }))
             )
           })),
@@ -219,7 +210,7 @@ const OrderEdit = () => {
               </div>
               <div className='flex justify-between gap-x-5'>
                 <OrderInfoItem label='Общая прибыль:' value={getStatistic('total_income') - getStatistic('total_consumption')} measure='сом' />
-                <OrderInfoItem label='Время выполнения:' value={getStatistic('total_time').toFixed(1)} measure='ч.' />
+                <OrderInfoItem label='Время выполнения:' value={getStatistic('total_time')?.toFixed(1) || 0} measure='ч.' />
                 <OrderInfoItem label='Статус заказа:' value={getStatistic('status')} measure='' />
               </div>
             </div>

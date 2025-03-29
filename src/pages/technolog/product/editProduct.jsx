@@ -64,7 +64,7 @@ const EditProduct = () => {
     if(validateFields()) {
       if(isDataValid()) {
 
-        const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
+        // const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
         const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
         const combinationsTotal = combinations.reduce((acc, combination) => {
           const childrenTotal = combination.children.reduce((sum, child) => {
@@ -73,7 +73,7 @@ const EditProduct = () => {
           }, 0);
           return acc + childrenTotal;
       }, 0);
-        const cost = (Number(operationsTotal) + Number(pricesTotal)) + Number(combinationsTotal) || 0;
+        const cost = (Number(pricesTotal)) + Number(combinationsTotal) || 0;
 
         dispatch(editProductById({
             id,
@@ -81,7 +81,7 @@ const EditProduct = () => {
                 ...productData,
                 cost_price: cost,
                 prices,
-                operations: operations.map(({ equipment, nomenclature, ...op}) => op),
+                // operations: operations.map(({ equipment, nomenclature, ...op}) => op),
                 combinations: combinations.map(item => ({
                   title: item.title,
                   operations: item.children.map(({ equipment, nomenclature, ...op}) => op)

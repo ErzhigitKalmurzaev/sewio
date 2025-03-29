@@ -35,7 +35,7 @@ const OperationsTable = ({ type }) => {
     if(!equipment_list) {
         dispatch(getEquipmentList());
     }
-  }, [])
+  }, [dispatch])
 
   const addRow = () => {
     dispatch(addOperation())
@@ -82,7 +82,7 @@ const OperationsTable = ({ type }) => {
         <Table
             data={operations || []}
             bordered
-            loading={loading || (type === 'edit' && product_status === 'loading')}
+            loading={loading || (type === 'edit' && product_status === 'loading') || product_status === 'kochuruu'}
             cellBordered
             autoHeight
         >

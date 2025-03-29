@@ -67,7 +67,7 @@ const ConsumablesTable = ({ type }) => {
             data={consumables || []}
             autoHeight
             bordered
-            loading={loading || (type === 'edit' && product_status === 'loading')}
+            loading={loading || (type === 'edit' && product_status === 'loading') || product_status === 'kochuruu'}
             cellBordered
         >
             <Column width={250}>
