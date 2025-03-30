@@ -19,7 +19,7 @@ const Calculator = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { clients, operations, consumables, prices, products } = useSelector(state => state.calculation);
+  const { clients, operations, consumables, prices, products, combinations } = useSelector(state => state.calculation);
 
   useEffect(() => {
     dispatch(getClientsNames());
@@ -46,7 +46,6 @@ const Calculator = () => {
 
   const isDataValid = () => {
       return (
-          operations.every(isObjectFilled) &&
           consumables.every(isObjectFilled) &&
           prices.every(isObjectFilled)
       );
@@ -78,7 +77,11 @@ const Calculator = () => {
         dispatch(createCalculation({
           ...clientData,
           cost_price: cost,
-          cal_operations: [...operations],
+          combinations: combinations.map(item => ({
+            title: item.title,
+            is_sample: false,
+            operations: item.children.map(op => op)
+          })),
           cal_consumables: [...consumables],
           cal_prices: [...prices]
         })).then(res => {
@@ -106,7 +109,11 @@ const Calculator = () => {
           ...productData,
           cost_price: cost,
           prices,
-          operations,
+          combinations: combinations.map(item => ({
+            title: item.title,
+            is_sample: false,
+            operations: item.children.map(op => op)
+          })),
           consumables
         })).then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
@@ -120,6 +127,8 @@ const Calculator = () => {
               } else {
                 navigate('/crm/product')
               }
+            } else if(res.payload?.vendor_code?.length > 0 && res.payload?.vendor_code[0] === 'nomenclature with this vendor code already exists.') {
+              toast.error('Товар с таким артикулом уже существует!')
             } else {
               toast.error('Произошла ошибка!')
             }

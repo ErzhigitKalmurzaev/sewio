@@ -30,7 +30,7 @@ const AccWorkTable = ({ data, status, amount }) => {
       dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value }));
     }
   };
-
+  console.log(data)
   const maxDetails = Math.max(...data.map((op) => op.details.length));
   
   return (

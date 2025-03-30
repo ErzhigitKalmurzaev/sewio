@@ -17,7 +17,7 @@ const CreateProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { operations, combinations, consumables, prices } = useSelector(state => state.product);
+  const { combinations, consumables, prices } = useSelector(state => state.product);
   const { products } = useSelector(state => state.calculation)
 
   const [images, setImages] = useState([]);

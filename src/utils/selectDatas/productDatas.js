@@ -11,6 +11,17 @@ export const dischargeDatas = [
     }
 ];
 
+export const combinationStatuses = [
+    {
+        id: 1,
+        label: 'ОТК'
+    },
+    {
+        id: 2,
+        label: 'Упаковка'
+    }
+];
+
 export const materialUnits = [
     {
         label: 'мм',

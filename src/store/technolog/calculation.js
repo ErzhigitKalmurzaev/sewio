@@ -144,6 +144,9 @@ const CalculationSlice = createSlice({
                 price: ''
             }
         ],
+        combinations: [
+
+        ],
 
         operations_list: null,
         clients: null,
@@ -197,6 +200,42 @@ const CalculationSlice = createSlice({
         },
         deleteOperation: (state, action) => {
             state.operations.splice(action.payload, 1);
+        },
+
+        addCombination: (state, action) => {
+            state.combinations.push(action.payload);
+        },
+        editCombination: (state, action) => {
+            const { index, value } = action.payload;
+
+            state.combinations[index].title = value;
+        },
+        getValueOperationInCombination: (state, action) => {
+            const { value, name, parentIndex, childIndex } = action.payload;
+            
+            state.combinations[parentIndex].children[childIndex][name] = value;
+        },
+        addOperationInCombination: (state, action) => {
+            state.combinations[action.payload.key].children.push({
+                title: '',
+                time: '',
+                rank: '',
+                price: '',
+                id: crypto.randomUUID()
+            })
+        },
+        fillCombination: (state, action) => {
+            const { childIndex, parentIndex, value} = action.payload;
+
+            state.combinations[parentIndex].children[childIndex] = value;    
+        },
+        deleteOperationInCombination: (state, action) => {
+            const { parentIndex, childIndex } = action.payload;
+
+            state.combinations[parentIndex]?.children?.splice(childIndex, 1);
+        },
+        deleteCombination: (state, action) => {
+            state.combinations.splice(action.payload, 1);
         },
 
         addConsumable: (state) => {
@@ -302,12 +341,14 @@ const CalculationSlice = createSlice({
                     price: calc.price,
                     cost_price: calc.cost_price
                 };
-                state.operations = action.payload.operations.map(item => ({
+                state.combinations = action.payload.combinations?.map(item => ({
                     title: item.title,
-                    time: item.time,
-                    rank: item.rank.id,
-                    price: item.price
-                }));
+                    id: item.id,
+                    children: item.operations?.map(op => ({
+                        ...op,
+                        rank: op?.rank?.id
+                    }))
+                }))
                 state.consumables = action.payload.consumables.map(item => ({
                     title: item.material_nomenclature?.title,
                     consumption: item.consumption,
@@ -333,5 +374,7 @@ export const { addOperation, addConsumable,
                deleteOperation, getValueConsumable, 
                deleteConsumable, fillConsumable,
                fillOperation, getValuePrice, deletePrice,
-               clearAll } = CalculationSlice.actions;
+               clearAll, addCombination, editCombination, 
+               getValueOperationInCombination, addOperationInCombination,
+               fillCombination, deleteOperationInCombination, deleteCombination } = CalculationSlice.actions;
 export default CalculationSlice;

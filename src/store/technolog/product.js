@@ -372,11 +372,13 @@ const TechnologProductSlice = createSlice({
                 state.product_status = 'loading';
             }).addCase(getProductById.fulfilled, (state, action) => {
                 state.product_status = 'success';
-                state.operations = action.payload.nom_operations;
                 state.combinations = action.payload.combinations.map(item => ({
                     title: item.title,
                     id: item.id,
-                    children: item.operations
+                    children: item.operations?.map(op => ({
+                        ...op,
+                        rank: op?.rank?.id
+                    }))
                 }))
                 state.consumables = action.payload.consumables.map(item => ({
                     color: item.color?.id,
@@ -417,12 +419,14 @@ const TechnologProductSlice = createSlice({
             })
             .addCase(getProductInfoById.fulfilled, (state, action) => {
                 state.product_status = 'success';
-                state.operations = action.payload?.operations?.map(item => ({
+                state.combinations = action.payload.combinations.map(item => ({
                     title: item.title,
-                    time: item.time,
-                    rank: item.rank.id,
-                    price: item.price
-                }));
+                    id: item.id,
+                    children: item.operations?.map(op => ({
+                        ...op,
+                        rank: op?.rank?.id
+                    }))
+                }))
                 state.consumables = action.payload?.consumables?.map(item => ({
                     title: item.material_nomenclature?.title,
                     consumption: item.consumption,

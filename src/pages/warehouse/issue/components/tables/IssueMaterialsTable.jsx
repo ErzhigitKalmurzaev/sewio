@@ -13,9 +13,9 @@ const IssueMaterialsTable = ({ data, status, output, setOutput }) => {
   }
 
   return (
-    <div className='min-h-[400px] bg-white rounded-xl'>
+    <div className='min-h-[500px] bg-white rounded-xl'>
          <Table
-            height={450}
+            height={500}
             loading={status === 'loading'}
             data={data || []}
             className='rounded-xl'

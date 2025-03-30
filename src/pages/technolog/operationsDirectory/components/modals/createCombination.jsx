@@ -8,6 +8,7 @@ import { getOperationsTitlesList } from './../../../../../store/technolog/calcul
 import Button from '../../../../../components/ui/button';
 import { createCombination, editCombinationById } from './../../../../../store/technolog/product';
 import { toast } from 'react-toastify';
+import { combinationStatuses } from '../../../../../utils/selectDatas/productDatas';
 
 const CreateCombination = ({ modals, setModals }) => {
 
@@ -19,7 +20,8 @@ const CreateCombination = ({ modals, setModals }) => {
     title: '',
     file: '',
     is_sample: true,
-    operations: []
+    operations: [],
+    status: ''
   });
   const [errors, setErrors] = useState({
     title: false,
@@ -76,7 +78,8 @@ const CreateCombination = ({ modals, setModals }) => {
                     title: '',
                     file: '',
                     is_sample: true,
-                    operations: []
+                    operations: [],
+                    status: ''
                 })
             } else {
                 toast.error('Произошла ошибка!')
@@ -113,6 +116,17 @@ const CreateCombination = ({ modals, setModals }) => {
                         error={errors.file}
                         placeholder='Выберите папку'
                         labelKey={'title'}
+                        valueKey={'id'}
+                    />
+                </div>
+
+                <div className='flex gap-x-3'>
+                    <Select
+                        label='Статус'
+                        data={combinationStatuses}
+                        value={combination?.status}
+                        onChange={(e) => getValue(e, 'status')}
+                        placeholder='Установите статус'
                         valueKey={'id'}
                     />
                 </div>

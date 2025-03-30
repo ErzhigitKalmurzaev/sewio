@@ -105,18 +105,18 @@ function groupOperations(data = [], allOperations = []) {
         return [];
     }
 
-    data.forEach(({ staff, operation, amount }) => {
-        if (!operation || !staff) return;
+    data.forEach(({ staff, combination, amount }) => {
+        if (!combination || !staff) return;
         
-        if (!grouped[operation.id]) {
-            grouped[operation.id] = {
-                id: operation.id,
-                title: operation.title,
+        if (!grouped[combination.id]) {
+            grouped[combination.id] = {
+                id: combination.id,
+                title: combination.title,
                 details: []
             };
         }
 
-        grouped[operation.id].details.push({
+        grouped[combination.id].details.push({
             staff: `${staff.id}`,
             count: amount
         });

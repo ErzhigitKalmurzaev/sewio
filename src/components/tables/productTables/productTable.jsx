@@ -77,7 +77,6 @@ const ProductTable = ({ data, status, total, activePage, limit, setPage }) => {
                 size="xs"
                 layout={['total', '-', 'limit', '|', 'pager', 'skip']}
                 total={total}
-                gotoText="Перейти к странице:"
                 limitOptions={[10, 30, 50]}
                 limit={limit}
                 activePage={Number(activePage)}

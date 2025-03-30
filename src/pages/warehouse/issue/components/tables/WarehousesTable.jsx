@@ -14,9 +14,9 @@ const WarehousesTable = ({ data, status, setOutput, output }) => {
   }
 
   return (
-    <div className='min-h-[400px] bg-white rounded-xl'>
+    <div className='min-h-[500px] bg-white rounded-xl'>
         <Table
-            height={450}
+            height={500}
             loading={status === 'loading'}
             data={data || []}
             className='rounded-xl'
@@ -36,7 +36,7 @@ const WarehousesTable = ({ data, status, setOutput, output }) => {
                 <Cell dataKey="address"/>
             </Column>
 
-            <Column width={570} fixed="right">
+            <Column flexGrow={1} fixed="right">
                 <HeaderCell>Выбор</HeaderCell>
 
                 <Cell style={{ padding: '6px' }}>

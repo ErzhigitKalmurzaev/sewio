@@ -149,7 +149,7 @@ const CreateAccWork = () => {
             }
         
             return {
-              operation: item.id,
+              combination: item.id,
               staff,
               amount
             };

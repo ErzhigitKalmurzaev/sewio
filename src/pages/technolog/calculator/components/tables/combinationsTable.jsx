@@ -9,16 +9,15 @@ import SelectForTable from '../../../../../components/ui/inputs/selectForTable';
 import { CircleMinus, PencilLine, Plus } from 'lucide-react';
 import { getRankList } from '../../../../../store/technolog/rank';
 import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
-import { addCombination, getValueOperationInCombination, deleteCombination, fillCombination, addOperationInCombination, deleteOperationInCombination, } from '../../../../../store/technolog/product';
-import AddCombination from './../modals/addCombination';
+import { addCombination, getValueOperationInCombination, deleteCombination, fillCombination, addOperationInCombination, deleteOperationInCombination, } from '../../../../../store/technolog/calculation';
+import AddCombination from '../modals/addCombination';
 import EditCombinations from '../modals/editCombinations';
 
 const { Column, HeaderCell, Cell } = Table;
 
 const CombinationsTable = ({ type }) => {
 
-  const { operations_list } = useSelector(state => state.calculation);
-  const { combinations, product_status } = useSelector(state => state.product)
+  const { operations_list, product_status, combinations } = useSelector(state => state.calculation);
   const { rank_list } = useSelector(state => state.rank);
 
   const dispatch = useDispatch();

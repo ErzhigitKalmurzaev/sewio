@@ -76,7 +76,7 @@ const EditAccWork = () => {
             size: work?.size?.id,
             details: operations_list?.flatMap(item => 
               item?.details?.map(detail => ({
-                operation: item.id,
+                combination: item.id,
                 staff: Number(detail.staff),
                 amount: Number(detail.count)
               }))
@@ -86,6 +86,8 @@ const EditAccWork = () => {
         if(res.meta.requestStatus === 'fulfilled') {
           toast.success('Работа успешно изменена!');
           navigate(`/crm/operations/${orderId}/${id}/history`);
+        } else if(res.payload?.code === '100') {
+          toast.error(res.payload?.detail);
         } else {
           toast.error('Произошла ошибка!');
         }

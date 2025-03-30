@@ -52,41 +52,41 @@ const CreateOrder = () => {
 
   const onSubmit = () => {
     if(validateFields()) {
-        // dispatch(createOrder({
-        //     ...order,
-        //     products: products_to_order.map(item => ({
-        //       ...item,
-        //       amounts: item.amounts.flatMap(amount => 
-        //           amount.sizes.map(size => ({
-        //               color: amount.color,
-        //               size: size.size,  // Переносим `size` в строку
-        //               amount: size.amount
-        //           }))
-        //       )
-        //     })),
-        //     deadline: new Date(order.deadline.split('.').reverse().join('-')).toISOString()
-        //   })).then(res => {
-        //     if (res.meta.requestStatus === 'fulfilled') {
-        //       dispatch(clearAll())
-        //       setOrder({...order, deadline: '', client: '', products: []});
-        //       navigate('/crm/orders')
-        //     } else {
-        //         toast.error('Произошла ошибка! Проверьте и заполните все поля правильно!')
-        //     }
-        //   })
-        console.log({
-              ...order,
-              products: products_to_order.map(item => ({
-                ...item,
-                amounts: item.amounts.flatMap(amount => 
-                    amount.sizes.map(size => ({
-                        color: amount.color,
-                        size: size.size,  // Переносим `size` в строку
-                        amount: size.amount
-                    }))
-                )
-              })),
-        })
+        dispatch(createOrder({
+            ...order,
+            products: products_to_order.map(item => ({
+              ...item,
+              amounts: item.amounts.flatMap(amount => 
+                  amount.sizes.map(size => ({
+                      color: amount.color,
+                      size: size.size,  // Переносим `size` в строку
+                      amount: size.amount
+                  }))
+              )
+            })),
+            deadline: new Date(order.deadline.split('.').reverse().join('-')).toISOString()
+          })).then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+              dispatch(clearAll())
+              setOrder({...order, deadline: '', client: '', products: []});
+              navigate('/crm/orders')
+            } else {
+                toast.error('Произошла ошибка! Проверьте и заполните все поля правильно!')
+            }
+          })
+        // console.log({
+        //       ...order,
+        //       products: products_to_order.map(item => ({
+        //         ...item,
+        //         amounts: item.amounts.flatMap(amount => 
+        //             amount.sizes.map(size => ({
+        //                 color: amount.color,
+        //                 size: size.size,  // Переносим `size` в строку
+        //                 amount: size.amount
+        //             }))
+        //         )
+        //       })),
+        // })
     } else {
       toast.error('Заполните все поля и выберите минимум 1 товар!');
     }
