@@ -31,7 +31,9 @@ const CreateProduct = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    dispatch(getProductsNames())
+    if(!products) {
+      dispatch(getProductsNames())
+    }
     dispatch(clearAll())
   }, [])
 
@@ -75,10 +77,10 @@ const CreateProduct = () => {
             ...productData,
             cost_price: cost,
             prices,
-            // operations,
             combinations: combinations.map(item => ({
               title: item.title,
               is_sample: false,
+              status: item.status,
               operations: item.children.map(op => op)
             })),
             consumables

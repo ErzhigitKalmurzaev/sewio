@@ -14,9 +14,9 @@ const RankTable = ({ data, setModals, modals, setEditRank, rank_list_status }) =
   }
 
   return (
-    <div className='min-h-[500px] font-inter bg-white rounded-xl'>
+    <div className='min-h-[600px] font-inter bg-white rounded-xl'>
         <Table
-            height={500}
+            height={600}
             loading={rank_list_status === 'loading'}
             data={data || []}
             className='rounded-xl'

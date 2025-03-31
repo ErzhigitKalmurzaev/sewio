@@ -9,6 +9,7 @@ import Button from '../../../../../components/ui/button';
 import { editCombinationById } from './../../../../../store/technolog/product';
 import { toast } from 'react-toastify';
 import { combinationStatuses } from '../../../../../utils/selectDatas/productDatas';
+import { Plus, Search, Trash2 } from 'lucide-react';
 
 const CombinationOpenModal = ({ modals, setModals }) => {
 
@@ -17,6 +18,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
   const { combination, combination_status, operaitions_list, operaitions_list_status, folders_list } = useSelector(state => state.operation);
 
   const [changed, setChanged] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if(modals.id) {
@@ -71,6 +73,10 @@ const CombinationOpenModal = ({ modals, setModals }) => {
     }
   }
 
+  const filteredOperations = operaitions_list?.results?.filter(op =>
+    op.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    !combination.operations.some(selectedOp => selectedOp.id === op.id)
+  );
 
   return (
     <Modal open={modals?.combination} onClose={() => setModals({ ...modals, combination: false })}>
@@ -84,7 +90,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
                         <Modal.Title>Комбинация: {combination?.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div className='flex flex-col gap-y-3'>
+                        <div className='flex flex-col gap-y-3 px-3'>
                             <div className='flex gap-x-3'>
                                 <Input
                                     label='Название'
@@ -118,53 +124,44 @@ const CombinationOpenModal = ({ modals, setModals }) => {
                             </div>
 
                             <div>
-                                {
-                                    operaitions_list?.results?.length > 0 && (
-                                        <div className="mt-4 grid grid-cols-2 gap-6">
-                                            {/* ✅ Список операций в комбинации */}
-                                            <div>
-                                                <h3 className="text-lg font-medium mb-2">Операции в комбинации</h3>
-                                                <ul className="border border-borderGray rounded p-2 h-60 overflow-y-auto">
-                                                    {combination?.operations?.map((operation, index) => (
-                                                        <li key={operation.id} className="flex justify-between items-center p-1 px-3 border border-borderGray rounded mb-2">
-                                                            <span>{operation.title}</span>
-                                                            <button 
-                                                                className="text-red-500 hover:text-red-700"
-                                                                onClick={() => handleRemoveOperation(index)}
-                                                            >
-                                                                ❌
-                                                            </button>
-                                                        </li>
-                                                    ))}
-                                                </ul>
+                                {operaitions_list?.results?.length > 0 && (
+                                    <div className='mt-4 grid grid-cols-2 gap-6'>
+                                        <div>
+                                            <h3 className='text-lg font-medium mb-1'>Операции в комбинации</h3>
+                                            <div className='flex items-center mb-2 border border-borderGray rounded p-1 px-2 invisible'>
+                                                <Search size={18} className='text-gray-400 mr-2' />
+                                                <input type='text' className='w-full outline-none' placeholder='Поиск...' value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
                                             </div>
-
-                                            {/* ✅ Список всех операций */}
-                                            <div>
-                                                <h3 className="text-lg font-medium mb-2">Все операции</h3>
-                                                <ul className="border border-borderGray rounded p-2 h-60 overflow-y-auto">
-                                                    {(() => {
-                                                    const selectedOperations = new Set(combination?.operations?.map(op => op.id));
-
-                                                    return operaitions_list.results
-                                                        ?.filter(op => !selectedOperations.has(op.id)) // O(1) проверка в Set
-                                                        .map((operation) => (
-                                                        <li key={operation.id} className="flex justify-between items-center p-1 px-3 border border-borderGray rounded mb-2">
-                                                            <span>{operation.title}</span>
-                                                            <button 
-                                                            className="text-green-500 hover:text-green-700"
-                                                            onClick={() => handleAddOperation(operation)}
-                                                            >
-                                                            ➕
-                                                            </button>
-                                                        </li>
-                                                        ));
-                                                    })()}
-                                                </ul>
-                                            </div>
+                                            <ul className='border border-borderGray rounded p-2 h-60 overflow-y-auto'>
+                                                {combination.operations.map((operation, index) => (
+                                                    <li key={operation.id} className='flex justify-between items-center p-1 px-3 border border-borderGray rounded mb-2'>
+                                                        <span>{operation.title}</span>
+                                                        <button className='text-red-500 hover:text-red-700' onClick={() => handleRemoveOperation(index)}>
+                                                            <Trash2 size={18} />
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
-                                    )
-                                }
+                                        <div>
+                                            <h3 className='text-lg font-medium mb-1'>Все операции</h3>
+                                            <div className='flex items-center mb-2 border border-borderGray rounded p-1 px-2'>
+                                                <Search size={18} className='text-gray-400 mr-2' />
+                                                <input type='text' className='w-full outline-none' placeholder='Поиск...' value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                            </div>
+                                            <ul className='border border-borderGray rounded p-2 h-60 overflow-y-auto'>
+                                                {filteredOperations.map(operation => (
+                                                    <li key={operation.id} className='flex justify-between items-center p-1 px-3 border border-borderGray rounded mb-2'>
+                                                        <span>{operation.title}</span>
+                                                        <button className='text-green-500 hover:text-green-700' onClick={() => handleAddOperation(operation)}>
+                                                            <Plus size={18} />
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                         </div>

@@ -5,11 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import ProductImages from "./components/shared/productImages";
-import { createProduct, createProductImages, editProductById, getProductById, getProductImages } from "../../../store/technolog/product";
+import { createProduct, createProductImages, editProductById, getProductById, getProductImages, getProductInfoById } from "../../../store/technolog/product";
 import { Toggle } from "rsuite";
 import Title from "../../../components/ui/title";
 import ProdTable from "./components/shared/prodTable";
 import BackDrop from "../../../components/ui/backdrop";
+import { getProductsNames } from "../../../store/technolog/calculation";
+import InputWithSuggestion from "../../../components/ui/inputs/inputWithSuggestion";
 
 const EditProduct = () => {
 
@@ -17,7 +19,8 @@ const EditProduct = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
-  const { operations, combinations, consumables, prices, product_status } = useSelector(state => state.product);
+  const { combinations, consumables, prices, product_status } = useSelector(state => state.product);
+  const { products } = useSelector(state => state.calculation)
 
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
@@ -39,17 +42,23 @@ const EditProduct = () => {
             })
         }
     })
+    if(!products) {
+      dispatch(getProductsNames())
+    }
   }, [])
 
   const isObjectFilled = (obj) => Object.values(obj).every(value => value !== '');
 
   const isDataValid = () => {
       return (
-          operations.every(isObjectFilled) &&
           consumables.every(isObjectFilled) &&
           prices.every(isObjectFilled)
       );
   };
+
+  const selectProduct = (data) => {
+    dispatch(getProductInfoById({ id: data}))
+  }
 
   const validateFields = () => {
     const newErrors = {
@@ -81,9 +90,9 @@ const EditProduct = () => {
                 ...productData,
                 cost_price: cost,
                 prices,
-                // operations: operations.map(({ equipment, nomenclature, ...op}) => op),
                 combinations: combinations.map(item => ({
                   title: item.title,
+                  status: item.status,
                   operations: item.children.map(({ equipment, nomenclature, ...op}) => op)
                 })),
                 consumables
@@ -92,7 +101,7 @@ const EditProduct = () => {
           if(res.meta.requestStatus === 'fulfilled') {
             dispatch(createProductImages({ props: {
               images: images.map(item => item.blobFile),
-              deleteImages,
+              delete_ids: deleteImages,
               product_id: res.payload.id
             }}))
             toast.success("Изменения сохранены!")
@@ -105,7 +114,6 @@ const EditProduct = () => {
     } else {
       toast.error('Заполните правильно данные о заказе!');
     }
-    console.log(combinations)
   };
 
   return (
@@ -131,13 +139,14 @@ const EditProduct = () => {
           <div className="flex flex-col gap-y-4">
             <p className="font-inter text-lg font-semibold">Данные о товаре</p>
             <div className="flex gap-x-5 items-center">
-              <Input
+              <InputWithSuggestion
                 width={"300px"}
-                type='text'
                 label="Название товара"
                 placeholder={"Введите название..."}
-                value={`${productData.title}`}
+                value={productData.title}
                 onChange={(e) => setProductData({ ...productData, title: e.target.value })}
+                onSelect={(e) => selectProduct(e)}
+                suggestions={products || []}
                 error={errors.title}
               />
               <Input

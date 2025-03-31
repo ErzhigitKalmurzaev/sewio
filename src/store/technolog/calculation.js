@@ -208,7 +208,8 @@ const CalculationSlice = createSlice({
         editCombination: (state, action) => {
             const { index, value } = action.payload;
 
-            state.combinations[index].title = value;
+            state.combinations[index].title = value.title;
+            state.combinations[index].status = value.status;
         },
         getValueOperationInCombination: (state, action) => {
             const { value, name, parentIndex, childIndex } = action.payload;
@@ -303,12 +304,14 @@ const CalculationSlice = createSlice({
                     price: calc.price,
                     cost_price: calc.cost_price
                 };
-                state.operations = action.payload.cal_operations.map(item => ({
+                state.combinations = action.payload.combinations?.map(item => ({
                     title: item.title,
-                    time: item.time,
-                    rank: item.rank,
-                    price: item.price
-                }));
+                    id: item.id,
+                    status: item.status,
+                    children: item.operations?.map(op => ({
+                        ...op
+                    }))
+                }))
                 state.consumables = action.payload.cal_consumables.map(item => ({
                     title: item.title,
                     consumption: item.consumption,
@@ -344,6 +347,7 @@ const CalculationSlice = createSlice({
                 state.combinations = action.payload.combinations?.map(item => ({
                     title: item.title,
                     id: item.id,
+                    status: item.status,
                     children: item.operations?.map(op => ({
                         ...op,
                         rank: op?.rank?.id

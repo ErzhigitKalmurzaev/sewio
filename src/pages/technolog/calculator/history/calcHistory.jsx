@@ -26,9 +26,9 @@ const CalcHistory = () => {
           <Title text="История" />
         </div>
 
-        <div className='min-h-[480px] font-inter bg-white rounded-xl'>
+        <div className='min-h-[500px] font-inter bg-white rounded-xl'>
         <Table
-            height={480}
+            height={500}
             loading={calc_history_status === 'loading'}
             data={calc_history?.results || []}
             className='rounded-xl'
@@ -38,7 +38,7 @@ const CalcHistory = () => {
                 <Cell dataKey="id" />
             </Column>
 
-            <Column width={300}>
+            <Column width={250}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell dataKey="title" />
             </Column>
@@ -58,7 +58,7 @@ const CalcHistory = () => {
                     }
                 </Cell>
             </Column>
-            <Column width={470} fixed="right">
+            <Column flexGrow={1} fixed="right">
                 <HeaderCell>Действия</HeaderCell>
 
                 <Cell style={{ padding: '6px' }}>

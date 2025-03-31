@@ -17,7 +17,7 @@ const { Column, HeaderCell, Cell } = Table;
 
 const CombinationsTable = ({ type }) => {
 
-  const { operations_list, product_status, combinations } = useSelector(state => state.calculation);
+  const { operations_list, calc_status, combinations } = useSelector(state => state.calculation);
   const { rank_list } = useSelector(state => state.rank);
 
   const dispatch = useDispatch();
@@ -80,7 +80,7 @@ const CombinationsTable = ({ type }) => {
     const index = combinations.findIndex(item => item.id === data.id);
     
     setEditComb({
-        title: data.title,
+        data,
         index
     })
     setModals({ ...modals, edit: true });
@@ -116,7 +116,7 @@ const CombinationsTable = ({ type }) => {
         <Table
             data={combinations || []}
             bordered
-            loading={loading || (type === 'edit' && product_status === 'loading') || product_status === 'kochuruu'}
+            loading={loading || (type === 'edit' && calc_status === 'loading') || calc_status === 'kochuruu'}
             cellBordered
             autoHeight
             isTree

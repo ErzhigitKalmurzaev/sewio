@@ -4,7 +4,6 @@ import OperationTabs from './operationTabs';
 import { ChevronDown } from 'lucide-react';
 import EditOperationModal from '../../../pages/technolog/product/components/modals/editOperation';
 import { useDispatch } from 'react-redux';
-import { deactivateOperationById, getProductById } from '../../../store/technolog/product';
 import { toast } from 'react-toastify';
 import DeleteOperationModal from '../../../pages/technolog/product/components/modals/deleteOperationModal';
 

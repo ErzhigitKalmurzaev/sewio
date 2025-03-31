@@ -14,9 +14,9 @@ const SizeTable = ({ data, setModals, modals, status }) => {
     }
 
     return (
-        <div className='min-h-[550px] font-inter bg-white rounded-xl'>
+        <div className='min-h-[600px] font-inter bg-white rounded-xl'>
         <Table
-            height={530}
+            height={600}
             loading={status === 'loading'}
             data={data || []}
             className='rounded-lg'

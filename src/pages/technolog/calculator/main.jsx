@@ -69,10 +69,16 @@ const Calculator = () => {
   const onSubmit = () => {
     if(validateFields()) {
       if(isDataValid()) {
-        const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
+        const combinationsTotal = combinations.reduce((acc, combination) => {
+          const childrenTotal = combination.children.reduce((sum, child) => {
+              const price = Number(child.price) || 0; // Приводим к числу, если не число — берём 0
+              return sum + price;
+          }, 0);
+          return acc + childrenTotal;
+        }, 0);
         const consumablesTotal = consumables.reduce((total, consumable) => total + Number(consumable.price), 0) || 0;
         const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
-        const cost = (Number(operationsTotal) + Number(consumablesTotal) + Number(pricesTotal)) || 0;
+        const cost = (Number(combinationsTotal) + Number(consumablesTotal) + Number(pricesTotal)) || 0;
 
         dispatch(createCalculation({
           ...clientData,
@@ -80,6 +86,7 @@ const Calculator = () => {
           combinations: combinations.map(item => ({
             title: item.title,
             is_sample: false,
+            status: item.status,
             operations: item.children.map(op => op)
           })),
           cal_consumables: [...consumables],
@@ -99,43 +106,44 @@ const Calculator = () => {
   };
 
   const handleCreateProduct = (name) => {
-      if(isDataValid()) {
+    if(isDataValid()) {
 
-        const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
-        const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
-        const cost = (Number(operationsTotal) + Number(pricesTotal)) || 0;
+      const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
+      const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
+      const cost = (Number(operationsTotal) + Number(pricesTotal)) || 0;
 
-        dispatch(createProduct({
-          ...productData,
-          cost_price: cost,
-          prices,
-          combinations: combinations.map(item => ({
-            title: item.title,
-            is_sample: false,
-            operations: item.children.map(op => op)
-          })),
-          consumables
-        })).then(res => {
-            if(res.meta.requestStatus === 'fulfilled') {
-              toast.success("Товар создан успешно!")
-              if(name === 'order') {
-                if(res.payload?.id) {
-                  navigate(`order/${res.payload?.id}`)
-                } else {
-                  toast.error('Произошла ошибка с перенаправлением! Попробуйте найти товар в разделе "Товары"!')
-                }
+      dispatch(createProduct({
+        ...productData,
+        cost_price: cost,
+        prices,
+        combinations: combinations.map(item => ({
+          title: item.title,
+          is_sample: false,
+          status: item.status,
+          operations: item.children.map(op => op)
+        })),
+        consumables
+      })).then(res => {
+          if(res.meta.requestStatus === 'fulfilled') {
+            toast.success("Товар создан успешно!")
+            if(name === 'order') {
+              if(res.payload?.id) {
+                navigate(`order/${res.payload?.id}`)
               } else {
-                navigate('/crm/product')
+                toast.error('Произошла ошибка с перенаправлением! Попробуйте найти товар в разделе "Товары"!')
               }
-            } else if(res.payload?.vendor_code?.length > 0 && res.payload?.vendor_code[0] === 'nomenclature with this vendor code already exists.') {
-              toast.error('Товар с таким артикулом уже существует!')
             } else {
-              toast.error('Произошла ошибка!')
+              navigate('/crm/product')
             }
-        })
-      } else {
-        toast.error('Заполните правильно данные о товаре!');
-      }
+          } else if(res.payload?.vendor_code?.length > 0 && res.payload?.vendor_code[0] === 'nomenclature with this vendor code already exists.') {
+            toast.error('Товар с таким артикулом уже существует!')
+          } else {
+            toast.error('Произошла ошибка!')
+          }
+      })
+    } else {
+      toast.error('Заполните правильно данные о товаре!');
+    }
   }
 
   const nextMove = (name) => {

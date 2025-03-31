@@ -81,7 +81,7 @@ const CombinationsTable = ({ type }) => {
     const index = combinations.findIndex(item => item.id === data.id);
     
     setEditComb({
-        title: data.title,
+        data,
         index
     })
     setModals({ ...modals, edit: true });

@@ -294,7 +294,8 @@ const TechnologProductSlice = createSlice({
         editCombination: (state, action) => {
             const { index, value } = action.payload;
 
-            state.combinations[index].title = value;
+            state.combinations[index].title = value.title;
+            state.combinations[index].status = value.status;
         },
         getValueOperationInCombination: (state, action) => {
             const { value, name, parentIndex, childIndex } = action.payload;
@@ -376,8 +377,7 @@ const TechnologProductSlice = createSlice({
                     title: item.title,
                     id: item.id,
                     children: item.operations?.map(op => ({
-                        ...op,
-                        rank: op?.rank?.id
+                        ...op
                     }))
                 }))
                 state.consumables = action.payload.consumables.map(item => ({
@@ -422,6 +422,7 @@ const TechnologProductSlice = createSlice({
                 state.combinations = action.payload.combinations.map(item => ({
                     title: item.title,
                     id: item.id,
+                    status: item.status,
                     children: item.operations?.map(op => ({
                         ...op,
                         rank: op?.rank?.id

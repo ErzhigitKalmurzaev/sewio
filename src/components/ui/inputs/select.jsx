@@ -27,7 +27,7 @@ const Select = ({ width, label, placeholder, data, onChange, error, required, la
         valueKey={valueKey || 'value'}
         placeholder={placeholder}
         disabled={disabled}
-        menuMaxHeight={150}
+        menuMaxHeight={150}  
         virtualized={false} // ✅ Отключает виртуализацию
         menuClassName="custom-menu-class"
         renderMenuItem={(label, item) => (

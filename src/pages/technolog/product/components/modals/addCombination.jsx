@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { List, Loader, Modal } from 'rsuite'
 import { getCombinationById, getCombinationList } from '../../../../../store/technolog/operations';
 import { useDispatch, useSelector } from 'react-redux';
-import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
 import Select from '../../../../../components/ui/inputs/select';
 import { getOperationsTitlesList } from './../../../../../store/technolog/calculation';
 import Button from '../../../../../components/ui/button';
 import { addCombination, createCombination, editCombinationById, getCombinationsList } from './../../../../../store/technolog/product';
 import { toast } from 'react-toastify';
+import { combinationStatuses } from '../../../../../utils/selectDatas/productDatas';
+import InputWithSuggestion from '../../../../../components/ui/inputs/inputWithSuggestion';
 
 const AddCombination = ({ modals, setModals }) => {
 
@@ -19,6 +20,7 @@ const AddCombination = ({ modals, setModals }) => {
   const [newCombination, setNewCombination] = useState({
     title: '',
     is_sample: false,
+    status: '',
     operations: []
   });
   const [errors, setErrors] = useState({
@@ -56,6 +58,7 @@ const AddCombination = ({ modals, setModals }) => {
     if(newCombination.title) {
         dispatch(addCombination({
             title: newCombination?.title,
+            status: newCombination?.status,
             children: newCombination?.operations?.map(item => ({
                 ...item,
                 equipment: item?.equipment?.id,
@@ -84,8 +87,8 @@ const AddCombination = ({ modals, setModals }) => {
         </Modal.Header>
         <Modal.Body>
             <div className='flex flex-col gap-y-3'>
-                <div className='flex gap-x-3'>
-                    <InputWithSuggestions
+                <div className='flex gap-x-3 items-center'>
+                    <InputWithSuggestion
                         label='Название'
                         type='text'
                         placeholder={'Введите название комбинации'}
@@ -93,6 +96,15 @@ const AddCombination = ({ modals, setModals }) => {
                         onChange={(e) => getValue(e.target.value, 'title')}
                         onSelect={(id) => handleSelect(id)}
                         suggestions={combinations_list?.results || []}
+                    />
+                    <Select
+                        size='md'
+                        label='Статус'
+                        data={combinationStatuses}
+                        value={newCombination?.status}
+                        onChange={(e) => getValue(e, 'status')}
+                        placeholder='Установите статус'
+                        valueKey={'id'}
                     />
                 </div>
 

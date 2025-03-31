@@ -13,6 +13,10 @@ export const dischargeDatas = [
 
 export const combinationStatuses = [
     {
+        id: '',
+        label: 'Нет статуса'
+    },
+    {
         id: 1,
         label: 'ОТК'
     },

@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { List, Loader, Modal } from 'rsuite'
 import { getCombinationById } from '../../../../../store/technolog/operations';
 import { useDispatch, useSelector } from 'react-redux';
-import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
 import { getOperationsTitlesList } from './../../../../../store/technolog/calculation';
 import Button from '../../../../../components/ui/button';
 import { getCombinationsList } from './../../../../../store/technolog/product';
 import { addCombination } from './../../../../../store/technolog/calculation';
 import { toast } from 'react-toastify';
+import InputWithSuggestion from '../../../../../components/ui/inputs/inputWithSuggestion';
+import { combinationStatuses } from '../../../../../utils/selectDatas/productDatas';
+import Select from '../../../../../components/ui/inputs/select';
 
 const AddCombination = ({ modals, setModals }) => {
 
@@ -56,6 +58,7 @@ const AddCombination = ({ modals, setModals }) => {
     if(newCombination.title) {
         dispatch(addCombination({
             title: newCombination?.title,
+            status: newCombination?.status,
             children: newCombination?.operations?.map(item => ({
                 ...item,
                 equipment: item?.equipment?.id,
@@ -85,7 +88,7 @@ const AddCombination = ({ modals, setModals }) => {
         <Modal.Body>
             <div className='flex flex-col gap-y-3'>
                 <div className='flex gap-x-3'>
-                    <InputWithSuggestions
+                    <InputWithSuggestion
                         label='Название'
                         type='text'
                         placeholder={'Введите название комбинации'}
@@ -93,6 +96,15 @@ const AddCombination = ({ modals, setModals }) => {
                         onChange={(e) => getValue(e.target.value, 'title')}
                         onSelect={(id) => handleSelect(id)}
                         suggestions={combinations_list?.results || []}
+                    />
+                    <Select
+                        size='md'
+                        label='Статус'
+                        data={combinationStatuses}
+                        value={newCombination?.status}
+                        onChange={(e) => getValue(e, 'status')}
+                        placeholder='Установите статус'
+                        valueKey={'id'}
                     />
                 </div>
 

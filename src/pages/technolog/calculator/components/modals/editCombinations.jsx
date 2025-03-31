@@ -1,20 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Input from '../../../../../components/ui/inputs/input'
 import { Modal } from 'rsuite'
 import Button from '../../../../../components/ui/button';
 import { useDispatch } from 'react-redux';
 import { deleteCombination, editCombination } from '../../../../../store/technolog/calculation';
+import Select from '../../../../../components/ui/inputs/select';
+import { combinationStatuses } from '../../../../../utils/selectDatas/productDatas';
 
 const EditCombinations = ({ modals, setModals, data, setData }) => {
 
   const dispatch = useDispatch();
 
-  const [combination, setCombination] = useState(data.title);
+  const [combination, setCombination] = useState(data.data);
+
+  useEffect(() => {
+    setCombination(data?.data);
+  }, [data?.data])
 
   const onSubmit = () => {
     dispatch(editCombination({ index: data.index, value: combination }))
     setModals({ ...modals, edit: false })
     setData({})
+  }
+
+  const getValue = (e, name) => {
+    setCombination({ ...combination, [name]: e });
   }
 
   const onDelete = () => {
@@ -35,8 +45,17 @@ const EditCombinations = ({ modals, setModals, data, setData }) => {
                         label='Название'
                         type='text'
                         placeholder={'Введите название комбинации'}
-                        value={combination || data.title}
-                        onChange={(e) => setCombination(e.target.value)}
+                        value={combination?.title}
+                        onChange={(e) => getValue(e.target.value, 'title')}
+                    />
+                    <Select
+                        size='md'
+                        label='Статус'
+                        data={combinationStatuses}
+                        value={combination?.status || ''}
+                        onChange={(e) => getValue(e, 'status')}
+                        placeholder='Установите статус'
+                        valueKey={'id'}
                     />
                 </div>
 

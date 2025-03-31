@@ -29,7 +29,7 @@ const OrderListTable = ({ data, status, total, activePage, limit, setPage, moder
   }
 
   return (
-        <div className='min-h-[500px] font-inter bg-white rounded-xl'>
+        <div className='min-h-[600px] font-inter bg-white rounded-xl'>
             <Table
               virtualized
               loading={status === 'loading'}

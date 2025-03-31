@@ -33,7 +33,7 @@ const EditCalculate = () => {
     })
   }, [id])
 
-  const { clients, operations, consumables, prices,  } = useSelector(state => state.calculation);
+  const { clients, operations, consumables, prices, combinations  } = useSelector(state => state.calculation);
 
   const [clientData, setClientData] = useState({
     title: "",
@@ -82,7 +82,12 @@ const EditCalculate = () => {
         dispatch(editCalculationById({ id, props: {
           ...clientData,
           cost_price: cost,
-          cal_operations: [...operations],
+          combinations: combinations.map(item => ({
+            title: item.title,
+            is_sample: false,
+            status: item.status,
+            operations: item.children.map(op => op)
+          })),
           cal_consumables: [...consumables],
           cal_prices: [...prices]
         }})).then(res => {
@@ -102,15 +107,26 @@ const EditCalculate = () => {
   const handleCreateProduct = (name) => {
     if(isDataValid()) {
 
-      const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
+      const combinationsTotal = combinations.reduce((acc, combination) => {
+        const childrenTotal = combination.children.reduce((sum, child) => {
+            const price = Number(child.price) || 0; // Приводим к числу, если не число — берём 0
+            return sum + price;
+        }, 0);
+        return acc + childrenTotal;
+      }, 0);
       const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
-      const cost = (Number(operationsTotal) + Number(pricesTotal)) || 0;
+      const cost = (Number(combinationsTotal) + Number(pricesTotal)) || 0;
 
       dispatch(createProduct({
         ...productData,
         cost_price: cost,
         prices,
-        operations,
+        combinations: combinations.map(item => ({
+          title: item.title,
+          is_sample: false,
+          status: item.status,
+          operations: item.children.map(op => op)
+        })),
         consumables
       })).then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
