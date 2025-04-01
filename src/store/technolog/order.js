@@ -343,7 +343,8 @@ const TechnologOrderSlice = createSlice({
                           amount: amount.amount,
                           cut: amount.cut,
                           done: amount.done,
-                          defect: amount.defect
+                          defect: amount.defect,
+                          otk: amount.otk
                         });
                   
                         return acc;

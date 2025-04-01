@@ -32,7 +32,7 @@ const EditCombinations = ({ modals, setModals, data, setData }) => {
     setModals({ ...modals, edit: false })
     setData({})
   }
-
+    
   return (
     <Modal open={modals?.edit} onClose={() => setModals({ ...modals, edit: false })}>
         <Modal.Header>

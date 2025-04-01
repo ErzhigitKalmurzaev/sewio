@@ -140,6 +140,8 @@ const EditCalculate = () => {
             } else {
               navigate('/crm/product')
             }
+          } else if(res.payload?.vendor_code?.length > 0 && res.payload?.vendor_code[0] === 'nomenclature with this vendor code already exists.') {
+            toast.error('Товар с таким артикулом уже существует!')
           } else {
             toast.error('Произошла ошибка!')
           }

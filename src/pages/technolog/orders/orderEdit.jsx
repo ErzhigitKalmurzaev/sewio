@@ -99,8 +99,13 @@ const OrderEdit = () => {
   
       case "total_time":
         return edit_products_in_order.reduce((total, product) => {
-          
-          return total + product.time;
+            const productTotalTime = product.amounts.reduce((sum, colorItem) => {
+                return sum + colorItem.sizes.reduce((sizeSum, sizeItem) => {
+                    return sizeSum + (product.time * sizeItem.amount);
+                }, 0);
+            }, 0);
+    
+            return total + productTotalTime;
         }, 0) / 3600;
       case 'status': 
         return OrderStatuses[order?.status]?.label

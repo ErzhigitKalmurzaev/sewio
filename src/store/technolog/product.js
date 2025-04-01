@@ -376,6 +376,7 @@ const TechnologProductSlice = createSlice({
                 state.combinations = action.payload.combinations.map(item => ({
                     title: item.title,
                     id: item.id,
+                    status: item.status,
                     children: item.operations?.map(op => ({
                         ...op
                     }))

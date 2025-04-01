@@ -87,7 +87,7 @@ const EditProdPanel = ({ product, id }) => {
           cellBordered
           data={product.amounts || []}
           autoHeight
-          headerHeight={60}
+          headerHeight={70}
           className='mb-3'
         >
           {/* Колонка для цвета */}
@@ -109,71 +109,44 @@ const EditProdPanel = ({ product, id }) => {
           </Table.Column>
 
           {/* Генерация колонок для всех размеров */}
-          {uniqueSizes?.map((sizeItem, sIndex) => (
-            <Table.ColumnGroup header={sizeItem?.title} key={sIndex} verticalAlign="middle" align="center">
-              {/* Колонка для "План" */}
-              <Table.Column key={`plan-${sIndex}`} width={80}>
-                <Table.HeaderCell>План</Table.HeaderCell>
-                <Table.Cell style={{ padding: "6px" }}>
-                  {(rowData) => {
-                    const sizeData = rowData.sizes.find(s => s.size.id === sizeItem.id);
-                    return (
-                      <NumInputForTable
-                        value={sizeData?.amount || ""}
-                        placeholder={"0"}
-                        onChange={(value) => handleAmountChange(value, id, rowData.color, sizeItem.id, "amount")}
-                      />
-                    );
-                  }}
-                </Table.Cell>
-              </Table.Column>
+          {uniqueSizes?.map((sizeItem, sIndex) => {
+              const bgColor = sIndex % 2 === 0 ? "#f5f5f5" : "#FFFFFF";
 
-              {/* Колонка для "Вырезано" */}
-              <Table.Column key={`cut-${sIndex}`} width={70}>
-                <Table.HeaderCell>Вырезано</Table.HeaderCell>
-                <Table.Cell style={{ padding: "6px" }}>
-                  {(rowData) => {
-                    const sizeData = rowData.sizes.find(s => s.size.id === sizeItem.id);
-                    return <p className="text-center">{sizeData?.cut || 0}</p>;
-                  }}
-                </Table.Cell>
-              </Table.Column>
-
-              {/* Колонка для "Готово" */}
-              <Table.Column key={`done-${sIndex}`} width={80}>
-                <Table.HeaderCell>Готово</Table.HeaderCell>
-                <Table.Cell style={{ padding: "6px" }}>
-                  {(rowData) => {
-                    const sizeData = rowData.sizes.find(s => s.size.id === sizeItem.id);
-                    return (
-                      <NumInputForTable
-                        value={sizeData?.done || ""}
-                        placeholder={"0"}
-                        onChange={(value) => handleAmountChange(value, id, rowData.color, sizeItem.id, "done")}
-                      />
-                    )
-                  }}
-                </Table.Cell>
-              </Table.Column>
-
-              {/* Колонка для "Брак" */}
-              <Table.Column key={`defect-${sIndex}`} width={80}>
-                <Table.HeaderCell>Брак</Table.HeaderCell>
-                <Table.Cell style={{ padding: "6px" }}>
-                  {(rowData) => {
-                    const sizeData = rowData.sizes.find(s => s.size.id === sizeItem.id);
-                    return (
-                      <NumInputForTable
-                        value={sizeData?.defect || ""}
-                        placeholder={"0"}
-                        onChange={(value) => handleAmountChange(value, id, rowData.color, sizeItem.id, "defect")}
-                      />
-                    )
-                  }}
-                </Table.Cell>
-              </Table.Column>
-            </Table.ColumnGroup>
-          ))}
+              return (
+                <Table.ColumnGroup 
+                  key={sIndex} 
+                  header={sizeItem?.title} 
+                  verticalAlign="middle" 
+                  align="center"
+                >
+                  {[
+                    { key: "amount", label: "План" },
+                    { key: "cut", label: "Вырезано" },
+                    { key: "otk", label: "ОТК" },
+                    { key: "done", label: "Готово" },
+                    { key: "defect", label: "Брак" },
+                  ].map(({ key, label }) => (
+                    <Table.Column key={`${key}-${sIndex}`} width={70}>
+                      <Table.HeaderCell style={{ backgroundColor: bgColor, padding: 0 }}>{label}</Table.HeaderCell>
+                      <Table.Cell style={{ background: bgColor, padding: '6px' }}>
+                        {(rowData) => {
+                          const sizeData = rowData.sizes.find(s => s.size.id === sizeItem.id);
+                          return key === "amount" || key === "done" || key === "defect" ? (
+                            <NumInputForTable
+                              value={sizeData?.[key] || ""}
+                              placeholder={"0"}
+                              onChange={(value) => handleAmountChange(value, id, rowData.color, sizeItem.id, key)}
+                            />
+                          ) : (
+                            <p className="text-center">{sizeData?.[key] || 0}</p>
+                          );
+                        }}
+                      </Table.Cell>
+                    </Table.Column>
+                  ))}
+                </Table.ColumnGroup>
+              );
+            })}
         </Table>
       </div>
 

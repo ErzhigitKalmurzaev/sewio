@@ -26,9 +26,9 @@ const CalcHistory = () => {
           <Title text="История" />
         </div>
 
-        <div className='min-h-[500px] font-inter bg-white rounded-xl'>
+        <div className='min-h-[600px] font-inter bg-white rounded-xl'>
         <Table
-            height={500}
+            height={600}
             loading={calc_history_status === 'loading'}
             data={calc_history?.results || []}
             className='rounded-xl'

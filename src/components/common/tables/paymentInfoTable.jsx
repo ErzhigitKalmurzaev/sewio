@@ -5,7 +5,7 @@ import { formatNumber } from '../../../utils/functions/numFuncs';
 const PaymentInfoTable = ({ data, status }) => {
     
     const calculateTotal = (items) => items.reduce((total, item) => total + item.total_amount, 0);
-
+    
     return (
     <div className="bg-[#EDEDED] rounded-xl border border-borderGray">
         {
@@ -23,7 +23,7 @@ const PaymentInfoTable = ({ data, status }) => {
                     </thead>
                     <tbody>
                         {data?.operations.map((op, index) => (
-                        <tr key={op.id} className={'bg-green-50'}>
+                        <tr key={`${index} ` + op?.operation_title} className={'bg-green-50'}>
                             <td className="border border-borderGray px-4 py-2">{op?.operation_title}</td>
                             <td className="border border-borderGray px-4 py-2">{op?.total_amount}</td>
                             <td className="border border-borderGray px-4 py-2">{op?.operation_price}</td>
@@ -104,6 +104,11 @@ const PaymentInfoTable = ({ data, status }) => {
                 </tbody>
                 </table>
             </> :
+            <></>
+        }
+        {
+            !data?.operations && !data?.id ? 
+            <h3 className="text-lg font-bold mb-2 p-10 text-center">Нет данных</h3> :
             <></>
         }
     </div>

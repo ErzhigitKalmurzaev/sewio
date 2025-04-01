@@ -98,14 +98,13 @@ const CreateAccWork = () => {
     const validatedDetails = operations_list?.flatMap(item =>
       item?.details?.map(detail => {
         const staff = Number(detail.staff);
-        const amount = Number(detail.count);
+        const amount = Number(detail.count) || 0;
   
         // Ошибка, если сотрудник не указан, но количество введено
         if (!staff && amount > 0 && amount !== '') {
           hasInvalidData = true;
           toast.error(`Ошибка: Сотрудник не указан, но количество ${amount} задано.`);
         }
-  
         // Ошибка, если количество превышает максимальное значение
         if (amount > maxAmount) {
           hasInvalidData = true;
@@ -129,8 +128,6 @@ const CreateAccWork = () => {
     setErrors(newErrors);
     return !Object.values(newErrors).some(Boolean);
   };
-  
-  
 
   const onSubmit = () => {
     if(validateField()) {

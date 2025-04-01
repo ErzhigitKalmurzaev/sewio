@@ -20,7 +20,7 @@ const AddCombination = ({ modals, setModals }) => {
   const [newCombination, setNewCombination] = useState({
     title: '',
     is_sample: false,
-    status: '',
+    status: 0,
     operations: []
   });
   const [errors, setErrors] = useState({

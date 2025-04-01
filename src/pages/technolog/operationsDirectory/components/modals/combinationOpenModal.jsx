@@ -58,7 +58,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
             operations: combination?.operations?.map(item => item?.id),
             file: combination?.file?.id || combination?.file,
             title: combination?.title,
-            status: combination?.status
+            status: combination?.status ? combination?.status : 0
         } })).then(res => {
             if(res?.meta?.requestStatus === 'fulfilled') {
                 toast.success('Изменения сохранены!')
@@ -74,8 +74,8 @@ const CombinationOpenModal = ({ modals, setModals }) => {
   }
 
   const filteredOperations = operaitions_list?.results?.filter(op =>
-    op.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    !combination.operations.some(selectedOp => selectedOp.id === op.id)
+    op?.title?.toLowerCase()?.includes(searchTerm?.toLowerCase()) &&
+    !combination?.operations?.some(selectedOp => selectedOp?.id === op?.id)
   );
 
   return (

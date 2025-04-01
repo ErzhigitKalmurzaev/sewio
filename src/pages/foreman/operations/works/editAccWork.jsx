@@ -44,7 +44,7 @@ const EditAccWork = () => {
         const staff = Number(detail.staff);
         const amount = Number(detail.count);
   
-        if (!staffIds.includes(staff)) {
+        if (staff && !staffIds.includes(staff)) {
           hasInvalidData = true;
           toast.error(`Ошибка: Сотрудник ${staff} отсутствует в сотрудниках!`);
         }
@@ -74,12 +74,22 @@ const EditAccWork = () => {
             party: work.party,
             color: work?.color?.id,
             size: work?.size?.id,
-            details: operations_list?.flatMap(item => 
-              item?.details?.map(detail => ({
-                combination: item.id,
-                staff: Number(detail.staff),
-                amount: Number(detail.count)
-              }))
+            details: operations_list?.flatMap(item =>
+              item?.details?.map(detail => {
+                const staff = Number(detail.staff);
+                const amount = Number(detail.count);
+            
+                // Фильтруем операции, где отсутствуют сотрудники или количество
+                if (!staff || amount <= 0) {
+                  return null;  // Возвращаем null, чтобы в дальнейшем отфильтровать такие элементы
+                }
+            
+                return {
+                  combination: item.id,
+                  staff,
+                  amount
+                };
+              }).filter(item => item !== null)  // Убираем null-элементы
             )
           }
       })).then(res => {

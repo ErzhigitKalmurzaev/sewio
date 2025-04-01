@@ -17,9 +17,7 @@ const PartiesPanel = () => {
       )
         .map(sizeId => order_parties[index]?.amounts?.flatMap(colorItem => colorItem.sizes).find(size => size.size.id === sizeId)?.size)
         .filter(Boolean);
-  } 
-
-  console.log(order_parties)
+  }
 
   return (
     <PanelGroup accordion bordered>

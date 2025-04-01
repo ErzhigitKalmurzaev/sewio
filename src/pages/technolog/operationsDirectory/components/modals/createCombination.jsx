@@ -19,7 +19,7 @@ const CreateCombination = ({ modals, setModals }) => {
         file: '',
         is_sample: true,
         operations: [],
-        status: ''
+        status: 0
     });
     
     const [searchTerm, setSearchTerm] = useState('');
@@ -66,7 +66,7 @@ const CreateCombination = ({ modals, setModals }) => {
                     toast.success('Комбинация создана!');
                     dispatch(getCombinationList({ search: '' }));
                     setModals({ ...modals, combination: false });
-                    setCombination({ title: '', file: '', is_sample: true, operations: [], status: '' });
+                    setCombination({ title: '', file: '', is_sample: true, operations: [], status: 0 });
                 } else {
                     toast.error('Произошла ошибка!');
                 }
