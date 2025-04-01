@@ -1,5 +1,5 @@
 import React from 'react'
-import { formatedToDDMMYYYY } from '../../../utils/functions/dateFuncs';
+import { formatedToDDMMYYYY, formatedToDDMMYYYYHHMM } from '../../../utils/functions/dateFuncs';
 import { formatNumber } from '../../../utils/functions/numFuncs';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -44,7 +44,8 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
         <table className="min-w-full table-auto bg-white">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border border-borderGray px-4 py-2">ID</th>
+              <th className="border border-borderGray px-4 py-2">ID заказа</th>
+              <th className="border border-borderGray px-4 py-2">Партия</th>
               <th className="border border-borderGray px-4 py-2">Название</th>
               <th className="border border-borderGray px-4 py-2">Цена</th>
               <th className="border border-borderGray px-4 py-2">Количество</th>
@@ -56,7 +57,8 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
             operations?.length > 0 ? 
             operations?.map((op, index) => (
               <tr key={op.id} className={'bg-green-50'}>
-                <td className="border border-borderGray px-4 py-2 text-center">{op?.operation?.id}</td>
+                <td className="border border-borderGray px-2 py-2 text-center">{op?.order_id}</td>
+                <td className="border border-borderGray px-4 py-2">{op?.party_number}</td>
                 <td className="border border-borderGray px-4 py-2">{op?.operation?.title}</td>
                 <td className="border border-borderGray px-4 py-2">{op.operation?.price}</td>
                 <td className="border border-borderGray px-4 py-2">{formatNumber(op?.total_amount)}</td>
@@ -72,7 +74,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
             </tr>
             }
             <tr>
-              <td colSpan="4" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
+              <td colSpan="5" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
               <td colSpan='1' className="border border-borderGray px-4 py-2 font-bold text-green-600">
                 +{formatNumber(calculateOperationTotal(operations))}
               </td>
@@ -87,7 +89,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
             <tr>
               <th className="border border-borderGray px-4 py-2">ID</th>
               <th className="border border-borderGray px-4 py-2">Дата</th>
-              <th className="border border-borderGray px-4 py-2">Сумма</th>
+              <th className="border border-borderGray px-4 py-2">Сумма (сом)</th>
             </tr>
           </thead>
           <tbody>
@@ -96,7 +98,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
               fines?.map((fine, index) => (
                 <tr key={fine.id} className={'bg-[#FFE4E6]'}>
                   <td className="border border-borderGray px-4 py-2 text-center">{fine.id}</td>
-                  <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYY(fine.created_at)}</td>
+                  <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYYHHMM(fine.created_at)}</td>
                   <td className="border border-borderGray px-4 py-2">{formatNumber(fine.amount)}</td>
                 </tr>
               )) :
@@ -121,7 +123,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
             <tr>
               <th className="border border-borderGray px-4 py-2">ID</th>
               <th className="border border-borderGray px-4 py-2">Дата</th>
-              <th className="border border-borderGray px-4 py-2">Сумма</th>
+              <th className="border border-borderGray px-4 py-2">Сумма (сом)</th>
             </tr>
           </thead>
           <tbody>
@@ -130,7 +132,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
               advances?.map((advance, index) => (
                 <tr key={advance.id} className={'bg-blue-50'}>
                   <td className="border border-borderGray px-4 py-2 text-center">{advance.id}</td>
-                  <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYY(advance.created_at)}</td>
+                  <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYYHHMM(advance.created_at)}</td>
                   <td className="border border-borderGray px-4 py-2">{formatNumber(advance.amount)}</td>
                 </tr>
               )) :

@@ -118,7 +118,7 @@ const OrderCreate = () => {
     const newErrors = {
       deadline: !order.deadline,
       client: !order.client,
-      products: !products_to_order?.length > 0,
+      products: !products_to_order?.length > 0 && !products_to_order?.some(item => item?.amounts?.length > 0 && item?.amounts?.some(amount => amount?.sizes?.length > 0)),
     };
 
     setError(newErrors);
@@ -134,11 +134,11 @@ const OrderCreate = () => {
         products: products_to_order?.map(item => ({
           ...item,
           price: item?.price || item?.cost_price,
-          amounts: item.amounts.flatMap(amount => 
-              amount.sizes.map(size => ({
-                  color: amount.color,
-                  size: size.size,  // Переносим `size` в строку
-                  amount: size.amount
+          amounts: item.amounts?.flatMap(amount => 
+              amount?.sizes?.map(size => ({
+                  color: amount?.color,
+                  size: size?.size,  // Переносим `size` в строку
+                  amount: size?.amount || 0
               }))
           )
         })),

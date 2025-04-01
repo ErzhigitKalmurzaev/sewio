@@ -24,6 +24,23 @@ export const formatedToDDMMYYYY = (date, character = '.') => {
   return formattedDate.replace(/\./g, character);
 };
 
+export const formatedToDDMMYYYYHHMM = (date, character = '.') => {
+  const newDate = new Date(date);
+
+  // Форматируем дату в нужный формат
+  const formattedDate = newDate.toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
+  const hours = String(newDate.getHours()).padStart(2, '0');
+  const minutes = String(newDate.getMinutes()).padStart(2, '0');
+
+  // Заменяем точки на указанный символ
+  return `${formattedDate.replace(/\./g, character)} ${hours}:${minutes}`;
+};
+
 export const formatedToDDMMYYYY2 = (date, character = '.') => {
   // Разделяем строку вручную
   const [day, month, year] = date.split('.'); // Предполагается формат DD.MM.YYYY

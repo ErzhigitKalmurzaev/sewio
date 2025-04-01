@@ -88,7 +88,7 @@ const FolderTable = ({ urls, params, setParams }) => {
                     className='flex items-center gap-x-1 hover:bg-zinc-200 pl-2' 
                     onDoubleClick={() => openCombinationFolder(combination.id)} 
                     key={index + " folder"}>
-                      <span className='text-2xl'>📁</span>
+                      <span className='text-xl'>🧩</span>
                       <span className='font-medium font-inter m-0'>{combination.title}</span>
                   </button>
                 )) :
@@ -105,7 +105,7 @@ const FolderTable = ({ urls, params, setParams }) => {
                     className='flex items-center gap-x-1 hover:bg-zinc-200 pl-2' 
                     onDoubleClick={() => openOperation(operation.id)} 
                     key={index + " folder"}>
-                      <span className='text-2xl'>📁</span>
+                      <span className='text-xl'>📄</span>
                       <span className='font-medium font-inter m-0'>{operation.title}</span>
                   </button>
                 )) : 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { formatedToDDMMYYYY } from '../../../utils/functions/dateFuncs';
+import { formatedToDDMMYYYY, formatedToDDMMYYYYHHMM } from '../../../utils/functions/dateFuncs';
 import { formatNumber } from '../../../utils/functions/numFuncs';
 
 const PaymentInfoTable = ({ data, status }) => {
@@ -59,7 +59,7 @@ const PaymentInfoTable = ({ data, status }) => {
                 <tbody>
                     <tr key={data.id} className={'bg-[#FFE4E6]'}>
                         <td className="border border-borderGray px-4 py-2">{data?.id}</td>
-                        <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYY(data?.created_at)}</td>
+                        <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYYHHMM(data?.created_at)}</td>
                         <td className="border border-borderGray px-4 py-2">{formatNumber(data?.amount)}</td>
                         <td className="max-w-[250px] border border-borderGray px-4 py-2">{data?.comment}</td>
                     </tr>
@@ -91,7 +91,7 @@ const PaymentInfoTable = ({ data, status }) => {
                 <tbody>
                     <tr key={data.id} className={'bg-blue-50'}>
                         <td className="border border-borderGray px-4 py-2">{data?.id}</td>
-                        <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYY(data?.created_at)}</td>
+                        <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYYHHMM(data?.created_at)}</td>
                         <td className="border border-borderGray px-4 py-2">{formatNumber(data?.amount)}</td>
                         <td className="border border-borderGray px-4 py-2">{data?.comment}</td>
                     </tr>

@@ -43,8 +43,7 @@ const AdvanceModal = ({ modals, setModals, update, setUpdate }) => {
 
   const validateField = () => {
     const newErrors = {
-      amount: !payment.amount,
-      comment: !payment.comment
+      amount: !payment.amount
     }
     setErrors(newErrors);
     return !Object.values(newErrors).some(item => item);
