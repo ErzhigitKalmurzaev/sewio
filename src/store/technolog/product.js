@@ -224,8 +224,7 @@ const TechnologProductSlice = createSlice({
             {
                 material_nomenclature: '',
                 title: '',
-                consumption: '',
-                color: ''
+                consumption: ''
             }
         ],
         prices: [
@@ -294,8 +293,8 @@ const TechnologProductSlice = createSlice({
         editCombination: (state, action) => {
             const { index, value } = action.payload;
 
-            state.combinations[index].title = value.title;
-            state.combinations[index].status = value.status;
+            state.combinations[index].title = value?.title;
+            state.combinations[index].status = value?.status;
         },
         getValueOperationInCombination: (state, action) => {
             const { value, name, parentIndex, childIndex } = action.payload;
@@ -331,8 +330,7 @@ const TechnologProductSlice = createSlice({
                 nomenclature: '',
                 title: '',
                 consumption: '',
-                unit: '',
-                price: ''
+                unit: ''
             })
         },
         getValueConsumable: (state, action) => {
@@ -382,7 +380,7 @@ const TechnologProductSlice = createSlice({
                     }))
                 }))
                 state.consumables = action.payload.consumables.map(item => ({
-                    color: item.color?.id,
+                    unit: item?.material_nomenclature?.unit,
                     material_nomenclature: item?.material_nomenclature?.id,
                     consumption: item.consumption,
                     title: item.material_nomenclature?.title,

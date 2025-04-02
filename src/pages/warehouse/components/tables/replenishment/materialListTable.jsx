@@ -31,14 +31,14 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
                 <Cell dataKey="id" />
             </Column>
 
-            <Column width={150}>
-                <HeaderCell>Артикул</HeaderCell>
-                <Cell dataKey="vendor_code" />
-            </Column>
-
             <Column width={200}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell dataKey="title" />
+            </Column>
+
+            <Column width={150}>
+                <HeaderCell>Артикул</HeaderCell>
+                <Cell dataKey="vendor_code" />
             </Column>
 
             <Column width={150}>

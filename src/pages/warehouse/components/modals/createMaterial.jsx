@@ -90,8 +90,8 @@ const CreateMaterial = ({ modals, setModals }) => {
                         error={errors.vendor_code}
                     />
                     <Select
-                        width='1/2'
-                        label='Единица измерения'
+                        width='300px'
+                        label='Ед. измер-я'
                         placeholder='Выберите'
                         data={materialUnits}
                         value={material.unit}

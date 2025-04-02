@@ -83,18 +83,6 @@ const ConsumablesTable = ({ type }) => {
                 </Cell>
             </Column>
             <Column width={250}>
-                <HeaderCell>Цена</HeaderCell>
-                <Cell style={{ padding: '7px 6px'}}>
-                    {(rowData, index) =>
-                        <NumInputForTable
-                            value={rowData.price}
-                            placeholder="0"
-                            onChange={(e) => getValue(e, "price", index)}
-                        />
-                    }
-                </Cell>
-            </Column>
-            <Column width={250}>
                 <HeaderCell>Расход</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>

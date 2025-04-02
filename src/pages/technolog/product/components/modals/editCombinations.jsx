@@ -17,10 +17,10 @@ const EditCombinations = ({ modals, setModals, data, setData }) => {
     setCombination(data?.data);
   }, [data?.data])
 
+
   const onSubmit = () => {
     dispatch(editCombination({ index: data.index, value: combination }))
     setModals({ ...modals, edit: false })
-    setData({})
   }
 
   const getValue = (e, name) => {
@@ -67,7 +67,7 @@ const EditCombinations = ({ modals, setModals, data, setData }) => {
                     Удалить
                 </Button>
                 <Button width={'120px'} onClick={onSubmit}>
-                    Добавить
+                    Сохранить
                 </Button>
             </div>
         </Modal.Footer>

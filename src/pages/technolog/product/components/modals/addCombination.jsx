@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Select from '../../../../../components/ui/inputs/select';
 import { getOperationsTitlesList } from './../../../../../store/technolog/calculation';
 import Button from '../../../../../components/ui/button';
-import { addCombination, createCombination, editCombinationById, getCombinationsList } from './../../../../../store/technolog/product';
+import { addCombination, getCombinationsList } from './../../../../../store/technolog/product';
 import { toast } from 'react-toastify';
 import { combinationStatuses } from '../../../../../utils/selectDatas/productDatas';
 import InputWithSuggestion from '../../../../../components/ui/inputs/inputWithSuggestion';
@@ -117,7 +117,7 @@ const AddCombination = ({ modals, setModals }) => {
                                 <h3 className="text-base font-medium mb-2">Операции в комбинации</h3>
                                 <List bordered size='sm'>
                                     {newCombination?.operations?.map((operation, index) => (
-                                            <List.Item>
+                                            <List.Item key={index}>
                                                 <div className="flex gap-x-3 font-inter font-medium w-full">
                                                     <span className="w-[35%] truncate">{operation?.title}</span>
                                                     <span className="w-[20%] truncate">{operation?.rank?.title}</span>

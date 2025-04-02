@@ -11,6 +11,7 @@ import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithS
 
 import { getColors, getConsumablesTitleList } from '../../../../../store/technolog/material';
 import { getMaterial } from './../../../../../store/technolog/material';
+import { materialUnits } from '../../../../../utils/selectDatas/productDatas';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -53,8 +54,7 @@ const ConsumablesTable = ({ type }) => {
                 material_nomenclature: res.payload.id,
                 title: res.payload.title,
                 consumption: '',
-                unit: res.payload.unit,
-                price: res.payload.cost_price.toFixed(1)
+                unit: res.payload.unit
             }}))
         }
         setLoading(false);
@@ -84,22 +84,6 @@ const ConsumablesTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={200}>
-                <HeaderCell>Цвет</HeaderCell>
-                <Cell style={{ padding: '7px 6px'}}>
-                    {(rowData, index) =>
-                        <SelectForTable
-                            value={rowData.color}
-                            data={colors_list}
-                            colors={true}
-                            onChange={(e) => getValue(e, "color", index)}
-                            placeholder="Цвет"
-                            labelKey='title'
-                            valueKey='id'
-                        />
-                    }
-                </Cell>
-            </Column>
             <Column width={250}>
                 <HeaderCell>Расход</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
@@ -108,6 +92,19 @@ const ConsumablesTable = ({ type }) => {
                             value={rowData.consumption}
                             placeholder="0"
                             onChange={(e) => getValue(e, "consumption", index)}
+                        />
+                    }
+                </Cell>
+            </Column>
+            <Column width={200}>
+                <HeaderCell>Единица измерения</HeaderCell>
+                <Cell style={{ padding: '7px 6px'}}>
+                    {(rowData, index) =>
+                        <SelectForTable
+                            value={rowData.unit}
+                            data={materialUnits}
+                            onChange={(e) => getValue(e, "unit", index)}
+                            placeholder="Ед. измер."
                         />
                     }
                 </Cell>

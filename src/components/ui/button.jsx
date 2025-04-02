@@ -183,7 +183,16 @@ const Button = ({ variant = "default", active,  disabled, type, sx, loading, chi
     }
 
     return (
-        <StyledButton loading={loading} type={type} disabled={disabled} width={width} {...props} styles={VARIANTS[variant]} onClick={onClick}>
+        <StyledButton 
+            loading={loading} 
+            type={type} 
+            disabled={disabled} 
+            width={width} 
+            styles={VARIANTS[variant]} 
+            onClick={onClick}
+            onDoubleClick={() => {}}
+            {...props}
+        >
             {icon ? icon : ''} {children}
         </StyledButton>
     )

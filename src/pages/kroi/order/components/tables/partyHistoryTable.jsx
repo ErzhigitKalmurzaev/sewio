@@ -21,10 +21,6 @@ const PartyHistoryTable = ({ data, status, urls, handleChangeFilter }) => {
             cellBordered
         >
             <Column width={80} align="center" verticalAlign="center">
-                <HeaderCell>ID</HeaderCell>
-                <Cell dataKey="id" />
-            </Column>
-            <Column width={80} align="center" verticalAlign="center">
                 <HeaderCell>Заказ</HeaderCell>
                 <Cell dataKey="order" />
             </Column>
@@ -38,7 +34,7 @@ const PartyHistoryTable = ({ data, status, urls, handleChangeFilter }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={200}>
+            <Column width={150}>
                 <HeaderCell>Артикул</HeaderCell>
                 <Cell>
                     {
@@ -48,7 +44,7 @@ const PartyHistoryTable = ({ data, status, urls, handleChangeFilter }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={80} align="center" verticalAlign="center">
+            <Column width={100} align="center" verticalAlign="center">
                 <HeaderCell>Партия №</HeaderCell>
                 <Cell dataKey="number" />
             </Column>
