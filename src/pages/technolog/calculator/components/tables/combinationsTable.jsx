@@ -198,7 +198,7 @@ const CombinationsTable = ({ type }) => {
                     {(rowData, index) =>
                         rowData.children ? 
                             <div className='flex justify-evenly gap-x-4'>
-                                <button onClick={() => addOperationRow(rowData)} className="cursor-pointer">
+                                <button onClick={() => addOperationRow(rowData)}  key={rowData?.id + index} className="cursor-pointer">
                                     <Plus color="#0D47A1" />
                                 </button>
                                 <button onClick={() => editCombination(rowData)} className="cursor-pointer">
