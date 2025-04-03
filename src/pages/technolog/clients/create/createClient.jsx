@@ -124,6 +124,7 @@ const CreateClient = () => {
                     type='text'
                     name='name'
                     label='Имя'
+                    value={employee_data?.name}
                     placeholder='Введите имя'
                     error={errors.name}
                     onChange={getValue}
@@ -133,6 +134,7 @@ const CreateClient = () => {
                     type='text'
                     name='surname'
                     label='Фамилия'
+                    value={employee_data?.surname}
                     placeholder='Введите имя'
                     error={errors.surname}
                     onChange={getValue}
@@ -143,6 +145,7 @@ const CreateClient = () => {
                   <Input
                     label='Логин'
                     name='username'
+                    value={employee_data?.username}
                     placeholder='Введите логин'
                     type='text'
                     error={errors.username}
@@ -152,6 +155,7 @@ const CreateClient = () => {
                   <Input
                     label='Пароль'
                     placeholder='********'
+                    value={employee_data?.password}
                     type='text'
                     name='password'
                     error={errors.password}
@@ -171,6 +175,7 @@ const CreateClient = () => {
               <Input
                   label='Компания'
                   name='company_title'
+                  value={employee_data?.company_title}
                   placeholder='Введите название компании'
                   type='text'
                   error={errors.company_title}
@@ -183,6 +188,7 @@ const CreateClient = () => {
                     width='49%'
                     label='Адрес'
                     name='address'
+                    value={employee_data?.address}
                     placeholder='Введите адрес'
                     type='text'
                     error={errors.address}

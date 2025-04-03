@@ -46,7 +46,7 @@ const CreateProduct = () => {
   const isDataValid = () => {
       return (
           // operations.every(isObjectFilled) &&
-          consumables.every(isObjectFilled) &&
+          // consumables.every(isObjectFilled) &&
           prices.every(isObjectFilled)
       );
   };

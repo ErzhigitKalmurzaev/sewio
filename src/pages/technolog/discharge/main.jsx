@@ -114,6 +114,7 @@ const Discharge = () => {
                         name='title'
                         placeholder='Введите название'
                         type='text'
+                        value={newRank.title}
                         error={errors.username}
                         onChange={getValue}
                     />

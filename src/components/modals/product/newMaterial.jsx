@@ -48,9 +48,6 @@ const NewMaterial = ({ open, setModals, modals, newOperation, setNewOperation, a
             <Modal.Body>
                 <div className='flex flex-col gap-y-4 px-3'>
                     <div className='flex flex-col gap-y-3'>
-                        <div className='w-full'>
-                            <Input width='70%' searchicon={true} placeholder='Поиск по сырью' type="text"/>
-                        </div>
                         <div className='w-full h-[250px] grid grid-cols-3 gap-3 content-start border border-borderGray rounded-md p-3 overflow-y-scroll'>
                             {
                                 materialsList.map(item => (

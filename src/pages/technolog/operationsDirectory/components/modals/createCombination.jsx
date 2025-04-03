@@ -48,7 +48,7 @@ const CreateCombination = ({ modals, setModals }) => {
     const validateField = () => {
         const newErrors = {
             title: !combination.title,
-            file: !combination.file,
+            // file: !combination.file,
             operations: combination.operations.length === 0,
         };
         setErrors(newErrors);

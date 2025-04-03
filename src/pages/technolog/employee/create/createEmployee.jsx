@@ -114,6 +114,7 @@ const CreateEmployee = () => {
                     label='Имя'
                     placeholder='Введите имя'
                     error={errors.name}
+                    value={employee_data?.name}
                     onChange={getValue}
                   />
 
@@ -123,6 +124,7 @@ const CreateEmployee = () => {
                     label='Фамилия'
                     placeholder='Введите имя'
                     error={errors.surname}
+                    value={employee_data?.surname}
                     onChange={getValue}
                   />
                 </div>
@@ -134,6 +136,7 @@ const CreateEmployee = () => {
                     placeholder='Введите логин'
                     type='text'
                     error={errors.username}
+                    value={employee_data?.username}
                     onChange={getValue}
                   />
 
@@ -142,6 +145,7 @@ const CreateEmployee = () => {
                     placeholder='********'
                     type='text'
                     name='password'
+                    value={employee_data?.password}
                     error={errors.password}
                     onChange={getValue}
                   />

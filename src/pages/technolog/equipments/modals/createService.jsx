@@ -88,6 +88,7 @@ const CreateService = ({ modals, setModals, setUpdate }) => {
                 name='staff'
                 placeholder='Выберите ответственного'
                 error={errors.staff}
+                value={service.staff}
                 onChange={(e) => getValue('staff', e)}
                 data={staff_list}
                 searchable={true}
@@ -97,6 +98,7 @@ const CreateService = ({ modals, setModals, setUpdate }) => {
             <Input
                 label='Тип обслуживания'
                 name='title'
+                value={service.text}
                 placeholder='Введите тип'
                 type='text'
                 error={errors.text}

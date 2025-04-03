@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import InputWithSuggestion from '../../../../../components/ui/inputs/inputWithSuggestion';
 import { combinationStatuses } from '../../../../../utils/selectDatas/productDatas';
 import Select from '../../../../../components/ui/inputs/select';
+import { nanoid } from 'nanoid';
 
 const AddCombination = ({ modals, setModals }) => {
 
@@ -68,9 +69,9 @@ const AddCombination = ({ modals, setModals }) => {
                 time: '',
                 rank: '',
                 price: '',
-                id: crypto.randomUUID()
+                id: nanoid()
             }],
-            id: newCombination?.id || crypto.randomUUID()
+            id: newCombination?.id || nanoid()
         }))
         setModals({ ...modals, combination: false })
         setNewCombination({})

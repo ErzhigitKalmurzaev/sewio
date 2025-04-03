@@ -41,9 +41,9 @@ const DetailSklad = () => {
                     <Button variant='filter'>Активные</Button>
                     <Button variant='filter'>Деактивные</Button>
                 </div>
-                <div className='w-4/6'>
+                {/* <div className='w-4/6'>
                     <Input searchicon={true} placeholder='Поиск по адресу' type="text"/>
-                </div>
+                </div> */}
             </div>
         </div>
     )

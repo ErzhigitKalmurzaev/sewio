@@ -20,12 +20,9 @@ const Sklad = () => {
 
   return (
     <div className='flex flex-col gap-y-3 mb-5'>
-        <Title text="Склады"/>
 
         <div className='flex items-center justify-between my-2 gap-x-6'>
-            <div className='w-3/6'>
-                <Input searchicon={true} placeholder='Поиск по адресу' type="text"/>
-            </div>
+            <Title text="Склады"/>
             <div className='2/6'>
                 <Button onClick={() => navigate('create')}>+ Добавить склад</Button>
             </div>
