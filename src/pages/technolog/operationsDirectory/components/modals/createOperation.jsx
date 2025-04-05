@@ -10,6 +10,7 @@ import { getEquipmentList } from './../../../../../store/technolog/equipment';
 import { getRankList } from '../../../../../store/technolog/rank';
 import NumInput from './../../../../../components/ui/inputs/numInput';
 import { createOperation, editOperationById } from '../../../../../store/technolog/product';
+import { roundTo } from '../../../../../utils/functions/numFuncs';
 
 const CreateOperation = ({ modals, setModals }) => {
 
@@ -47,13 +48,13 @@ const CreateOperation = ({ modals, setModals }) => {
         setOperation({
             ...operation,
             [name]: e,
-            price: rank_list.find(item => item.id === e)?.percent * Number(operation.time)
+            price: roundTo(rank_list.find(item => item.id === e)?.percent * operation.time, 2)
         })
     } else if(name === 'time') {
         setOperation({
             ...operation,
             [name]: e,
-            price: rank_list.find(item => item.id === operation.rank)?.percent * e
+            price: roundTo(rank_list.find(item => item.id === operation.rank)?.percent * e)
         })
     } else {
         setOperation({

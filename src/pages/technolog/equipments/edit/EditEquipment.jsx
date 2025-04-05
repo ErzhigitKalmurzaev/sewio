@@ -114,7 +114,7 @@ const EditEquipment = () => {
     <div className='w-full min-h-[100vh] flex flex-col gap-y-5'>
         
         <div className='flex justify-between items-center'>
-            <Title text="Создание оборудования" />
+            <Title text="Редактирование оборудования" />
             <Button width='120px' onClick={onSubmit}>Сохранить</Button>
         </div>
 

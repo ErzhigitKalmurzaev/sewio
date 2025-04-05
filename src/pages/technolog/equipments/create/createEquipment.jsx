@@ -80,6 +80,8 @@ const CreateEquipment = () => {
                             navigate(-1);
                         }
                     })
+                } else {
+                    toast.error('Произошла ошибка! Попробуйте ввести даты повторно!');
                 }
             })
     } else {

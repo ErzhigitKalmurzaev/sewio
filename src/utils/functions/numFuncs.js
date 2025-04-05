@@ -23,3 +23,8 @@ export function formatPhoneNumber(phone) {
     const regex = /^\+996(\d{3})(\d{3})(\d{3})$/;
     return phone?.replace(regex, "+(996) $1 $2 $3");
 }
+
+export function roundTo(value, decimals = 0) {
+  const factor = Math?.pow(10, decimals) || 0;
+  return Math?.round(value * factor) / factor || 0;
+}

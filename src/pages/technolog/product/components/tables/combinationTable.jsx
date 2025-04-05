@@ -12,6 +12,7 @@ import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithS
 import { addCombination, getValueOperationInCombination, deleteCombination, fillCombination, addOperationInCombination, deleteOperationInCombination, } from '../../../../../store/technolog/product';
 import AddCombination from './../modals/addCombination';
 import EditCombinations from '../modals/editCombinations';
+import { roundTo } from '../../../../../utils/functions/numFuncs';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -67,11 +68,11 @@ const CombinationsTable = ({ type }) => {
     if(name === 'rank') {
         dispatch(getValueOperationInCombination({ value, name, parentIndex, childIndex }))
         const rank_kef = rank_list.find(item => item.id === value)?.percent;
-        dispatch(getValueOperationInCombination({ name: 'price', value: rank_kef * data.time || '', parentIndex, childIndex }));
+        dispatch(getValueOperationInCombination({ name: 'price', value: roundTo(rank_kef * data.time, 2) || '', parentIndex, childIndex }));
     } else if(name === 'time') {
         dispatch(getValueOperationInCombination({ value, name, parentIndex, childIndex }))
         const rank_kef = rank_list.find(item => item.id === data?.rank)?.percent;
-        dispatch(getValueOperationInCombination({ name: 'price', value: rank_kef * value || '', parentIndex, childIndex }));
+        dispatch(getValueOperationInCombination({ name: 'price', value: roundTo(rank_kef * value, 2) || '', parentIndex, childIndex }));
     } else {
         dispatch(getValueOperationInCombination({ value, name, parentIndex, childIndex }))
     }
