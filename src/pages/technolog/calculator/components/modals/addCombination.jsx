@@ -34,9 +34,7 @@ const AddCombination = ({ modals, setModals }) => {
     if(!operations_list) {
         dispatch(getOperationsTitlesList())
     }
-    if(!combinations_list) {
-        dispatch(getCombinationsList())
-    }
+    dispatch(getCombinationsList())
   }, [modals])
 
   const getValue = (e, name) => {

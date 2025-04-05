@@ -15,17 +15,19 @@ const DataPicker = ({
   disabled = false,
   errorTitle
 }) => {
-  // Локальное значение в Date формате
-  const [internalDate, setInternalDate] = useState(() => {
-    return value ? parseDateString(value) : null;
-  });
 
   const parseDateString = (str) => {
     const [dd, mm, yyyy] = str.split('.');
     if (!dd || !mm || !yyyy) return null;
     const date = new Date(+yyyy, +mm - 1, +dd);
+    console.log("Parse: " + date)
     return isNaN(date.getTime()) ? null : date;
   };
+
+  // Локальное значение в Date формате
+  const [internalDate, setInternalDate] = useState(() => {
+    return value ? parseDateString(value) : null;
+  });
 
   const formatDate = (date) => {
     if (!(date instanceof Date) || isNaN(date)) return '';
@@ -46,7 +48,7 @@ const DataPicker = ({
       onChange(formatted);
     }
   };
-
+  
   return (
     <StyledDiv width={width}>
       <label htmlFor={id}>
@@ -56,7 +58,7 @@ const DataPicker = ({
       <DatePicker
         format="dd.MM.yyyy"
         placeholder={placeholder}
-        value={internalDate}
+        value={internalDate || parseDateString(value)}
         onChange={handleChange}
         disabled={disabled}
         style={{ width: width }}

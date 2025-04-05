@@ -60,7 +60,7 @@ const EditEquipment = () => {
         })
       })
   }, [id, update]);
-
+  console.log(formatedToDDMMYYYY(equipment.service_date));
   const getValue = (name, value) => {
     setEquipment({
       ...equipment,

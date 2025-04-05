@@ -52,7 +52,6 @@ const EditEmployee = () => {
                 surname: res.payload?.surname,
                 username: res.payload?.user?.username,
                 phone: res.payload?.phone,
-                password: res.payload?.password,
                 role: res.payload?.role,
                 rank: res.payload?.rank?.id,
                 salary: `${res.payload?.salary}`
@@ -67,7 +66,6 @@ const EditEmployee = () => {
     surname: '',
     username: '',
     phone: '',
-    password: '',
     role: '',
     rank: '',
     salary: ''

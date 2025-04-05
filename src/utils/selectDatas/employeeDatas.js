@@ -39,7 +39,7 @@ export const employeeRole = [
         value: 5
     },
     {
-        label: 'Контроллер',
+        label: 'Контролер',
         value: 6
     }
 ]

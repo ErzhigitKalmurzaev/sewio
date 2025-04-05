@@ -15,6 +15,7 @@ import EditAmountsTable from './components/editAmountsTable';
 import { Building, Phone, User } from 'lucide-react';
 import BackDrop from '../../../components/ui/backdrop';
 import Select from '../../../components/ui/inputs/select';
+import { formatedToDDMMYYYY } from '../../../utils/functions/dateFuncs';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -45,7 +46,7 @@ const OrderEdit = () => {
         .then(res => {
             if (res.meta.requestStatus === 'fulfilled') {
                 setOrder({
-                    deadline: res.payload.deadline,
+                    deadline: formatedToDDMMYYYY(res.payload.deadline),
                     client: res.payload.client,
                     products: res.payload.products,
                     status: res.payload.status
@@ -156,6 +157,8 @@ const OrderEdit = () => {
         toast('Заполните все поля и выберите минимум 1 товар!');
     }
   }
+
+  console.log(order.deadline)
 
   return (
     <div className='flex flex-col gap-y-5 mb-5'>

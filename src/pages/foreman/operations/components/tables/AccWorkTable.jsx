@@ -43,6 +43,14 @@ const AccWorkTable = ({ data, status, amount }) => {
         cellBordered
         className="rounded-lg"
       >
+        
+        <Column width={70} align='center'>
+          <HeaderCell>Номер</HeaderCell>
+          <Cell>
+              {(rowData, rowIndex) => <p>{rowIndex + 1}</p>}
+          </Cell>
+        </Column>
+
         <Column width={170} fixed>
           <HeaderCell className="">Операция</HeaderCell>
           <Cell dataKey="title" className="text-sm font-medium" />
