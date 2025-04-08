@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance, { ImageUploadingFetch } from "../../api/axios";
+import { nanoid } from "nanoid";
 
 export const getProductList = createAsyncThunk(
     'technologProduct/getProductList',
@@ -307,7 +308,7 @@ const TechnologProductSlice = createSlice({
                 time: '',
                 rank: '',
                 price: '',
-                id: crypto.randomUUID()
+                id: nanoid()
             })
         },
         fillCombination: (state, action) => {

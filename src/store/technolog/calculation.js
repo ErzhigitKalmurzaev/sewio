@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance, { ImageUploadingFetch } from "../../api/axios";
 import { act } from "react";
+import { nanoid } from "nanoid";
 
 export const getCalculateList = createAsyncThunk(
     'calculationSlice/getCalculateList',
@@ -222,7 +223,7 @@ const CalculationSlice = createSlice({
                 time: '',
                 rank: '',
                 price: '',
-                id: crypto.randomUUID()
+                id: nanoid()
             })
         },
         fillCombination: (state, action) => {
