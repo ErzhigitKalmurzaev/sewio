@@ -11,6 +11,7 @@ import { getRankList } from '../../../../../store/technolog/rank';
 import NumInput from './../../../../../components/ui/inputs/numInput';
 import { editOperationById } from '../../../../../store/technolog/product';
 import { ShieldAlert } from 'lucide-react';
+import { roundTo } from '../../../../../utils/functions/numFuncs';
 
 const OperationOpenModal = ({ modals, setModals }) => {
 
@@ -42,6 +43,16 @@ const OperationOpenModal = ({ modals, setModals }) => {
   }, [modals.id])
 
   const getValue = (e, name) => {
+    if(name === 'rank') {
+        dispatch(changeOperationValue({ name, value: e }))
+        dispatch(changeOperationValue({ name: 'price', value: roundTo(rank_list.find(item => item.id === e)?.percent * operation.time, 2) }))
+        
+    } else if(name === 'time') {
+        dispatch(changeOperationValue({ name, value: e }))
+        dispatch(changeOperationValue({ name: 'price', value: roundTo(rank_list.find(item => item.id === (operation.rank?.id || operation.rank))?.percent * e, 2) }))
+    } else {
+        dispatch(changeOperationValue({ name, value: e }))
+    }
     setChanged(true);
     dispatch(changeOperationValue({ name, value: e }))
   }

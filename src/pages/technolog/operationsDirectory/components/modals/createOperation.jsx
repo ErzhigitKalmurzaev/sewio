@@ -54,7 +54,7 @@ const CreateOperation = ({ modals, setModals }) => {
         setOperation({
             ...operation,
             [name]: e,
-            price: roundTo(rank_list.find(item => item.id === operation.rank)?.percent * e)
+            price: roundTo(rank_list.find(item => item.id === operation.rank)?.percent * e, 2)
         })
     } else {
         setOperation({
