@@ -34,7 +34,7 @@ const EditAccWork = () => {
   }, [])
 
   const validateField = () => {
-    const staffIds = staff_list.map(staff => Number(staff.id)); // Получаем список ID сотрудников
+    const staffIds = staff_list.map(staff => Number(staff.number)); // Получаем список ID сотрудников
     const maxAmount = work?.party_amount || 0;
   
     let hasInvalidData = false;

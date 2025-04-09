@@ -50,6 +50,18 @@ export const materialUnits = [
     {
         label: 'рулон',
         value: 6
+    },
+    {
+        label: 'бобина',
+        value: 7
+    },
+    {
+        label: 'коробка',
+        value: 8
+    },
+    {
+        label: 'метр',
+        value: 9
     }
 ]
 

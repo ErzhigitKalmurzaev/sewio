@@ -35,7 +35,7 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
             >
               <Column width={70} align="center" fixed>
                   <HeaderCell>ID</HeaderCell>
-                  <Cell dataKey="id" />
+                  <Cell dataKey="number" />
               </Column>
 
               <Column width={150}>

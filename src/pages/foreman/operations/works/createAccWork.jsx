@@ -90,7 +90,7 @@ const CreateAccWork = () => {
       size: !urls.size || urls.size === 'null',
     };
   
-    const staffIds = staff_list.map(staff => Number(staff.id)); // Получаем список ID сотрудников
+    const staffIds = staff_list.map(staff => Number(staff.number)); // Получаем список ID сотрудников
     const maxAmount = orderInfo?.amount || 0;
   
     let hasInvalidData = false;
@@ -130,42 +130,50 @@ const CreateAccWork = () => {
   };
 
   const onSubmit = () => {
-    if(validateField()) {
+    if (validateField()) {
       dispatch(postAcceptOperation({
         party: party_list[Number(urls.party)].id,
         color: Number(urls.color),
         size: Number(urls.size),
         details: operations_list?.flatMap(item =>
           item?.details?.map(detail => {
-            const staff = Number(detail.staff);
+            const staffNumber = Number(detail.staff);
             const amount = Number(detail.count);
-        
-            // Фильтруем операции, где отсутствуют сотрудники или количество
-            if (!staff || amount <= 0) {
-              return null;  // Возвращаем null, чтобы в дальнейшем отфильтровать такие элементы
+  
+            if (!staffNumber || amount <= 0) {
+              return null;
             }
-        
+  
+            // Находим сотрудника по номеру
+            const staffObj = staff_list.find(staff => staff.number === staffNumber);
+  
+            // Если не найден, возвращаем null
+            if (!staffObj) {
+              return null;
+            }
+  
             return {
               combination: item.id,
-              staff,
+              staff: staffObj.id, // используем id найденного сотрудника
               amount
             };
-          }).filter(item => item !== null)  // Убираем null-элементы
+          }).filter(item => item !== null)
         )
       })).then(res => {
-        if(res.meta.requestStatus === 'fulfilled') {
+        if (res.meta.requestStatus === 'fulfilled') {
           toast.success('Работа успешно принята!');
-          navigate('history')
+          navigate('history');
         } else {
-          if(res.payload?.code === '100') {
+          if (res.payload?.code === '100') {
             toast.error(res.payload?.detail);
           } else {
             toast.error('Произошла ошибка!');
           }
         }
-      })
+      });
     }
   }
+  
 
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-5'>

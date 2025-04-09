@@ -117,7 +117,7 @@ function groupOperations(data = [], allOperations = []) {
         }
 
         grouped[combination.id].details.push({
-            staff: `${staff.id}`,
+            staff: `${staff.number}`,
             count: amount
         });
     });

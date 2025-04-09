@@ -107,7 +107,15 @@ const CreateEmployee = () => {
               <SingleImagePicker fileInfo={image} setFileInfo={setImage} />
 
               <div className='flex flex-col gap-y-6 w-full'>
-                <div className='flex gap-x-6'>
+                <div className='flex gap-x-3'>
+                  <NumInput
+                    width='140px'
+                    label='ID'
+                    name='number'
+                    value={employee_data?.number || ''}
+                    placeholder='ID'
+                    onChange={e => getValue({ target: { value: e, name: 'number' } })}
+                  />
                   <Input
                     type='text'
                     name='name'
@@ -173,6 +181,7 @@ const CreateEmployee = () => {
                 label='Зарплата'
                 name='salary'
                 placeholder='Введите зарплату'
+                value={employee_data?.salary}
                 error={errors.salary}
                 onChange={e => getValue({ target: { value: e, name: 'salary' } })}
               />
@@ -182,6 +191,7 @@ const CreateEmployee = () => {
               <Select 
                 label='Роль'
                 data={employeeRole}
+                value={employee_data.role}
                 onChange={e => getValue({ target: { value: e, name: 'role' } })}
                 error={errors.role} 
                 placeholder='Выберите роль' 

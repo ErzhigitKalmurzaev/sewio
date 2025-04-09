@@ -54,7 +54,8 @@ const EditEmployee = () => {
                 phone: res.payload?.phone,
                 role: res.payload?.role,
                 rank: res.payload?.rank?.id,
-                salary: `${res.payload?.salary}`
+                salary: `${res.payload?.salary}`,
+                number: res.payload?.number
             })
             setImage(res.payload?.image)
         })
@@ -159,7 +160,15 @@ const EditEmployee = () => {
               <SingleImagePicker fileInfo={image} setFileInfo={setImage} />
 
               <div className='flex flex-col gap-y-6 w-full'>
-                <div className='flex gap-x-6'>
+                <div className='flex gap-x-3'>
+                  <NumInput
+                    width='140px'
+                    label='ID'
+                    name='number'
+                    value={employee_data?.number || ''}
+                    placeholder='ID'
+                    onChange={e => getValue({ target: { value: e, name: 'number' } })}
+                  />
                   <Input
                     type='text'
                     name='name'

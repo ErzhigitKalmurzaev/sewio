@@ -20,7 +20,7 @@ const EmployeeIdInput = ({ value, onChange, employees }) => {
     }
 
     // Поиск сотрудника по ID
-    const foundEmployee = employees?.find((emp) => emp?.id.toString() === value.trim());
+    const foundEmployee = employees?.find((emp) => emp?.number.toString() === value.trim());
 
     if (foundEmployee) {
       setEmployee(foundEmployee);
@@ -83,7 +83,7 @@ const EmployeeIdInput = ({ value, onChange, employees }) => {
             width: positionRef.current.width, 
             color: '#2F4F4F'
           }}>
-            {employee ? `${employee.name} ${employee?.surname?.charAt(0)}.` : error}
+            {employee ? `${employee?.name?.length > 9 ? `${employee?.name?.slice(0, 9)}.` : employee?.name} ${employee?.surname?.charAt(0)}.` : error}
           </SuggestionBox>,
           document.body
         )}
