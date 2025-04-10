@@ -25,6 +25,9 @@ const EditProduct = () => {
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
 
+  const [files, setFiles] = useState([]);
+  const [deleteFiles, setDeleteFiles] = useState([]);
+
   const [productData, setProductData] = useState({
     title: "",
     is_active: true,
@@ -132,7 +135,11 @@ const EditProduct = () => {
           images={images}
           setImages={setImages}
           deleteImages={deleteImages}
-          setDeleteImages={setDeleteImages}  
+          setDeleteImages={setDeleteImages} 
+          files={files}
+          setFiles={setFiles}
+          deleteFiles={deleteFiles}
+          setDeleteFiles={setDeleteFiles} 
         />
 
         <div className="w-full bg-white rounded-lg px-6 py-6 flex flex-col gap-y-5">

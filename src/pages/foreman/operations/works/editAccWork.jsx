@@ -76,17 +76,24 @@ const EditAccWork = () => {
             size: work?.size?.id,
             details: operations_list?.flatMap(item =>
               item?.details?.map(detail => {
-                const staff = Number(detail.staff);
+                const staffNumber = Number(detail.staff);
                 const amount = Number(detail.count);
-            
-                // Фильтруем операции, где отсутствуют сотрудники или количество
-                if (!staff || amount <= 0) {
-                  return null;  // Возвращаем null, чтобы в дальнейшем отфильтровать такие элементы
+      
+                if (!staffNumber || amount <= 0) {
+                  return null;
                 }
-            
+      
+                // Находим сотрудника по номеру
+                const staffObj = staff_list.find(staff => staff.number === staffNumber);
+      
+                // Если не найден, возвращаем null
+                if (!staffObj) {
+                  return null;
+                }
+      
                 return {
                   combination: item.id,
-                  staff,
+                  staff: staffObj.id, // используем id найденного сотрудника
                   amount
                 };
               }).filter(item => item !== null)  // Убираем null-элементы

@@ -136,6 +136,18 @@ export const getProductImages = createAsyncThunk(
     }
 )
 
+export const getProductFiles = createAsyncThunk(
+    'technologProduct/getProductFiles',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`product/${id}/files/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const getCombinationsList = createAsyncThunk(
     'technologProduct/getCombinationsList',
     async (_, { rejectWithValue }) => {
@@ -176,6 +188,30 @@ export const createProductImages = createAsyncThunk(
             }
             
             const { data } = await ImageUploadingFetch.post(`product/images/crud`, formData);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const createProductFiles = createAsyncThunk(
+    'technologProduct/createProductFiles',
+    async ({ props }, { rejectWithValue }) => {
+        try {
+            const formData = new FormData();
+            for (const key in props) {
+                if (key === "files" || key === 'delete_ids') {
+                    for (let i = 0; i < props[key].length; i++) {
+                        const item = props[key][i]
+                        formData.append(key, item)
+                    }
+                } else {
+                    formData.append(key, props[key])
+                }
+            }
+            
+            const { data } = await ImageUploadingFetch.post(`product/files/crud`, formData);
             return data;
         } catch (err) {
             return rejectWithValue(err)

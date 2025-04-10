@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import ProductImages from "./components/shared/productImages";
-import { clearAll, createProduct, createProductImages, getProductInfoById } from "../../../store/technolog/product";
+import { clearAll, createProduct, createProductFiles, createProductImages, getProductInfoById } from "../../../store/technolog/product";
 import { Toggle } from "rsuite";
 import Title from "../../../components/ui/title";
 import ProdTable from "./components/shared/prodTable";
@@ -22,6 +22,9 @@ const CreateProduct = () => {
 
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
+
+  const [files, setFiles] = useState([]);
+  const [deleteFiles, setDeleteFiles] = useState([]);
 
   const [productData, setProductData] = useState({
     title: "",
@@ -90,6 +93,10 @@ const CreateProduct = () => {
                 images: images.map(item => item.blobFile),
                 product_id: res.payload.id
               }}))
+              dispatch(createProductFiles({ props: {
+                files: files.map(item => item.blobFile),
+                product_id: res.payload.id
+              }}))
               toast.success("Товар создан успешно!")
               navigate(-1)
             } else if(res.payload?.vendor_code?.length > 0 && res.payload?.vendor_code[0] === 'nomenclature with this vendor code already exists.') {
@@ -119,7 +126,11 @@ const CreateProduct = () => {
           images={images}
           setImages={setImages}
           deleteImages={deleteImages}
-          setDeleteImages={setDeleteImages}  
+          setDeleteImages={setDeleteImages} 
+          files={files}
+          setFiles={setFiles}
+          deleteFiles={deleteFiles}
+          setDeleteFiles={setDeleteFiles} 
         />
 
         <div className="w-full bg-white rounded-lg px-6 py-6 flex flex-col gap-y-5">
