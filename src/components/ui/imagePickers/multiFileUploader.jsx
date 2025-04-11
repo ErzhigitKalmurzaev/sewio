@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Uploader } from 'rsuite';
-import { CloudUpload } from 'lucide-react';
+import { Uploader, IconButton } from 'rsuite';
+import { CloudUpload, Download } from 'lucide-react';
 import Button from '../button';
 
 const MultiFileUploader = ({ existingFiles = [], setExistingFiles, setDeleteFiles, newFiles, setNewFiles }) => {
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    const formattedExistingFiles = existingFiles ? existingFiles?.map(file => ({
+    const formattedExistingFiles = existingFiles?.map(file => ({
       fileId: file?.id,
       name: file?.title || 'Файл',
       url: file?.file, // путь к файлу на сервере
-    })) : [];
+    })) || [];
 
     setFileList([...formattedExistingFiles, ...newFiles]);
   }, [existingFiles, newFiles]);
@@ -32,15 +32,29 @@ const MultiFileUploader = ({ existingFiles = [], setExistingFiles, setDeleteFile
     setFileList(prev => prev.filter(f => f.fileId !== file.fileId));
   };
 
+  const renderFileInfo = (file) => {
+    return (
+      <div className="flex justify-between items-center w-[360px] pr-2 pl-7 pb-1">
+        <span className="truncate">{file.name}</span>
+        {file.url && (
+          <a href={file.url} target="_blank" rel="noopener noreferrer" className="ml-3">
+            <Download size={18} />
+          </a>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="w-full flex flex-col file-uploader-wrapper">
       <Uploader
         multiple
         autoUpload={false}
-        listType="text" // <-- ключевое отличие
+        listType="text"
         fileList={fileList}
         onChange={handleChange}
         onRemove={handleRemove}
+        renderFileInfo={renderFileInfo}
         className="vertical-file-uploader"
       >
         <Button>
@@ -50,18 +64,34 @@ const MultiFileUploader = ({ existingFiles = [], setExistingFiles, setDeleteFile
       </Uploader>
 
       <style jsx>{`
-            .file-uploader-wrapper .rs-uploader-file-items {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 16px;
-            }
+        .file-uploader-wrapper .rs-uploader-file-items {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-top: 16px;
+        }
 
-            .file-uploader-wrapper .rs-uploader-file-item {
-            width: 400px !important;
-            height: 30px !important;
-            }
-        `}</style>
+        .file-uploader-wrapper .rs-uploader-file-item {
+          width: 400px !important;
+          max-height: 40px;
+          padding: 4px 8px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background-color: #f8f8f8;
+          border-radius: 6px;
+          font-size: 14px;
+        }
+
+        .file-uploader-wrapper a {
+          color: #3b82f6;
+          transition: opacity 0.2s ease;
+        }
+
+        .file-uploader-wrapper a:hover {
+          opacity: 0.8;
+        }
+      `}</style>
     </div>
   );
 };

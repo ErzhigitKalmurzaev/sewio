@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import ProductImages from "./components/shared/productImages";
-import { createProduct, createProductImages, editProductById, getProductById, getProductImages, getProductInfoById } from "../../../store/technolog/product";
+import { createProduct, createProductFiles, createProductImages, editProductById, getProductById, getProductImages, getProductInfoById } from "../../../store/technolog/product";
 import { Toggle } from "rsuite";
 import Title from "../../../components/ui/title";
 import ProdTable from "./components/shared/prodTable";
@@ -105,6 +105,11 @@ const EditProduct = () => {
             dispatch(createProductImages({ props: {
               images: images.map(item => item.blobFile),
               delete_ids: deleteImages,
+              product_id: res.payload.id
+            }}))
+            dispatch(createProductFiles({ props: {
+              files: files.map(item => item.blobFile),
+              delete_ids: deleteFiles,
               product_id: res.payload.id
             }}))
             toast.success("Изменения сохранены!")
