@@ -46,7 +46,7 @@ const OrderEdit = () => {
         .then(res => {
             if (res.meta.requestStatus === 'fulfilled') {
                 setOrder({
-                    deadline: formatedToDDMMYYYY(res.payload.deadline),
+                    deadline: res.payload.deadline,
                     client: res.payload.client,
                     products: res.payload.products,
                     status: res.payload.status
@@ -151,6 +151,8 @@ const OrderEdit = () => {
               setOrder({...order, deadline: '', client: '', products: []});
               toast.success('Заказ успешно отредактирован!');
               navigate(-1)
+            } else {
+                toast.error('Произошла ошибка!')
             }
           })
     } else {
@@ -181,7 +183,7 @@ const OrderEdit = () => {
           <DataPicker
             label='Дата сдачи заказа'
             placeholder='Выберите дату'
-            value={order.deadline}
+            value={formatedToDDMMYYYY(order?.deadline) || ''}
             disabled={true}
             onChange={e => getMainValue({ target: { name: 'deadline', value: e } })}
           />
