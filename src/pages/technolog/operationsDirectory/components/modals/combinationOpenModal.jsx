@@ -128,9 +128,9 @@ const CombinationOpenModal = ({ modals, setModals }) => {
                                     <div className='mt-4 grid grid-cols-2 gap-6'>
                                         <div>
                                             <h3 className='text-lg font-medium mb-1'>Операции в комбинации</h3>
-                                            <div className='flex items-center mb-2 border border-borderGray rounded p-1 px-2 invisible'>
-                                                <Search size={18} className='text-gray-400 mr-2' />
-                                                <input type='text' className='w-full outline-none' placeholder='Поиск...' value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                            <div className='flex items-end justify-between py-1 mb-3'>
+                                                <p>Время: {combination.operations.reduce((total, op) => total + op.time, 0) || 0} c</p>
+                                                <p>Цена: {(combination.operations?.reduce((total, op) => total + op.price, 0))?.toFixed(2) || 0} cом</p>
                                             </div>
                                             <ul className='border border-borderGray rounded p-2 h-60 overflow-y-auto'>
                                                 {combination.operations.map((operation, index) => (

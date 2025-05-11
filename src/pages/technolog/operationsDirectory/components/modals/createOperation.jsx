@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from 'rsuite'
-import { changeOperationValue, getOperationById, getOperationList } from '../../../../../store/technolog/operations';
+import { getOperationList } from '../../../../../store/technolog/operations';
 import { useDispatch, useSelector } from 'react-redux';
-import Input from '../../../../../components/ui/inputs/input';
 import Select from '../../../../../components/ui/inputs/select';
 import Button from '../../../../../components/ui/button';
 import { toast } from 'react-toastify';
 import { getEquipmentList } from './../../../../../store/technolog/equipment';
 import { getRankList } from '../../../../../store/technolog/rank';
 import NumInput from './../../../../../components/ui/inputs/numInput';
-import { createOperation, editOperationById } from '../../../../../store/technolog/product';
+import { createOperation } from '../../../../../store/technolog/product';
 import { roundTo } from '../../../../../utils/functions/numFuncs';
+import InputWithSuggestion from '../../../../../components/ui/inputs/inputWithSuggestion';
+import { getOperationsTitlesList, getOperation } from './../../../../../store/technolog/calculation';
 
 const CreateOperation = ({ modals, setModals }) => {
 
@@ -18,6 +19,7 @@ const CreateOperation = ({ modals, setModals }) => {
 
   const { equipment_list } = useSelector(state => state.equipment);
   const { rank_list } = useSelector(state => state.rank);
+  const { operations_list } = useSelector(state => state.calculation);
 
   const [operation, setOperation] = useState({
     title: '',
@@ -41,7 +43,22 @@ const CreateOperation = ({ modals, setModals }) => {
     if(!rank_list) {
         dispatch(getRankList())
     }
+    if(!operations_list) {
+        dispatch(getOperationsTitlesList())
+    }
   }, [modals.id])
+
+  useEffect(() => {
+    if(!modals.operation) {
+        setOperation({
+            title: '',
+            equipment: '',
+            time: '',
+            rank: '',
+            price: ''
+        })
+    }
+  }, [modals.operation])
 
   const getValue = (e, name) => {
     if(name === 'rank') {
@@ -74,6 +91,22 @@ const CreateOperation = ({ modals, setModals }) => {
       };
       setErrors(newErrors);
       return !Object.values(newErrors).some(Boolean);
+  }
+
+  const onSelect = (id) => {
+    dispatch(getOperation({ id })).then(res => {
+        if(res?.meta?.requestStatus === 'fulfilled') {
+            const rank_kef = rank_list.find(item => item.id === res.payload.rank?.id)?.percent;
+            setOperation({
+                ...operation,
+                title: res.payload.title,
+                equipment: res.payload?.equipment?.id,
+                time: res.payload?.time,
+                rank: res.payload?.rank?.id,
+                price: roundTo(rank_kef * res.payload?.time, 2)
+            })
+        }
+    })
   }
 
   const onSubmit = () => {
@@ -112,13 +145,14 @@ const CreateOperation = ({ modals, setModals }) => {
         <Modal.Body>
             <div className='flex flex-col gap-y-3'>
                 <div className='flex gap-x-3'>
-                    <Input
+                    <InputWithSuggestion
                         label='Название'
-                        type='text'
                         placeholder='Введите название'
                         value={operation?.title}
                         onChange={(e) => getValue(e.target.value, 'title')}
+                        onSelect={(e) => onSelect(e)}
                         error={errors?.title}
+                        suggestions={operations_list}
                     />
 
                     <Select

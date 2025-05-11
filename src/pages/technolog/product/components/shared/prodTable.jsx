@@ -1,6 +1,5 @@
 import React from 'react'
 import { Panel, PanelGroup } from 'rsuite';
-import OperationsTable from '../tables/operationTable';
 import OtherExpensesTable from '../tables/otherExpensesTable';
 import CombinationsTable from '../tables/combinationTable';
 import ConsumablesTable from '../tables/consumablesTable';
