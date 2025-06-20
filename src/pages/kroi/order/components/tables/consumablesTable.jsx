@@ -4,7 +4,7 @@ import NumInputForTable from "../../../../../components/ui/inputs/numInputForTab
 import { addPartyConsumable, clearAll, deletePartyConsumable, fillPartyConsumables, getValueConsumables } from "../../../../../store/kroi/order";
 import { useDispatch, useSelector } from "react-redux";
 import InputWithSuggestions from "../../../../../components/ui/inputs/inputWithSuggestions";
-import { getConsumablesTitleList, getMateralList, getMaterial } from "../../../../../store/technolog/material";
+import { getMateralList, getMaterial } from "../../../../../store/technolog/material";
 import { CircleMinus, Plus } from "lucide-react";
 import { materialUnits } from "../../../../../utils/selectDatas/productDatas";
 

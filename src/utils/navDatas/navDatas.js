@@ -91,13 +91,7 @@ export const shveyaNav = [
         path: 'salary',
         icon: <CircleDollarSign/>,
         elements: false
-    },
-    // {
-    //     title: 'Операции',
-    //     path: 'operations',
-    //     icon: <ClipboardList/>,
-    //     elements: false
-    // }
+    }
 ]
 
 export const kroiNav = [
@@ -105,6 +99,12 @@ export const kroiNav = [
         title: 'Заказы',
         path: 'orders',
         icon: <ClipboardList/>,
+        elements: false
+    },
+    {
+        title: 'Мой склад',
+        path: 'warehouse',
+        icon: <Warehouse/>,
         elements: false
     },
     {

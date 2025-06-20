@@ -132,7 +132,8 @@ const TextInputForTable = ({
                 onClick={() => handleSelectSuggestion(suggestion)}
                 className={highlightedIndex === index ? "highlighted" : ""}
               >
-                {suggestion.title}
+                <span>{suggestion.title}</span>
+                <span className="text-zinc-400">{suggestion?.vendor_code ? suggestion?.vendor_code : ''}</span>
               </SuggestionItem>
             ))}
           </SuggestionsList>,
@@ -186,8 +187,11 @@ const SuggestionsList = styled.ul`
 `;
 
 const SuggestionItem = styled.li`
-  padding: 8px;
+  padding: 10px;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #ddd;
   background: ${({ className }) => (className === "highlighted" ? "#f0f0f0" : "white")};
 

@@ -7,7 +7,7 @@ import Input from '../../../components/ui/inputs/input'
 import Select from '../../../components/ui/inputs/select'
 import Button from '../../../components/ui/button'
 import { employeeRole, employeeSalaryType } from '../../../utils/selectDatas/employeeDatas'
-import { Modal } from 'rsuite'
+import { Modal, Toggle } from 'rsuite'
 import Textarea from '../../../components/ui/inputs/textarea'
 import NumInput from '../../../components/ui/inputs/numInput'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -19,6 +19,7 @@ import { toast } from 'react-toastify'
 import AdvanceModal from './components/modals/advanceModal'
 import FineModal from './components/modals/fineModal'
 import BackDrop from '../../../components/ui/backdrop'
+import BonusModal from './components/modals/bonusModal';
 
 const EditEmployee = () => {
 
@@ -55,13 +56,14 @@ const EditEmployee = () => {
                 role: res.payload?.role,
                 rank: res.payload?.rank?.id,
                 salary: `${res.payload?.salary}`,
-                number: res.payload?.number
+                number: res.payload?.number,
+                is_active: res.payload?.user?.is_active
             })
             setImage(res.payload?.image)
         })
   }, [])
 
-  const [modals, setModals] = useState({ advance: false, fine: false })
+  const [modals, setModals] = useState({ advance: false, fine: false, bonus: false });
   const [employee_data, setEmployee_data] = useState({
     name: '',
     surname: '',
@@ -69,7 +71,8 @@ const EditEmployee = () => {
     phone: '',
     role: '',
     rank: '',
-    salary: ''
+    salary: '',
+    is_active: true
   })
   const [errors, setErrors] = useState({
     name: false,
@@ -145,7 +148,8 @@ const EditEmployee = () => {
         
         <div className='flex gap-x-5'>
             <Button onClick={() => navigate('salary_history')}>История расчета</Button>
-            <Button onClick={() => setModals({ ...modals, advance: true })}>Аванс</Button>
+            <Button variant='white' onClick={() => setModals({ ...modals, advance: true })}>Аванс</Button>
+            <Button variant='green' onClick={() => setModals({ ...modals, bonus: true })}>Бонус</Button>
             <Button variant='red' onClick={() => setModals({ ...modals, fine: true })}>Штраф</Button>
             <Button variant='blue' onClick={() => navigate('salary_calculate')}>Рассчитать зарплату</Button>
         </div>
@@ -153,7 +157,7 @@ const EditEmployee = () => {
 
       <form onSubmit={onSubmit}>
         <div className='w-full mx-auto flex flex-col bg-white p-5 px-10 rounded-xl mt-2 gap-y-5'>
-          <div className='flex flex-col gap-y-4'>
+          <div className='flex flex-col gap-y-3'>
             <p className='text-base font-semibold'>Основная информация</p>
 
             <div className='flex justify-between gap-x-10 items-center'>
@@ -214,16 +218,14 @@ const EditEmployee = () => {
               </div>
             </div>
 
-            <div className='flex gap-x-6'>
-              {/* <Input
-                label='Email'
-                name='email'
-                placeholder='technolog@gmail.com'
-                type='email'
-                error={errors.email}
-                value={employee_data.email}
-                onChange={getValue}
-              /> */}
+            <div className='flex gap-x-6 items-center'>
+              <Toggle
+                  className='flex w-[410px] justify-center items-center mt-5'
+                  checked={employee_data?.is_active}
+                  onChange={(e) => setEmployee_data({ ...employee_data, is_active: e })}
+                >
+                  Активный
+              </Toggle>
               <TelInput
                 label='Телефон (WhatsApp)'
                 value={employee_data?.phone}
@@ -278,6 +280,11 @@ const EditEmployee = () => {
         setUpdate={setUpdate}
       />
       <FineModal
+        modals={modals}
+        setModals={setModals}
+        setUpdate={setUpdate}
+      />
+      <BonusModal
         modals={modals}
         setModals={setModals}
         setUpdate={setUpdate}

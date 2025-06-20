@@ -42,4 +42,8 @@ export const PaymentStatuses = [
         title: "Аванс",
         color: 'blue'
     },
+    {
+        title: "Бонус",
+        color: 'green'
+    },
 ]

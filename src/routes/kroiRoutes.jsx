@@ -8,6 +8,10 @@ import OrdersList from '../pages/kroi/order/main';
 import CreateParty from '../pages/kroi/order/party/createParty';
 import PartyHistory from '../pages/kroi/order/party/partyHistory';
 import EditParty from '../pages/kroi/order/party/editParty';
+import MyWarehouse from '../pages/warehouse/myWarehouse';
+import ReplenishmentWarehouse from '../pages/warehouse/replenishment/replenishmentWarehouse';
+import RejectMaterials from '../pages/warehouse/reject/rejectMaterials';
+import IssueMaterials from '../pages/warehouse/issue/issueMaterials';
 
 const KroiRoute = () => {
 
@@ -32,6 +36,12 @@ const KroiRoute = () => {
                 <Route path='history' element={<PartyHistory/>}/>
                 <Route path='history/:id' element={<EditParty/>}/>
                 <Route path=':orderId/:id' element={<CreateParty/>}/>
+            </Route>
+            <Route path="warehouse" element={<Outlet/>}>
+                <Route path="" element={<MyWarehouse />} />
+                <Route path="fill" element={<ReplenishmentWarehouse/>}/>
+                <Route path="reject" element={<RejectMaterials/>}/>
+                <Route path="issue" element={<IssueMaterials/>}/>
             </Route>
         </Route>
     </Routes>

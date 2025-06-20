@@ -16,7 +16,7 @@ const Employee = () => {
   const [params, setParams] = useSearchParams();
 
   const urls = {
-    is_active: params?.get("active") || "",
+    is_active: params?.get("is_active") || "",
     search: params?.get("search") || "",
     role: params.get("role") || "",
     salary_type: params.get("salary_type") || ""
@@ -44,7 +44,12 @@ const Employee = () => {
             </div>
         </div>
 
-        <div className='flex items-center my-2 gap-x-14'>
+        <div className='flex items-center my-2 gap-x-6'>
+            <div className='flex justify-between items-center gap-x-3'>
+                <Button variant={urls.is_active === "" ? "filterActive" : "filter"} onClick={() => handleChangeFilter("is_active", "")}>Все</Button>
+                <Button variant={urls.is_active === 'true' ? "filterActive" : "filter"} onClick={() => handleChangeFilter("is_active", true)}>Активные</Button>
+                <Button variant={urls.is_active === 'false' ? "filterActive" : "filter"} onClick={() => handleChangeFilter("is_active", false)}>Деактивные</Button>
+            </div>
             <div className='w-3/6'>
                 <Input 
                     searchicon={true} 

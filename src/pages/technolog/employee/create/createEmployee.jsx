@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createEmployee } from '../../../../store/technolog/staff';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { Toggle } from 'rsuite';
 
 const CreateEmployee = () => {
   const breadcrumbs = [
@@ -34,7 +35,8 @@ const CreateEmployee = () => {
     password: '',
     role: '',
     rank: '',
-    salary: 0
+    salary: 0,
+    is_active: true
   })
   const [errors, setErrors] = useState({
     full_name: false,
@@ -68,7 +70,7 @@ const CreateEmployee = () => {
       username: !employee_data.username,
       phone: !employee_data.phone || !/^\+?\d{10,13}$/.test(employee_data.phone),
       // email: !employee_data.email || !/\S+@\S+\.\S+/.test(employee_data.email),
-      password: employee_data.password.length < 6,
+      password: employee_data.password.length < 3,
       role: !employee_data.role,
       rank: !employee_data.rank
     };
@@ -100,7 +102,7 @@ const CreateEmployee = () => {
 
       <form onSubmit={onSubmit}>
         <div className='w-full mx-auto flex flex-col bg-white p-5 px-10 rounded-xl mt-2 gap-y-5'>
-          <div className='flex flex-col gap-y-4'>
+          <div className='flex flex-col gap-y-3'>
             <p className='text-base font-semibold'>Основная информация</p>
 
             <div className='flex justify-between gap-x-10 items-center'>
@@ -161,15 +163,14 @@ const CreateEmployee = () => {
               </div>
             </div>
 
-            <div className='flex gap-x-6'>
-              {/* <Input
-                label='Email'
-                name='email'
-                placeholder='technolog@gmail.com'
-                type='email'
-                error={errors.email}
-                onChange={getValue}
-              /> */}
+            <div className='flex gap-x-6 items-center'>
+              <Toggle 
+                  className='flex w-[410px] justify-center items-center mt-5'
+                  checked={employee_data?.is_active}
+                  onChange={(e) => setEmployee_data({ ...employee_data, is_active: e })}
+                >
+                  Активный
+              </Toggle>
               <TelInput
                 label='Телефон (WhatsApp)'
                 value={employee_data.phone}
