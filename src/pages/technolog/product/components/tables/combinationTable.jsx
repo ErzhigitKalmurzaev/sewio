@@ -9,7 +9,7 @@ import SelectForTable from '../../../../../components/ui/inputs/selectForTable';
 import { CircleMinus, PencilLine, Plus } from 'lucide-react';
 import { getRankList } from '../../../../../store/technolog/rank';
 import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
-import { addCombination, getValueOperationInCombination, deleteCombination, fillCombination, addOperationInCombination, deleteOperationInCombination, } from '../../../../../store/technolog/product';
+import { getValueOperationInCombination, fillCombination, addOperationInCombination, deleteOperationInCombination, } from '../../../../../store/technolog/product';
 import AddCombination from './../modals/addCombination';
 import EditCombinations from '../modals/editCombinations';
 import { roundTo } from '../../../../../utils/functions/numFuncs';
@@ -35,7 +35,7 @@ const CombinationsTable = ({ type }) => {
     if(!operations_list) {
         dispatch(getOperationsTitlesList());
     }
-  }, [])
+  }, [dispatch])
 
   const addRow = () => {
     setModals({ ...modals, combination: true });

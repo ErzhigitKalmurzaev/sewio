@@ -4,7 +4,7 @@ import Title from '../../../components/ui/title'
 import { useDispatch, useSelector } from 'react-redux'
 import { getComingHistory } from '../../../store/warehouse/warehouse'
 import ComingHistoryTable from './components/tables/comingHistoryTable'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 
 const ComingHistory = () => {
 
@@ -27,7 +27,6 @@ const ComingHistory = () => {
   ]
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
 
   const { coming_history, coming_history_status } = useSelector(state => state.ware_warehouse);

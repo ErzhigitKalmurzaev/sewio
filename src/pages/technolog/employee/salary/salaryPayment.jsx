@@ -39,7 +39,7 @@ const SalaryPayment = () => {
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
         <MyBreadcrums items={breadcrumbs}/>
-        <Title text="Выдача ЗП сотруднику"/>
+        <Title text="Расчёт ЗП сотрудника"/>
 
         <div className='w-2/3'>
           <SalaryPaymentTable

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance, { ImageUploadingFetch } from "../../api/axios";
+import axiosInstance from "../../api/axios";
 
 export const getWarehouseList = createAsyncThunk(
     'warehouse/getWarehouseList',
@@ -18,6 +18,18 @@ export const getWarehouseById = createAsyncThunk(
     async ({ id }, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.get(`warehouse/crud/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getWarehouseMateriralsById = createAsyncThunk(
+    'warehouse/getWarehouseMateriralsById',
+    async ({ id, page, page_size, title }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`warehouse/materials/list/?warehouse=${id}&title=${title}&page=${page}&page_size=${page_size}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
@@ -66,6 +78,8 @@ const WarehouseSlice = createSlice({
     initialState: {
         warehouse_list: [],
         warehouse_list_status: 'loading',
+        warehouse_materials: [],        
+        warehouse_materials_status: 'loading'
     },
     reducers: {
 
@@ -79,6 +93,14 @@ const WarehouseSlice = createSlice({
                 state.warehouse_list = action.payload
             }).addCase(getWarehouseList.rejected, (state) => {
                 state.warehouse_list_status = 'error';
+            })
+            .addCase(getWarehouseMateriralsById.pending, (state) => {
+                state.warehouse_materials_status = 'loading';
+            }).addCase(getWarehouseMateriralsById.fulfilled, (state, action) => {
+                state.warehouse_materials_status = 'success';
+                state.warehouse_materials = action.payload
+            }).addCase(getWarehouseMateriralsById.rejected, (state) => {
+                state.warehouse_materials_status = 'error';
             })
     }
 })

@@ -1,15 +1,9 @@
 import React from 'react';
 import { Table } from 'rsuite';
-import { formatedToDDMMYYYY } from '../../../../../utils/functions/dateFuncs';
-import { Info } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 const {Column, HeaderCell, Cell} = Table;
 
 const ComingMaterialsTable = ({ data, status }) => {
-
-  const navigate = useNavigate();
-
   return (
     <div className='min-h-[500px] font-inter bg-white rounded-xl'>
       <Table

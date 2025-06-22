@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { List, Loader, Modal } from 'rsuite'
-import { getCombinationById, getCombinationList } from '../../../../../store/technolog/operations';
+import { getCombinationById } from '../../../../../store/technolog/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from '../../../../../components/ui/inputs/select';
 import { getOperationsTitlesList } from './../../../../../store/technolog/calculation';
@@ -24,10 +24,6 @@ const AddCombination = ({ modals, setModals }) => {
     status: 0,
     operations: []
   });
-  const [errors, setErrors] = useState({
-    title: false,
-    operations: false,
-  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -35,7 +31,7 @@ const AddCombination = ({ modals, setModals }) => {
         dispatch(getOperationsTitlesList())
     }
     dispatch(getCombinationsList())
-  }, [modals])
+  }, [dispatch, modals])
 
   const getValue = (e, name) => {
     setNewCombination({ ...newCombination, [name]: e });

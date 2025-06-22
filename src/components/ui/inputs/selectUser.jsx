@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { SelectPicker } from 'rsuite';
+import { employeeRole } from '../../../utils/selectDatas/employeeDatas';
 
-const SelectUser = ({ width = '100%', label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false, disabled = false, className, size = 'md' }) => {
+const SelectUser = ({ width = '100%', label, placeholder, data, onChange, error, required, labelKey, valueKey, value, searchable = false, disabled = false, className, size = 'md', role = false }) => {
   
   const memoizedData = useMemo(() => data || [], [data]);
   
@@ -23,8 +24,13 @@ const SelectUser = ({ width = '100%', label, placeholder, data, onChange, error,
         disabled={disabled}
         menuMaxHeight={250}
         renderMenuItem={(label, item) => (
-          <div>
+          <div className='flex justify-between items-center'>
             <p className='text-sm font-inter text-fprimary'><span>{item.name}</span> <span>{item.surname}</span></p>
+            {
+              role ? 
+                <p className='text-sm font-inter text-zinc-400'>{employeeRole[item.role].label || '###'}</p>
+              : <></>
+            }
           </div>
         )}
       />

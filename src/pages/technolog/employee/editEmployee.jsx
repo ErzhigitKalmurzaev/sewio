@@ -100,7 +100,6 @@ const EditEmployee = () => {
       name: !employee_data.name,
       surname: !employee_data.surname,
       username: !employee_data.username,
-      phone: !employee_data.phone || !/^\+?\d{10,13}$/.test(employee_data.phone),
       role: !employee_data.role,
       rank: !employee_data.rank,
     };

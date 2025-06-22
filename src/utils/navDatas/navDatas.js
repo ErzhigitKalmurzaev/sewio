@@ -1,4 +1,4 @@
-import { ChartColumnIncreasing, Users, UsersRound, Cable, Package, ShoppingBasket, Warehouse, BookOpenCheck, ClipboardList, Ribbon, GraduationCap, PencilRuler, CircleDollarSign, Calculator } from 'lucide-react';
+import { ChartColumnIncreasing, Users, UsersRound, Cable, Package, ShoppingBasket, Warehouse, BookOpenCheck, ClipboardList, Ribbon, PencilRuler, CircleDollarSign, Calculator } from 'lucide-react';
 
 export const technologNav = [
     {

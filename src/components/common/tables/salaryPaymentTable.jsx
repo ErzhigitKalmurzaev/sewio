@@ -11,6 +11,8 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('ru-RU');
 
   const operations = data?.works?.map(item => item)
 
@@ -40,7 +42,10 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
   return (
     <div className='flex flex-col gap-y-4'>
       <div className="bg-[#EDEDED] rounded-xl border border-borderGray font-inter">
-        <h3 className="text-lg font-bold mb-2 px-4 pt-2">Операции</h3>
+        <h3 className="text-lg font-bold mb-2 px-4 pt-2 flex justify-between items-center">
+          <span>Операции</span>
+          <span className='text-base mt-1'>{`${formatedToDDMMYYYY(data?.earliest_created_at) + ' - ' + formattedDate}`}</span>
+        </h3>
         <table className="min-w-full table-auto bg-white">
           <thead className="bg-gray-100">
             <tr>

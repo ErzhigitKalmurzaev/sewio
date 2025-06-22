@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance, { ImageUploadingFetch } from "../../api/axios";
+import axiosInstance from "../../api/axios";
 
 export const getWarehouseListWithoutMe = createAsyncThunk(
     'warehouse/getWarehouseList',

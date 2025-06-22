@@ -7,10 +7,11 @@ import Input from '../../../../components/ui/inputs/input';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStaffList } from '../../../../store/technolog/staff';
 import SelectStaffTable from '../components/tables/selectStaffsTable';
-import { deleteWarehouse, getWarehouseById, patchWarehouse } from '../../../../store/technolog/warehouse';
+import { deleteWarehouse, getWarehouseById, getWarehouseMateriralsById, patchWarehouse } from '../../../../store/technolog/warehouse';
 import { toast } from 'react-toastify';
 import Button from '../../../../components/ui/button';
-import { MoveRight } from 'lucide-react';
+import SelectUser from '../../../../components/ui/inputs/selectUser';
+import WarehouseMaterialsTable from '../components/tables/warehouseMaterialsTable';
 
 const EditWarehouse = () => {
 
@@ -31,7 +32,10 @@ const EditWarehouse = () => {
   const navigate = useNavigate();
 
   const { staff_list, staff_list_status } = useSelector(state => state.staff);
+  const { warehouse_materials, warehouse_materials_status } = useSelector(state => state.warehouse);
   const { id } = useParams();
+
+  const [searchValues, setSearchValues] = useState({ title: "", page: 1 });
 
   const [warehouse, setWarehouse] = useState({
     title: '',
@@ -55,6 +59,10 @@ const EditWarehouse = () => {
   useEffect(() => {
     dispatch(getStaffList({ urls }))
   }, [urls.role])
+
+  useEffect(() => {
+    dispatch(getWarehouseMateriralsById({ id, title: searchValues.title, page: searchValues.page }))
+  }, [id, searchValues.title, searchValues.page])
 
   useEffect(() => {
     dispatch(getWarehouseById({ id }))
@@ -120,6 +128,14 @@ const EditWarehouse = () => {
         
         <div className='flex items-center justify-between'>
             <Title text="Создание склада"/>
+            <div className='flex justify-center gap-x-4'>
+              <Button variant='red' width='120px' onClick={onDelete}>
+                  Удалить
+              </Button>
+              <Button width='120px' onClick={onSubmit}>
+                Сохранить 
+              </Button>
+            </div>
         </div>
 
         <WhiteWrapper>
@@ -146,9 +162,51 @@ const EditWarehouse = () => {
                     onChange={(e) => setWarehouse({...warehouse, address: e.target.value})}
                 />
             </div>
+            <div className='flex justify-between gap-x-10'>
+              <SelectUser
+                width='48%'
+                label="Зав. складом"
+                placeholder="Зав. складом"
+                value={warehouse.staffs[0] || null}
+                data={staff_list || []}
+                onChange={(e) => setWarehouse({ ...warehouse, staffs: [...warehouse.staffs, e] })}
+                searchable={true}
+                valueKey='id'
+                labelKey='name'
+                role={true}
+              />
+            </div>
         </WhiteWrapper>
-        
-        <div className='flex flex-col gap-y-5 bg-white rounded-lg p-5'>
+
+        <WhiteWrapper>
+            <p className='text-base font-semibold'>Содержание склада</p>
+
+            <WarehouseMaterialsTable
+                data={warehouse_materials?.results || []} 
+                status={warehouse_materials_status}
+                total={warehouse_materials?.count || 0}
+                limit={30}
+                activePage={searchValues.page}
+                setPage={(e) => setSearchValues({ ...searchValues, page: e })}
+            />
+        </WhiteWrapper>
+    </div>
+  )
+}
+
+export default EditWarehouse
+
+const WhiteWrapper = styled("div")`
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  padding: 15px 20px 20px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+{/* <div className='flex flex-col gap-y-5 bg-white rounded-lg p-5'>
                 <Input
                     type='text'
                     width='50%'
@@ -166,29 +224,4 @@ const EditWarehouse = () => {
                 warehouse={warehouse}
                 setWarehouse={setWarehouse}
             />
-        </div>
-
-        <div className='flex justify-center gap-x-10'>
-          <Button variant='red' width='150px' onClick={onDelete}>
-              Удалить
-          </Button>
-          <Button width='150px' onClick={onSubmit}>
-            Сохранить 
-          </Button>
-        </div>
-
-    </div>
-  )
-}
-
-export default EditWarehouse
-
-const WhiteWrapper = styled("div")`
-  width: 100%;
-  background: white;
-  border-radius: 12px;
-  padding: 15px 20px 20px 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-`;
+</div> */}

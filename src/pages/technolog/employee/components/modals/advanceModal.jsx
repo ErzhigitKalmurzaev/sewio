@@ -72,6 +72,8 @@ const AdvanceModal = ({ modals, setModals, update, setUpdate }) => {
                     setModals({ ...modals, advance: false });
                     toast('Аванс успешно оформлен!')
                 }
+            } else {
+                toast.error('Произошла ошибка!')
             }
         })
     } else {

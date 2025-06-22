@@ -38,8 +38,12 @@ const BonusModal = ({ modals, setModals, setUpdate }) => {
     if(validateField()) {
         dispatch(postPayment({ ...payment, amount: Number(payment.amount) }))
         .then(res => {
-            toast('Бонус успешно выдан!')
-            setModals({ ...modals, bonus: false });
+            if(res.meta.requestStatus === 'fulfilled') {
+              toast('Бонус успешно выдан!')
+              setModals({ ...modals, bonus: false });
+            } else {
+                toast.error('Произошла ошибка!')
+            }
         })
     } else {
         toast('Заполните все поля!')

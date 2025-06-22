@@ -59,6 +59,8 @@ const FineModal = ({ modals, setModals, setUpdate }) => {
                     setModals({ ...modals, fine: false });
                     toast('Штраф успешно оформлен!')
                }
+            } else {
+                toast('Произошла ошибка!')
             }
         })
         

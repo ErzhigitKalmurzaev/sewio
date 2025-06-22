@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance, { ImageUploadingFetch } from "../../api/axios";
-import { act } from "react";
+import axiosInstance from "../../api/axios";
 import { nanoid } from "nanoid";
 
 export const getCalculateList = createAsyncThunk(
