@@ -2,27 +2,34 @@ import React, { useEffect, useState } from 'react'
 import { Modal, Toggle } from 'rsuite'
 import Button from '../../../../components/ui/button'
 import Input from '../../../../components/ui/inputs/input'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Select from '../../../../components/ui/inputs/select'
 import { materialUnits } from '../../../../utils/selectDatas/productDatas'
 import { patchMaterial, postMaterial } from '../../../../store/technolog/material'
 import { toast } from 'react-toastify'
+import { color } from 'framer-motion'
 
 const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
   
     const dispatch = useDispatch();
 
+    const { colors_list } = useSelector(state => state.material);
+
     const [material, setMaterial] = useState({
       title: data?.title || '',
       vendor_code: data?.vendor_code || '',
       unit: data?.unit || 0,
-      is_active: data?.is_active || false
+      is_active: data?.is_active || false,
+      color: data?.color || null,
+      coefficient: data?.coefficient || 0
     })
     const [errors, setErrors] = useState({
       title: false,
       vendor_code: false,
       unit: false,
-      is_active: false
+      is_active: false,
+      color: false,
+      coefficient: false
     })
 
     useEffect(() => {
@@ -31,7 +38,9 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
               title: data.title,
               vendor_code: data.vendor_code,
               unit: data.unit,
-              is_active: data.is_active
+              is_active: data.is_active,
+              color: data.color,
+              coefficient: data.coefficient
           })
       }
     }, [data.title, data])
@@ -49,6 +58,7 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
         title: !material.title,
         vendor_code: !material.vendor_code,
         unit: !material.unit,
+        color: !material.color
       };
       setErrors(newErrors);
       return !Object.values(newErrors).some((error) => error === true);
@@ -66,7 +76,9 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
                       title: '',
                       vendor_code: '',
                       unit: 0,
-                      is_active: false
+                      is_active: false,
+                      color: null,
+                      coefficient: 0
                   })
               }
           })
@@ -111,12 +123,44 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
                             onChange={(e) => getValue({ target: { name: 'unit', value: e } })}
                         />
                     </div>
-                    <Toggle 
-                        checked={material.is_active}
-                        onChange={(e) => getValue({ target: { name: 'is_active', value: e } })}    
-                    >
-                        Активный
-                    </Toggle>
+                    <div className="flex justify-between gap-x-5">
+                        <div className="w-1/3">
+                            <Input
+                                type="number"
+                                name="coefficient"
+                                label="Коэффициент"
+                                placeholder="Введите коэффициент"
+                                value={material.coefficient}
+                                onChange={getValue}
+                                error={errors.coefficient}
+                            />
+                        </div>
+                        <div className="w-1/3">
+                            <Select
+                                label="Цвет"
+                                placeholder="Выберите"
+                                data={colors_list}
+                                value={material.color}
+                                error={errors.color}
+                                labelKey='title'
+                                valueKey='id'
+                                onChange={(e) =>
+                                getValue({ target: { name: "color", value: e } })
+                                }
+                                colors={true}
+                            />
+                        </div>
+                        <div className="w-1/3 flex items-end pb-[10px]">
+                            <Toggle
+                                checked={material.is_active}
+                                onChange={(e) =>
+                                getValue({ target: { name: "is_active", value: e } })
+                                }
+                            >
+                                Активный
+                            </Toggle>
+                        </div>
+                    </div>
                 </div>
             </Modal.Body>
             <Modal.Footer>

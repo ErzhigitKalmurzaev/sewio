@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import Button from '../../../../components/ui/button';
 import SelectUser from '../../../../components/ui/inputs/selectUser';
 import WarehouseMaterialsTable from '../components/tables/warehouseMaterialsTable';
+import { getColors } from '../../../../store/technolog/material';
 
 const EditWarehouse = () => {
 
@@ -32,6 +33,7 @@ const EditWarehouse = () => {
   const navigate = useNavigate();
 
   const { staff_list, staff_list_status } = useSelector(state => state.staff);
+  const { colors_list } = useSelector(state => state.material);
   const { warehouse_materials, warehouse_materials_status } = useSelector(state => state.warehouse);
   const { id } = useParams();
 
@@ -58,6 +60,7 @@ const EditWarehouse = () => {
 
   useEffect(() => {
     dispatch(getStaffList({ urls }))
+    dispatch(getColors())
   }, [urls.role])
 
   useEffect(() => {

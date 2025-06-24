@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "@emotion/styled";
 import { createPortal } from "react-dom";
+import { useSelector } from "react-redux";
 
 const TextInputForTable = ({
   id,
@@ -18,6 +19,8 @@ const TextInputForTable = ({
   const inputRef = useRef(null);
   const listRef = useRef(null);
   const positionRef = useRef({ top: 0, left: 0, width: 0 });
+
+  const { colors_list } = useSelector(state => state.material);
 
   // Обработчик клика вне инпута и списка
   useEffect(() => {
@@ -133,7 +136,9 @@ const TextInputForTable = ({
                 className={highlightedIndex === index ? "highlighted" : ""}
               >
                 <span>{suggestion.title}</span>
-                <span className="text-zinc-400">{suggestion?.vendor_code ? suggestion?.vendor_code : ''}</span>
+                <span style={suggestion?.color ? { color: colors_list?.find(color => color.id === suggestion?.color).code } : { color: 'gray'}}>
+                  {suggestion?.vendor_code ? suggestion?.vendor_code : ''}
+                </span>
               </SuggestionItem>
             ))}
           </SuggestionsList>,

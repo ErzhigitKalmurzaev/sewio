@@ -14,6 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { OrderStatuses } from '../../../utils/constants/statuses';
 import AmountsTable from './components/amountsTable';
+import Select from '../../../components/ui/inputs/select';
+import { getWarehouseList } from '../../../store/technolog/warehouse';
 
 const OrderCreate = () => {
   const breadcrumbs = [
@@ -24,17 +26,20 @@ const OrderCreate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { client_list, product_list, products_to_order  } = useSelector(state => state.order);
+  const { warehouse_list } = useSelector(state => state.warehouse);
   
   const [order, setOrder] = useState({
     deadline: '',
     client: '',
+    warehouse: '',
     products: [],
     status: 1
   });
   const [error, setError] = useState({
     deadline: false,
     client: false,
-    products: false
+    products: false,
+    warehouse: false
   });
 
   useEffect(() => {
@@ -43,6 +48,9 @@ const OrderCreate = () => {
     }
     if(!product_list) {
       dispatch(getOrderProductList());
+    }
+    if(warehouse_list) {
+      dispatch(getWarehouseList())
     }
     dispatch(clearAll());
   }, []);
@@ -118,6 +126,7 @@ const OrderCreate = () => {
     const newErrors = {
       deadline: !order.deadline,
       client: !order.client,
+      warehouse: !order.warehouse,
       products: !products_to_order?.length > 0 && !products_to_order?.some(item => item?.amounts?.length > 0 && item?.amounts?.some(amount => amount?.sizes?.length > 0)),
     };
 
@@ -185,6 +194,18 @@ const OrderCreate = () => {
             onChange={e => getMainValue({ target: { name: 'client', value: e } })}
             valueKey='id'
             labelKey='name'
+            className={'mb-1'}
+          />
+          <Select
+            width='350px'
+            label='Склад ГП'
+            placeholder='Выберите склад'
+            data={warehouse_list}
+            onChange={e => getMainValue({ target: { name: 'warehouse', value: e } })}
+            error={error.warehouse}
+            value={order.warehouse}
+            valueKey='id'
+            labelKey='title'
             className={'mb-1'}
           />
         </div>

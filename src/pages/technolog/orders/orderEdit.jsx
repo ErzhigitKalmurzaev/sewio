@@ -33,12 +33,14 @@ const OrderEdit = () => {
     deadline: '',
     client: '',
     products: [],
-    status: 1
+    status: 1,
+    warehouse: ''
   });
   const [error, setError] = useState({
     deadline: false,
     client: false,
-    products: false
+    products: false,
+    warehouse: false
   });
 
   useEffect(() => {
@@ -49,7 +51,8 @@ const OrderEdit = () => {
                     deadline: res.payload.deadline,
                     client: res.payload.client,
                     products: res.payload.products,
-                    status: res.payload.status
+                    status: res.payload.status,
+                    warehouse: res.payload.warehouse
                 });
             }
         })
@@ -108,8 +111,8 @@ const OrderEdit = () => {
     
             return total + productTotalTime;
         }, 0) / 3600;
-      case 'status': 
-        return OrderStatuses[order?.status]?.label
+      case 'warehouse': 
+        return order?.warehouse?.title || '-/-/-'
       default:
         return 0;
     }
@@ -221,7 +224,7 @@ const OrderEdit = () => {
               <div className='flex justify-between gap-x-5'>
                 <OrderInfoItem label='Общая прибыль:' value={getStatistic('total_income') - getStatistic('total_consumption')} measure='сом' />
                 <OrderInfoItem label='Время выполнения:' value={getStatistic('total_time')?.toFixed(1) || 0} measure='ч.' />
-                <OrderInfoItem label='Статус заказа:' value={getStatistic('status')} measure='' />
+                <OrderInfoItem label='Склад ГП:' value={getStatistic('warehouse')} measure='' />
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { Checkbox, Modal, Pagination, Table } from 'rsuite'
 import Input from '../../../../../components/ui/inputs/input';
 import Button from '../../../../../components/ui/button';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 
 const { Column, HeaderCell, Cell } = Table;
@@ -10,6 +11,8 @@ const { Column, HeaderCell, Cell } = Table;
 const SelectIssueMaterialModal = ({ modals, setModals, materials_list, status, urls, handleChangeFilter, handleSearch, setOutput, output }) => {
 
   const [selectedMaterial, setSelectedMaterial] = useState([]);
+
+  const { colors_list } = useSelector(state => state.material);
 
   const selectMaterial = (material) => {
     console.log(selectedMaterial.find(item => item.id === material.id))
@@ -70,6 +73,25 @@ const SelectIssueMaterialModal = ({ modals, setModals, materials_list, status, u
                     <Column width={200}>
                         <HeaderCell>Название</HeaderCell>
                         <Cell dataKey="title" />
+                    </Column>
+
+                    <Column width={60}>
+                        <HeaderCell align="center">Цвет</HeaderCell>
+                        <Cell style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            {rowData => (
+                                rowData?.color ? (
+                                    <div style={{ 
+                                        background: colors_list?.find(color => color.id === rowData?.color)?.code,
+                                        width: 24,
+                                        height: 24,
+                                        borderRadius: '50%',
+                                        border: '1px solid rgba(208, 213, 221, 1)'
+                                    }}></div> 
+                                ) : (
+                                    <p>-</p>
+                                )
+                            )}
+                        </Cell>
                     </Column>
 
                     <Column width={120}>

@@ -2,7 +2,7 @@ import React from 'react'
 import { Table } from 'rsuite'
 import NumInputForTable from '../../../../../components/ui/inputs/numInputForTable';
 import { fillWarehouseWithMaterial } from '../../../../../store/technolog/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../../../components/ui/button';
@@ -13,6 +13,8 @@ const InputMaterialsTable = ({ data, status }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { colors_list } = useSelector(state => state.material);
 
   const dataForInput =  data?.map(item => ({...item, amount: '', price: ''} )) || [];
 
@@ -68,6 +70,25 @@ const InputMaterialsTable = ({ data, status }) => {
                 <Column width={200}>
                     <HeaderCell>Название</HeaderCell>
                     <Cell dataKey="title" />
+                </Column>
+
+                <Column width={60}>
+                    <HeaderCell align="center">Цвет</HeaderCell>
+                    <Cell style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {rowData => (
+                            rowData?.color ? (
+                                <div style={{ 
+                                    background: colors_list?.find(color => color.id === rowData?.color)?.code,
+                                    width: 24,
+                                    height: 24,
+                                    borderRadius: '50%',
+                                    border: '1px solid rgba(208, 213, 221, 1)'
+                                }}></div> 
+                            ) : (
+                                <p>-</p>
+                            )
+                        )}
+                    </Cell>
                 </Column>
 
                 <Column width={150}>

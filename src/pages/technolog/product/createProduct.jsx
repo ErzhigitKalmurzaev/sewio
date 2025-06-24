@@ -11,6 +11,7 @@ import Title from "../../../components/ui/title";
 import ProdTable from "./components/shared/prodTable";
 import { getProductsNames } from "../../../store/technolog/calculation";
 import InputWithSuggestion from "../../../components/ui/inputs/inputWithSuggestion";
+import { getColors } from "../../../store/technolog/material";
 
 const CreateProduct = () => {
 
@@ -37,6 +38,7 @@ const CreateProduct = () => {
     if(!products) {
       dispatch(getProductsNames())
     }
+    dispatch(getColors());
     dispatch(clearAll())
   }, [])
 

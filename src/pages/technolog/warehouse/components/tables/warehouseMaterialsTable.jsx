@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Pagination, Table } from 'rsuite';
 import { materialUnits } from '../../../../../utils/selectDatas/productDatas';
+import { useSelector } from 'react-redux';
 
 const { Column, HeaderCell, Cell } = Table;
 
 const WarehouseMaterialsTable = ({ data, status, total, limit, activePage, setPage }) => {
+
+    const { colors_list } = useSelector(state => state.material);
 
   return (
     <div className='min-h-[500px] bg-white rounded-xl'>
@@ -26,22 +29,50 @@ const WarehouseMaterialsTable = ({ data, status, total, limit, activePage, setPa
                 <Cell dataKey="title" />
             </Column>
 
-            <Column width={150}>
+            <Column width={60}>
+                <HeaderCell align="center">Цвет</HeaderCell>
+                <Cell style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    {rowData => (
+                        rowData?.color ? (
+                            <div style={{ 
+                                background: colors_list?.find(color => color.id === rowData?.color)?.code,
+                                width: 24,
+                                height: 24,
+                                borderRadius: '50%',
+                                border: '1px solid rgba(208, 213, 221, 1)'
+                            }}></div> 
+                        ) : (
+                            <p>-</p>
+                        )
+                    )}
+                </Cell>
+            </Column>
+
+            <Column width={120}>
                 <HeaderCell>Артикул</HeaderCell>
                 <Cell dataKey="vendor_code" />
             </Column>
 
-            <Column width={150}>
+            <Column width={120}>
+                <HeaderCell>Коэффициент</HeaderCell>
+                <Cell>
+                    {rowData => (
+                        <p>{rowData?.coefficient || '-/-/-/-'}</p>
+                    )}
+                </Cell>
+            </Column>
+
+            <Column width={120}>
                 <HeaderCell>Цена</HeaderCell>
                 <Cell dataKey="cost_price" />
             </Column>
 
-            <Column width={150}>
+            <Column width={120}>
                 <HeaderCell>Количество</HeaderCell>
                 <Cell dataKey="amount" />
             </Column>
 
-            <Column width={200}>
+            <Column width={150}>
                 <HeaderCell>Единица измерения</HeaderCell>
                 <Cell>
                     {rowData => (

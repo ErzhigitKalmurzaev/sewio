@@ -1,9 +1,13 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Table } from 'rsuite';
 
 const {Column, HeaderCell, Cell} = Table;
 
 const ComingMaterialsTable = ({ data, status }) => {
+
+  const { colors_list } = useSelector(state => state.material);
+
   return (
     <div className='min-h-[500px] font-inter bg-white rounded-xl'>
       <Table
@@ -20,9 +24,33 @@ const ComingMaterialsTable = ({ data, status }) => {
                 <Cell dataKey="nomenclature.id" />
             </Column>
 
-            <Column width={300}>
+            <Column width={250}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell dataKey="nomenclature.title" />
+            </Column>
+
+            <Column width={100}>
+                <HeaderCell>Артикул</HeaderCell>
+                <Cell dataKey="nomenclature.vendor_code" />
+            </Column>
+
+            <Column width={60}>
+                <HeaderCell align="center">Цвет</HeaderCell>
+                <Cell style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    {rowData => (
+                        rowData?.color ? (
+                            <div style={{ 
+                                background: colors_list?.find(color => color.id === rowData?.color)?.code,
+                                width: 24,
+                                height: 24,
+                                borderRadius: '50%',
+                                border: '1px solid rgba(208, 213, 221, 1)'
+                            }}></div> 
+                        ) : (
+                            <p>-</p>
+                        )
+                    )}
+                </Cell>
             </Column>
 
             <Column width={250}>

@@ -9,7 +9,7 @@ import SelectForTable from '../../../../../components/ui/inputs/selectForTable';
 import { CircleMinus, Plus } from 'lucide-react';
 import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithSuggestions';
 
-import { getConsumablesTitleList } from '../../../../../store/technolog/material';
+import { getColors, getConsumablesTitleList } from '../../../../../store/technolog/material';
 import { materialUnits } from '../../../../../utils/selectDatas/productDatas';
 import { getMaterial } from './../../../../../store/technolog/material';
 
@@ -27,6 +27,7 @@ const ConsumablesTable = ({ type }) => {
   useEffect(() => {
     if(!consumables_title_list) {
         dispatch(getConsumablesTitleList());
+        dispatch(getColors())
     }
   }, [])
 

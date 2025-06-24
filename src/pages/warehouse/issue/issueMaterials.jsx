@@ -12,6 +12,7 @@ import IssueMaterialsTable from './components/tables/IssueMaterialsTable';
 import { getMyMateralsList } from '../../../store/warehouse/materails';
 import SelectIssueMaterialModal from './components/modals/selectIssueMaterialModal';
 import { toast } from 'react-toastify';
+import { getColors } from '../../../store/technolog/material';
 
 const IssueMaterials = () => {
 
@@ -52,6 +53,7 @@ const IssueMaterials = () => {
   useEffect(() => {
     dispatch(getWarehouseListWithoutMe())
     dispatch(getMyMateralsList(urls));
+    dispatch(getColors())
   }, [])
 
   const handleSearch = () => {

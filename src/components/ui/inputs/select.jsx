@@ -12,7 +12,7 @@ const Select = ({ width, label, placeholder, data, onChange, error, required, la
   }, [data]);
 
   return (
-    <div className={`${width ? `w-[${width}]` : 'w-full'} flex flex-col gap-y-1`}>
+    <div className={`flex flex-col gap-y-1`} style={{ width: width || '100%' }}>
       <label style={{ fontSize: '13px', fontFamily: 'Inter', fontWeight: '400', color: 'rgba(52, 64, 84, 1)'}}>
         {label} 
         {required && <span style={ error && { color: 'red' }}> *</span>}

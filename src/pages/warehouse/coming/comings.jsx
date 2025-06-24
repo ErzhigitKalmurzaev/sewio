@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getComings } from '../../../store/warehouse/warehouse'
 import Button from '../../../components/ui/button'
 import { useNavigate } from 'react-router-dom'
+import { getColors } from '../../../store/technolog/material'
 
 const Comings = () => {
 
@@ -31,6 +32,7 @@ const Comings = () => {
     if(comings_list?.length === 0 && comings_list_status !== 'success') {
         dispatch(getComings());
     }
+    dispatch(getColors())
   }, [])
 
   return (

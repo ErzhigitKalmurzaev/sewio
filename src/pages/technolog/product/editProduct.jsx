@@ -12,6 +12,7 @@ import ProdTable from "./components/shared/prodTable";
 import BackDrop from "../../../components/ui/backdrop";
 import { getProductsNames } from "../../../store/technolog/calculation";
 import InputWithSuggestion from "../../../components/ui/inputs/inputWithSuggestion";
+import { getColors } from "../../../store/technolog/material";
 
 const EditProduct = () => {
 
@@ -21,6 +22,7 @@ const EditProduct = () => {
   const { id } = useParams();
   const { combinations, consumables, prices, product_status } = useSelector(state => state.product);
   const { products } = useSelector(state => state.calculation)
+  const { colors_list } = useSelector(state => state.material)
 
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
@@ -45,6 +47,9 @@ const EditProduct = () => {
             })
         }
     })
+    if(!colors_list) {
+      dispatch(getColors());
+    }
     if(!products) {
       dispatch(getProductsNames())
     }
