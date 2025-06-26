@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, forwardRef } from 'react';
 import MyBreadcrums from '../../../components/ui/breadcrums';
 import Title from '../../../components/ui/title';
-import Input from '../../../components/ui/inputs/input';
 import OrderInfoItem from '../../../components/shared/order/orderInfoItem';
 import Button from '../../../components/ui/button';
 import DataPicker from '../../../components/ui/inputs/dataPicker';
-import SelectUser from '../../../components/ui/inputs/selectUser';
 import { useDispatch, useSelector } from 'react-redux';
-import { createOrder, editOrderById, getOrderById } from '../../../store/technolog/order';
+import { editOrderById, getOrderById } from '../../../store/technolog/order';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { OrderStatuses } from './../../../utils/constants/statuses';
@@ -16,6 +14,9 @@ import { Building, Phone, User } from 'lucide-react';
 import BackDrop from '../../../components/ui/backdrop';
 import Select from '../../../components/ui/inputs/select';
 import { formatedToDDMMYYYY } from '../../../utils/functions/dateFuncs';
+import ReactToPrint, { useReactToPrint } from 'react-to-print';
+import OrderPrint from './components/OrderPrint';
+import { Print } from '@mui/icons-material';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -42,6 +43,9 @@ const OrderEdit = () => {
     products: false,
     warehouse: false
   });
+  const printCom = false;
+
+  const printRef = React.useRef();
 
   useEffect(() => {
     dispatch(getOrderById({ id}))
@@ -163,15 +167,40 @@ const OrderEdit = () => {
     }
   }
 
-  console.log(order.deadline)
+  const handlePrint = useReactToPrint({
+    documentTitle: `Отчёт о заказе #${id}`,
+    contentRef: printRef,
+    pageStyle: `
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+          font-family: Arial;
+        }
+      }
+    `
+  })
 
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs} />
-      <Title text={`Редактирование заказа #${id}`} />
+      <div className='flex items-center justify-between'>
+        <Title text={`Редактирование заказа #${id}`} />
+        <Button 
+            onClick={handlePrint} 
+            className='w-max px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
+          >
+            <Print className='mr-2'/>
+            Распечатать
+          </Button>
+      </div>
       {
         order_status === 'loading' && <BackDrop />
       }
+
+      <div className='hidden'>
+        <OrderPrint ref={printRef} order={order} products={edit_products_in_order} />
+      </div>
 
       <div className='w-full flex gap-x-7'>
         <div className='w-1/2 flex flex-col gap-y-2 bg-white rounded-lg px-8 py-5'>
@@ -229,7 +258,6 @@ const OrderEdit = () => {
             </div>
           </div>
         </div>
-        
       </div>
       <div className='bg-white w-full p-3 rounded-lg shadow-sm'>
         <EditAmountsTable/>

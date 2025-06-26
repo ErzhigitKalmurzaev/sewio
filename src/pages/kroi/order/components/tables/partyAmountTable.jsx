@@ -41,14 +41,14 @@ const PartyAmountTable = ({ data, status }) => {
         className="rounded-lg border-2 border-borderGray"
       >
         {/* Колонка "Цвет" */}
-        <Column width={110} align="center" verticalAlign="center"fullText>
+        <Column width={100} align="center" verticalAlign="center"fullText>
           <HeaderCell>Цвет</HeaderCell>
           <Cell dataKey="color.title" />
         </Column>
 
         {party_amounts[0]?.sizes?.map((sItem, sIndex) => (
           <ColumnGroup key={sIndex + 'tab'} header={sItem?.size?.title} verticalAlign="middle" align="center">
-            <Column width={80} colSpan={2}>
+            <Column width={65} colSpan={2}>
               <HeaderCell>План</HeaderCell>
               <Cell>
                 {
@@ -58,7 +58,7 @@ const PartyAmountTable = ({ data, status }) => {
                 }
               </Cell>
             </Column>
-            <Column width={80}>
+            <Column width={65}>
               <HeaderCell>Факт</HeaderCell>
               <Cell style={{ padding: '6px' }}>
                 {(rowData, rowIndex) => (
@@ -75,7 +75,7 @@ const PartyAmountTable = ({ data, status }) => {
         
 
         <ColumnGroup header={'ИТОГО'} verticalAlign="middle" align="center" fixed='right'>
-            <Column width={70} colSpan={2}>
+            <Column width={65} colSpan={2}>
               <HeaderCell>План</HeaderCell>
               <Cell style={{ background: '#f9fbff' }}>
                 {(rowData, rowIndex) => (
@@ -83,7 +83,7 @@ const PartyAmountTable = ({ data, status }) => {
                 )}
               </Cell>
             </Column>
-            <Column width={80}>
+            <Column width={65}>
               <HeaderCell>Факт</HeaderCell>
               <Cell style={{ background: '#f9fbff' }}>
                 {(rowData, rowIndex) => (
