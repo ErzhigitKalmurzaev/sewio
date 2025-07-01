@@ -13,6 +13,9 @@ import BackDrop from "../../../components/ui/backdrop";
 import { getProductsNames } from "../../../store/technolog/calculation";
 import InputWithSuggestion from "../../../components/ui/inputs/inputWithSuggestion";
 import { getColors } from "../../../store/technolog/material";
+import CombinationsPrint from "./components/shared/combinationsPrint";
+import { useReactToPrint } from "react-to-print";
+import { Print } from "@mui/icons-material";
 
 const EditProduct = () => {
 
@@ -23,6 +26,7 @@ const EditProduct = () => {
   const { combinations, consumables, prices, product_status } = useSelector(state => state.product);
   const { products } = useSelector(state => state.calculation)
   const { colors_list } = useSelector(state => state.material)
+  const printRef = React.useRef();
 
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
@@ -129,11 +133,32 @@ const EditProduct = () => {
     }
   };
 
+  const handlePrint = useReactToPrint({
+    documentTitle: `Операции товара: ${productData.title}   Артикул: ${productData.vendor_code}`,
+    contentRef: printRef,
+    pageStyle: `
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+          font-family: Arial;
+        }
+      }
+    `
+  })
+
   return (
     <>
       <div className="w-full min-h-[100vh] flex flex-col gap-y-5 position-relative">
         <div className="flex justify-between items-center">
           <Title text="Редактирование товара" />
+          <Button 
+            onClick={handlePrint} 
+            className='w-max px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
+          >
+            <Print className='mr-2'/>
+            Распечатать операции
+          </Button>
         </div>
 
         {
@@ -151,6 +176,10 @@ const EditProduct = () => {
           deleteFiles={deleteFiles}
           setDeleteFiles={setDeleteFiles} 
         />
+
+        <div className="hidden">
+          <CombinationsPrint ref={printRef}/>
+        </div>
 
         <div className="w-full bg-white rounded-lg px-6 py-6 flex flex-col gap-y-5">
           <div className="flex flex-col gap-y-4">
@@ -186,7 +215,7 @@ const EditProduct = () => {
 
           <div className="flex flex-col gap-y-4">
 
-            <ProdTable type='edit'/>
+            <ProdTable/>
           </div>
           <div className="flex justify-center">
             <Button width='180px' onClick={onSubmit}>

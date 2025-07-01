@@ -124,7 +124,7 @@ const CombinationsTable = ({ type }) => {
             virtualized
             rowKey='id'
         >
-            <Column width={250}>
+            <Column width={350}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
@@ -144,7 +144,7 @@ const CombinationsTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={250}>
+            <Column width={200}>
                 <HeaderCell>Время (сек)</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
@@ -158,7 +158,7 @@ const CombinationsTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={250}>
+            <Column width={200}>
                 <HeaderCell>Разряд</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
@@ -189,7 +189,7 @@ const CombinationsTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={150}>
+            <Column width={155}>
                 <HeaderCell align="center">
                     <button onClick={addRow} className="cursor-pointer">
                          <Plus color="#00796B" />

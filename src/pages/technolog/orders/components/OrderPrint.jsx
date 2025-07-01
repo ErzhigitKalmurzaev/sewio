@@ -1,12 +1,12 @@
 import React, { forwardRef } from 'react';
-import Title from '../../../../components/ui/title';
-import { Table } from 'rsuite';
-import { Building, Phone, User } from 'lucide-react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { formatedToDDMMYYYY } from '../../../../utils/functions/dateFuncs';
 
-const OrderPrint = React.forwardRef(({ order, products }, ref) => {
-
+const OrderPrint = forwardRef(({ order, products }, ref) => {
+  const { id } = useParams();
   const { colors_list } = useSelector(state => state.material);
+
   const getTotalByProduct = (product) => {
     return product.amounts.reduce((sum, colorItem) => {
       return sum + colorItem.sizes.reduce((s, i) => s + i.amount, 0);
@@ -28,12 +28,11 @@ const OrderPrint = React.forwardRef(({ order, products }, ref) => {
     });
     return Object.entries(sizeMap).map(([id, title]) => ({ id: Number(id), title }));
   };
-  console.log(colors_list)
 
   return (
     <div ref={ref} className="p-8 text-[13px] font-sans text-black bg-white">
-      <h2 className="text-xl font-bold mb-2">Заказ №{order?.id || '—'}</h2>
-      <p className="mb-4">Дата сдачи: {order?.deadline || '—'}</p>
+      <h2 className="text-xl font-bold mb-2">Заказ №{id || '—'}</h2>
+      <p className="mb-4">Дата сдачи: {formatedToDDMMYYYY(order?.deadline) || '—'}</p>
 
       <div className="border border-gray-400 p-4 rounded mb-6">
         <p className="font-semibold mb-2">Информация о клиенте:</p>
@@ -55,29 +54,47 @@ const OrderPrint = React.forwardRef(({ order, products }, ref) => {
             <table className="w-full border-collapse border border-gray-400 mb-2 text-center">
               <thead>
                 <tr className="bg-gray-200">
-                  <th className="border border-gray-400 px-2 py-1">Цвет</th>
+                  <th rowSpan={2} className="border border-gray-400 px-2 py-1">Цвет</th>
                   {sizes.map(size => (
-                    <th key={size.id} className="border border-gray-400 px-2 py-1">{size.title}</th>
+                    <th key={size.id} colSpan={2} className="border border-gray-400 px-2 py-1">{size.title}</th>
                   ))}
-                  <th className="border border-gray-400 px-2 py-1">Итого</th>
+                  <th colSpan={2} className="border border-gray-400 px-2 py-1">Итого</th>
+                </tr>
+                <tr className="bg-gray-100">
+                  {sizes.map(size => (
+                    <React.Fragment key={`sub-${size.id}`}>
+                      <th className="border border-gray-400 px-2 py-1">План</th>
+                      <th className="border border-gray-400 px-2 py-1">Факт</th>
+                    </React.Fragment>
+                  ))}
+                  <th className="border border-gray-400 px-2 py-1">План</th>
+                  <th className="border border-gray-400 px-2 py-1">Факт</th>
                 </tr>
               </thead>
               <tbody>
                 {product.amounts.map((colorItem, i) => {
-                  const total = colorItem.sizes.reduce((sum, s) => sum + s.amount, 0);
+                  const planTotal = colorItem.sizes.reduce((sum, s) => sum + s.amount, 0);
+                  const factTotal = 0; // можно подставить реальные данные при необходимости
 
                   return (
                     <tr key={i}>
-                      <td className="border border-gray-400 px-2 py-1">{colors_list?.find(c => c.id === colorItem.color)?.title || '—'}</td>
+                      <td className="border border-gray-400 px-2 py-1">
+                        {colors_list?.find(c => c.id === colorItem.color)?.title || '—'}
+                      </td>
                       {sizes.map(size => {
                         const found = colorItem.sizes.find(s => s.size.id === size.id);
+                        const amount = found ? found.amount : 0;
+                        const fact = ''; // или found.fact, если будет
+
                         return (
-                          <td key={size.id} className="border border-gray-400 px-2 py-1">
-                            {found ? found.amount : 0}
-                          </td>
+                          <React.Fragment key={`cell-${size.id}-${i}`}>
+                            <td className="border border-gray-400 px-2 py-1">{amount}</td>
+                            <td className="border border-gray-400 px-2 py-1">{fact}</td>
+                          </React.Fragment>
                         );
                       })}
-                      <td className="border border-gray-400 px-2 py-1 font-semibold">{total}</td>
+                      <td className="border border-gray-400 px-2 py-1 font-semibold">{planTotal}</td>
+                      <td className="border border-gray-400 px-2 py-1 font-semibold"></td>
                     </tr>
                   );
                 })}

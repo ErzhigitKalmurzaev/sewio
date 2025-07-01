@@ -45,6 +45,7 @@ const EditClient = () => {
                 password: res.payload?.password,
                 company_title: res.payload?.company_title,
                 address: res.payload?.address,
+                is_active: res.payload?.user?.is_active
             })
             setImage(res.payload?.image)
             setExistingFiles(res?.payload?.files)
@@ -59,7 +60,8 @@ const EditClient = () => {
     phone: '',
     password: '',
     company_title: '',
-    address: ''
+    address: '',
+    is_active: true
   })
   const [errors, setErrors] = useState({
     name: false,

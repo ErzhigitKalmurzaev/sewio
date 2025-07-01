@@ -5,6 +5,7 @@ import { employeeRole, employeeSalaryType } from '../../../utils/selectDatas/emp
 
 import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
 import TableDropdown from '../tableDropdown';
+import { formatPhoneNumber } from '../../../utils/functions/numFuncs';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -50,7 +51,21 @@ TechnologEmployeeTable = ({ data, status, handleChangeFilter, urls }) => {
 
               <Column width={200}>
                   <HeaderCell>Телефон</HeaderCell>
-                  <Cell dataKey="phone" />
+                  <Cell>
+                    {
+                      rowData => (
+                        <div className='flex items-center'>
+                          {
+                            rowData?.phone?.length > 5 ?
+                            <span className='font-inter'>{formatPhoneNumber(rowData?.phone)}</span>
+                            :
+                            <span className='font-inter text-primary mx-3'>Не указанo</span>
+
+                          }
+                        </div>
+                      )
+                    }
+                  </Cell>
               </Column>
 
               <Column width={200}>
