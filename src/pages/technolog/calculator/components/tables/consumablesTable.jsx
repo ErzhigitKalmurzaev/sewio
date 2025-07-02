@@ -69,7 +69,7 @@ const ConsumablesTable = ({ type }) => {
             loading={loading || (type === 'edit' && calc_status === 'loading') || calc_status === 'kochuruu'}
             cellBordered
         >
-            <Column width={250}>
+            <Column width={300}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
@@ -83,7 +83,7 @@ const ConsumablesTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={250}>
+            <Column width={200}>
                 <HeaderCell>Расход</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
@@ -95,15 +95,15 @@ const ConsumablesTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={200}>
+            <Column width={150}>
                 <HeaderCell>Ед. измер.</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
                         <SelectForTable
                             value={rowData.unit}
                             data={materialUnits}
-                            onChange={(e) => getValue(e, "unit", index)}
                             placeholder="Ед. измер."
+                            disabled={true}
                         />
                     }
                 </Cell>

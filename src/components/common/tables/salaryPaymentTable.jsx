@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../ui/button';
 import { postSalary } from '../../../store/technolog/staff';
 import { toast } from 'react-toastify';
+import { format } from 'rsuite/esm/internals/utils/date';
 
 const SalaryPaymentTable = ({ data, status, staff_id }) => {
 
@@ -22,12 +23,14 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
 
   const calculateTotal = (items) => items?.reduce((total, item) => total + item.amount, 0);
   const calculateOperationTotal = (items) => items?.reduce((total, item) => total + (item?.total_amount * item.operation?.price), 0);
-
+  
   const onSubmit = () => {
     if(Number(calculateOperationTotal(operations) - calculateTotal(fines) - calculateTotal(advances)) > 0) {
       dispatch(postSalary({
         staff_id,
-        amount: Number(calculateOperationTotal(operations) - calculateTotal(fines) - calculateTotal(advances))
+        amount: Number(calculateOperationTotal(operations) - calculateTotal(fines) - calculateTotal(advances)),
+        date_from: data?.earliest_created_at,
+        date_until: new Date().toISOString().split('T')[0]
       })).then(res => {
         if(res?.meta?.requestStatus === 'fulfilled') {
           toast.success('Зарплата выдана успешно!');
@@ -61,7 +64,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
             {
             operations?.length > 0 ? 
             operations?.map((op, index) => (
-              <tr key={op.id} className={'bg-green-50'}>
+              <tr key={op.id} className={'odd:bg-green-50'}>
                 <td className="border border-borderGray px-2 py-2 text-center">{op?.order_id}</td>
                 <td className="border border-borderGray px-4 py-2">{op?.party_number}</td>
                 <td className="border border-borderGray px-4 py-2">{op?.operation?.title}</td>
@@ -74,6 +77,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
               <td></td>
               <td></td>
               <p className='text-center py-4'>Нет выполненных операций</p>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -101,7 +105,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
             {
               fines?.length > 0 ?
               fines?.map((fine, index) => (
-                <tr key={fine.id} className={'bg-[#FFE4E6]'}>
+                <tr key={fine.id} className={'odd:bg-red-50'}>
                   <td className="border border-borderGray px-4 py-2 text-center">{fine.id}</td>
                   <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYYHHMM(fine.created_at)}</td>
                   <td className="border border-borderGray px-4 py-2">{formatNumber(fine.amount)}</td>
@@ -135,7 +139,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
             {
               advances?.length > 0 ?
               advances?.map((advance, index) => (
-                <tr key={advance.id} className={'bg-blue-50'}>
+                <tr key={advance.id} className={'odd:bg-blue-50'}>
                   <td className="border border-borderGray px-4 py-2 text-center">{advance.id}</td>
                   <td className="border border-borderGray px-4 py-2">{formatedToDDMMYYYYHHMM(advance.created_at)}</td>
                   <td className="border border-borderGray px-4 py-2">{formatNumber(advance.amount)}</td>

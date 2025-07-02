@@ -37,6 +37,10 @@ const ConsumablesTable = ({ status }) => {
     dispatch(deletePartyConsumable(key))
   }
 
+  const kroi_details = {
+    count_in_layer: 'Кол-во в слое',
+  }
+
   const handleSelect = (id, index) => {
     setLoading(true);
     dispatch(getMaterial({ id }))
@@ -83,8 +87,8 @@ const ConsumablesTable = ({ status }) => {
                 </Cell>
             </Column>
 
-            <Column width={130}>
-                <HeaderCell>Потрачено</HeaderCell>
+            <Column width={80}>
+                <HeaderCell>Длина в паспорте</HeaderCell>
                 <Cell style={{ padding: '6.5px' }}>
                     {
                         (rowData, index) => (
@@ -98,8 +102,8 @@ const ConsumablesTable = ({ status }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={130}>
-                <HeaderCell>Брак</HeaderCell>
+            <Column width={80}>
+                <HeaderCell>Длина настила</HeaderCell>
                 <Cell style={{ padding: '6.5px' }}>
                     {
                         (rowData, index) => (
@@ -107,21 +111,6 @@ const ConsumablesTable = ({ status }) => {
                                 width={100}
                                 value={rowData?.defect}
                                 onChange={value => getValue({ index, value, name: 'defect' })}
-                                placeholder='0'
-                            />
-                        )
-                    }
-                </Cell>
-            </Column>
-            <Column width={130}>
-                <HeaderCell>Остаток</HeaderCell>
-                <Cell style={{ padding: '6.5px' }}>
-                    {
-                        (rowData, index) => (
-                            <NumInputForTable
-                                width={100}
-                                value={rowData?.left}
-                                onChange={value => getValue({ index, value, name: 'left' })}
                                 placeholder='0'
                             />
                         )

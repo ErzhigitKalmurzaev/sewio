@@ -19,7 +19,7 @@ const PrintableReport = React.forwardRef((props, ref) => {
 
       {payment_detail_status === 'loading' && <BackDrop open={true} />}
 
-      <div className='w-2/3'>
+      <div className='w-3/4 print:w-full'>
         <PaymentInfoTable
           data={payment_detail}
           status={payment_detail?.status}

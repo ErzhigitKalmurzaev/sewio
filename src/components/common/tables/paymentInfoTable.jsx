@@ -15,11 +15,13 @@ const PaymentInfoTable = ({ data, status }) => {
             <>
                 <h3 className="text-lg font-bold mb-2 px-4 pt-2 flex justify-between items-center">
                     <span>Операции</span>
-                    <span className='text-base mt-1'>{`${formatedToDDMMYYYY(data?.earliest_created_at) + ' - ' + formattedDate}`}</span>
+                    <span className='text-base mt-1'>{`${formatedToDDMMYYYY(data?.date_from) + ' - ' + formatedToDDMMYYYY(data?.date_until)}`}</span>
                 </h3>
                 <table className="min-w-full table-auto bg-white">
                     <thead className="bg-gray-100">
                         <tr>
+                            <th className="border border-borderGray px-4 py-2">ID заказа</th>
+                            <th className="border border-borderGray px-4 py-2">Партия</th>
                             <th className="border border-borderGray px-4 py-2">Название</th>
                             <th className="border border-borderGray px-4 py-2">Количество</th>
                             <th className="border border-borderGray px-4 py-2">Цена (сом)</th>
@@ -28,7 +30,9 @@ const PaymentInfoTable = ({ data, status }) => {
                     </thead>
                     <tbody>
                         {data?.operations.map((op, index) => (
-                        <tr key={`${index} ` + op?.operation_title} className={'bg-green-50'}>
+                        <tr key={`${index} ` + op?.operation_title} className={'odd:bg-green-50'}>
+                            <td className="border border-borderGray px-2 py-2 text-center">{op?.order_id}</td>
+                            <td className="border border-borderGray px-4 py-2">{op?.party_number}</td>
                             <td className="border border-borderGray px-4 py-2">{op?.operation_title}</td>
                             <td className="border border-borderGray px-4 py-2">{op?.total_amount}</td>
                             <td className="border border-borderGray px-4 py-2">{op?.operation_price}</td>
@@ -36,7 +40,7 @@ const PaymentInfoTable = ({ data, status }) => {
                         </tr>
                         ))}
                         <tr>
-                        <td colSpan="3" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
+                        <td colSpan="5" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
                         <td className="border border-borderGray px-4 py-2 font-bold text-green-600">
                             +{data?.amount}
                         </td>

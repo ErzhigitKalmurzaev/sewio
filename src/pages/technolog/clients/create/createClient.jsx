@@ -63,7 +63,7 @@ const CreateClient = () => {
       surname: !employee_data.surname,
       username: !employee_data.username,
       phone: !employee_data.phone || !/^\+?\d{10,13}$/.test(employee_data.phone),
-      password: employee_data.password.length < 6,
+      password: employee_data.password.length < 3,
       company_title: !employee_data.company_title,
       address: !employee_data.address,
     };
@@ -78,7 +78,7 @@ const CreateClient = () => {
     e.preventDefault();
     
     if (validateFields()) {
-      dispatch(createClient({ ...employee_data, image }))
+      dispatch(createClient({ ...employee_data, image: image?.blobFile }))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
             dispatch(createClientFiles({ 
