@@ -109,6 +109,18 @@ export const getColors = createAsyncThunk(
     }
 )
 
+export const getKroiMaterials = createAsyncThunk(
+    'material/getKroiMaterials',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`material/list/my/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const MaterialSlice = createSlice({
     name: 'material',
     initialState: {
@@ -116,7 +128,9 @@ const MaterialSlice = createSlice({
         materials_list_status: 'loading',
         consumables_title_list: null,
         consumables_title_list_status: 'loading',
-        colors_list: null
+        colors_list: null,
+        kroi_materials: null,
+        kroi_materials_status: 'loading'
     },
     reducers: {
 
@@ -131,6 +145,7 @@ const MaterialSlice = createSlice({
             }).addCase(getMateralList.rejected, (state) => {
                 state.materials_list_status = 'error';
             })
+            //--------------------------------------------------------
             .addCase(getConsumablesTitleList.pending, (state) => {
                 state.consumables_title_list_status = 'loading';
             }).addCase(getConsumablesTitleList.fulfilled, (state, action) => {
@@ -139,10 +154,19 @@ const MaterialSlice = createSlice({
             }).addCase(getConsumablesTitleList.rejected, (state) => {
                 state.consumables_title_list_status = 'error';
             })
+            //--------------------------------------------------------
             .addCase(getColors.fulfilled, (state, action) => {
                 state.colors_list = action.payload;
             })
-
+            //--------------------------------------------------------
+            .addCase(getKroiMaterials.pending, (state) => {
+                state.kroi_materials_status = 'loading';
+            }).addCase(getKroiMaterials.fulfilled, (state, action) => {
+                state.kroi_materials_status = 'success';
+                state.kroi_materials = action.payload
+            }).addCase(getKroiMaterials.rejected, (state) => {
+                state.kroi_materials_status = 'error';
+            })
     }
 })
 

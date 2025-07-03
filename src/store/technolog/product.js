@@ -417,7 +417,7 @@ const TechnologProductSlice = createSlice({
                     }))
                 }))
                 state.consumables = action.payload.consumables.map(item => ({
-                    unit: item?.material_nomenclature?.unit,
+                    unit: item?.unit ? item.unit : item?.material_nomenclature?.unit,
                     material_nomenclature: item?.material_nomenclature?.id,
                     consumption: item.consumption,
                     title: item.material_nomenclature?.title,

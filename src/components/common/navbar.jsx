@@ -29,7 +29,8 @@ const Navbar = ({ role }) => {
         warehouseNav,
         shveyaNav,
         kroiNav,
-        foremanNav
+        foremanNav,
+        foremanNav,
     ]
 
     return (

@@ -27,7 +27,6 @@ const PartyAmountTable = ({ data, status }) => {
     };
   });
 
-
   return (
     <div className="flex flex-col gap-y-1">
       <Table

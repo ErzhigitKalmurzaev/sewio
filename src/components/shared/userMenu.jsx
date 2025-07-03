@@ -110,7 +110,7 @@ const UserMenu = () => {
                     </div>
                     <div>
                         <p className='text-[13px] font-inter'>Разряд: {me_info?.rank?.title}</p>
-                        <p className='text-[13px] font-inter'>Телефон: {me_info?.phone}</p>
+                        <p className='text-[13px] font-inter'>Телефон: {me_info?.phone?.length > 4 ? me_info?.phone : 'Не указано'}</p>
                     </div>
                 </div>
             </MenuItem>

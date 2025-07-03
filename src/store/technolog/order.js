@@ -110,6 +110,18 @@ export const createOrder = createAsyncThunk(
     }
 )
 
+export const getInvoiceData = createAsyncThunk(
+    'order/getInvoiceData',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.get(`order/invoice/data/?order_id=${props}`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const TechnologOrderSlice = createSlice({
     name: 'order',
     initialState: {
@@ -123,6 +135,7 @@ const TechnologOrderSlice = createSlice({
         moderation_list_status: 'loading',
         accept_operation_status: 'loading',
         product_status: 'loading',
+        invoice_data: null,
 
         products_to_order: [
             {
@@ -295,6 +308,10 @@ const TechnologOrderSlice = createSlice({
                 state.order_list = action.payload
             }).addCase(getOrderList.rejected, (state) => {
                 state.order_list_status = 'error';
+            })
+            // --------------------------------------------------
+            .addCase(getInvoiceData.fulfilled, (state, action) => {
+                state.invoice_data = action.payload
             })
             // --------------------------------------------------
             .addCase(getModerationList.pending, (state) => {

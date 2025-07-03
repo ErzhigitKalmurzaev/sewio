@@ -17,6 +17,7 @@ import { formatedToDDMMYYYY } from '../../../utils/functions/dateFuncs';
 import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import OrderPrint from './components/OrderPrint';
 import { Print } from '@mui/icons-material';
+import InvoicePrint from './components/invoicePrint';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -46,6 +47,7 @@ const OrderEdit = () => {
   const printCom = false;
 
   const printRef = React.useRef();
+  const invoiceRef = React.useRef();
 
   useEffect(() => {
     dispatch(getOrderById({ id}))
@@ -181,18 +183,40 @@ const OrderEdit = () => {
     `
   })
 
+  const handlePrintInvoice = useReactToPrint({
+    documentTitle: `Накладная на заказе #${id}`,
+    contentRef: invoiceRef,
+    pageStyle: `
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+          font-family: Arial;
+        }
+      }
+    `
+  })
+
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs} />
       <div className='flex items-center justify-between'>
         <Title text={`Редактирование заказа #${id}`} />
-        <Button 
+        <div className='flex gap-x-3'>
+          <Button 
             onClick={handlePrint} 
             className='w-max px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
           >
             <Print className='mr-2'/>
             Распечатать
           </Button>
+          <Button 
+            onClick={handlePrintInvoice}
+          >
+            <Print className='mr-2'/>
+            Накладная
+          </Button>
+        </div>
       </div>
       {
         order_status === 'loading' && <BackDrop />
@@ -200,6 +224,7 @@ const OrderEdit = () => {
 
       <div className='hidden'>
         <OrderPrint ref={printRef} order={order} products={edit_products_in_order} />
+        <InvoicePrint ref={invoiceRef}/>
       </div>
 
       <div className='w-full flex gap-x-7'>

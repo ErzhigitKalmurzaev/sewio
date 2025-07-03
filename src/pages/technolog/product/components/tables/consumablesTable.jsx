@@ -104,7 +104,8 @@ const ConsumablesTable = ({ type }) => {
                             value={rowData.unit}
                             data={materialUnits}
                             placeholder="Ед. измер."
-                            disabled={true}
+                            onChange={(e) => getValue(e, "unit", index)}
+                            // disabled={true}
                         />
                     }
                 </Cell>

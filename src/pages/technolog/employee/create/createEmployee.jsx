@@ -86,8 +86,12 @@ const CreateEmployee = () => {
     if (validateFields()) {
       dispatch(createEmployee({ ...employee_data, image }))
         .then(res => {
-          navigate(-1)
-          toast("Разряд создан успешно!")
+          if(res.meta.requestStatus === 'fulfilled') {
+            navigate(-1)
+            toast("Сотрудник создан успешно!")
+          } else {
+            toast.error("Произошла ошибка!")
+          }
         })
     } else {
       console.log('Form contains errors');

@@ -23,6 +23,10 @@ export const combinationStatuses = [
     {
         id: 2,
         label: 'Упаковка'
+    },
+    {
+        id: 3,
+        label: 'Крой'
     }
 ];
 

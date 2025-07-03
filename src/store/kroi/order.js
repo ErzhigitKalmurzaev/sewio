@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axios";
-import { addConsumable } from "../technolog/product";
 
 export const getOrdersList = createAsyncThunk(
     'order/getOrdersList',
@@ -85,10 +84,18 @@ const KroiOrderSlice = createSlice({
         party_consumables: [
             {
                 title: '',
-                consumption: '',
+                nomenclature: '',
+                color: '',
+                passport_length: '',
+                table_length: '',
+                layers_count: '',
+                number_of_marker: '',
+                restyled: '',
                 defect: '',
-                left: '',
-                unit: ''
+                remainder: '',
+                fact_length: '',
+                fail: '',
+                count_in_layer: '',
             }
         ],
         party_list: null,
@@ -107,19 +114,97 @@ const KroiOrderSlice = createSlice({
         },
         getValueConsumables: (state, action) => {
             const { index, name, value } = action.payload;
-            
-            state.party_consumables[index][name] = value;
-        },
+            const item = state.party_consumables[index];
+          
+            // Обновляем значение поля
+            item[name] = value;
+          
+            const toNum = (v) => Number(v) || 0;
+          
+            // Формулы для вычислений
+            const {
+              table_length = 0,
+              layers_count = 0,
+              restyled = 0,
+              defect = 0,
+              remainder = 0,
+              color,
+            } = item;
+          
+            const shouldUpdateFactLength = ['table_length', 'layers_count', 'restyled', 'defect', 'remainder'].includes(name);
+            const shouldUpdateFail = shouldUpdateFactLength || name === 'passport_length';
+          
+            // Пересчет fact_length
+            if (shouldUpdateFactLength) {
+              item.fact_length =
+                toNum(table_length) * toNum(layers_count) +
+                toNum(restyled) +
+                toNum(defect) +
+                toNum(remainder);
+            }
+          
+            // Пересчет fail
+            if (shouldUpdateFail) {
+              item.fail = toNum(item.passport_length) - toNum(item.fact_length);
+            }
+          
+            // Если изменено одно из: layers_count или count_in_layer — обновляем party_amounts
+            if (['layers_count', 'count_in_layer'].includes(name)) {
+              const total = toNum(item.layers_count) * toNum(item.count_in_layer);
+              const colorId = color;
+          
+              if (colorId && state.party_amounts?.length > 0) {
+                const colorIndex = state.party_amounts.findIndex(p => p.color.id === colorId);
+                if (colorIndex !== -1) {
+                  const sizes = state.party_amounts[colorIndex].sizes;
+                  const sizeCount = sizes.length;
+          
+                  if (sizeCount > 0) {
+                    const distributed = Math.floor(total / sizeCount);
+                    const remainder = total % sizeCount;
+          
+                    sizes.forEach((s, i) => {
+                      // Распределяем остаток по первым N размерам
+                      sizes[i].true_amount = distributed + (i < remainder ? 1 : 0);
+                    });
+                  }
+                }
+              }
+            }
+          },
+                    
         fillPartyConsumables: (state, action) => {
-            state.party_consumables[action.payload.key] = action.payload.value;
+            state.party_consumables = action.payload?.map(item => ({
+                title: item.title,
+                nomenclature: item.id,
+                passport_length: item.coefficient,
+                color: item.color,
+                table_length: '',
+                layers_count: '',
+                number_of_marker: '',
+                restyled: '',
+                defect: '',
+                remainder: '',
+                fact_length: '',
+                fail: '',
+                count_in_layer: '',
+            }))
         },
         addPartyConsumable: (state) => {
             state.party_consumables.push({
                 title: '',
-                consumption: '',
+                nomenclature: '',
+                color: '',
+                passport_length: '',
+                table_length: '',
+                layers_count: '',
+                number_of_marker: '',
+                restyled: '',
                 defect: '',
-                left: '',
-                unit: ''
+                remainder: '',
+                fact_length: '',
+                fail: '',
+                count_in_layer: '',
             })
         },
         deletePartyConsumable: (state, action) => {
@@ -129,15 +214,22 @@ const KroiOrderSlice = createSlice({
             state.party_consumables = [
                 {
                     title: '',
-                    consumption: '',
+                    nomenclature: '',
+                    color: '',
+                    passport_length: '',
+                    table_length: '',
+                    layers_count: '',
+                    number_of_marker: '',
+                    restyled: '',
                     defect: '',
-                    left: '',
-                    unit: ''
+                    remainder: '',
+                    fact_length: '',
+                    fail: '',
+                    count_in_layer: '',
                 }
             ]
         },
         changePartyNumber: (state, action) => {
-            console.log(action.payload.value)
             state.party.number = action.payload.value
         }
     },
@@ -201,10 +293,17 @@ const KroiOrderSlice = createSlice({
                 state.party_consumables = action.payload.consumptions.map(item => ({
                     title: item.nomenclature?.title,
                     nomenclature: item.nomenclature.id,
-                    consumption: item.consumption,
+                    color: item.color,
+                    passport_length: item.passport_length,
+                    table_length: item.table_length,
+                    layers_count: item.layers_count,
+                    number_of_marker: item.number_of_marker,
+                    restyled: item.restyled,
                     defect: item.defect,
-                    left: item.left,
-                    unit: item.nomenclature?.unit
+                    remainder: item.remainder,
+                    fact_length: item.fact_length,
+                    fail: item.fail,
+                    count_in_layer: item.quantity / item.layers_count
                 }))
                 state.party_amounts = Object.values(
                     action.payload?.details?.reduce((acc, item) => {

@@ -41,5 +41,9 @@ export const employeeRole = [
     {
         label: 'Супервайзер',
         value: 6
+    },
+    {
+        label: 'ОТК',
+        value: 7
     }
 ]

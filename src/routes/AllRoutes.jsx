@@ -9,6 +9,7 @@ import WarehouseRoute from './warehouseRoute';
 import ShveyaRoute from './shveyaRoutes';
 import ForemanRoutes from './foremanRoutes';
 import KroiRoute from './kroiRoutes';
+import OtkRoutes from './otkRoutes';
 
 const AllRoutes = () => {
   const { isAuthenticated, me_info } = useSelector((state) => state.auth);
@@ -23,7 +24,7 @@ const AllRoutes = () => {
     if(isAuthenticated === 'error') {
       navigate('/');
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, me_info?.role, dispatch, navigate]);
 
   const routes = {
     director: <TechnologRoute/>,
@@ -31,10 +32,11 @@ const AllRoutes = () => {
     shveya: <ShveyaRoute />,
     warehouse: <WarehouseRoute/>,
     kroi: <KroiRoute/>,
-    foreman: <ForemanRoutes/>
+    foreman: <ForemanRoutes/>,
+    otk: <OtkRoutes/>
   }
 
-  const allowedCRMRoles = ['', 'director', 'technolog', 'warehouse', 'shveya', 'kroi', 'foreman'];
+  const allowedCRMRoles = ['', 'director', 'technolog', 'warehouse', 'shveya', 'kroi', 'foreman', 'otk'];
   
   return (
     <Routes>

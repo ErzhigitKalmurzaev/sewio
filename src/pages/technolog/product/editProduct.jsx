@@ -153,8 +153,7 @@ const EditProduct = () => {
         <div className="flex justify-between items-center">
           <Title text="Редактирование товара" />
           <Button 
-            onClick={handlePrint} 
-            className='w-max px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
+            onClick={handlePrint}
           >
             <Print className='mr-2'/>
             Распечатать операции

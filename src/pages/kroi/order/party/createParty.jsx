@@ -51,10 +51,8 @@ const CreateParty = () => {
         consumptions: party_consumables
           .filter(item => item.nomenclature)  // Отфильтровываем элементы без nomenclature
           .map(item => ({
-            nomenclature: item.nomenclature,
-            consumption: Number(item.consumption),
-            defect: Number(item.defect),
-            left: Number(item.left)
+            ...item,
+            quantity: Number(item.layers_count * item.count_in_layer)
           }))
       
       }

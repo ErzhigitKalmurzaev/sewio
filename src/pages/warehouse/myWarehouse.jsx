@@ -65,8 +65,14 @@ const MyWarehouse = () => {
                 </Button>
                 <Button variant='red' onClick={() => navigate('reject')}>Учет брака</Button>
                 <Button width='100px' variant='blue' onClick={() => navigate('issue')}>Выдать</Button>
-                <Button variant='white' onClick={() => navigate('fill')}>Пополнение</Button>
-                <Button onClick={() => setModals({ ...modals, create: true })}>+ Создать материал</Button>
+                {
+                  me_info?.role === 5 ? 
+                    null:
+                  <>
+                    <Button variant='white' onClick={() => navigate('fill')}>Пополнение</Button>
+                    <Button onClick={() => setModals({ ...modals, create: true })}>+ Создать материал</Button>
+                  </>
+                }
             </div>
         </div>
 
