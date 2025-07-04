@@ -16,6 +16,8 @@ import Comings from '../pages/warehouse/coming/comings';
 import ComingDeteil from '../pages/warehouse/coming/comingDeteil';
 import ComingHistory from '../pages/warehouse/coming/comingHistory';
 import ComingHistoryDeteil from '../pages/warehouse/coming/comingHistoryDetail';
+import History from '../pages/warehouse/history/history';
+import HistoryDetail from '../pages/warehouse/history/historyDetail';
 
 const KroiRoute = () => {
 
@@ -46,6 +48,10 @@ const KroiRoute = () => {
                 <Route path="fill" element={<ReplenishmentWarehouse/>}/>
                 <Route path="reject" element={<RejectMaterials/>}/>
                 <Route path="issue" element={<IssueMaterials/>}/>
+                <Route path="history" element={<Outlet/>}>
+                    <Route path="" element={<History/>}/>
+                    <Route path=":id" element={<HistoryDetail/>}/>
+                </Route>
                 <Route path="coming" element={<Outlet/>}>
                     <Route path="" element={<Comings/>}/>
                     <Route path=":id" element={<ComingDeteil/>}/>

@@ -23,7 +23,6 @@ axiosInstance.interceptors.response.use(
         const { data } = await axios.post(`${Base_URL}/api/v1/token/refresh/`, {
           refresh: refresh,
         });
-        console.log(data)
         localStorage.setItem("sewio_token", data.access);
         window.location.reload();
         return;

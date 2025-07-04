@@ -74,7 +74,7 @@ const CreateOrder = () => {
                 toast.error('Произошла ошибка! Проверьте и заполните все поля правильно!')
             }
           })
-        // console.log({
+        // {
         //       ...order,
         //       products: products_to_order.map(item => ({
         //         ...item,

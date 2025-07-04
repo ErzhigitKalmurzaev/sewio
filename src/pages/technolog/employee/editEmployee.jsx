@@ -129,8 +129,6 @@ const EditEmployee = () => {
             toast.error("Произошла ошибка!")
           }
         })
-    } else {
-      console.log('Form contains errors');
     }
   };
 

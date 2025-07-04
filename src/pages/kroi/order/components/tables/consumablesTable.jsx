@@ -7,26 +7,28 @@ import InputWithSuggestions from "../../../../../components/ui/inputs/inputWithS
 import { getColors, getKroiMaterials, getMateralList, getMaterial } from "../../../../../store/technolog/material";
 import { CircleMinus, Plus } from "lucide-react";
 import { materialUnits } from "../../../../../utils/selectDatas/productDatas";
+import { useParams } from "react-router-dom";
 
 const { Column, HeaderCell, Cell, ColumnGroup } = Table;
 
 const ConsumablesTable = () => {
 
+  const { id } = useParams();
   const dispatch = useDispatch();
   const { kroi_materials, kroi_materials_status } = useSelector(state => state.material);
-  const { party_consumables, party_amounts } = useSelector(state => state.kroi_order); 
+  const { party_consumables } = useSelector(state => state.kroi_order); 
   const { colors_list } = useSelector(state => state.material);
 
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    if(!kroi_materials) {
-        dispatch(getKroiMaterials());
-    } else {
-        dispatch(fillPartyConsumables(kroi_materials));
-    }
+    dispatch(getKroiMaterials(id))
+        .then((res) =>  {
+            if(res.meta.requestStatus === 'fulfilled') {
+                dispatch(fillPartyConsumables(res.payload));
+            }
+        });
+    
     dispatch(getColors());
-  }, [kroi_materials, dispatch]);
+  }, [id, dispatch]);
 
   const getValue = ({ index, value, name }) => {
     dispatch(getValueConsumables({ index, name, value }));
@@ -52,7 +54,7 @@ const ConsumablesTable = () => {
     fail: 'Недосдача',
     count_in_layer: 'Кол-во в слое',
   }
-  console.log(party_consumables)
+  
   return (
     <div className="flex flex-col gap-y-1">
         <Table

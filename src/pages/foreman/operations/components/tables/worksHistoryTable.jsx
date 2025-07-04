@@ -50,7 +50,7 @@ const WorksHistoryTable = ({ data, status }) => {
                 <Cell>
                     {
                         rowData => (
-                            <p className='font-inter text-xs'>{rowData.staff.name} {rowData.staff.surname}</p>
+                            <p className='font-inter text-xs'>{rowData?.staff?.name} {rowData?.staff?.surname}</p>
                         )
                     }
                 </Cell>
@@ -66,7 +66,7 @@ const WorksHistoryTable = ({ data, status }) => {
                         rowData => (
                             <span className='font-inter flex items-center'>
                                 <span style={{ backgroundColor: rowData.color.code, width: '15px', height: '15px', display: 'inline-block', borderRadius: '50%', marginRight: '5px' }}></span>
-                                {rowData.color.title}
+                                {rowData.color?.title}
                             </span>
                         )
                     }
@@ -81,7 +81,7 @@ const WorksHistoryTable = ({ data, status }) => {
                 <Cell>
                     {
                         rowData => (
-                            <p>{formatedToDDMMYYYY(rowData.created_at)}</p>
+                            <p>{formatedToDDMMYYYY(rowData?.created_at)}</p>
                         )
                     }
                 </Cell>
@@ -91,7 +91,7 @@ const WorksHistoryTable = ({ data, status }) => {
                 <Cell>
                     {
                         rowData => (
-                            <p>{formatedToDDMMYYYY(rowData.updated_at)}</p>
+                            <p>{formatedToDDMMYYYY(rowData?.updated_at)}</p>
                         )
                     }
                 </Cell>

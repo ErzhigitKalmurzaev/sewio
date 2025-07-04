@@ -6,13 +6,13 @@ import styled from '@emotion/styled/macro';
 import Input from '../../../../components/ui/inputs/input';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStaffList } from '../../../../store/technolog/staff';
-import SelectStaffTable from '../components/tables/selectStaffsTable';
 import { deleteWarehouse, getWarehouseById, getWarehouseMateriralsById, patchWarehouse } from '../../../../store/technolog/warehouse';
 import { toast } from 'react-toastify';
 import Button from '../../../../components/ui/button';
 import SelectUser from '../../../../components/ui/inputs/selectUser';
 import WarehouseMaterialsTable from '../components/tables/warehouseMaterialsTable';
 import { getColors } from '../../../../store/technolog/material';
+import WarehouseDeleteModal from '../components/modals/warehouseDeleteModal';
 
 const EditWarehouse = () => {
 
@@ -33,7 +33,6 @@ const EditWarehouse = () => {
   const navigate = useNavigate();
 
   const { staff_list, staff_list_status } = useSelector(state => state.staff);
-  const { colors_list } = useSelector(state => state.material);
   const { warehouse_materials, warehouse_materials_status } = useSelector(state => state.warehouse);
   const { id } = useParams();
 
@@ -49,6 +48,7 @@ const EditWarehouse = () => {
     address: false,
     staffs: false
   })
+  const [modal, setModal] = useState(false);
   const [params, setParams] = useSearchParams();
 
   const urls = {
@@ -120,6 +120,7 @@ const EditWarehouse = () => {
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
             navigate(-1)
+            setModal(false)
             toast("Склад успешно удален!")
           }
         })
@@ -132,7 +133,7 @@ const EditWarehouse = () => {
         <div className='flex items-center justify-between'>
             <Title text="Создание склада"/>
             <div className='flex justify-center gap-x-4'>
-              <Button variant='red' width='120px' onClick={onDelete}>
+              <Button variant='red' width='120px' onClick={() => setModal(true)}>
                   Удалить
               </Button>
               <Button width='120px' onClick={onSubmit}>
@@ -193,6 +194,12 @@ const EditWarehouse = () => {
                 setPage={(e) => setSearchValues({ ...searchValues, page: e })}
             />
         </WhiteWrapper>
+
+        <WarehouseDeleteModal
+          open={modal}
+          onClose={() => setModal(false)}
+          onConfirm={() => onDelete()}
+        />
     </div>
   )
 }

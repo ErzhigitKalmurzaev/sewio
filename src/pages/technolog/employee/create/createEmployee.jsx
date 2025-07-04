@@ -93,8 +93,6 @@ const CreateEmployee = () => {
             toast.error("Произошла ошибка!")
           }
         })
-    } else {
-      console.log('Form contains errors');
     }
   };
 

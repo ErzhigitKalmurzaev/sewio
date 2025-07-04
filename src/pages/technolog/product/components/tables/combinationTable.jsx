@@ -106,12 +106,17 @@ const CombinationsTable = ({ type }) => {
                 title: res.payload.title,
                 time:  res.payload.time,
                 rank: res.payload.rank?.id,
-                price: res.payload.time * rank_kef 
+                price: (res.payload.time * rank_kef).toFixed(2) 
           }}))
       }
       setLoading(false);
     })  
   }
+
+  const sumChildValues = (children, key) => {
+    if (!children || children.length === 0) return 0;
+    return children.reduce((acc, item) => acc + (Number(item[key]) || 0), 0).toFixed(2);
+  };
 
   return (
     <div>
@@ -148,8 +153,12 @@ const CombinationsTable = ({ type }) => {
             <Column width={200}>
                 <HeaderCell>Время (сек)</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
-                    {(rowData, index) =>
-                        rowData.children ? null : (
+                    {(rowData) =>
+                        rowData.children ? (
+                            <span className="p-2">
+                                {sumChildValues(rowData.children, 'time')}
+                            </span>
+                        ) : (
                             <NumInputForTable
                                 value={rowData.time}
                                 placeholder="0"
@@ -179,8 +188,12 @@ const CombinationsTable = ({ type }) => {
             <Column width={200}>
                 <HeaderCell>Цена (сом)</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
-                    {(rowData, index) =>
-                        rowData.children ? null : (
+                    {(rowData) =>
+                        rowData.children ? (
+                            <span className='p-2'>
+                                {sumChildValues(rowData.children, 'price')}
+                            </span>
+                        ) : (
                             <NumInputForTable
                                 value={rowData.price}
                                 placeholder="0"

@@ -72,6 +72,15 @@ const EditProduct = () => {
     dispatch(getProductInfoById({ id: data}))
   }
 
+  const isCombinationValid = () => {
+    const requiredStatusIds = [1, 2, 3];
+    // Получаем уникальные статусы из combinations
+    const presentStatuses = new Set(combinations.map(comb => comb.status));
+  
+    // Проверяем, что все нужные статусы есть
+    return requiredStatusIds.every(statusId => presentStatuses.has(statusId));
+  };
+
   const validateFields = () => {
     const newErrors = {
       title: !productData.title,
@@ -82,11 +91,14 @@ const EditProduct = () => {
   };
   
   const onSubmit = () => {
-    if(validateFields()) {
-      if(isDataValid()) {
-
-        // const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
-        const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
+    if(!validateFields()) {
+      toast.error('Заполните правильно данные о товаре!');
+    } else if(!isDataValid()) {
+        toast.error('Заполните правильно данные о заказе!');
+    } else if(!isCombinationValid()) {
+      toast.error('Продукт должен содержать комбинации со статусами "Крой", "ОТК", "Упаковка"!')
+    } else {
+      const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
         const combinationsTotal = combinations.reduce((acc, combination) => {
           const childrenTotal = combination.children.reduce((sum, child) => {
               const price = Number(child.price) || 0; // Приводим к числу, если не число — берём 0
@@ -125,11 +137,6 @@ const EditProduct = () => {
             navigate(-1)
           }
         })
-      } else {
-        toast.error('Заполните правильно данные о товаре!');
-      }
-    } else {
-      toast.error('Заполните правильно данные о заказе!');
     }
   };
 

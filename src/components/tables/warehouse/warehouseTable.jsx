@@ -16,7 +16,7 @@ const WarehouseTable = ({ data, status }) => {
         <Table
             height={600}
             loading={status === 'loading'}
-            data={data}
+            data={data || []}
             className='rounded-xl'
             bordered
             cellBordered

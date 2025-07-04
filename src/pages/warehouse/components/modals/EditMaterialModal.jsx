@@ -21,7 +21,8 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
       unit: data?.unit || 0,
       is_active: data?.is_active || false,
       color: data?.color || null,
-      coefficient: data?.coefficient || 0
+      coefficient: data?.coefficient || 0,
+      status: data?.status || 1
     })
     const [errors, setErrors] = useState({
       title: false,
@@ -29,7 +30,8 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
       unit: false,
       is_active: false,
       color: false,
-      coefficient: false
+      coefficient: false,
+      status: false
     })
 
     useEffect(() => {
@@ -40,7 +42,8 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
               unit: data.unit,
               is_active: data.is_active,
               color: data.color,
-              coefficient: data.coefficient
+              coefficient: data.coefficient,
+              status: data.status
           })
       }
     }, [data.title, data])
@@ -78,7 +81,8 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
                       unit: 0,
                       is_active: false,
                       color: null,
-                      coefficient: 0
+                      coefficient: 0,
+                      status: 1
                   })
               }
           })
@@ -150,16 +154,28 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
                                 colors={true}
                             />
                         </div>
-                        <div className="w-1/3 flex items-end pb-[10px]">
-                            <Toggle
-                                checked={material.is_active}
+                        <div className="w-1/3">
+                            <Select
+                                label="Статус"
+                                placeholder="Выберите"
+                                data={[{ value: 1, label: "В крой" }, { value: 2, label: "В цех" }]}
+                                value={material.status}
+                                error={errors.status}
                                 onChange={(e) =>
-                                getValue({ target: { name: "is_active", value: e } })
-                                }
-                            >
-                                Активный
-                            </Toggle>
+                                            getValue({ target: { name: "status", value: e } })
+                                        }
+                            />
                         </div>
+                    </div>
+                    <div className="w-1/3 flex items-end pb-[10px]">
+                        <Toggle
+                            checked={material.is_active}
+                            onChange={(e) =>
+                            getValue({ target: { name: "is_active", value: e } })
+                            }
+                        >
+                            Активный
+                        </Toggle>
                     </div>
                 </div>
             </Modal.Body>

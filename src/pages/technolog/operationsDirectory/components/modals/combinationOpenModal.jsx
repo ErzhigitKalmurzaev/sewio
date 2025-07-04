@@ -16,6 +16,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
   const dispatch = useDispatch();
 
   const { combination, combination_status, operaitions_list, operaitions_list_status, folders_list } = useSelector(state => state.operation);
+  const { operations_list } = useSelector(state => state.calculation);
 
   const [changed, setChanged] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -73,7 +74,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
     }
   }
 
-  const filteredOperations = operaitions_list?.results?.filter(op =>
+  const filteredOperations = operations_list?.filter(op =>
     op?.title?.toLowerCase()?.includes(searchTerm?.toLowerCase()) &&
     !combination?.operations?.some(selectedOp => selectedOp?.id === op?.id)
   );
@@ -124,7 +125,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
                             </div>
 
                             <div>
-                                {operaitions_list?.results?.length > 0 && (
+                                {operations_list?.length > 0 && (
                                     <div className='mt-4 grid grid-cols-2 gap-6'>
                                         <div>
                                             <h3 className='text-lg font-medium mb-1'>Операции в комбинации</h3>

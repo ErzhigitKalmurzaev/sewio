@@ -16,7 +16,9 @@ const CombinationTable = ({ urls }) => {
   const [modals, setModals] = useState({ combination: false, id: null });
   
   useEffect(() => {
-    dispatch(getCombinationList({ search: urls.search }))
+    if(!combinations_list) {
+      dispatch(getCombinationList({ search: urls.search }));
+    }
   }, [])
 
   const openCombination = (id) => {

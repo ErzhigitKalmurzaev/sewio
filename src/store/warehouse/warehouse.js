@@ -85,6 +85,30 @@ export const postAnswerComing = createAsyncThunk(
     }
 )
 
+export const getHistory = createAsyncThunk(
+    'warehouse/getHistory',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`warehouse/history/list/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getHistoryById = createAsyncThunk(
+    'warehouse/getHistoryById',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`warehouse/history/list/${props}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const WareWarehouseSlice = createSlice({
     name: 'warehouse',
     initialState: {
@@ -95,7 +119,11 @@ const WareWarehouseSlice = createSlice({
         coming: null,
         coming_status: 'loading',
         coming_history: null,
-        coming_history_status: 'loading'
+        coming_history_status: 'loading',
+        history: null,
+        history_status: 'loading',
+        history_details: null,
+        history_details_status: 'loading'
     },
     reducers: {
 
@@ -147,6 +175,24 @@ const WareWarehouseSlice = createSlice({
                 state.coming_history = action.payload
             }).addCase(getComingHistory.rejected, (state) => {
                 state.coming_history_status = 'error';
+            })
+            // ------------------------------------------
+            .addCase(getHistory.pending, (state) => {
+                state.history_status = 'loading';
+            }).addCase(getHistory.fulfilled, (state, action) => {
+                state.history_status = 'success';
+                state.history = action.payload
+            }).addCase(getHistory.rejected, (state) => {
+                state.history_status = 'error';
+            })
+            // ------------------------------------------
+            .addCase(getHistoryById.pending, (state) => {
+                state.history_details_status = 'loading';
+            }).addCase(getHistoryById.fulfilled, (state, action) => {
+                state.history_details_status = 'success';
+                state.history_details = action.payload
+            }).addCase(getHistoryById.rejected, (state) => {
+                state.history_details_status = 'error';
             })
     }
 })

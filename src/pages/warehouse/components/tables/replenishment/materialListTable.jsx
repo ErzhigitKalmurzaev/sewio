@@ -130,4 +130,4 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
   )
 }
 
-export default MaterialListTable
+export default MaterialListTable;

@@ -41,7 +41,6 @@ const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, s
     } else {
       setWarehouse({...warehouse, staffs: [...warehouse.staffs, id]})
     }
-    console.log(id)
   };
 
   return (

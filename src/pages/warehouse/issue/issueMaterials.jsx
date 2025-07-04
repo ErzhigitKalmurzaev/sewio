@@ -78,7 +78,6 @@ const IssueMaterials = () => {
         }
     } else if(check === 'submit') {
         if(validateField() && output?.products?.length > 0) {
-            console.log("sadas")
             onSubmit()
         } else {
             toast.error("Выберите товары и заполните все поля!");

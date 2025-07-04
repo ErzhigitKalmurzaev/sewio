@@ -87,7 +87,7 @@ const Discharge = () => {
         }
     }
 
-    // console.log(rank_list)
+    // rank_list)
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-3'>
         <div className='flex justify-between items-center'>

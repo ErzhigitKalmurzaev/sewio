@@ -76,7 +76,7 @@ export const deleteWarehouse = createAsyncThunk(
 const WarehouseSlice = createSlice({
     name: 'warehouse',
     initialState: {
-        warehouse_list: [],
+        warehouse_list: null,
         warehouse_list_status: 'loading',
         warehouse_materials: [],        
         warehouse_materials_status: 'loading'

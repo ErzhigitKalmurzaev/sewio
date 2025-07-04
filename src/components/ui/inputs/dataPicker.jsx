@@ -20,7 +20,6 @@ const DataPicker = ({
     const [dd, mm, yyyy] = str.split('.');
     if (!dd || !mm || !yyyy) return null;
     const date = new Date(+yyyy, +mm - 1, +dd);
-    console.log("Parse: " + date)
     return isNaN(date.getTime()) ? null : date;
   };
 

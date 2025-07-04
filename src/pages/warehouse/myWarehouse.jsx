@@ -4,11 +4,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Title from '../../components/ui/title';
 import Input from '../../components/ui/inputs/input';
 import Button from '../../components/ui/button';
-import MaterialListTable from './components/tables/replenishment/materialListTable';
 import CreateMaterialModal from './components/modals/createMaterialModal.';
 import { getMyMateralsList } from '../../store/warehouse/materails';
 import { Badge } from 'rsuite';
 import { getComings } from '../../store/warehouse/warehouse';
+import MaterialListTable from './components/tables/replenishment/materialListTable';
 
 const MyWarehouse = () => {
 
@@ -60,6 +60,7 @@ const MyWarehouse = () => {
                 />
             </div>
             <div className='3/6 flex gap-x-3'>
+                <Button width='100px' onClick={() => navigate('history')}>История</Button>
                 <Button width='100px' variant='green' onClick={() => navigate('coming')}>
                   <Badge content={comings_list?.length || 0}>Приход</Badge>
                 </Button>
@@ -77,7 +78,7 @@ const MyWarehouse = () => {
         </div>
 
         <div className='mt-2'>
-            <MaterialListTable 
+            <MaterialListTable
                 data={materials_list?.results || []} 
                 status={materials_list_status} 
                 modals={modals}

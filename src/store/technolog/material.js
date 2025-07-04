@@ -111,9 +111,9 @@ export const getColors = createAsyncThunk(
 
 export const getKroiMaterials = createAsyncThunk(
     'material/getKroiMaterials',
-    async (_, { rejectWithValue }) => {
+    async (props, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get(`material/list/my/`);
+            const { data } = await axiosInstance.get(`material/list/my/?product=${props}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)

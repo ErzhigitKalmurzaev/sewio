@@ -70,7 +70,6 @@ const EditParty = () => {
 
   const validateField = () => {
     if(!party.number && id) {
-      console.log(party.number)
       return false;
     }
     return true;

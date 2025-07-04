@@ -15,7 +15,6 @@ const SelectIssueMaterialModal = ({ modals, setModals, materials_list, status, u
   const { colors_list } = useSelector(state => state.material);
 
   const selectMaterial = (material) => {
-    console.log(selectedMaterial.find(item => item.id === material.id))
     if(selectedMaterial.findIndex(item => item.id === material.id) !== -1){
       setSelectedMaterial(selectedMaterial.filter(item => item.id !== material.id));
     } else {

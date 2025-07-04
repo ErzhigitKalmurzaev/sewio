@@ -22,7 +22,6 @@ const Statistic = () => {
   }
 
   const handleChangeFilter = (value) => {
-    console.log(value)
     params.set('date', formatedToDDMMYYYY2(value, '-'));
     setParams(params);
   }

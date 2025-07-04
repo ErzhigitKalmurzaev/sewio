@@ -18,6 +18,8 @@ import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import OrderPrint from './components/OrderPrint';
 import { Print } from '@mui/icons-material';
 import InvoicePrint from './components/invoicePrint';
+import { getWarehouseList } from './../../../store/technolog/warehouse';
+import OrderSummary from '../../../components/shared/order/orderSummary';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -30,13 +32,15 @@ const OrderEdit = () => {
   const { id } = useParams();
 
   const { edit_products_in_order, product_list, order_status, order_parties  } = useSelector(state => state.order);
+  const { warehouse_list } = useSelector(state => state.warehouse);
 
   const [order, setOrder] = useState({
     deadline: '',
     client: '',
     products: [],
     status: 1,
-    warehouse: ''
+    in_warehouse: '',
+    out_warehouse: ''
   });
   const [error, setError] = useState({
     deadline: false,
@@ -58,11 +62,14 @@ const OrderEdit = () => {
                     client: res.payload.client,
                     products: res.payload.products,
                     status: res.payload.status,
-                    warehouse: res.payload.warehouse
+                    in_warehouse: res.payload.in_warehouse?.id,
+                    out_warehouse: res.payload.out_warehouse?.id
                 });
             }
         })
-
+    if(!warehouse_list) {
+      dispatch(getWarehouseList());
+    }
   }, []);
 
   const getMainValue = (e) => {
@@ -143,6 +150,8 @@ const OrderEdit = () => {
           ...order,
           client: order.client.id,
           status: Number(order.status),
+          in_warehouse: order.in_warehouse,
+          out_warehouse: order.out_warehouse,
           products: edit_products_in_order.map(item => ({
             ...item,
             amounts: item.amounts.flatMap(amount => 
@@ -237,6 +246,24 @@ const OrderEdit = () => {
             data={OrderStatuses.slice(1) || []}
             onChange={e => getMainValue({ target: { name: 'status', value: e } })}
           />
+          <Select
+            label='Склад ГП'
+            placeholder='Выберите склад'
+            value={order.in_warehouse}
+            data={warehouse_list || []}
+            onChange={e => getMainValue({ target: { name: 'in_warehouse', value: e } })}
+            labelKey='title'
+            valueKey='id'
+          />
+          <Select
+            label='Склад списания'
+            placeholder='Выберите склад'
+            value={order.out_warehouse}
+            data={warehouse_list || []}
+            onChange={e => getMainValue({ target: { name: 'out_warehouse', value: e } })}
+            labelKey='title'
+            valueKey='id'
+          />
           <DataPicker
             label='Дата сдачи заказа'
             placeholder='Выберите дату'
@@ -265,24 +292,7 @@ const OrderEdit = () => {
           </div>
         </div>
 
-        <div className='w-1/2 flex flex-col gap-y-4'>
-          <div className='flex flex-col gap-y-5 bg-white rounded-lg px-8 py-8'>
-            <p className='text-base font-bold font-inter text-center'>Информация о заказе:</p>
-
-            <div className='flex flex-col justify-center gap-y-8'>
-              <div className='flex justify-between gap-x-5'>
-                <OrderInfoItem label='Общее кол-во:' value={getStatistic('total_count')} measure='шт.' />
-                <OrderInfoItem label='Общая сумма:' value={getStatistic('total_income')} measure='сом' />
-                <OrderInfoItem label='Общие расходы:' value={getStatistic('total_consumption')} measure='сом' />
-              </div>
-              <div className='flex justify-between gap-x-5'>
-                <OrderInfoItem label='Общая прибыль:' value={getStatistic('total_income') - getStatistic('total_consumption')} measure='сом' />
-                <OrderInfoItem label='Время выполнения:' value={getStatistic('total_time')?.toFixed(1) || 0} measure='ч.' />
-                <OrderInfoItem label='Склад ГП:' value={getStatistic('warehouse')} measure='' />
-              </div>
-            </div>
-          </div>
-        </div>
+        <OrderSummary getStatistic={getStatistic}/>
       </div>
       <div className='bg-white w-full p-3 rounded-lg shadow-sm'>
         <EditAmountsTable/>

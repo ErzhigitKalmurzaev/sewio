@@ -31,7 +31,8 @@ const OrderCreate = () => {
   const [order, setOrder] = useState({
     deadline: '',
     client: '',
-    warehouse: '',
+    in_warehouse: '',
+    out_warehouse: '',
     products: [],
     status: 1
   });
@@ -49,7 +50,7 @@ const OrderCreate = () => {
     if(!product_list) {
       dispatch(getOrderProductList());
     }
-    if(warehouse_list) {
+    if(!warehouse_list) {
       dispatch(getWarehouseList())
     }
     dispatch(clearAll());
@@ -66,67 +67,10 @@ const OrderCreate = () => {
     setOrder(prev => ({ ...prev, [name]: value }));
   };
 
-  const getStatistic = (type) => {
-    switch (type) {
-      case 'total_count':
-        return order.products.reduce((sum, product) => {
-          const productTotal = product.amounts.reduce((productSum, item) => productSum + item.amount, 0);
-          return sum + productTotal;
-        }, 0);
-      case 'total_income': 
-        return order.products.reduce((total, product) => {
-          const productIncome = product.amounts.reduce((productSum, item) => {
-            return productSum + item.amount * product.price; // Умножаем amount на price
-          }, 0);
-          return total + productIncome;
-        }, 0);
-      case 'total_consumption':
-        return order?.products?.reduce((total, product) => {
-          // Найти продукт по nomenclature в массиве productDetails
-          const productDetail = product_list?.find(
-            (detail) => detail.id === product.nomenclature
-          );
-        
-          if (!productDetail) {
-            return total;
-          }
-        
-          const productCost = product.amounts.reduce((productSum, item) => {
-            return productSum + item.amount * productDetail.cost_price;
-          }, 0);
-        
-          return total + productCost;
-        }, 0);
-      case 'total_time': 
-        return order?.products?.reduce((total, product) => {
-          // Найти товар в productDetails
-          const productDetail = product_list?.find(
-            (detail) => detail.id === product.nomenclature
-          );
-        
-          if (!productDetail) {
-            return total;
-          }
-        
-          const productTime = product?.amounts?.reduce((productSum, item) => {
-            return productSum + item.amount * productDetail.time; // Умножаем количество на время
-          }, 0);
-        
-          return total + productTime;
-        }, 0) / 3600;
-      case 'status': 
-        return OrderStatuses[order?.status]?.label
-      default:
-        return 0;
-    }
-
-  }
-
   const validateFields = () => {
     const newErrors = {
       deadline: !order.deadline,
       client: !order.client,
-      warehouse: !order.warehouse,
       products: !products_to_order?.length > 0 && !products_to_order?.some(item => item?.amounts?.length > 0 && item?.amounts?.some(amount => amount?.sizes?.length > 0)),
     };
 
@@ -166,7 +110,6 @@ const OrderCreate = () => {
     }
   }
 
-
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
       <MyBreadcrums items={breadcrumbs} />
@@ -174,9 +117,9 @@ const OrderCreate = () => {
 
       
       <div className='w-full h-auto bg-white flex flex-col gap-y-5 p-6 rounded-lg'>
-        <div className='flex gap-x-5'>
+        <div className='flex gap-x-5 justify-between'>
           <DataPicker
-            width='350px'
+            width='300px'
             label='Дата сдачи заказа'
             placeholder='Выберите дату'
             value={order.deadline}
@@ -184,7 +127,7 @@ const OrderCreate = () => {
             onChange={e => getMainValue({ target: { name: 'deadline', value: e } })}
           />
           <SelectUser
-            width='350px'
+            width='300px'
             label='Клиент'
             placeholder='Выберите клиента'
             data={client_list || []}
@@ -197,13 +140,23 @@ const OrderCreate = () => {
             className={'mb-1'}
           />
           <Select
-            width='350px'
+            width='300px'
             label='Склад ГП'
             placeholder='Выберите склад'
             data={warehouse_list}
-            onChange={e => getMainValue({ target: { name: 'warehouse', value: e } })}
-            error={error.warehouse}
-            value={order.warehouse}
+            onChange={e => getMainValue({ target: { name: 'in_warehouse', value: e } })}
+            value={order.in_warehouse}
+            valueKey='id'
+            labelKey='title'
+            className={'mb-1'}
+          />
+          <Select
+            width='300px'
+            label='Склад списания'
+            placeholder='Выберите склад'
+            data={warehouse_list}
+            onChange={e => getMainValue({ target: { name: 'out_warehouse', value: e } })}
+            value={order.out_warehouse}
             valueKey='id'
             labelKey='title'
             className={'mb-1'}
