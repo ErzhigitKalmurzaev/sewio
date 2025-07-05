@@ -22,7 +22,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
   const advances = data?.payments?.filter(item => item.status === 5 || item.status === 3);
 
   const calculateTotal = (items) => items?.reduce((total, item) => total + item.amount, 0);
-  const calculateOperationTotal = (items) => items?.reduce((total, item) => total + (item?.total_amount * item.operation?.price), 0);
+  const calculateOperationTotal = (items) => items?.reduce((total, item) => total + (item?.total_amount * item.operation?.price), 0).toFixed(2);
   
   const onSubmit = () => {
     if(Number(calculateOperationTotal(operations) - calculateTotal(fines) - calculateTotal(advances)) > 0) {

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Pagination, Table } from 'rsuite'
-import { OrderStatuses } from '../../../../../utils/constants/statuses';
+import { Table } from 'rsuite'
 import { formatedToDDMMYYYY } from '../../../../../utils/functions/dateFuncs';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReactComponent as Pencil } from '../../../../../assets/icons/pencil.svg';
@@ -44,16 +43,6 @@ const WorksHistoryTable = ({ data, status }) => {
             <Column width={60} align="center" verticalAlign="center">
                 <HeaderCell>ID</HeaderCell>
                 <Cell dataKey="id" />
-            </Column>
-            <Column width={190} verticalAlign="center">
-                <HeaderCell>Контроллер</HeaderCell>
-                <Cell>
-                    {
-                        rowData => (
-                            <p className='font-inter text-xs'>{rowData?.staff?.name} {rowData?.staff?.surname}</p>
-                        )
-                    }
-                </Cell>
             </Column>
             <Column width={70}>
                 <HeaderCell>Партия</HeaderCell>

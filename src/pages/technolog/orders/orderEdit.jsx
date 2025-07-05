@@ -108,7 +108,7 @@ const OrderEdit = () => {
           const productCost = product.amounts.reduce(
             (productSum, item) =>
               productSum +
-              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * (product.true_cost_price || product.cost_price), 0),
+              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * (product.true_cost_price || product.cost_price).toFixed(2), 0),
             0
           );
           return total + productCost;

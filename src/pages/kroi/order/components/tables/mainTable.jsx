@@ -1,5 +1,6 @@
 import { ChevronsRight } from 'lucide-react';
 import React from 'react'
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, Table } from 'rsuite';
 
@@ -8,6 +9,8 @@ const { Column, HeaderCell, Cell } = Table;
 const MainTable = ({ data, status }) => {
 
     const navigate = useNavigate();
+
+    const { me_info } = useSelector(state => state.auth);
 
     const transformedData = [];
 
@@ -26,7 +29,11 @@ const MainTable = ({ data, status }) => {
     });
 
     const handleNavigate = (rowData) => {
-        navigate(`${rowData.id}/${rowData.productId}`);
+        if(me_info?.role === 5) {
+            navigate(`${rowData.id}/${rowData.productId}`);
+        } else {
+            navigate(`${rowData.id}/${rowData.productId}/history`);
+        }
         localStorage.setItem('order', JSON.stringify(rowData));
     }
 

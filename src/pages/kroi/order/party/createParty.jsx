@@ -41,12 +41,14 @@ const CreateParty = () => {
         nomenclature: Number(id),
         number: party.number,
         details: party_amounts.flatMap(item => (
-          item.sizes.map(sizeData => ({
-            color: item.color.id,
-            size: sizeData.size.id,
-            plan_amount: sizeData.plan_amount,
-            true_amount: Number(sizeData.true_amount)
-          }))
+          item.sizes
+            .filter(sizeData => sizeData?.true_amount !== 0 && sizeData?.true_amount !== '')
+            .map(sizeData => ({
+              color: item.color.id,
+              size: sizeData.size.id,
+              plan_amount: sizeData.plan_amount,
+              true_amount: Number(sizeData.true_amount) || 0
+            }))
         )),
         consumptions: party_consumables
           .filter(item => item.nomenclature)  // Отфильтровываем элементы без nomenclature

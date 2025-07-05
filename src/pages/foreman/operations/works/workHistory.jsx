@@ -18,7 +18,7 @@ const WorkHistory = () => {
 
   const dispatch = useDispatch();
   const { works_history, works_history_status } = useSelector(state => state.foreman_order);
-  const [params, setParams] = useSearchParams();
+  const { me_info } = useSelector(state => state.auth);
 
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const WorkHistory = () => {
 
   return (
     <div className='flex flex-col gap-y-4 mb-5'>
-        <MyBreadcrums items={breadcrumbs} />
+        <MyBreadcrums items={me_info?.role === 7 ? breadcrumbs.filter((e, i) => i !== 1) : breadcrumbs} />
         <p className='text-lg font-inter font-semibold'>История приемов работы</p>
 
         <WorksHistoryTable

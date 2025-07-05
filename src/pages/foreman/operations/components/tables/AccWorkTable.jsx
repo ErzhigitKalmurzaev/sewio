@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Button, Table } from 'rsuite'
+import React, { useEffect } from 'react';
+import { Button, Table } from 'rsuite';
 import { useDispatch, useSelector } from 'react-redux';
 import NumInputForTable from '../../../../../components/ui/inputs/numInputForTable';
 import { addDetail, getStaffList, removeDetail, updateDetail } from '../../../../../store/foreman/order';
@@ -10,80 +10,81 @@ import { toast } from 'react-toastify';
 const { Column, HeaderCell, Cell } = Table;
 
 const AccWorkTable = ({ data, status, amount }) => {
-
   const dispatch = useDispatch();
   const { staff_list, staff_list_status } = useSelector(state => state.foreman_order);
 
   useEffect(() => {
     if (!staff_list) {
-      dispatch(getStaffList())
+      dispatch(getStaffList());
     }
-  }, []);
+  }, [dispatch, staff_list]);
 
   const getAmountValue = (value, rowData, index) => {
-    const totalCount = rowData.details?.reduce((sum, detail, i) => sum + (i === index ? Number(value) : Number(detail.count)), 0) || 0;
-  
+    const totalCount = rowData.details.reduce((sum, detail, i) => {
+      if (i === index) {
+        return sum + (Number(value) || 0);
+      }
+      return sum + (Number(detail.count) || 0);
+    }, 0);
+
     if (totalCount > amount) {
-      dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value: '' }));
-      toast.error(`Общее количество (${totalCount}) превышает максимально допустимое: ${amount}`);
+      dispatch(updateDetail({ operationId: rowData.id, index, field: 'count', value: '' }));
+      toast.error(`Общее количество (${totalCount}) превышает максимально допустимое: ${amount}`, {
+        autoClose: 4000
+      });
     } else {
-      dispatch(updateDetail({ operationId: rowData.id, index, field: "count", value }));
+      dispatch(updateDetail({ operationId: rowData.id, index, field: 'count', value }));
     }
   };
-  
-  const maxDetails = Math.max(...data.map((op) => op.details.length));
-  
+
+  const maxDetails = Math.max(...data.map(op => op.details.length));
+
   return (
     <div className="min-h-[300px] rounded-lg">
       <Table
-        data={data || []}
+        data={[...data]} // новая ссылка для принудительного обновления
         loading={status === 'loading' || staff_list_status === 'loading'}
         autoHeight
         bordered
         cellBordered
         className="rounded-lg"
       >
-        
-        <Column width={70} align='center'>
+        <Column width={70} align="center">
           <HeaderCell>Номер</HeaderCell>
-          <Cell>
-              {(rowData, rowIndex) => <p>{rowIndex + 1}</p>}
-          </Cell>
+          <Cell>{(rowData, rowIndex) => <p>{rowIndex + 1}</p>}</Cell>
         </Column>
 
         <Column width={170} fixed>
-          <HeaderCell className="">Операция</HeaderCell>
+          <HeaderCell>Операция</HeaderCell>
           <Cell dataKey="title" className="text-sm font-medium" />
         </Column>
 
-        {/* Динамические пары (Сотрудник + Кол-во + Удаление) */}
+        {/* Динамические колонки сотрудников и количеств */}
         {Array.from({ length: maxDetails }).map((_, index) => (
-          <>
-            <Column key={`staff-${index}`} width={130}>
+          <React.Fragment key={index}>
+            <Column width={130}>
               <HeaderCell>Сотрудник {index + 1}</HeaderCell>
               <Cell style={{ padding: '6.5px' }}>
                 {(rowData) => rowData.details[index] ? (
                   <EmployeeIdInput
                     employees={staff_list || []}
-                    value={rowData.details[index]?.staff || ""}
-                    onChange={(value) =>
-                      dispatch(updateDetail({ operationId: rowData.id, index, field: "staff", value }))
-                    }
+                    value={rowData.details[index].staff || ''}
+                    onChange={value => dispatch(updateDetail({ operationId: rowData.id, index, field: 'staff', value }))}
                   />
                 ) : null}
               </Cell>
             </Column>
 
-            <Column key={`count-${index}`} width={100}>
-              <HeaderCell>Кол-во 
-                <span className='font-inter font-bold ml-2' style={{ color: amount ? 'green' : '#C2185B' }}>({amount ? amount : '--'})</span>
+            <Column width={100}>
+              <HeaderCell>
+                Кол-во
+                <span className="font-inter font-bold ml-2" style={{ color: amount ? 'green' : '#C2185B' }}>({amount || '--'})</span>
               </HeaderCell>
               <Cell style={{ padding: '6.5px' }}>
                 {(rowData) => rowData.details[index] ? (
                   <NumInputForTable
-                    placeholder={`${rowData.details[index]?.count}`}
-                    value={rowData.details[index]?.count || ""}
-                    onChange={(value) => getAmountValue(value, rowData, index)}
+                    value={rowData.details[index].count || ''}
+                    onChange={value => getAmountValue(value, rowData, index)}
                     max={amount}
                     className="w-full"
                     disabled={!amount}
@@ -92,8 +93,7 @@ const AccWorkTable = ({ data, status, amount }) => {
               </Cell>
             </Column>
 
-            {/* Кнопка удаления для каждой пары */}
-            <Column key={`delete-${index}`} width={70} align="center">
+            <Column width={70} align="center">
               <HeaderCell>Удалить</HeaderCell>
               <Cell style={{ padding: '6.5px' }}>
                 {(rowData) => rowData.details[index] ? (
@@ -103,15 +103,14 @@ const AccWorkTable = ({ data, status, amount }) => {
                     onClick={() => dispatch(removeDetail({ operationId: rowData.id, index }))}
                     className="p-1 rounded-md shadow-sm"
                   >
-                    <CircleMinus size={18} color='#C2185B' />
+                    <CircleMinus size={18} color="#C2185B" />
                   </Button>
                 ) : null}
               </Cell>
             </Column>
-          </>
+          </React.Fragment>
         ))}
 
-        {/* Кнопка добавления нового сотрудника (в конце строки) */}
         <Column width={70} align="center">
           <HeaderCell>Добавить</HeaderCell>
           <Cell style={{ padding: '6.5px' }}>
@@ -130,6 +129,6 @@ const AccWorkTable = ({ data, status, amount }) => {
       </Table>
     </div>
   );
-}
+};
 
 export default AccWorkTable;
