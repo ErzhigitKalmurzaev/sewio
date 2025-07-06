@@ -45,11 +45,11 @@ const WorksHistoryTable = ({ data, status }) => {
                 <Cell dataKey="id" />
             </Column>
             <Column width={70}>
-                <HeaderCell>Партия</HeaderCell>
+                <HeaderCell>Party</HeaderCell>
                 <Cell dataKey='party.number' />
             </Column>
             <Column width={120} fullText>
-                <HeaderCell>Цвет</HeaderCell>
+                <HeaderCell>Color</HeaderCell>
                 <Cell>
                     {
                         rowData => (
@@ -62,11 +62,11 @@ const WorksHistoryTable = ({ data, status }) => {
                 </Cell>
             </Column>
             <Column width={70} align="center" verticalAlign="center">
-                <HeaderCell>Размер</HeaderCell>
+                <HeaderCell>Size</HeaderCell>
                 <Cell dataKey="size.title" />
             </Column>
-            <Column width={100}>
-                <HeaderCell>Дата создания</HeaderCell>
+            <Column width={120}>
+                <HeaderCell>Date of creation</HeaderCell>
                 <Cell>
                     {
                         rowData => (
@@ -75,8 +75,8 @@ const WorksHistoryTable = ({ data, status }) => {
                     }
                 </Cell>
             </Column>
-            <Column width={100}>
-                <HeaderCell>Дата редактирования</HeaderCell>
+            <Column width={120}>
+                <HeaderCell>Date edited</HeaderCell>
                 <Cell>
                     {
                         rowData => (
@@ -86,7 +86,7 @@ const WorksHistoryTable = ({ data, status }) => {
                 </Cell>
             </Column>
             <Column flexGrow={1} fixed="right">
-                <HeaderCell>Действие</HeaderCell>
+                <HeaderCell>Actions</HeaderCell>
                 <Cell style={{ padding: '6px' }}>
                     {
                         rowData => (

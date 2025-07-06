@@ -79,7 +79,7 @@ const HistoryDetail = () => {
                                 {decodeURIComponent(file.file.split('/').pop()) || `Файл ${i + 1}`}
                             </span>
                             <a
-                                href={file.url}
+                                href={file.file}
                                 download
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -122,14 +122,14 @@ const HistoryDetail = () => {
                 <Cell dataKey="amount" />
               </Column>
 
-              <Column width={120} align="center">
+              <Column width={110} align="center">
                 <HeaderCell>Ед. изм.</HeaderCell>
                 <Cell>
                   {row => materialUnits.find(u => u.value === row.nomenclature.unit)?.label || '-'}
                 </Cell>
               </Column>
 
-              <Column width={120} align="center">
+              <Column width={110} align="center">
                 <HeaderCell>Цена</HeaderCell>
                 <Cell>{row => row.price ? `${row.price} сом` : '-'}</Cell>
               </Column>

@@ -11,9 +11,9 @@ const WorkHistory = () => {
   const { orderId, id } = useParams();   
   
   const breadcrumbs = [
-      { label: 'Главная', path: '/operations', active: false },
-      { label: 'Прием работы', path: `/operations/${orderId}/${id}`, active: false },
-      { label: 'Исторя приемов работы', path: `/operations/${orderId}/${id}/history`, active: true },
+      { label: 'Home', path: '/operations', active: false },
+      { label: 'Work create', path: `/operations/${orderId}/${id}`, active: false },
+      { label: 'History of works', path: `/operations/${orderId}/${id}/history`, active: true },
   ];
 
   const dispatch = useDispatch();
@@ -28,8 +28,8 @@ const WorkHistory = () => {
 
   return (
     <div className='flex flex-col gap-y-4 mb-5'>
-        <MyBreadcrums items={me_info?.role === 7 ? breadcrumbs.filter((e, i) => i !== 1) : breadcrumbs} />
-        <p className='text-lg font-inter font-semibold'>История приемов работы</p>
+        <MyBreadcrums items={(me_info?.role === 7 || me_info?.role === 6) ? breadcrumbs.filter((e, i) => i !== 1) : breadcrumbs} />
+        <p className='text-lg font-inter font-semibold'>History of works</p>
 
         <WorksHistoryTable
           data={works_history}

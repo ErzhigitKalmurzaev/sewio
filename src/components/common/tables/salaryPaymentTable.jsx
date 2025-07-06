@@ -70,7 +70,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
                 <td className="border border-borderGray px-4 py-2">{op?.operation?.title}</td>
                 <td className="border border-borderGray px-4 py-2">{op.operation?.price}</td>
                 <td className="border border-borderGray px-4 py-2">{formatNumber(op?.total_amount)}</td>
-                <td className="border border-borderGray px-4 py-2">{formatNumber(op.total_amount * op?.operation?.price)}</td>
+                <td className="border border-borderGray px-4 py-2">{formatNumber((op.total_amount * op?.operation?.price).toFixed(2))}</td>
               </tr>
             )) : 
             <tr className='bg-green-50 w-full' >

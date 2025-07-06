@@ -36,13 +36,13 @@ const PaymentInfoTable = ({ data, status }) => {
                             <td className="border border-borderGray px-4 py-2">{op?.operation_title}</td>
                             <td className="border border-borderGray px-4 py-2">{op?.total_amount}</td>
                             <td className="border border-borderGray px-4 py-2">{op?.operation_price}</td>
-                            <td className="border border-borderGray px-4 py-2">{op?.total_price}</td>
+                            <td className="border border-borderGray px-4 py-2">{op?.total_price?.toFixed(2)}</td>
                         </tr>
                         ))}
                         <tr>
                         <td colSpan="5" className="border border-borderGray px-4 py-2 font-bold">Итого:</td>
                         <td className="border border-borderGray px-4 py-2 font-bold text-green-600">
-                            +{data?.amount}
+                            +{data?.amount?.toFixed(2)}
                         </td>
                         <td></td>
                         </tr>

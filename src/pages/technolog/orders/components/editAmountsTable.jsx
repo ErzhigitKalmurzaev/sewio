@@ -4,12 +4,15 @@ import { addProduct, deleteProduct, getOrderProductList } from '../../../../stor
 import { Panel, PanelGroup, Table } from 'rsuite';
 import EditProdPanel from './editProdPanel';
 import { motion, AnimatePresence } from "framer-motion";
+import { ReactComponent as Pencil } from '../../../../assets/icons/pencil.svg';
+import { useNavigate } from 'react-router-dom';
 
 const { Cell, Column, HeaderCell } = Table;
 
 const EditAmountsTable = () => {
 
   const dispatch = useDispatch();    
+  const navigate = useNavigate();
 
   const { edit_products_in_order } = useSelector(state => state.order);
 
@@ -37,6 +40,8 @@ const EditAmountsTable = () => {
                 >
                     <Panel 
                         key={`panel-${product.id || index}`}
+                        collapsible={product?.nomenclature ? false : true}
+                        style={{ border: '1px solid rgba(208, 213, 221, 1)' }}
                         header={
                             <div className="flex justify-between items-center w-full pr-2">
                                 <span className='flex items-center gap-x-3'>
@@ -44,10 +49,10 @@ const EditAmountsTable = () => {
                                     <span className='ml-3 font-semibold text-sm text-fprimary'>
                                         Арт: {product.vendor_code}
                                     </span>
+                                    <Pencil className='ml-5 mb-2' onClick={() => navigate(`/crm/product/${product.nomenclature}`)}/>
                                 </span>
                             </div>
                         }
-                        style={{ border: '1px solid rgba(208, 213, 221, 1)' }}
                         defaultExpanded
                     >
                         <EditProdPanel product={product} id={index} /> 

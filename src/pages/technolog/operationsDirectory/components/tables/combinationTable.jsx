@@ -33,6 +33,7 @@ const CombinationTable = ({ urls }) => {
             loading={combinations_list_status === 'loading'}
             bordered
             cellBordered
+            className='rounded-xl'
         >
             <Column width={80} align='center'>
                 <HeaderCell>ID</HeaderCell>

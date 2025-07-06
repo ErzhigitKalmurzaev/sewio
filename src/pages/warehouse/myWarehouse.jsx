@@ -64,14 +64,14 @@ const MyWarehouse = () => {
                 <Button width='100px' variant='green' onClick={() => navigate('coming')}>
                   <Badge content={comings_list?.length || 0}>Приход</Badge>
                 </Button>
-                <Button variant='red' onClick={() => navigate('reject')}>Учет брака</Button>
+                <Button width='100px' variant='red' onClick={() => navigate('reject')}>Списание</Button>
                 <Button width='100px' variant='blue' onClick={() => navigate('issue')}>Выдать</Button>
                 {
                   me_info?.role === 5 ? 
                     null:
                   <>
                     <Button variant='white' onClick={() => navigate('fill')}>Пополнение</Button>
-                    <Button onClick={() => setModals({ ...modals, create: true })}>+ Создать материал</Button>
+                    <Button width='100px' onClick={() => setModals({ ...modals, create: true })}>+ Создать</Button>
                   </>
                 }
             </div>

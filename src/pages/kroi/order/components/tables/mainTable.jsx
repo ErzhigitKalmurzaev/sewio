@@ -53,34 +53,34 @@ const MainTable = ({ data, status }) => {
             </Column>
 
             <Column width={200} verticalAlign='middle' rowSpan={rowData => rowData.idRowSpan}>
-                <HeaderCell>Клиент</HeaderCell>
+                <HeaderCell>Client</HeaderCell>
                 <Cell dataKey="client" />
             </Column>
 
             <Column width={150} verticalAlign='middle' rowSpan={rowData => rowData.idRowSpan}>
-                <HeaderCell>Компания</HeaderCell>
+                <HeaderCell>Company</HeaderCell>
                 <Cell dataKey="company" />
             </Column>
 
             <Column width={220}>
-                <HeaderCell>Название</HeaderCell>
+                <HeaderCell>Name</HeaderCell>
                 <Cell dataKey="productTitle" />
             </Column>
 
             <Column width={200}>
-                <HeaderCell>Артикул</HeaderCell>
+                <HeaderCell>Article</HeaderCell>
                 <Cell dataKey="vendorCode" />
             </Column>
 
 
             <Column flexGrow={1} minWidth={130} verticalAlign='center' fixed='right'>
-                <HeaderCell style={{ padding: '7px 16px' }}>Действия</HeaderCell>
+                <HeaderCell style={{ padding: '7px 16px' }}>Actions</HeaderCell>
                 <Cell style={{ padding: '7px 16px' }}>
                     {(rowData) => (
                         <span className=''>
                             <Button size='xs' color='blue' appearance="primary" onClick={() => handleNavigate(rowData)}>
                                 <span className='flex items-center gap-x-1'>
-                                    <p className='text-xs'>Перейти</p>
+                                    <p className='text-xs'>Go to</p>
                                     <ChevronsRight size={22}/>
                                 </span>
                             </Button>

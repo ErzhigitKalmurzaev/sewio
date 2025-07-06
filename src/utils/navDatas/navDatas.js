@@ -117,7 +117,7 @@ export const kroiNav = [
 
 export const foremanNav = [
     {
-        title: 'Операции',
+        title: 'Operations',
         path: 'operations',
         icon: <ClipboardList/>,
         elements: false

@@ -50,12 +50,12 @@ const AccWorkTable = ({ data, status, amount }) => {
         className="rounded-lg"
       >
         <Column width={70} align="center">
-          <HeaderCell>Номер</HeaderCell>
+          <HeaderCell>Number</HeaderCell>
           <Cell>{(rowData, rowIndex) => <p>{rowIndex + 1}</p>}</Cell>
         </Column>
 
         <Column width={170} fixed>
-          <HeaderCell>Операция</HeaderCell>
+          <HeaderCell>Operation</HeaderCell>
           <Cell dataKey="title" className="text-sm font-medium" />
         </Column>
 
@@ -63,7 +63,7 @@ const AccWorkTable = ({ data, status, amount }) => {
         {Array.from({ length: maxDetails }).map((_, index) => (
           <React.Fragment key={index}>
             <Column width={130}>
-              <HeaderCell>Сотрудник {index + 1}</HeaderCell>
+              <HeaderCell>Employee {index + 1}</HeaderCell>
               <Cell style={{ padding: '6.5px' }}>
                 {(rowData) => rowData.details[index] ? (
                   <EmployeeIdInput
@@ -77,7 +77,7 @@ const AccWorkTable = ({ data, status, amount }) => {
 
             <Column width={100}>
               <HeaderCell>
-                Кол-во
+                Quantity
                 <span className="font-inter font-bold ml-2" style={{ color: amount ? 'green' : '#C2185B' }}>({amount || '--'})</span>
               </HeaderCell>
               <Cell style={{ padding: '6.5px' }}>
@@ -94,7 +94,7 @@ const AccWorkTable = ({ data, status, amount }) => {
             </Column>
 
             <Column width={70} align="center">
-              <HeaderCell>Удалить</HeaderCell>
+              <HeaderCell>Delete</HeaderCell>
               <Cell style={{ padding: '6.5px' }}>
                 {(rowData) => rowData.details[index] ? (
                   <Button
@@ -112,7 +112,7 @@ const AccWorkTable = ({ data, status, amount }) => {
         ))}
 
         <Column width={70} align="center">
-          <HeaderCell>Добавить</HeaderCell>
+          <HeaderCell>Add</HeaderCell>
           <Cell style={{ padding: '6.5px' }}>
             {(rowData) => (
               <Button

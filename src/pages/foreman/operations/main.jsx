@@ -20,7 +20,7 @@ const ForemanMain = () => {
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-5'>
         <div className='flex justify-between items-center'>
-            <p className='text-base font-inter font-semibold'>Список заказов</p>
+            <p className='text-base font-inter font-semibold'>List of orders</p>
             <div className='flex gap-x-5'>
                 {/* <Button onClick={() => navigate('history')}>История партий</Button> */}
             </div>

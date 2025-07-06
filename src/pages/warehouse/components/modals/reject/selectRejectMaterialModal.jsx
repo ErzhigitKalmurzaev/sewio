@@ -5,6 +5,7 @@ import Button from '../../../../../components/ui/button';
 import { CloudUpload, Upload } from 'lucide-react';
 import Textarea from '../../../../../components/ui/inputs/textarea';
 import NumInput from '../../../../../components/ui/inputs/numInput';
+import { toast } from 'react-toastify';
 
 
 const { Column, HeaderCell, Cell } = Table;
@@ -22,19 +23,25 @@ const SelectRejectMaterialModal = ({
 }) => {
   const [selectedMaterial, setSelectedMaterial] = useState({});
   const [inputValues, setInputValues] = useState({ amount: '', comment: '', files: [] });
+  const [error, setError] = useState(false);
 
   const handleChange = (name, value) => {
     setInputValues({ ...inputValues, [name]: value });
   };
 
   const onSubmit = () => {
-    setMaterials([
-      ...materials, 
-      { ...selectedMaterial, ...inputValues }
-    ]);
-    setModals({ ...modals, select: false });
-    setSelectedMaterial({});
-    setInputValues({ amount: '', comment: '' });
+    if(inputValues.amount) {
+      setMaterials([
+        ...materials, 
+        { ...selectedMaterial, ...inputValues }
+      ]);
+      setModals({ ...modals, select: false });
+      setSelectedMaterial({});
+      setInputValues({ amount: '', comment: '' });
+    } else {
+      setError(true);
+      toast.error('Укажите количество!');
+    }
   };
 
   return (
@@ -95,6 +102,7 @@ const SelectRejectMaterialModal = ({
               label='Количество'
               placeholder="Количество"
               width='50%'
+              error={error}
               value={inputValues.amount}
               onChange={(e) => handleChange('amount', e)}
             />

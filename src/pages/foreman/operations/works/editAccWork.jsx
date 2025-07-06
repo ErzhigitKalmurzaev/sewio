@@ -16,14 +16,15 @@ const EditAccWork = () => {
   const navigate = useNavigate();
   
   const breadcrumbs = [
-    { label: 'Главная', path: '/operations', active: false },
-    { label: 'Прием работы', path: `/operations/${orderId}/${id}`, active: false },
-    { label: 'Исторя приемов работы', path: `/operations/${orderId}/${id}/history`, active: false },
-    { label: 'Редактирование приема работы', path: `/operations/${orderId}/${id}/history/${workId}`, active: true },
+    { label: 'Home', path: '/operations', active: false },
+    { label: 'Crate work', path: `/operations/${orderId}/${id}`, active: false },
+    { label: 'History of works', path: `/operations/${orderId}/${id}/history`, active: false },
+    { label: 'Editing the work', path: `/operations/${orderId}/${id}/history/${workId}`, active: true },
   ];
 
   const { work, work_status, parties, operations_list, operations_list_status, staff_list } = useSelector(state => state.foreman_order);
-
+  const  { me_info } = useSelector(state => state.auth);
+  
   const [orderInfo, setOrderInfo] = useState({});
 
   useEffect(() => {
@@ -114,8 +115,8 @@ const EditAccWork = () => {
 
   return (
     <div className='flex min-h-[100vh] flex-col gap-y-4 mb-5'>
-        <MyBreadcrums items={breadcrumbs} />
-        <p className='text-lg font-inter font-semibold'>История работ</p>
+        <MyBreadcrums items={(me_info?.role === 7 || me_info?.role === 6) ? breadcrumbs.filter((e, i) => i !== 1) : breadcrumbs} />
+        <p className='text-lg font-inter font-semibold'>Editing work</p>
 
         {
           work_status === 'loading' && <BackDrop open={true} />
@@ -127,10 +128,10 @@ const EditAccWork = () => {
             <table className="w-full">
                 <tbody>
                 <tr className="flex justify-between flex-wrap">
-                    <td className="border border-borderGray p-2 font-semibold flex">Заказ: <span className="text-fprimary ml-2">№ {orderInfo?.id}</span></td>
-                    <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Компания: <span className="text-fprimary ml-2">{orderInfo?.company}</span></td>
-                    <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Товар: <span className="text-fprimary ml-2">{orderInfo?.productTitle}</span></td>
-                    <td className="flex-1 border border-borderGray p-2 font-semibold flex">Артикул: <span className="text-fprimary ml-2">{orderInfo?.vendorCode}</span></td>
+                    <td className="border border-borderGray p-2 font-semibold flex">Order: <span className="text-fprimary ml-2">№ {orderInfo?.id}</span></td>
+                    <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Company: <span className="text-fprimary ml-2">{orderInfo?.company}</span></td>
+                    <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Product: <span className="text-fprimary ml-2">{orderInfo?.productTitle}</span></td>
+                    <td className="flex-1 border border-borderGray p-2 font-semibold flex">Article: <span className="text-fprimary ml-2">{orderInfo?.vendorCode}</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -144,8 +145,8 @@ const EditAccWork = () => {
                     data={parties || []}
                     labelKey={'title'}
                     valueKey={'id'}
-                    placeholder={'Выберите партию'}
-                    label='Партия'
+                    placeholder={'Select party'}
+                    label='Party'
                     disabled={true}
                     value={work?.party}
                 />
@@ -156,8 +157,8 @@ const EditAccWork = () => {
                     data={[{ ...work?.color }] || []}
                     labelKey={'title'}
                     valueKey={'id'}
-                    placeholder={'Выберите цвет'}
-                    label='Цвет'
+                    placeholder={'Select color'}
+                    label='Color'
                     disabled={true}
                     value={Number(work?.color?.id)}
                 />
@@ -168,8 +169,8 @@ const EditAccWork = () => {
                     data={[{ ...work?.size }] || []}
                     labelKey={'title'}
                     valueKey={'id'}
-                    placeholder={'Выберите размер'}
-                    label='Размер'
+                    placeholder={'Select size'}
+                    label='Size'
                     disabled={true}
                     value={Number(work?.size?.id)}
                 />
@@ -179,7 +180,7 @@ const EditAccWork = () => {
 
             <div className='flex justify-center'>
             <Button width={'200px'} onClick={onSubmit}>
-                Сохранить
+                Save
             </Button>
             </div>
       </div>

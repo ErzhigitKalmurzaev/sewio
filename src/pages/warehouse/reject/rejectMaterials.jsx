@@ -12,7 +12,13 @@ import { CloudUpload } from 'lucide-react';
 import { postRejectMaterials, postRejectMaterialsFiles } from '../../../store/warehouse/materails'
 import { toast } from 'react-toastify'
 import BackDrop from '../../../components/ui/backdrop'
+import Select from '../../../components/ui/inputs/select'
 
+const statuses = [
+  { label: 'Списание', value: 4 },
+  { label: 'Возврат клиенту', value: 5 },
+  { label: 'Брак', value: 6 },
+]
 const RejectMaterials = () => {
 
   const breadcrumbs = [
@@ -22,7 +28,7 @@ const RejectMaterials = () => {
         active: false
     },
     {
-        label: 'Учет брака',
+        label: 'Списание',
         path: '/main/repleshipment',
         active: true
     }
@@ -38,6 +44,7 @@ const RejectMaterials = () => {
   const [materials, setMaterials] = useState([]);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('');
 
   useEffect(() => {
     dispatch(getMateralList({ title: search }))
@@ -48,41 +55,49 @@ const RejectMaterials = () => {
   }
 
   const onSubmit = () => {
-    const data = materials.map((material) => ({
-      product_id: material.id,
-      amount: Number(material.amount),
-      comment: material.comment,
-      price: 0
-    }));
+    const data = {
+      products: materials.map((material) => ({
+        product_id: material.id,
+        amount: Number(material.amount),
+        comment: material.comment,
+        price: 0
+      })),
+      status: Number(status)
+    }
     setLoading(true)
 
-    dispatch(postRejectMaterials({ products: data })).then(res => {
-      if(res.meta.requestStatus === 'fulfilled') {
-        if(files?.length > 0) {
-          dispatch(postRejectMaterialsFiles({
-            quantity_id: res.payload.quantity_id,
-            files: files.map(item => item.blobFile)
-          }))
-              .then(res => {
-                  if(res.meta.requestStatus === 'fulfilled') {
-                      navigate(-1)
-                      toast("Брак успешно оформлен!")
-                      setLoading(false)
-                  } else {
-                      toast("Произошла ошибка!")
-                      setLoading(false)
-                  }
-              })
+    if(status) {
+      dispatch(postRejectMaterials(data)).then(res => {
+        if(res.meta.requestStatus === 'fulfilled') {
+          if(files?.length > 0) {
+            dispatch(postRejectMaterialsFiles({
+              quantity_id: res.payload.quantity_id,
+              files: files.map(item => item.blobFile)
+            }))
+                .then(res => {
+                    if(res.meta.requestStatus === 'fulfilled') {
+                        navigate(-1)
+                        toast("Брак успешно оформлен!")
+                        setLoading(false)
+                    } else {
+                        toast("Произошла ошибка!")
+                        setLoading(false)
+                    }
+                })
+          } else {
+            setLoading(false);
+            navigate(-1)
+            toast("Брак успешно оформлен!")
+          }
         } else {
-          setLoading(false);
-          navigate(-1)
-          toast("Брак успешно оформлен!")
+          toast("Произошла ошибка!")
+          setLoading(false)
         }
-      } else {
-        toast("Произошла ошибка!")
-        setLoading(false)
-      }
-    })
+      })
+    } else {
+      toast.error("Выберите действие из списка!")
+      setLoading(false)
+    }
     
   }
 
@@ -94,18 +109,21 @@ const RejectMaterials = () => {
         }
         
         <div className='flex items-center justify-between'>
-            <Title text="Учет брака"/>
-            <div className='2/6'>
-                <Button onClick={() => setModals({ ...modals, select: true })}>+ Добавить материал</Button>
-            </div>
+            <Select
+                label='Действие'
+                width='300px'
+                data={statuses}
+                value={status}
+                onChange={setStatus}
+                placeholder='Выберите действие'
+            />
+            <Button onClick={() => setModals({ ...modals, select: true })}>+ Добавить материал</Button>
         </div>
 
-        <div className='mt-2'>
-            <RejectMaterialsTable
-                data={materials}
-                setMaterials={setMaterials}
-            />
-        </div>
+        <RejectMaterialsTable
+            data={materials}
+            setMaterials={setMaterials}
+        />
 
         <div className='bg-white rounded-lg flex flex-col gap-y-5 p-5'>
           <p className='text-base font-semibold font-inter'>Файлы</p>

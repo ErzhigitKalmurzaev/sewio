@@ -71,7 +71,7 @@ const EmployeeIdInput = ({ value, onChange, employees }) => {
         onChange={(e) => onChange(e.target.value)}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        placeholder="Введите ID"
+        placeholder="Enter ID"
         borderColor={employee ? "green" : error ? "red" : "rgba(208, 213, 221, 1)"}
       />
 
