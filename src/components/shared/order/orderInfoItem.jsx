@@ -2,7 +2,7 @@ import React from 'react';
 import { formatNumber } from '../../../utils/functions/numFuncs';
 
 const OrderInfoItem = ({ label, value, measure, icon }) => {
-  const displayValue = (measure !== '' && measure !== 'ч.') ? formatNumber(value) : value;
+  const displayValue = (measure !== '' && measure !== 'ч.') ? formatNumber(value.toFixed(2)) : value;
 
   return (
     <div className="flex items-start gap-3 bg-gray-50 p-4 rounded-xl shadow-sm border border-borderGray hover:shadow-md transition">

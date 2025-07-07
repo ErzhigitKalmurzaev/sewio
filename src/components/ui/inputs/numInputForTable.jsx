@@ -90,6 +90,12 @@ const StyledInput = styled("input")`
     font-weight: 300;
     font-size: 14px;
   }
+  
+  &:disabled {
+    background-color: #eeeded;
+    color: #888;
+    cursor: not-allowed;
+  }
 
   @media screen and (max-width: 1000px) {
     &::placeholder {

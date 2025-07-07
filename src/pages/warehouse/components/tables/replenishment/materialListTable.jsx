@@ -74,7 +74,11 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
 
             <Column width={120}>
                 <HeaderCell>Цена</HeaderCell>
-                <Cell dataKey="cost_price" />
+                <Cell>
+                    {rowData => (
+                        <p>{rowData?.cost_price?.toFixed(2) || '-'}</p>
+                    )}
+                </Cell>
             </Column>
 
             <Column width={120}>

@@ -6,7 +6,7 @@ import { Table, Tag, Uploader } from 'rsuite';
 import { getHistoryById } from '../../../store/warehouse/warehouse';
 import MyBreadcrums from '../../../components/ui/breadcrums';
 import Title from '../../../components/ui/title';
-import { formatedToDDMMYYYY } from '../../../utils/functions/dateFuncs';
+import { formatedToDDMMYYYYHHMM } from '../../../utils/functions/dateFuncs';
 import { materialUnits } from '../../../utils/selectDatas/productDatas';
 
 const { Column, HeaderCell, Cell } = Table;
@@ -58,7 +58,7 @@ const HistoryDetail = () => {
             {/* Инфо блоки */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <InfoBlock label="ID" value={data.id} />
-                <InfoBlock label="Дата" value={formatedToDDMMYYYY(data.created_at)} />
+                <InfoBlock label="Дата" value={formatedToDDMMYYYYHHMM(data.created_at)} />
                 <InfoBlock label="Сотрудник" value={`${data.staff_name} ${data.staff_surname}`} />
                 <InfoBlock
                 label="Статус"

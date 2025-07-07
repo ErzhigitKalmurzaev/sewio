@@ -72,34 +72,34 @@ const EditAccWork = () => {
       dispatch(patchAcceptOperation({
         id: workId,
         props: {
-            party: work.party,
-            color: work?.color?.id,
-            size: work?.size?.id,
-            details: operations_list?.flatMap(item =>
-              item?.details?.map(detail => {
+          party: work.party,
+          color: work?.color?.id,
+          size: work?.size?.id,
+          details: operations_list?.flatMap(item =>
+            item?.details
+              ?.filter(detail => {
                 const staffNumber = Number(detail.staff);
                 const amount = Number(detail.count);
       
-                if (!staffNumber || amount <= 0) {
-                  return null;
-                }
-      
-                // Находим сотрудника по номеру
+                // Пропустить если уже оплачен, или нет валидных данных
+                return detail.status !== 1 && staffNumber && amount > 0;
+              })
+              .map(detail => {
+                const staffNumber = Number(detail.staff);
+                const amount = Number(detail.count);
                 const staffObj = staff_list.find(staff => staff.number === staffNumber);
       
-                // Если не найден, возвращаем null
-                if (!staffObj) {
-                  return null;
-                }
+                if (!staffObj) return null;
       
                 return {
                   combination: item.id,
-                  staff: staffObj.id, // используем id найденного сотрудника
+                  staff: staffObj.id,
                   amount
                 };
-              }).filter(item => item !== null)  // Убираем null-элементы
-            )
-          }
+              })
+              .filter(Boolean) // удаляет null если сотрудник не найден
+          )
+        }
       })).then(res => {
         if(res.meta.requestStatus === 'fulfilled') {
           toast.success('Работа успешно изменена!');
@@ -112,7 +112,7 @@ const EditAccWork = () => {
       })
     }
   }
-
+  
   return (
     <div className='flex min-h-[100vh] flex-col gap-y-4 mb-5'>
         <MyBreadcrums items={(me_info?.role === 7 || me_info?.role === 6) ? breadcrumbs.filter((e, i) => i !== 1) : breadcrumbs} />
@@ -124,18 +124,18 @@ const EditAccWork = () => {
 
         <div className='bg-white rounded-lg p-4 flex flex-col gap-y-3'>
             <div className='flex items-center border-b border-borderGray py-2'>
-            <div className="w-full overflow-x-auto">
-            <table className="w-full">
-                <tbody>
-                <tr className="flex justify-between flex-wrap">
-                    <td className="border border-borderGray p-2 font-semibold flex">Order: <span className="text-fprimary ml-2">№ {orderInfo?.id}</span></td>
-                    <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Company: <span className="text-fprimary ml-2">{orderInfo?.company}</span></td>
-                    <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Product: <span className="text-fprimary ml-2">{orderInfo?.productTitle}</span></td>
-                    <td className="flex-1 border border-borderGray p-2 font-semibold flex">Article: <span className="text-fprimary ml-2">{orderInfo?.vendorCode}</span></td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
+              <div className="w-full overflow-x-auto">
+                <table className="w-full">
+                    <tbody>
+                    <tr className="flex justify-between flex-wrap">
+                        <td className="border border-borderGray p-2 font-semibold flex">Order: <span className="text-fprimary ml-2">№ {orderInfo?.id}</span></td>
+                        <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Company: <span className="text-fprimary ml-2">{orderInfo?.company}</span></td>
+                        <td className="flex-1 min-w-[220px] border border-borderGray p-2 font-semibold flex">Product: <span className="text-fprimary ml-2">{orderInfo?.productTitle}</span></td>
+                        <td className="flex-1 border border-borderGray p-2 font-semibold flex">Article: <span className="text-fprimary ml-2">{orderInfo?.vendorCode}</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+              </div>
             </div>
 
             <div className='flex items-center gap-x-4'>

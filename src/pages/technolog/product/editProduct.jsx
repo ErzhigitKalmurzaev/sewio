@@ -135,6 +135,8 @@ const EditProduct = () => {
             }}))
             toast.success("Изменения сохранены!")
             navigate(-1)
+          } else {
+            toast.error("Произошла ошибка!")
           }
         })
     }

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "@emotion/styled";
 import { createPortal } from "react-dom";
 
-const EmployeeIdInput = ({ value, onChange, employees }) => {
+const EmployeeIdInput = ({ value, onChange, employees, disabled = false }) => {
   const [employee, setEmployee] = useState(null);
   const [error, setError] = useState("");
   const [showTooltip, setShowTooltip] = useState(false);
@@ -71,8 +71,9 @@ const EmployeeIdInput = ({ value, onChange, employees }) => {
         onChange={(e) => onChange(e.target.value)}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        disabled={disabled}
         placeholder="Enter ID"
-        borderColor={employee ? "green" : error ? "red" : "rgba(208, 213, 221, 1)"}
+        borderColor={(!disabled && employee) ? "green" : error ? "red" : "rgba(208, 213, 221, 1)"}
       />
 
       {showTooltip &&
@@ -111,6 +112,11 @@ const StyledInput = styled.input`
   &::placeholder {
     font-weight: 300;
     font-size: 14px;
+  }
+  &:disabled {
+    background-color: #eeeded;
+    color: #888;
+    cursor: not-allowed;
   }
 `;
 

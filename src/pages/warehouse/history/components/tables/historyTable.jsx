@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'rsuite';
 import { useSelector } from 'react-redux';
-import { formatedToDDMMYYYY } from '../../../../../utils/functions/dateFuncs';
+import { formatedToDDMMYYYYHHMM } from '../../../../../utils/functions/dateFuncs';
 import { useNavigate } from 'react-router-dom';
 
 const { Column, HeaderCell, Cell } = Table;
@@ -81,6 +81,13 @@ const HistoryTable = ({ data = [], meWarehouseId, status }) => {
                 </Cell>
             </Column>
 
+            <Column width={180}>
+                <HeaderCell>Дата</HeaderCell>
+                <Cell>
+                {row => formatedToDDMMYYYYHHMM(row.created_at)}
+                </Cell>
+            </Column>
+
             <Column width={140}>
                 <HeaderCell>Тип</HeaderCell>
                 <Cell>
@@ -99,13 +106,6 @@ const HistoryTable = ({ data = [], meWarehouseId, status }) => {
                 <HeaderCell>Склад-отправитель</HeaderCell>
                 <Cell>
                 {row => row.quantity?.out_warehouse?.title || '-'}
-                </Cell>
-            </Column>
-
-            <Column width={180}>
-                <HeaderCell>Дата</HeaderCell>
-                <Cell>
-                {row => formatedToDDMMYYYY(row.created_at)}
                 </Cell>
             </Column>
         </Table>

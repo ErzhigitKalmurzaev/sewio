@@ -22,7 +22,7 @@ const ForemanRoutes = () => {
               <Route path="operations" element={<Outlet/>}>
                   <Route path="" element={<ForemanMain />} />
                   <Route path=":orderId/:id" element={<Outlet/>}>
-                      <Route path="" element={<CreateAccWork />} />
+                      {/* <Route path="" element={<CreateAccWork />} /> */}
                       <Route path="history" element={<WorkHistory />} />
                       <Route path="history/:workId" element={<EditAccWork />} />
                   </Route>

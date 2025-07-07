@@ -68,6 +68,7 @@ const AccWorkTable = ({ data, status, amount }) => {
                 {(rowData) => rowData.details[index] ? (
                   <EmployeeIdInput
                     employees={staff_list || []}
+                    disabled={rowData.details[index].status === 1 || !amount}
                     value={rowData.details[index].staff || ''}
                     onChange={value => dispatch(updateDetail({ operationId: rowData.id, index, field: 'staff', value }))}
                   />
@@ -84,10 +85,10 @@ const AccWorkTable = ({ data, status, amount }) => {
                 {(rowData) => rowData.details[index] ? (
                   <NumInputForTable
                     value={rowData.details[index].count || ''}
+                    disabled={rowData.details[index].status === 1 || !amount}
                     onChange={value => getAmountValue(value, rowData, index)}
                     max={amount}
                     className="w-full"
-                    disabled={!amount}
                   />
                 ) : null}
               </Cell>

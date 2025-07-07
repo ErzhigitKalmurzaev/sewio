@@ -98,16 +98,20 @@ export const deleteWorkById = createAsyncThunk(
     }
 )
 
-function groupOperations(data = [], allOperations = []) {
+function groupOperations(data = [], allOperations = [], paid_operations = []) {
     const grouped = {};
 
-    if (!Array.isArray(data)) {
-        return [];
-    }
+    if (!Array.isArray(data)) return [];
 
     data.forEach(({ staff, combination, amount }) => {
         if (!combination || !staff) return;
-        
+
+        const isPaid = paid_operations.some(
+            (paid) =>
+                paid.combination?.id === combination.id &&
+                paid.staff?.id === staff.id
+        );
+
         if (!grouped[combination.id]) {
             grouped[combination.id] = {
                 id: combination.id,
@@ -118,7 +122,8 @@ function groupOperations(data = [], allOperations = []) {
 
         grouped[combination.id].details.push({
             staff: `${staff.number}`,
-            count: amount
+            count: amount,
+            status: isPaid ? 1 : 0 // 1 = оплачено, 0 = не оплачено
         });
     });
 
@@ -131,7 +136,8 @@ function groupOperations(data = [], allOperations = []) {
                     details: [
                         {
                             staff: '',
-                            count: ''
+                            count: '',
+                            status: 0
                         }
                     ]
                 };
@@ -141,6 +147,7 @@ function groupOperations(data = [], allOperations = []) {
 
     return Object.values(grouped);
 }
+
 
 const ForemanOrderSlice = createSlice({
   name: 'foreman',
@@ -173,7 +180,7 @@ const ForemanOrderSlice = createSlice({
         const { operationId } = action.payload;
         const operation = state.operations_list.find((op) => op.id === operationId);
         if (operation) {
-          operation.details.push({ staff: "", count: "" });
+          operation.details.push({ staff: "", count: "", status: 0 });
         }
     },
     removeDetail: (state, action) => {
@@ -198,6 +205,7 @@ const ForemanOrderSlice = createSlice({
                 {
                     staff: '',
                     count: '',
+                    status: 0
                 }
             ]
         }];
@@ -255,7 +263,7 @@ const ForemanOrderSlice = createSlice({
             state.work_status = 'loading';
         }).addCase(getWorkById.fulfilled, (state, action) => {
             state.work = action.payload.work;
-            state.operations_list = groupOperations(action.payload?.work?.details || [], action.payload?.operations || []) || [];
+            state.operations_list = groupOperations(action.payload?.work?.details || [], action.payload?.operations || [], action.payload?.work?.details || []) || [];
             state.work_status = 'success';
         }).addCase(getWorkById.rejected, (state) => {
             state.work_status = 'error';

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { SelectPicker } from 'rsuite';
 
-const Select = ({ width, label, placeholder, data, onChange, error, required, labelKey, valueKey, value, size = 'md', searchable = false, disabled = false, colors = false }) => {
+const Select = ({ width, label, placeholder, data, onChange, error, required, labelKey, valueKey, value = '', size = 'md', searchable = false, disabled = false, colors = false }) => {
   const [delayedData, setDelayedData] = useState([]);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const Select = ({ width, label, placeholder, data, onChange, error, required, la
         onChange={(e) => onChange(e)}
         searchable={searchable}
         size={size}
-        value={value}
+        value={(value === undefined || isNaN(value)) ? null : value}
         labelKey={labelKey || 'label'}
         valueKey={valueKey || 'value'}
         placeholder={placeholder}
