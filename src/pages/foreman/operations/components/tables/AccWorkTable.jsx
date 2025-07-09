@@ -38,7 +38,7 @@ const AccWorkTable = ({ data, status, amount }) => {
   };
 
   const maxDetails = Math.max(...data.map(op => op.details.length));
-
+  
   return (
     <div className="min-h-[300px] rounded-lg">
       <Table

@@ -98,57 +98,78 @@ export const deleteWorkById = createAsyncThunk(
     }
 )
 
-function groupOperations(data = [], allOperations = [], paid_operations = []) {
+function groupOperations(details = [], allOperations = [], salaryDetails = []) {
     const grouped = {};
-
-    if (!Array.isArray(data)) return [];
-
-    data.forEach(({ staff, combination, amount }) => {
-        if (!combination || !staff) return;
-
-        const isPaid = paid_operations.some(
-            (paid) =>
-                paid.combination?.id === combination.id &&
-                paid.staff?.id === staff.id
-        );
-
-        if (!grouped[combination.id]) {
-            grouped[combination.id] = {
-                id: combination.id,
-                title: combination.title,
-                details: []
-            };
-        }
-
-        grouped[combination.id].details.push({
-            staff: `${staff.number}`,
-            count: amount,
-            status: isPaid ? 1 : 0 // 1 = оплачено, 0 = не оплачено
-        });
+  
+    // Временный массив объединённых записей
+    const merged = [];
+  
+    // Добавляем неоплаченные
+    details.forEach(({ staff, combination, amount }) => {
+      if (!combination || !staff) return;
+      merged.push({
+        combination,
+        staff,
+        amount,
+        status: 0
+      });
     });
-
+  
+    // Добавляем оплаченные (всё отдельно, не затираем)
+    salaryDetails.forEach(({ staff, combination, amount }) => {
+      if (!combination || !staff) return;
+      merged.push({
+        combination,
+        staff,
+        amount,
+        status: 1
+      });
+    });
+  
+    // Группируем по combination.id
+    merged.forEach(({ combination, staff, amount, status }) => {
+      if (!grouped[combination.id]) {
+        grouped[combination.id] = {
+          id: combination.id,
+          title: combination.title,
+          details: []
+        };
+      }
+  
+      grouped[combination.id].details.push({
+        staff: `${staff.number}`,
+        count: amount,
+        status
+      });
+    });
+  
+    // Добавляем пустые операции, если их не было
     if (Array.isArray(allOperations)) {
-        allOperations.forEach(op => {
-            if (!grouped[op.id]) {
-                grouped[op.id] = {
-                    id: op.id,
-                    title: op.title,
-                    details: [
-                        {
-                            staff: '',
-                            count: '',
-                            status: 0
-                        }
-                    ]
-                };
-            }
-        });
+      allOperations.forEach(op => {
+        if (!grouped[op.id]) {
+          grouped[op.id] = {
+            id: op.id,
+            title: op.title,
+            details: [
+              {
+                staff: '',
+                count: '',
+                status: 0
+              }
+            ]
+          };
+        }
+      });
     }
-
+  
+    // Сортируем внутри каждой комбинации: оплаченные — первыми
+    Object.values(grouped).forEach(group => {
+      group.details.sort((a, b) => b.status - a.status);
+    });
+  
     return Object.values(grouped);
 }
-
-
+  
 const ForemanOrderSlice = createSlice({
   name: 'foreman',
   initialState: {
@@ -263,7 +284,7 @@ const ForemanOrderSlice = createSlice({
             state.work_status = 'loading';
         }).addCase(getWorkById.fulfilled, (state, action) => {
             state.work = action.payload.work;
-            state.operations_list = groupOperations(action.payload?.work?.details || [], action.payload?.operations || [], action.payload?.work?.details || []) || [];
+            state.operations_list = groupOperations(action.payload?.work?.details || [], action.payload?.operations || [], action.payload?.work?.salary_details || []) || [];
             state.work_status = 'success';
         }).addCase(getWorkById.rejected, (state) => {
             state.work_status = 'error';

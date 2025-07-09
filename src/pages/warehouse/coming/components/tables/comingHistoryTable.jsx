@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pagination, Table } from 'rsuite';
-import { formatedToDDMMYYYY } from '../../../../../utils/functions/dateFuncs';
+import { formatedToDDMMYYYY, formatedToDDMMYYYYHHMM } from '../../../../../utils/functions/dateFuncs';
 import { Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -41,7 +41,7 @@ const ComingHistoryTable = ({ data, status, total, activePage, limit, setPage })
                 <HeaderCell>Дата выдачи</HeaderCell>
                 <Cell>
                     {rowData => (
-                        formatedToDDMMYYYY(rowData.created_at)  
+                        formatedToDDMMYYYYHHMM(rowData.created_at)  
                     )}
                 </Cell>
             </Column>

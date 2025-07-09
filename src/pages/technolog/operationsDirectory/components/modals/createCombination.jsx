@@ -13,6 +13,7 @@ import { Trash2, Plus, Search } from 'lucide-react';
 const CreateCombination = ({ modals, setModals }) => {
     const dispatch = useDispatch();
     const { folders_list, operaitions_list } = useSelector(state => state.operation);
+    const { operations_list } = useSelector(state => state.calculation);
 
     const [combination, setCombination] = useState({
         title: '',
@@ -35,6 +36,7 @@ const CreateCombination = ({ modals, setModals }) => {
     const handleAddOperation = (operation) => {
         if (!combination.operations.some(op => op.id === operation.id)) {
             setCombination({ ...combination, operations: [...combination.operations, operation] });
+            console.log(...combination.operations, operation)
         }
     };
 
@@ -76,11 +78,11 @@ const CreateCombination = ({ modals, setModals }) => {
         }
     };
 
-    const filteredOperations = operaitions_list?.results?.filter(op =>
+    const filteredOperations = operations_list?.filter(op =>
         op.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
         !combination.operations.some(selectedOp => selectedOp.id === op.id)
-    );
-
+    ) || [];
+    
     return (
         <Modal open={modals?.combination} onClose={() => setModals({ ...modals, combination: false })}>
             <Modal.Header>
@@ -100,12 +102,12 @@ const CreateCombination = ({ modals, setModals }) => {
                             <div className='mt-4 grid grid-cols-2 gap-6'>
                                 <div>
                                     <h3 className='text-lg font-medium mb-1'>Операции в комбинации</h3>
-                                    <div className='flex items-center mb-2 border border-borderGray rounded p-1 px-2 invisible'>
-                                        <Search size={18} className='text-gray-400 mr-2' />
-                                        <input type='text' className='w-full outline-none' placeholder='Поиск...' value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                    <div className='flex items-end justify-between py-1 mb-3'>
+                                        <p>Время: {combination.operations.reduce((total, op) => total + op.time, 0) || 0} c</p>
+                                        <p>Цена: {(combination.operations?.reduce((total, op) => total + op.price, 0))?.toFixed(2) || 0} cом</p>
                                     </div>
                                     <ul className='border border-borderGray rounded p-2 h-60 overflow-y-auto'>
-                                        {combination.operations.map((operation, index) => (
+                                        {combination.operations?.map((operation, index) => (
                                             <li key={operation.id} className='flex justify-between items-center p-1 px-3 border border-borderGray rounded mb-2'>
                                                 <span>{operation.title}</span>
                                                 <button className='text-red-500 hover:text-red-700' onClick={() => handleRemoveOperation(index)}>
@@ -122,7 +124,7 @@ const CreateCombination = ({ modals, setModals }) => {
                                         <input type='text' className='w-full outline-none' placeholder='Поиск...' value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
                                     </div>
                                     <ul className='border border-borderGray rounded p-2 h-60 overflow-y-auto'>
-                                        {filteredOperations.map(operation => (
+                                        {filteredOperations?.map(operation => (
                                             <li key={operation.id} className='flex justify-between items-center p-1 px-3 border border-borderGray rounded mb-2'>
                                                 <span>{operation.title}</span>
                                                 <button className='text-green-500 hover:text-green-700' onClick={() => handleAddOperation(operation)}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'rsuite';
-import { formatedToDDMMYYYY } from '../../../../../utils/functions/dateFuncs';
+import { formatedToDDMMYYYY, formatedToDDMMYYYYHHMM } from '../../../../../utils/functions/dateFuncs';
 import { Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ const ComingsTable = ({ data, status }) => {
                 <HeaderCell>Дата выдачи</HeaderCell>
                 <Cell>
                     {rowData => (
-                        formatedToDDMMYYYY(rowData.created_at)  
+                        formatedToDDMMYYYYHHMM(rowData.created_at)  
                     )}
                 </Cell>
             </Column>
