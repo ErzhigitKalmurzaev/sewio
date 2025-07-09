@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Checkbox, Table } from 'rsuite';
 import { employeeRole, employeeSalaryType } from '../../../../../utils/selectDatas/employeeDatas';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 
 import TablePopover from '../../../../../components/tables/tableDropdown';
 
@@ -24,22 +25,24 @@ const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, s
       filteredData = filteredData.filter(item => item.salary === 0);
     }
   
-    // Сортировка: сначала выбранные, затем остальные
+    // Сортировка: выбранный сотрудник — наверх
     filteredData.sort((a, b) => {
       const isASelected = warehouse.staffs.includes(a.id);
       const isBSelected = warehouse.staffs.includes(b.id);
-      return isBSelected - isASelected; // true (1) поднимается выше false (0)
+      return isBSelected - isASelected;
     });
   
     return filteredData;
   };
   
+  
 
-  const selectStaff = (id, e) => {
-    if(warehouse.staffs.includes(id)) {
-      setWarehouse({...warehouse, staffs: warehouse.staffs.filter(item => item !== id)})
+  const selectStaff = (id) => {
+    // Если выбран уже этот сотрудник — убрать его (отменить выбор)
+    if (warehouse.staffs.includes(id)) {
+      setWarehouse({ ...warehouse, staffs: [] });
     } else {
-      setWarehouse({...warehouse, staffs: [...warehouse.staffs, id]})
+      setWarehouse({ ...warehouse, staffs: [id] }); // Только один сотрудник
     }
   };
 
@@ -49,7 +52,7 @@ const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, s
               virtualized
               height={400}
               loading={status === 'loading'}
-              data={getData() || []}
+              data={data || []}
               className='rounded-xl'
             >
               <Column width={60} align="center" fixed>
@@ -109,15 +112,15 @@ const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, s
                   <HeaderCell>Заведующий</HeaderCell>
 
                   <Cell style={{ padding: '6px' }}>
-                    {(rowData, index) => (
-                          <div 
-                            className='flex items-center cursor-pointer' 
-                            key={index + 'checl'}
-                            onClick={(e) => selectStaff(rowData.id, e)}
-                          >
-                            <Checkbox checked={warehouse.staffs.includes(rowData.id)}/>
-                          </div>
-                    )}
+                      {(rowData, index) => (
+                        <div 
+                          className='flex items-center cursor-pointer' 
+                          key={index + 'check'}
+                          onClick={() => selectStaff(rowData.id)}
+                        >
+                          <Checkbox checked={warehouse.staffs.includes(rowData.id)} />
+                        </div>
+                      )}
                   </Cell>
               </Column>
           </Table>

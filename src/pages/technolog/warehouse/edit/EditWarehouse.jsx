@@ -108,6 +108,8 @@ const EditWarehouse = () => {
           if(res.meta.requestStatus === 'fulfilled') {
             navigate(-1)
             toast("Склад успешно изменен!")
+          } else {
+            toast.error("Произошла ошибка!")
           }
         })
     } else {
@@ -125,13 +127,13 @@ const EditWarehouse = () => {
           }
         })
   }
-
+  console.log(warehouse)
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
         <MyBreadcrums items={breadcrumbs}/>
         
         <div className='flex items-center justify-between'>
-            <Title text="Создание склада"/>
+            <Title text="Редактирование склада"/>
             <div className='flex justify-center gap-x-4'>
               <Button variant='red' width='120px' onClick={() => setModal(true)}>
                   Удалить
@@ -168,17 +170,17 @@ const EditWarehouse = () => {
             </div>
             <div className='flex justify-between gap-x-10'>
               <SelectUser
-                width='48%'
-                label="Зав. складом"
-                placeholder="Зав. складом"
-                value={warehouse.staffs[0] || null}
-                data={staff_list || []}
-                onChange={(e) => setWarehouse({ ...warehouse, staffs: [...warehouse.staffs, e] })}
-                searchable={true}
-                valueKey='id'
-                labelKey='name'
-                role={true}
-              />
+                  width='48%'
+                  label="Зав. складом"
+                  placeholder="Зав. складом"
+                  value={warehouse.staffs[0]}
+                  data={staff_list || []}
+                  onChange={(e) => setWarehouse({ ...warehouse, staffs: [...warehouse.staffs, e] })}
+                  searchable={true}
+                  valueKey='id'
+                  labelKey='name'
+                  role={true}
+                />
             </div>
         </WhiteWrapper>
 
