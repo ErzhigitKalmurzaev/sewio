@@ -7,6 +7,8 @@ import { Link } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../store/auth/auth";
 import { toast } from "react-toastify";
+import { Image } from "lucide-react";
+import logo from '../../assets/images/SewMaster.png';
 
 const SignIn = () => {
 
@@ -29,9 +31,9 @@ const SignIn = () => {
 
   return (
     <Wrapper>
-      <div className="w-[430px] h-[500px] bg-zinc-50 rounded-2xl flex justify-center items-center shadow shadow-md">
+      <div className="w-[430px] h-[500px] bg-zinc-100 rounded-2xl flex justify-center items-center shadow shadow-lg">
         <form className="w-4/5 flex flex-col gap-y-5" onSubmit={handleSubmit}>
-          <h1 className="text-2xl font-bold text-center text-primary mb-5">SewMaster</h1>
+          <h1 className="text-3xl font-bold text-center text-primary mb-5">SewMaster</h1>
           <p className="text-xl font-bold text-primary">Добро пожаловать!</p>
           <div className="flex flex-col gap-y-4">
             <Input label="Логин" placeholder={"Введите логин"} value={login} onChange={(e) => setLogin(e.target.value)} type="text"/>

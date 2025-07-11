@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Checkbox, Table } from 'rsuite';
 import { employeeRole, employeeSalaryType } from '../../../../../utils/selectDatas/employeeDatas';
-import { motion, AnimatePresence, Reorder } from 'framer-motion';
 
 import TablePopover from '../../../../../components/tables/tableDropdown';
 
@@ -10,9 +9,6 @@ import TablePopover from '../../../../../components/tables/tableDropdown';
 const { Column, HeaderCell, Cell } = Table;
 
 const SelectStaffTable = ({ data, status, handleChangeFilter, urls, warehouse, setWarehouse }) => {
-
-  const navigate = useNavigate();
-
   const getData = () => {
     if (!Array.isArray(data)) return [];
   

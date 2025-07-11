@@ -16,9 +16,9 @@ const StickyBox = ({ count, price }) => {
         const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
         const consumablesTotal = consumables.reduce((total, consumable) => total + Number(consumable.price), 0) || 0;
         const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
-        return (Number(operationsTotal) + Number(consumablesTotal) + Number(pricesTotal)) || 0;
+        return (Number(operationsTotal) + Number(consumablesTotal) + Number(pricesTotal)).toFixed(2) || 0;
       case 'total':
-        return getTotal('consumption') * count || 0;
+        return (getTotal('consumption') * count)?.toFixed(2) || 0;
       case 'profit': 
         return getTotal('payment') - getTotal('total') || 0;
     }

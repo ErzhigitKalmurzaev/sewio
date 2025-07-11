@@ -82,7 +82,7 @@ const Calculator = () => {
 
         dispatch(createCalculation({
           ...clientData,
-          cost_price: cost,
+          cost_price: cost?.toFixed(2),
           combinations: combinations.map(item => ({
             title: item.title,
             is_sample: false,
