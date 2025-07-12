@@ -13,7 +13,7 @@ import { set } from 'react-hook-form'
 function calculateTotal(works) {
     return works?.reduce((sum, work) => {
         return sum + (work?.total_amount * work?.operation?.price);
-    }, 0);
+    }, 0).toFixed(2);
 }
 
 const AdvanceModal = ({ modals, setModals, update, setUpdate }) => {

@@ -175,7 +175,7 @@ const EditWarehouse = () => {
                   placeholder="Зав. складом"
                   value={warehouse.staffs[0]}
                   data={staff_list || []}
-                  onChange={(e) => setWarehouse({ ...warehouse, staffs: [...warehouse.staffs, e] })}
+                  onChange={(e) => setWarehouse({ ...warehouse, staffs: [e] })}
                   searchable={true}
                   valueKey='id'
                   labelKey='name'

@@ -317,7 +317,7 @@ const CalculationSlice = createSlice({
                     consumption: item.consumption,
                     unit: item.unit,
                     price: item.price,
-                    material_nomenclature: item.id,
+                    material_nomenclature: item.nomenclature,
                     id: item.id
                 }));
                 state.prices = action.payload.cal_prices.map(item => ({
@@ -360,7 +360,7 @@ const CalculationSlice = createSlice({
                     consumption: item.consumption,
                     unit: item?.material_nomenclature?.unit,
                     price: item?.material_nomenclature?.cost_price,
-                    material_nomenclature: item?.material_nomenclature?.id,
+                    nomenclature: item?.material_nomenclature?.id,
                     color: item?.color?.id
                 }));
                 state.prices = action.payload.prices.map(item => ({

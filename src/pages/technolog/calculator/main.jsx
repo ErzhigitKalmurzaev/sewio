@@ -108,9 +108,15 @@ const Calculator = () => {
   const handleCreateProduct = (name) => {
     if(isDataValid()) {
 
-      const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
+      const combinationsTotal = combinations.reduce((acc, combination) => {
+        const childrenTotal = combination.children.reduce((sum, child) => {
+            const price = Number(child.price) || 0; // Приводим к числу, если не число — берём 0
+            return sum + price;
+        }, 0);
+        return acc + childrenTotal;
+      }, 0);
       const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
-      const cost = (Number(operationsTotal) + Number(pricesTotal)) || 0;
+      const cost = (Number(combinationsTotal) + Number(pricesTotal)) || 0;
 
       dispatch(createProduct({
         ...productData,

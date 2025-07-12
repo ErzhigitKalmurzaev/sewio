@@ -131,7 +131,7 @@ const EditProdPanel = ({ product, id }) => {
                       <Table.Cell style={{ background: bgColor, padding: '6px' }}>
                         {(rowData) => {
                           const sizeData = rowData.sizes.find(s => s.size.id === sizeItem.id);
-                          return key === "amount" || key === "done" || key === "defect" ? (
+                          return key === "amount" || key === "defect" ? (
                             <NumInputForTable
                               value={sizeData?.[key] || ""}
                               placeholder={"0"}

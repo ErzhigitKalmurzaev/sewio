@@ -31,7 +31,7 @@ const WarehouseTable = ({ data, status }) => {
                 <Cell dataKey="title" />
             </Column>
 
-            <Column width={220}>
+            <Column width={250}>
                 <HeaderCell>Зав. складом</HeaderCell>
                 <Cell>
                   {

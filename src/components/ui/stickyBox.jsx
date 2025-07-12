@@ -20,7 +20,7 @@ const StickyBox = ({ count, price }) => {
       case 'total':
         return (getTotal('consumption') * count)?.toFixed(2) || 0;
       case 'profit': 
-        return getTotal('payment') - getTotal('total') || 0;
+        return (getTotal('payment') - getTotal('total')).toFixed(2) || 0;
     }
   }
   

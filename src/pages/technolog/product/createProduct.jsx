@@ -81,44 +81,44 @@
         toast.error('Продукт должен содержать комбинации со статусами "Крой", "ОТК", "Упаковка"!')
       }else {
         const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
-            const combinationsTotal = combinations.reduce((acc, combination) => {
-              const childrenTotal = combination.children.reduce((sum, child) => {
-                  const price = Number(child.price) || 0; // Приводим к числу, если не число — берём 0
-                  return sum + price;
-              }, 0);
-              return acc + childrenTotal;
-            }, 0);
-            const cost = (Number(pricesTotal)) + Number(combinationsTotal) || 0;
+        const combinationsTotal = combinations.reduce((acc, combination) => {
+          const childrenTotal = combination.children.reduce((sum, child) => {
+              const price = Number(child.price) || 0; // Приводим к числу, если не число — берём 0
+              return sum + price;
+          }, 0);
+          return acc + childrenTotal;
+        }, 0);
+        const cost = (Number(pricesTotal)) + Number(combinationsTotal) || 0;
 
-            dispatch(createProduct({
-              ...productData,
-              cost_price: cost,
-              prices,
-              combinations: combinations.map(item => ({
-                title: item.title,
-                is_sample: false,
-                status: item.status,
-                operations: item.children.map(op => op)
-              })),
-              consumables
-            })).then(res => {
-              if(res.meta.requestStatus === 'fulfilled') {
-                dispatch(createProductImages({ props: {
-                  images: images.map(item => item.blobFile),
-                  product_id: res.payload.id
-                }}))
-                dispatch(createProductFiles({ props: {
-                  files: files.map(item => item.blobFile),
-                  product_id: res.payload.id
-                }}))
-                toast.success("Товар создан успешно!")
-                navigate(-1)
-              } else if(res.payload?.vendor_code?.length > 0 && res.payload?.vendor_code[0] === 'nomenclature with this vendor code already exists.') {
-                toast.error('Товар с таким артикулом уже существует!')
-              } else {
-                toast.error('Произошла ошибка!')
-              }
-            })
+        dispatch(createProduct({
+          ...productData,
+          cost_price: cost,
+          prices,
+          combinations: combinations.map(item => ({
+            title: item.title,
+            is_sample: false,
+            status: item.status,
+            operations: item.children.map(op => op)
+          })),
+          consumables
+        })).then(res => {
+          if(res.meta.requestStatus === 'fulfilled') {
+            dispatch(createProductImages({ props: {
+              images: images.map(item => item.blobFile),
+              product_id: res.payload.id
+            }}))
+            dispatch(createProductFiles({ props: {
+              files: files.map(item => item.blobFile),
+              product_id: res.payload.id
+            }}))
+            toast.success("Товар создан успешно!")
+            navigate(-1)
+          } else if(res.payload?.vendor_code?.length > 0 && res.payload?.vendor_code[0] === 'nomenclature with this vendor code already exists.') {
+            toast.error('Товар с таким артикулом уже существует!')
+          } else {
+            toast.error('Произошла ошибка!')
+          }
+        })
       }
     };
 
