@@ -121,5 +121,11 @@ export const foremanNav = [
         path: 'operations',
         icon: <ClipboardList/>,
         elements: false
-    }
+    },
+    {
+        title: 'Salary',
+        path: 'salary',
+        icon: <CircleDollarSign/>,
+        elements: false
+    },
 ]

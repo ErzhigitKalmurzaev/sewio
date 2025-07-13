@@ -6,6 +6,8 @@ import ForemanTabletLayout from '../layouts/tablet/foremanTabletLayout';
 import CreateAccWork from '../pages/foreman/operations/works/createAccWork';
 import WorkHistory from '../pages/foreman/operations/works/workHistory';
 import EditAccWork from '../pages/foreman/operations/works/editAccWork';
+import MySalary from '../pages/shveya/salary/main';
+import MySalaryDetail from '../pages/shveya/salary/mySalaryDetail';
 
 const ForemanRoutes = () => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -26,6 +28,11 @@ const ForemanRoutes = () => {
                       <Route path="history" element={<WorkHistory />} />
                       <Route path="history/:workId" element={<EditAccWork />} />
                   </Route>
+
+              </Route>
+              <Route path="salary" element={<Outlet/>}>
+                <Route path="" element={<MySalary />} />
+                <Route path=":id" element={<MySalaryDetail />} />
               </Route>
 
           </Route>

@@ -31,7 +31,7 @@ const SignIn = () => {
 
   return (
     <Wrapper>
-      <div className="w-[430px] h-[500px] bg-zinc-100 rounded-2xl flex justify-center items-center shadow shadow-lg">
+      <div className="lg:w-[450px] lg:h-[500px] h-[420px] w-[350px] bg-zinc-100 rounded-2xl flex justify-center items-center shadow shadow-lg">
         <form className="w-4/5 flex flex-col gap-y-5" onSubmit={handleSubmit}>
           <h1 className="text-3xl font-bold text-center text-primary mb-5">SewMaster</h1>
           <p className="text-xl font-bold text-primary">Добро пожаловать!</p>

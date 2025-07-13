@@ -28,7 +28,7 @@ const MySalaryTable = ({ data, status, activePage, limit, setPage, total }) => {
         </Column>
 
         <Column width={115}>
-            <HeaderCell>Сумма</HeaderCell>
+            <HeaderCell>Sum</HeaderCell>
             <Cell>
                 {(rowData) => (
                     <p>{formatNumber(rowData?.amount)} сом</p>
@@ -37,7 +37,7 @@ const MySalaryTable = ({ data, status, activePage, limit, setPage, total }) => {
         </Column>
         
         <Column width={80}>
-            <HeaderCell>Дата</HeaderCell>
+            <HeaderCell>Date</HeaderCell>
             <Cell>
                 {(rowData) => (
                     <p>{formatedToDDMMYYYY(rowData?.created_at)}</p>
@@ -46,11 +46,11 @@ const MySalaryTable = ({ data, status, activePage, limit, setPage, total }) => {
         </Column>
 
         <Column width={100} align='center'>
-            <HeaderCell>Статус</HeaderCell>
+            <HeaderCell>Status</HeaderCell>
             <Cell>
                 {(rowData) => (
                     <p className='font-semibold te' style={{ color: PaymentStatuses[rowData?.status - 1].color }}>
-                        {PaymentStatuses[rowData?.status - 1].title}
+                        {PaymentStatuses[rowData?.status - 1].en_title}
                     </p>
                 )}
             </Cell>

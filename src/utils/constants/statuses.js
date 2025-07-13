@@ -24,26 +24,32 @@ export const OrderStatuses = [
 export const PaymentStatuses = [
     {
         title: "ЗП",
+        en_title: 'Salary',
         color: 'green'
     },
     {
         title: 'Штраф',
+        en_title: 'Fines',
         color: 'red'
     },
     {
         title: "Аванс",
+        en_title: 'Advance',
         color: 'blue'
     },
     {
         title: 'Штраф',
+        en_title: 'Fines',
         color: 'red'
     },
     {
         title: "Аванс",
+        en_title: 'Advance',
         color: 'blue'
     },
     {
         title: "Бонус",
+        en_title: 'Bonus',
         color: 'green'
     },
 ]

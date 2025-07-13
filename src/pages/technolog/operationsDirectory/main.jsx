@@ -12,6 +12,11 @@ import CreateOperation from './components/modals/createOperation'
 
 const page_types = [
   {
+    type: 'folder',
+    title: 'Папки',
+    id: 1
+  },
+  {
     type: 'combination',
     title: 'Комбинации',
     id: 2
@@ -32,7 +37,7 @@ const OperationDirectory = () => {
   const [modals, setModals] = useState({ folder: false, combination: false, operation: false });
 
   const urls = {
-    activePage: params.get('activePage') || 'combination',
+    activePage: params.get('activePage') || 'folder',
     search: params.get('search') || '',
     page: params.get('page') || 1,
     page_size: params.get('page_size') || 20,

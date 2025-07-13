@@ -39,7 +39,7 @@ const OperationTable = ({ urls }) => {
                 <Cell dataKey="id" />
             </Column>
 
-            <Column width={300}>
+            <Column width={400}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell dataKey="title" />
             </Column>

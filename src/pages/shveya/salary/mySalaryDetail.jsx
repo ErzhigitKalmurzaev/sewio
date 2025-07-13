@@ -17,12 +17,12 @@ const MySalaryDetail = () => {
   }, [id, dispatch])
 
   return (
-    <div className='flex flex-col gap-y-5 mb-5 overflow-y-scroll'>
-        <p className='font-semibold font-inter'>Информация о выплате</p>
+    <div className='flex flex-col gap-y-5 mb-5 overflow-y-auto'>
+        <p className='font-semibold font-inter'>Payment information</p>
         {payment_detail_status === 'loading' && <BackDrop open={payment_detail_status === 'loading'}/>}
 
 
-        <div className='w-2/3'>
+        <div className='lg:w-2/3'>
           <SalaryDetailTable
             data={payment_detail}
             status={payment_detail?.status}
@@ -32,7 +32,7 @@ const MySalaryDetail = () => {
         {
           payment_detail?.files?.length > 0 &&
           <div className='flex flex-col gap-y-4'>
-            <p className='text-lg font-semibold font-inter'>Картинки</p>
+            <p className='text-lg font-semibold font-inter'>Images</p>
             <div className='flex gap-x-4'>
               {
                 payment_detail?.files?.map((item, index) => (

@@ -33,45 +33,6 @@ const MySalary = () => {
     }
   }
 
-  const statistics = [
-    {
-      plan: true,
-      title: 'Доход',
-      planSum: 320000,
-      factSum: 200000,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    },
-    {
-      plan: false,
-      title: 'Расход',
-      planSum: 0,
-      factSum: 200000,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    },
-    {
-      plan: false,
-      title: 'Прибыль',
-      planSum: 320000,
-      factSum: 200000,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    },
-    {
-      plan: true,
-      title: 'Заказы',
-      planSum: 2000,
-      factSum: 1950,
-      start_date: '11.11.2024', 
-      end_date: '12.11.2024',
-      month: '12.11.2024' 
-    }
-  ]
-
   useEffect(() => {
     dispatch(getMySalaryList({ urls }))
   }, [urls.page, urls.from_date, urls.to_date])
@@ -79,7 +40,7 @@ const MySalary = () => {
   return (
     <div className='flex flex-col gap-y-4 mb-5'>
         <div className='flex flex-col gap-y-2'>
-          <p className='font-semibold font-inter'>Фильтрация по дате:</p>
+          <p className='font-semibold font-inter'>Filter by date:</p>
           <DateRangePickerInput 
             date={[urls.from_date, urls.to_date]} 
             setDate={handleChangeFilter} 
@@ -87,15 +48,6 @@ const MySalary = () => {
             size='sm'
           />
         </div>
-
-        {/* <div className='flex gap-x-5 my-3'>
-            {
-                statistics.map(item => (
-                    <InfoCard data={item}/>
-                  ))
-            }
-        </div> */}
-
         <div>
           <MySalaryTable
             data={salary_list?.results}
