@@ -1,13 +1,22 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Table } from 'rsuite';
+import { getColors } from './../../../../../store/technolog/material';
 
 const {Column, HeaderCell, Cell} = Table;
 
 const ComingMaterialsTable = ({ data, status }) => {
 
+  const dispatch = useDispatch();  
+
   const { colors_list } = useSelector(state => state.material);
 
+  useEffect(() => {
+    if(!colors_list) {
+        dispatch(getColors())
+    }
+  }, [])
+  console.log(data)
   return (
     <div className='min-h-[500px] font-inter bg-white rounded-xl'>
       <Table
@@ -38,9 +47,9 @@ const ComingMaterialsTable = ({ data, status }) => {
                 <HeaderCell align="center">Цвет</HeaderCell>
                 <Cell style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     {rowData => (
-                        rowData?.color ? (
+                        rowData?.nomenclature?.color ? (
                             <div style={{ 
-                                background: colors_list?.find(color => color.id === rowData?.color)?.code,
+                                background: colors_list?.find(color => color.id === rowData?.nomenclature?.color)?.code,
                                 width: 24,
                                 height: 24,
                                 borderRadius: '50%',

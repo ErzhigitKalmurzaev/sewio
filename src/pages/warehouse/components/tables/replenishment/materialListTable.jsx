@@ -77,7 +77,7 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
                 <Cell>
                     {rowData => (
                         <p>{rowData?.amount > 0 && rowData?.unit === 6 ? 
-                            `${rowData?.amount} / ${rowData?.amount * rowData?.coefficient} м.`
+                            `${rowData?.amount} / ${(rowData?.amount * rowData?.coefficient).toFixed(1)} м.`
                             : rowData?.amount}
                         </p>
                     )}
