@@ -90,18 +90,20 @@ const SelectMaterial = ({ modals, setModals, materials_list, status, search, set
                         </Cell>
                     </Column>
                     <Column width={70}>
-                        <HeaderCell>Выбрать</HeaderCell>
-                        <Cell style={{ padding: '7px 15px'}}>
-                          {(rowData, index) => (
-                              <div 
-                                className='flex cursor-pointer' 
-                                key={index + 'check'}
-                                onClick={() => selectMaterial(rowData)}
-                              >
-                                <Checkbox checked={selectedMaterial.find(item => item.id === rowData.id)}/>
-                              </div>
-                          )}
-                        </Cell>
+                      <HeaderCell>Выбрать</HeaderCell>
+                      <Cell style={{ padding: '7px 15px' }}>
+                        {rowData => (
+                          <div 
+                            className="flex cursor-pointer" 
+                            onClick={() => selectMaterial(rowData)}
+                          >
+                            <Checkbox 
+                              checked={Boolean(selectedMaterial.find(item => item.id === rowData.id))} 
+                              onChange={() => selectMaterial(rowData)}
+                            />
+                          </div>
+                        )}
+                      </Cell>
                     </Column>
                 </Table>
               </div>

@@ -128,7 +128,10 @@ const Calculator = () => {
           status: item.status,
           operations: item.children.map(op => op)
         })),
-        consumables
+        consumables: consumables?.map(item => ({
+          ...item,
+          material_nomenclature: item.nomenclature
+        }))
       })).then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
             toast.success("Товар создан успешно!")

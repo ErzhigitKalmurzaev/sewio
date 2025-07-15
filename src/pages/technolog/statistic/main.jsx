@@ -28,7 +28,7 @@ const Statistic = () => {
 
   useEffect(() => {
     dispatch(getStatistic({ date: urls.date }));
-  }, [])
+  }, [urls.date])
 
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-12'>

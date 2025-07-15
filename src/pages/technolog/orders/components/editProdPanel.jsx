@@ -121,7 +121,7 @@ const EditProdPanel = ({ product, id }) => {
                 >
                   {[
                     { key: "amount", label: "План" },
-                    { key: "cut", label: "Вырезано" },
+                    { key: "cut", label: "Раскроено" },
                     { key: "otk", label: "ОТК" },
                     { key: "done", label: "Готово" },
                     { key: "defect", label: "Брак" },

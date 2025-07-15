@@ -72,18 +72,16 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
                 </Cell>
             </Column>
 
-            <Column width={120}>
-                <HeaderCell>Цена</HeaderCell>
+            <Column width={140}>
+                <HeaderCell>Количество</HeaderCell>
                 <Cell>
                     {rowData => (
-                        <p>{rowData?.cost_price?.toFixed(2) || '-'}</p>
+                        <p>{rowData?.amount > 0 && rowData?.unit === 6 ? 
+                            `${rowData?.amount} / ${rowData?.amount * rowData?.coefficient} м.`
+                            : rowData?.amount}
+                        </p>
                     )}
                 </Cell>
-            </Column>
-
-            <Column width={120}>
-                <HeaderCell>Количество</HeaderCell>
-                <Cell dataKey="amount" />
             </Column>
 
             <Column width={150}>
@@ -91,6 +89,15 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
                 <Cell>
                     {rowData => (
                         <p>{materialUnits[rowData?.unit-1]?.label}</p>
+                    )}
+                </Cell>
+            </Column>
+
+            <Column width={120}>
+                <HeaderCell>Цена</HeaderCell>
+                <Cell>
+                    {rowData => (
+                        <p>{rowData?.cost_price?.toFixed(2) || '-'}</p>
                     )}
                 </Cell>
             </Column>

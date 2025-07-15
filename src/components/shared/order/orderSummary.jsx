@@ -30,8 +30,8 @@ const OrderSummary = ({ getStatistic }) => {
     },
     {
       label: 'Время выполнения',
-      value: getStatistic('total_time')?.toFixed(1) || 0,
-      measure: 'ч.',
+      value: getStatistic('total_time') || 0,
+      measure: '',
       icon: <Clock4 size={20} className="text-indigo-600" />
     }
   ];

@@ -109,7 +109,7 @@ const SelectIssueMaterialModal = ({ modals, setModals, materials_list, status, u
                               >
                                 <Checkbox 
                                   // disabled={rowData.amount < 1}
-                                  checked={selectedMaterial.find(item => item.id === rowData.id)}
+                                  checked={Boolean(selectedMaterial.find(item => item.id === rowData.id))}
                                 />
                               </div>
                           )}

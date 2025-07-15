@@ -115,7 +115,7 @@ const OrderEdit = () => {
         }, 0);
   
       case "total_time":
-        return edit_products_in_order.reduce((total, product) => {
+        const totalSeconds = edit_products_in_order.reduce((total, product) => {
             const productTotalTime = product.amounts.reduce((sum, colorItem) => {
                 return sum + colorItem.sizes.reduce((sizeSum, sizeItem) => {
                     return sizeSum + (product.time * sizeItem.amount);
@@ -123,7 +123,13 @@ const OrderEdit = () => {
             }, 0);
     
             return total + productTotalTime;
-        }, 0) / 3600;
+        }, 0);
+    
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+    
+        return `${hours} ч. ${minutes} мин. ${seconds} сек.`;      
       case 'warehouse': 
         return order?.warehouse?.title || '-/-/-'
       default:
