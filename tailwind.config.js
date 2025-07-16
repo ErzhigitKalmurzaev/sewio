@@ -14,6 +14,7 @@ module.exports = {
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'], // Добавляем шрифт Inter
+        mont: ['Montserrat', 'sans-serif'],
       },
     },
   },
