@@ -188,7 +188,7 @@ const EditWarehouse = () => {
         <WhiteWrapper>
             <p className='text-base font-semibold'>Содержание склада</p>
             <Input
-                width={"50%"}
+                width={"48%"}
                 searchicon={true} 
                 placeholder='Поиск по материалам' 
                 type="text"
