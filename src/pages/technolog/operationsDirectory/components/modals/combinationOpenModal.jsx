@@ -188,4 +188,4 @@ const CombinationOpenModal = ({ modals, setModals }) => {
   )
 }
 
-export default CombinationOpenModal
+export default CombinationOpenModal;
