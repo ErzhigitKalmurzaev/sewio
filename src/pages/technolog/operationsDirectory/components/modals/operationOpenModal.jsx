@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal } from 'rsuite'
+import { Modal, Toggle } from 'rsuite'
 import { changeOperationValue, getOperationById, getOperationList } from '../../../../../store/technolog/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../../components/ui/inputs/input';
@@ -78,7 +78,7 @@ const OperationOpenModal = ({ modals, setModals }) => {
         }}))
             .then(res => {
                 if(res?.meta?.requestStatus === 'fulfilled') {
-                    dispatch(getOperationList())
+                    dispatch(getOperationList({ search: '' }))
                     toast.success("Изменения сохранены")
                     setModals({ ...modals, operation: false })
                 } else {
@@ -150,6 +150,12 @@ const OperationOpenModal = ({ modals, setModals }) => {
                                     error={changed && errors?.price}
                                 />
                             </div>
+                            <Toggle 
+                                checked={operation?.is_active}
+                                onChange={(e) => getValue(e, 'is_active')}
+                            >
+                                Активный
+                            </Toggle>
 
                         </div>
                     </Modal.Body>

@@ -304,7 +304,9 @@ const OrderEdit = () => {
         <EditAmountsTable/>
       </div>
       <div className='flex justify-center'>
-        <Button width='250px' onClick={onSubmit}>Сохранить</Button>
+        {
+          order?.status !== 2 && <Button width='250px' onClick={onSubmit}>Сохранить</Button>
+        }
       </div>
     </div>
   );

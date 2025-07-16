@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 
 const { Column, HeaderCell, Cell, ColumnGroup } = Table;
 
-const ConsumablesTable = () => {
+const ConsumablesTable = ({ type = 'new', status }) => {
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -20,12 +20,14 @@ const ConsumablesTable = () => {
   const { colors_list } = useSelector(state => state.material);
 
   useEffect(() => {
-    dispatch(getKroiMaterials(id))
+    if(type !== 'edit') {
+        dispatch(getKroiMaterials(id))
         .then((res) =>  {
             if(res.meta.requestStatus === 'fulfilled') {
                 dispatch(fillPartyConsumables(res.payload));
             }
         });
+    }
     
     dispatch(getColors());
   }, [id, dispatch]);
@@ -62,7 +64,7 @@ const ConsumablesTable = () => {
             cellBordered
             wordWrap="break-word"
             headerHeight={54}
-            loading={kroi_materials_status === 'loading'}
+            loading={status === 'loading'}
             data={party_consumables || []}
             className="rounded-lg border-2 border-borderGray"
         >

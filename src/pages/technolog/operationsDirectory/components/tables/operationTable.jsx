@@ -4,6 +4,7 @@ import { Table } from 'rsuite';
 import { getOperationList } from '../../../../../store/technolog/operations';
 import { ExternalLink } from 'lucide-react';
 import CombinationOpenModal from '../modals/combinationOpenModal';
+import TableDropdown from '../../../../../components/tables/tableDropdown';
 import OperationOpenModal from '../modals/operationOpenModal';
 
 const { Column, HeaderCell, Cell } = Table;
@@ -22,6 +23,10 @@ const OperationTable = ({ urls }) => {
 
   const openOperation = (id) => {
     setModals({ ...modals, operation: true, id: id });
+  }
+
+  const handleChangeFilter = (name, value) => {
+    dispatch(getOperationList({ search: urls.search, [name]: value }))
   }
   
   return (
@@ -42,6 +47,20 @@ const OperationTable = ({ urls }) => {
             <Column width={400}>
                 <HeaderCell>Название</HeaderCell>
                 <Cell dataKey="title" />
+            </Column>
+
+            <Column width={200}>
+                <HeaderCell>
+                    <TableDropdown
+                      title="Cтатус" 
+                      data={[{value: '', label: 'Все'}, { value: true, label: 'Активен' }, { value: false, label: 'Не активен' }]} 
+                      handleChangeFilter={handleChangeFilter}
+                      name='is_active'
+                    /> 
+                </HeaderCell>
+                <Cell>
+                    {rowData => (rowData.is_active ? 'Активен' : 'Не активен')}
+                </Cell>
             </Column>
 
             <Column width={300}>

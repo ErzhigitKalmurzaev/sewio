@@ -36,7 +36,6 @@ const CreateCombination = ({ modals, setModals }) => {
     const handleAddOperation = (operation) => {
         if (!combination.operations.some(op => op.id === operation.id)) {
             setCombination({ ...combination, operations: [...combination.operations, operation] });
-            console.log(...combination.operations, operation)
         }
     };
 

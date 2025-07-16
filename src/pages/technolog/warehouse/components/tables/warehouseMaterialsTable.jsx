@@ -62,14 +62,16 @@ const WarehouseMaterialsTable = ({ data, status, total, limit, activePage, setPa
                 </Cell>
             </Column>
 
-            <Column width={120}>
-                <HeaderCell>Цена</HeaderCell>
-                <Cell dataKey="cost_price" />
-            </Column>
-
-            <Column width={120}>
+            <Column width={140}>
                 <HeaderCell>Количество</HeaderCell>
-                <Cell dataKey="amount" />
+                <Cell>
+                    {rowData => (
+                        <p>{rowData?.amount > 0 && rowData?.unit === 6 ? 
+                            `${rowData?.amount} / ${(rowData?.amount * rowData?.coefficient).toFixed(1)} м.`
+                            : rowData?.amount}
+                        </p>
+                    )}
+                </Cell>
             </Column>
 
             <Column width={150}>
@@ -79,6 +81,11 @@ const WarehouseMaterialsTable = ({ data, status, total, limit, activePage, setPa
                         <p>{materialUnits[rowData?.unit-1]?.label}</p>
                     )}
                 </Cell>
+            </Column>
+
+            <Column width={120}>
+                <HeaderCell>Цена</HeaderCell>
+                <Cell dataKey="cost_price" />
             </Column>
         </Table>
         <div style={{ padding: 20 }}>

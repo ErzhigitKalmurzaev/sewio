@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from 'rsuite'
-import { changeFolderValue, editFolderById, getCombinationList, getFolderById, getFolderList } from '../../../../../store/technolog/operations';
+import { changeFolderValue, deleteFolderById, editFolderById, getFolderById, getFolderList } from '../../../../../store/technolog/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../../components/ui/inputs/input';
-import Select from '../../../../../components/ui/inputs/select';
 import Button from '../../../../../components/ui/button';
-import { editCombinationById } from './../../../../../store/technolog/product';
 import { toast } from 'react-toastify';
 import { Layers } from 'lucide-react';
 
@@ -29,21 +27,8 @@ const FolderOpenModal = ({ modals, setModals }) => {
     dispatch(changeFolderValue({ name, value: e }))
   }
 
-  const handleAddOperation = (combination) => {
-    setChanged(true);
-    if (!folder.combinations.some(op => op.id === combination.id)) {
-        const updatedOperations = [...folder.combinations, combination];
-        dispatch(changeFolderValue({ name: 'combinations', value: updatedOperations }));
-    }
-  };
-
-  const handleRemoveOperation = (index) => {
-    setChanged(true);
-    const updatedOperations = folder.combinations.filter((_, i) => i !== index);
-    dispatch(changeFolderValue({ name: 'combinations', value: updatedOperations }));
-  };
-
   const onSubmit = () => {
+    setModals({ ...modals, folder: false });
     if(folder?.title) {
         dispatch(editFolderById({ id: modals.id, props: {
             title: folder?.title
@@ -60,6 +45,17 @@ const FolderOpenModal = ({ modals, setModals }) => {
     }
   }
 
+  const onDelete = () => {
+    setModals({ ...modals, folder: false });
+    dispatch(deleteFolderById({ id: modals.id })).then(res => {
+        if(res?.meta?.requestStatus === 'fulfilled') {
+            dispatch(getFolderList({ search: '' }))
+            toast.success('Папка успешно удалена!')
+        } else {
+            toast.error('Произошла ошибка!')
+        }
+    })
+  }
 
   return (
     <Modal open={modals?.folder} onClose={() => setModals({ ...modals, folder: false })}>
@@ -84,37 +80,37 @@ const FolderOpenModal = ({ modals, setModals }) => {
                                     error={changed && !folder?.title}
                                 />
                             </div>
-
-                            <div>
+                            <div className='grid grid-cols-2'>
                                 {
-                                        <div className="mt-4 grid grid-cols-2 gap-6">
-                                            {/* ✅ Список операций в комбинации */}
-                                            <div>
-                                                <h3 className="text-lg font-medium mb-2">Комбинации в папке</h3>
-                                                <div className="p-2 h-60 overflow-y-auto">
-                                                    {folder?.combinations?.map((combination, index) => (
-                                                        <div key={combination.id} className="flex flex-col items-center justify-center gap-y-2">
-                                                            <Layers size={30} />
-                                                            <p>{combination.title}</p>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
+                                    folder?.combinations?.length > 0 ? 
+                                    folder?.combinations?.map(item => (
+                                        <button
+                                            className="flex items-center my-2 gap-x-2"
+                                        >
+                                            <Layers size={20}/>
+                                            <span className="font-medium text-base text-gray-800">{item?.title}</span>
+                                        </button>
+                                    ))
+                                    : (
+                                        <p className="text-gray-500">Нет комбинаций</p>
+                                    )
                                 }
                             </div>
 
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <div className='flex justify-end'>
+                        <div className='flex justify-end gap-x-4'>
+                            <Button width='100px' variant='red' onClick={onDelete}>
+                                Удалить
+                            </Button>
                             {
                                 changed ? 
-                                    <Button onClick={onSubmit}>
+                                    <Button width='100px' onClick={onSubmit}>
                                         Сохранить
                                     </Button>
                                     :
-                                    <Button onClick={() => setModals({ ...modals, folder: false })}>
+                                    <Button width='100px' onClick={() => setModals({ ...modals, folder: false })}>
                                         Закрыть
                                     </Button>
                             }

@@ -45,7 +45,7 @@ const PrintableReport = React.forwardRef((props, ref) => {
 
         <PartyAmountTable data={party_amounts} status={party_status} />
 
-        <ConsumablesTable status={party_status} />
+        <ConsumablesTable type='edit' status={party_status} />
 
       </div>
   );

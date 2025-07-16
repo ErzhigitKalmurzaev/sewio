@@ -1,130 +1,116 @@
 import React, { useEffect, useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  Avatar,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
+  IconButton,
+  Tooltip,
+  Box,
+  Typography
+} from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile, logout } from '../../store/auth/auth';
 import { useNavigate } from 'react-router-dom';
 
 const UserMenu = () => {
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
-    const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const { me_info, isAuthenticated } = useSelector(state => state.auth);
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-
-    const { me_info, isAuthenticated } = useSelector(state => state.auth);
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        if(!me_info?.role && isAuthenticated === 'success') {
-            dispatch(getProfile())  
-        }
-    }, [])
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate('/')
+  useEffect(() => {
+    if (!me_info?.role && isAuthenticated === 'success') {
+      dispatch(getProfile());
     }
-    
-  return (
-    <Tooltip title="Account settings" >
-        <div>
-            <IconButton
-                onClick={handleClick}
-                size="small"
-                sx={{ ml: 2, borderRadius: 5 }}
-                aria-controls={open ? 'account-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-            >
-            {
-                me_info?.image ? 
-                    <Avatar alt={me_info?.first_name} src={me_info?.image}/>
-                        :
-                    <Avatar sx={{ width: 32, height: 32 }}>{me_info?.first_name?.length > 0 ? me_info?.first_name[0] : ''}</Avatar>
-            }
-            <KeyboardArrowDownIcon sx={{ ml: 1 }}/>
-            </IconButton>
-            <Menu
-            anchorEl={anchorEl}
-            id="account-menu"
-            open={open}
-            onClose={() => setAnchorEl(null)}
-            slotProps={{
-            paper: {
-                elevation: 0,
-                sx: {
-                overflow: 'visible',
-                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                mt: 1.5,
-                '& .MuiAvatar-root': {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
-                },
-                '&::before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
-                },
-                },
-            },
-            }}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        >
-            <MenuItem>
-                <div className='flex flex-col gap-y-4'>
-                    <div className='flex items-center gap-x-2'>
-                        {
-                            me_info?.image ? 
-                                <Avatar size='lg' alt={me_info?.first_name} src={me_info?.image}/>
-                                    :
-                                <Avatar size='md'>{me_info?.first_name?.length > 0 ? me_info?.first_name[0] : ''}</Avatar>
-                        }
-                        <div className='flex flex-col gap-y-0'>
-                            <p className='text-sm font-semibold font-inter leading-3'>{me_info?.user?.username}</p>
-                            <p className='text-sm font-inter leading-3'>{me_info?.name + ' ' + me_info?.surname}</p>
-                        </div>
-                    </div>
-                    <div>
-                        <p className='text-[13px] font-inter'>Разряд: {me_info?.rank?.title}</p>
-                        <p className='text-[13px] font-inter'>Телефон: {me_info?.phone?.length > 4 ? me_info?.phone : 'Не указано'}</p>
-                    </div>
-                </div>
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={handleLogout}>
-                <ListItemIcon>
-                    <Logout fontSize="small" />
-                </ListItemIcon>
-                Выйти
-            </MenuItem>
-            </Menu>
-        </div>
-    </Tooltip>
-  )
-}
+  }, []);
 
-export default UserMenu
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
+
+  return (
+    <Tooltip>
+      <Box>
+        <IconButton
+          onClick={handleClick}
+          size="small"
+          sx={{ ml: 2, borderRadius: 2 }}
+        >
+          {me_info?.image ? (
+            <Avatar alt={me_info?.first_name} src={me_info?.image} />
+          ) : (
+            <Avatar>{me_info?.first_name?.[0]}</Avatar>
+          )}
+          <KeyboardArrowDownIcon sx={{ ml: 1 }} />
+        </IconButton>
+
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          PaperProps={{
+            elevation: 3,
+            sx: {
+              mt: 0.3,
+              borderRadius: 2,
+              minWidth: 250,
+              p: 1,
+              '& .MuiMenuItem-root': {
+                borderRadius: 1,
+              },
+            },
+          }}
+        >
+          <Box px={1} py={0.5}>
+            <Box display="flex" alignItems="center" gap={1.5}>
+              {me_info?.image ? (
+                <Avatar alt={me_info?.first_name} src={me_info?.image} />
+              ) : (
+                <Avatar>{me_info?.first_name?.[0]}</Avatar>
+              )}
+              <Box>
+                <Typography fontSize={14} fontWeight={600}>
+                  {me_info?.user?.username}
+                </Typography>
+                <Typography fontSize={13} color="text.secondary">
+                  {me_info?.name} {me_info?.surname}
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box mt={1.5}>
+              <Typography fontSize={14} color="text.secondary">
+                Разряд: <strong>{me_info?.rank?.title}</strong>
+              </Typography>
+              <Typography fontSize={14} mt={0.7} color="text.secondary">
+                Телефон: <strong>{me_info?.phone?.length > 4 ? me_info?.phone : 'Не указано'}</strong>
+              </Typography>
+            </Box>
+          </Box>
+
+          <Divider sx={{ my: 1 }} />
+
+          <MenuItem onClick={handleLogout}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            <Typography fontSize={14}>Выйти</Typography>
+          </MenuItem>
+        </Menu>
+      </Box>
+    </Tooltip>
+  );
+};
+
+export default UserMenu;

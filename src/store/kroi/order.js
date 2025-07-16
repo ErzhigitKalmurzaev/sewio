@@ -293,7 +293,7 @@ const KroiOrderSlice = createSlice({
                 state.party_consumables = action.payload.consumptions.map(item => ({
                     title: item.nomenclature?.title,
                     nomenclature: item.nomenclature.id,
-                    color: item.color,
+                    color: item.nomenclature?.color,
                     passport_length: item.passport_length,
                     table_length: item.table_length,
                     layers_count: item.layers_count,

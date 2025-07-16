@@ -16,7 +16,7 @@ const ComingMaterialsTable = ({ data, status }) => {
         dispatch(getColors())
     }
   }, [])
-  console.log(data)
+  
   return (
     <div className='min-h-[500px] font-inter bg-white rounded-xl'>
       <Table

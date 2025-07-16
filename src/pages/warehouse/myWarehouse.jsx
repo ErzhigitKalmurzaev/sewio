@@ -33,7 +33,7 @@ const MyWarehouse = () => {
   useEffect(() => {
     dispatch(getMyMateralsList(urls));
     dispatch(getComings());
-  }, [dispatch, update])
+  }, [dispatch, update, urls.page])
 
   const handleChangeFilter = (name, value) => {
     params.set(name, value);
