@@ -27,7 +27,7 @@ export const getWarehouseById = createAsyncThunk(
 
 export const getWarehouseMateriralsById = createAsyncThunk(
     'warehouse/getWarehouseMateriralsById',
-    async ({ id, page, page_size = 30, title }, { rejectWithValue }) => {
+    async ({ id, page, page_size = 20, title }, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.get(`warehouse/materials/list/?warehouse=${id}&title=${title}&page=${page}&page_size=${page_size}`);
             return data;

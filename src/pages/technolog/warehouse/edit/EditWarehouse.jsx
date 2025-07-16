@@ -49,6 +49,7 @@ const EditWarehouse = () => {
     staffs: false
   })
   const [modal, setModal] = useState(false);
+  const [search, setSearch] = useState('');
   const [params, setParams] = useSearchParams();
 
   const urls = {
@@ -86,7 +87,7 @@ const EditWarehouse = () => {
   }
 
   const handleSearch = () => {
-    dispatch(getStaffList({ urls }))
+    dispatch(getWarehouseMateriralsById({ id, title: search, page: searchValues.page }))
   }
 
   const validateField = () => {
@@ -186,14 +187,23 @@ const EditWarehouse = () => {
 
         <WhiteWrapper>
             <p className='text-base font-semibold'>Содержание склада</p>
+            <Input
+                width={"50%"}
+                searchicon={true} 
+                placeholder='Поиск по материалам' 
+                type="text"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                searchHandle={handleSearch}
+            />
 
             <WarehouseMaterialsTable
                 data={warehouse_materials?.results || []} 
                 status={warehouse_materials_status}
                 total={warehouse_materials?.count || 0}
-                limit={30}
+                limit={20}
                 activePage={searchValues.page}
-                setPage={(e) => setSearchValues({ ...searchValues, page: e })}
+                setPage={(name, e) => setSearchValues({ ...searchValues, page: e })}
             />
         </WhiteWrapper>
 
