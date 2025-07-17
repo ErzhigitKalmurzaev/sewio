@@ -54,6 +54,7 @@ const CreateParty = () => {
           .filter(item => item.nomenclature)  // Отфильтровываем элементы без nomenclature
           .map(item => ({
             ...item,
+            layers_count: Number(item.layers_count) || 0,
             quantity: Number(item.layers_count * item.count_in_layer)
           }))
       

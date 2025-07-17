@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Table } from "rsuite";
+import { Checkbox, Table } from "rsuite";
 import NumInputForTable from "../../../../../components/ui/inputs/numInputForTable";
-import { getValueAmount } from "../../../../../store/kroi/order";
+import { getValueAmount, changeActiveSizes, updatePartyAmountsBySelectedSizes } from "../../../../../store/kroi/order";
 import { useDispatch, useSelector } from "react-redux";
 
 const { Column, HeaderCell, Cell, ColumnGroup } = Table;
@@ -9,7 +9,7 @@ const { Column, HeaderCell, Cell, ColumnGroup } = Table;
 const PartyAmountTable = ({ data, status }) => {
 
   const dispatch = useDispatch();
-  const { party_amounts } = useSelector(state => state.kroi_order);
+  const { party_amounts, party_active_sizes } = useSelector(state => state.kroi_order);
 
   if (!data || data.length === 0) {
     return <p>Нет данных для отображения</p>;
@@ -19,6 +19,16 @@ const PartyAmountTable = ({ data, status }) => {
     dispatch(getValueAmount({ index, value, sIndex }));
   };
 
+  const selectSize = (size) => {
+    if(party_active_sizes?.find(item => item.id === size.id)) {
+      dispatch(changeActiveSizes(party_active_sizes.filter(item => item.id !== size.id)));
+      dispatch(updatePartyAmountsBySelectedSizes({ select_sizes: party_active_sizes.filter(item => item.id !== size.id) }));
+    } else {
+      dispatch(changeActiveSizes([...party_active_sizes, size]));
+      dispatch(updatePartyAmountsBySelectedSizes({ select_sizes: [...party_active_sizes, size]}));
+    }
+  }
+
   // Подсчет итогов по каждому цвету
   const totalByColor = party_amounts.map(item => {
     return {
@@ -26,14 +36,13 @@ const PartyAmountTable = ({ data, status }) => {
       fact: item.sizes.reduce((sum, size) => sum + (Number(size.true_amount) || 0), 0)
     };
   });
-
+  console.log(party_amounts)
   return (
     <div className="flex flex-col gap-y-1">
       <Table
         bordered
         cellBordered
         autoHeight
-        // minHeight={200}
         headerHeight={70}
         loading={status === 'loading'}
         data={[...party_amounts] || []}
@@ -46,7 +55,16 @@ const PartyAmountTable = ({ data, status }) => {
         </Column>
 
         {party_amounts[0]?.sizes?.map((sItem, sIndex) => (
-          <ColumnGroup key={sIndex + 'tab'} header={sItem?.size?.title} verticalAlign="middle" align="center">
+          <ColumnGroup key={sIndex + 'tab'} header={
+            <div className="flex items-center mt-[-10px]">
+              <p className="font-inter">{sItem.size.title}</p>
+              <Checkbox
+                className="p-0"
+                checked={Boolean(party_active_sizes?.find(item => item.id === sItem.size.id))} 
+                onChange={() => selectSize(sItem.size)}
+              />
+            </div>
+          } verticalAlign="top" align="center">
             <Column width={65} colSpan={2}>
               <HeaderCell>План</HeaderCell>
               <Cell>

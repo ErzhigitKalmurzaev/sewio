@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axios";
+import { color } from "framer-motion";
 
 export const getOrdersList = createAsyncThunk(
     'order/getOrdersList',
@@ -101,7 +102,8 @@ const KroiOrderSlice = createSlice({
         party_list: null,
         party_list_status: 'loading',
         party: null,
-        party_status: 'loading'
+        party_status: 'loading',
+        party_active_sizes: [],
     },
     reducers: {
         fillPartyAmounts: (state, action) => {
@@ -113,7 +115,7 @@ const KroiOrderSlice = createSlice({
             state.party_amounts[index].sizes[sIndex].true_amount = value;
         },
         getValueConsumables: (state, action) => {
-            const { index, name, value } = action.payload;
+            const { index, name, value, select_sizes } = action.payload;
             const item = state.party_consumables[index];
           
             // Обновляем значение поля
@@ -156,7 +158,7 @@ const KroiOrderSlice = createSlice({
               if (colorId && state.party_amounts?.length > 0) {
                 const colorIndex = state.party_amounts.findIndex(p => p.color.id === colorId);
                 if (colorIndex !== -1) {
-                  const sizes = state.party_amounts[colorIndex].sizes;
+                  const sizes = state.party_amounts[colorIndex].sizes.filter(item => select_sizes?.some(size => item.size.id === size.id));
                   const sizeCount = sizes.length;
           
                   if (sizeCount > 0) {
@@ -171,8 +173,25 @@ const KroiOrderSlice = createSlice({
                 }
               }
             }
+        },
+        updatePartyAmountsBySelectedSizes: (state, action) => {
+            const { select_sizes } = action.payload;
+
+            state.party_amounts.forEach((colorEntry) => {
+                
+                const total = Number(colorEntry.sizes.reduce((sum, s) => sum + Number(s.true_amount), 0));
+                const distributed = Math.floor(total / select_sizes?.length);
+                const remainder = Number(total % select_sizes?.length);
+
+                colorEntry.sizes.forEach((s, i) =>{
+                    if(select_sizes?.some((sel) => sel.id === s.size.id)) {
+                        s.true_amount = distributed + (i < remainder ? 1 : 0);
+                    } else{ 
+                        s.true_amount = ''
+                    }
+                });
+            });
           },
-                    
         fillPartyConsumables: (state, action) => {
             state.party_consumables = action.payload?.map(item => ({
                 title: item.title,
@@ -231,7 +250,11 @@ const KroiOrderSlice = createSlice({
         },
         changePartyNumber: (state, action) => {
             state.party.number = action.payload.value
-        }
+        },
+
+        changeActiveSizes: (state, action) => {
+            state.party_active_sizes = action.payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -246,9 +269,13 @@ const KroiOrderSlice = createSlice({
             //---------------------------------------------------------
             .addCase(getProductInfo.pending, (state) => {
                 state.product_info_status = 'loading';
+                state.party_active_sizes = [];
             }).addCase(getProductInfo.fulfilled, (state, action) => {
                 state.product_info_status = 'success';
                 state.product_info = action.payload;
+                state.party_active_sizes = action.payload?.amounts?.filter((obj, index, self) =>
+                index === self.findIndex((o) => o.size.id === obj.size.id)
+                ).map(item => item.size);
                 state.party_amounts = Object.values(
                     action.payload?.amounts?.reduce((acc, item) => {
                       const colorId = item?.color?.id;
@@ -287,6 +314,7 @@ const KroiOrderSlice = createSlice({
             //---------------------------------------------------------
             .addCase(getPartyById.pending, (state) => {
                 state.party_status = 'loading';
+                state.party_active_sizes = [];
             }).addCase(getPartyById.fulfilled, (state, action) => {
                 state.party_status = 'success';
                 state.party = action.payload;
@@ -305,6 +333,9 @@ const KroiOrderSlice = createSlice({
                     fail: item.fail,
                     count_in_layer: item.quantity / item.layers_count
                 }))
+                state.party_active_sizes = action.payload?.details?.length > 0 ? action.payload?.details?.filter((obj, index, self) =>
+                index === self.findIndex((o) => o.size.id === obj.size.id)
+                ).map(item => item.size) : [];
                 state.party_amounts = Object.values(
                     action.payload?.details?.reduce((acc, item) => {
                       const colorId = item?.color?.id;
@@ -337,5 +368,5 @@ const KroiOrderSlice = createSlice({
 export const { fillPartyAmounts, getValueAmount, 
                fillPartyConsumables, addPartyConsumable, 
                deletePartyConsumable, getValueConsumables,
-               clearAll, changePartyNumber } = KroiOrderSlice.actions;
+               clearAll, changePartyNumber, changeActiveSizes, updatePartyAmountsBySelectedSizes } = KroiOrderSlice.actions;
 export default KroiOrderSlice;

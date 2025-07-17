@@ -58,7 +58,7 @@ const EditParty = () => {
   const navigate = useNavigate();
   const printRef = useRef();
 
-  const { party, party_status, party_amounts, party_consumables } = useSelector(state => state.kroi_order);
+  const { party, party_status, party_amounts, party_consumables, party_active_sizes } = useSelector(state => state.kroi_order);
 
   useEffect(() => {
     dispatch(getPartyById({ id }))
@@ -67,7 +67,7 @@ const EditParty = () => {
   const setParty = (e) => {
     dispatch(changePartyNumber({ value: e }))
   }
-
+  console.log(party_active_sizes)
   const validateField = () => {
     if(!party.number && id) {
       return false;

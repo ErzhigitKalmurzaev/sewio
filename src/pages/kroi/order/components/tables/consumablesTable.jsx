@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "rsuite";
 import NumInputForTable from "../../../../../components/ui/inputs/numInputForTable";
-import { addPartyConsumable, clearAll, deletePartyConsumable, fillPartyConsumables, getValueConsumables } from "../../../../../store/kroi/order";
+import { deletePartyConsumable, fillPartyConsumables, getValueConsumables } from "../../../../../store/kroi/order";
 import { useDispatch, useSelector } from "react-redux";
-import InputWithSuggestions from "../../../../../components/ui/inputs/inputWithSuggestions";
-import { getColors, getKroiMaterials, getMateralList, getMaterial } from "../../../../../store/technolog/material";
-import { CircleMinus, Plus } from "lucide-react";
-import { materialUnits } from "../../../../../utils/selectDatas/productDatas";
+import { getColors, getKroiMaterials } from "../../../../../store/technolog/material";
+import { CircleMinus } from "lucide-react";
 import { useParams } from "react-router-dom";
 
 const { Column, HeaderCell, Cell, ColumnGroup } = Table;
@@ -15,8 +13,7 @@ const ConsumablesTable = ({ type = 'new', status }) => {
 
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { kroi_materials, kroi_materials_status } = useSelector(state => state.material);
-  const { party_consumables } = useSelector(state => state.kroi_order); 
+  const { party_consumables, party_active_sizes } = useSelector(state => state.kroi_order); 
   const { colors_list } = useSelector(state => state.material);
 
   useEffect(() => {
@@ -33,11 +30,7 @@ const ConsumablesTable = ({ type = 'new', status }) => {
   }, [id, dispatch]);
 
   const getValue = ({ index, value, name }) => {
-    dispatch(getValueConsumables({ index, name, value }));
-  }
-
-  const addRow = () => {
-    dispatch(addPartyConsumable())
+    dispatch(getValueConsumables({ index, name, value, select_sizes: party_active_sizes }));
   }
 
   const deleteRow = (key) => {
@@ -64,6 +57,7 @@ const ConsumablesTable = ({ type = 'new', status }) => {
             cellBordered
             wordWrap="break-word"
             headerHeight={54}
+            autoHeight
             loading={status === 'loading'}
             data={party_consumables || []}
             className="rounded-lg border-2 border-borderGray"
@@ -113,11 +107,7 @@ const ConsumablesTable = ({ type = 'new', status }) => {
                 ))
             }
             <Column width={100}>
-                <HeaderCell align="center">
-                    <button onClick={addRow} className="cursor-pointer">
-                         <Plus color="#00796B" />
-                    </button>
-                </HeaderCell>
+                <HeaderCell align="center" verticalAlign="middle">Действие</HeaderCell>
                 <Cell>
                     {(rowData, index) =>
                         <div className='flex justify-center'>
