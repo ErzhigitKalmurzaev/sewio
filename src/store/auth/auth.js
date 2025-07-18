@@ -60,6 +60,7 @@ const AuthSlice = createSlice({
             state.isAuthenticated = 'success';
             localStorage.setItem('sewio_token', action.payload?.access);
             localStorage.setItem('sewio_refresh_token', action.payload?.refresh);
+            localStorage.setItem('status', action.payload?.status);
         }).addCase(logIn.rejected, (state) => {
             state.isAuthenticated = 'error';
         })

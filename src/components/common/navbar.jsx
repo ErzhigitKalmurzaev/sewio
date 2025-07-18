@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { foremanNav, kroiNav, shveyaNav, technologNav, warehouseNav } from '../../utils/navDatas/navDatas'
+import { ClientNav, foremanNav, kroiNav, shveyaNav, technologNav, warehouseNav } from '../../utils/navDatas/navDatas'
 import NavButton from '../shared/navButton'
 import { useLocation } from 'react-router-dom';
 
@@ -31,12 +31,13 @@ const Navbar = ({ role }) => {
         kroiNav,
         foremanNav,
         foremanNav,
+        ClientNav
     ]
 
     return (
         <div className={`${hide ? 'w-[80px] min-w-[80px]' : 'w-[290px]'} relative border-r border-gray flex flex-col items-center gap-1 py-8 transition-all ease-linear duration-300`}>
             {
-                navs[role].map((item, index) => {
+                navs[role ? role : navs?.length-1]?.map((item, index) => {
                     return (
                         item.elements ? 
                             <NavAccardion key={index} title={item.title} icon={item.icon} active={active} hide={hide} buttons={item.buttons} />

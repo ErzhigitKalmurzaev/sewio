@@ -9,6 +9,7 @@ import MobileNavbar from '../../components/common/mobileNavbar'
 const ShveyaMobileLayout = () => {
 
   const { me_info } = useSelector((state) => state.auth);
+  const status = localStorage.getItem('status');
 
   return (
     <div className='w-full min-h-[100vh] flex flex-col'>
@@ -18,7 +19,9 @@ const ShveyaMobileLayout = () => {
                 <Outlet />
             </Suspense>
         </div>
-        <MobileNavbar/>
+        {
+          status !== '2' && <MobileNavbar/>
+        }
     </div>
   )
 }

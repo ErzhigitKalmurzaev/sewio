@@ -129,3 +129,12 @@ export const foremanNav = [
         elements: false
     },
 ]
+
+export const ClientNav = [
+    {
+        title: 'Мои заказы',
+        path: 'orders',
+        icon: <ClipboardList/>,
+        elements: false
+    },
+]

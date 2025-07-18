@@ -156,7 +156,7 @@ const EditProduct = () => {
       }
     `
   })
-  //42.39 + 240 + 450 + 500 = 1232.39 
+  
   return (
     <>
       <div className="w-full min-h-[100vh] flex flex-col gap-y-5 position-relative">
@@ -184,11 +184,8 @@ const EditProduct = () => {
           setFiles={setFiles}
           deleteFiles={deleteFiles}
           setDeleteFiles={setDeleteFiles} 
+          printRef={printRef}
         />
-
-        <div className="hidden">
-          <CombinationsPrint ref={printRef}/>
-        </div>
 
         <div className="w-full bg-white rounded-lg px-6 py-6 flex flex-col gap-y-5">
           <div className="flex flex-col gap-y-4">

@@ -25,11 +25,41 @@ export const postInputWork = createAsyncThunk(
     }
 )
 
+export const getMyOrdersList = createAsyncThunk(
+    'operation/getMyOrdersList',
+    async ({ urls }, { rejectWithValue }) => {
+        try {
+            const { page, page_size } = urls;
+
+            const { data } =  await axiosInstance.get(`client/order/list/?page=${page}&page_size=${page_size}`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+export const getMyOrderById = createAsyncThunk(
+    'operation/getMyOrderById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.get(`client/order/list/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 const ShveyaOperationSlice = createSlice({
     name: 'operation',
     initialState: {
         operations_list: null,
-        operations_list_status: 'loading'
+        operations_list_status: 'loading',
+        my_orders_list: null,
+        my_orders_list_status: 'loading',
+        my_order: null,
+        my_order_status: 'loading'
     },
     reducers: {
 
@@ -45,6 +75,24 @@ const ShveyaOperationSlice = createSlice({
                 state.operations_list_status = 'error';
             })
             //---------------------------------------------------------
+            .addCase(getMyOrdersList.pending, (state) => {
+                state.my_orders_list_status = 'loading';
+            }).addCase(getMyOrdersList.fulfilled, (state, action) => {
+                state.my_orders_list_status = 'success';
+                state.my_orders_list = action.payload
+            }).addCase(getMyOrdersList.rejected, (state) => {
+                state.my_orders_list_status = 'error';
+            })
+            //---------------------------------------------------------
+            .addCase(getMyOrderById.pending, (state) => {
+                state.my_order_status = 'loading';
+                state.my_order = null
+            }).addCase(getMyOrderById.fulfilled, (state, action) => {
+                state.my_order_status = 'success';
+                state.my_order = action.payload
+            }).addCase(getMyOrderById.rejected, (state) => {
+                state.my_order_status = 'error';
+            })
     }
 })
 

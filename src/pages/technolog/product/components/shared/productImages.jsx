@@ -5,8 +5,9 @@ import Button from '../../../../../components/ui/button';
 import { createProductImages, getProductFiles, getProductImages } from '../../../../../store/technolog/product';
 import { toast } from 'react-toastify';
 import MultiFileUploader from '../../../../../components/ui/imagePickers/multiFileUploader';
+import CombinationsPrint from './combinationsPrint';
 
-const ProductImages = ({ id_product, images, setImages, files, setFiles, deleteImages, setDeleteImages, deleteFiles, setDeleteFiles }) => {
+const ProductImages = ({ id_product, images, setImages, files, setFiles, setDeleteImages, setDeleteFiles, printRef }) => {
   const dispatch = useDispatch();
 
   const [existingImages, setExistingImages] = useState([]);
@@ -29,6 +30,17 @@ const ProductImages = ({ id_product, images, setImages, files, setFiles, deleteI
     <div className='bg-white p-4 rounded-lg space-y-6'>
       <div className='flex justify-between'>
         <p className='text-lg font-semibold'>Лекало</p>
+      </div>
+
+      <div className="hidden">
+          <CombinationsPrint
+            ref={printRef}
+            existingImages={existingImages}
+            setExistingImages={setExistingImages}
+            setDeleteImages={setDeleteImages}
+            newImages={images}
+            setNewImages={setImages}
+          />
       </div>
 
       <MultiImagePicker

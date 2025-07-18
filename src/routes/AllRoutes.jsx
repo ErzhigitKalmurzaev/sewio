@@ -10,15 +10,18 @@ import ShveyaRoute from './shveyaRoutes';
 import ForemanRoutes from './foremanRoutes';
 import KroiRoute from './kroiRoutes';
 import OtkRoutes from './otkRoutes';
+import ClientRoute from './clientRoutes';
 
 const AllRoutes = () => {
   const { isAuthenticated, me_info } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const status = localStorage.getItem('status');
+
   useEffect(() => {
     dispatch(checkAuth());
-    if(!me_info?.role && isAuthenticated === 'success') {
+    if(!me_info?.role && isAuthenticated === 'success' && status === '1') {
       dispatch(getProfile());
     }
     if(isAuthenticated === 'error') {
@@ -52,6 +55,15 @@ const AllRoutes = () => {
             } />
             <Route path="*" element={<div>Page not found</div>} />
           </>
+        }
+        {
+          status === '2' &&
+          <Route path="/crm/*" element={
+            <ProtectedRoute navigate="/"
+                allowed={true} >
+                {<ClientRoute/>}
+            </ProtectedRoute>
+          } />
         }
     </Routes>
   );
