@@ -63,7 +63,7 @@ const MultiFileUploader = ({ existingFiles = [], setExistingFiles, setDeleteFile
         </Button>
       </Uploader>
 
-      <style jsx>{`
+      <style>{`
         .file-uploader-wrapper .rs-uploader-file-items {
           display: flex;
           flex-direction: column;

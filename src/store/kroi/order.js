@@ -193,7 +193,7 @@ const KroiOrderSlice = createSlice({
             });
           },
         fillPartyConsumables: (state, action) => {
-            state.party_consumables = action.payload?.map(item => ({
+            state.party_consumables = action.payload?.data?.map(item => ({
                 title: item.title,
                 nomenclature: item.id,
                 passport_length: item.coefficient,
@@ -206,7 +206,7 @@ const KroiOrderSlice = createSlice({
                 remainder: '',
                 fact_length: '',
                 fail: '',
-                count_in_layer: '',
+                count_in_layer: action.payload.sizes?.length,
             }))
         },
         addPartyConsumable: (state) => {
@@ -271,11 +271,13 @@ const KroiOrderSlice = createSlice({
                 state.product_info_status = 'loading';
                 state.party_active_sizes = [];
             }).addCase(getProductInfo.fulfilled, (state, action) => {
-                state.product_info_status = 'success';
-                state.product_info = action.payload;
-                state.party_active_sizes = action.payload?.amounts?.filter((obj, index, self) =>
+                const sizes_list = action.payload?.amounts?.filter((obj, index, self) =>
                 index === self.findIndex((o) => o.size.id === obj.size.id)
                 ).map(item => item.size);
+
+                state.product_info_status = 'success';
+                state.product_info = action.payload;
+                state.party_active_sizes = sizes_list;
                 state.party_amounts = Object.values(
                     action.payload?.amounts?.reduce((acc, item) => {
                       const colorId = item?.color?.id;

@@ -5,7 +5,6 @@ import { Plus } from 'lucide-react';
 const MultiImagePicker = ({ existingImages, setExistingImages, setDeleteImages, newImages, setNewImages }) => {
   const [fileList, setFileList] = useState([]);
 
-  // Обновляем fileList, если изменяются existingImages или newImages
   useEffect(() => {
     const formattedExistingImages = existingImages.map(img => ({
       fileId: img.id,      // Уникальный идентификатор
@@ -17,7 +16,6 @@ const MultiImagePicker = ({ existingImages, setExistingImages, setDeleteImages, 
     setFileList([...formattedExistingImages, ...newImages]);
   }, [existingImages, newImages]);
 
-  // Обработчик добавления новых изображений
   const handleChange = (updatedFileList) => {
     // Фильтруем новые файлы
     const newFiles = updatedFileList.filter(file => !file.url);
@@ -25,7 +23,6 @@ const MultiImagePicker = ({ existingImages, setExistingImages, setDeleteImages, 
     setFileList(updatedFileList); // Обновляем полный список изображений
   };
 
-  // Обработчик удаления изображения
   const handleRemove = (file) => {
     if (file.url) {
       setDeleteImages(prev => [...prev, file.fileId]);  // Добавляем id удалённого изображения
@@ -40,10 +37,10 @@ const MultiImagePicker = ({ existingImages, setExistingImages, setDeleteImages, 
     <div className="flex gap-y-3 pb-5">
       <Uploader
         multiple
-        action=""
+        action=''
         listType="picture"
         method='get'
-        fileList={fileList || []} // Используем fileList для управления отображением
+        fileList={fileList || []}
         onChange={handleChange}
         onRemove={handleRemove}
         className='w-full'
@@ -54,7 +51,7 @@ const MultiImagePicker = ({ existingImages, setExistingImages, setDeleteImages, 
         </button>
       </Uploader>
 
-      <style jsx="true">{`
+      <style>{`
         .rs-uploader-file-item-picture,
         .rs-uploader-file-item-status,
         .rs-uploader-file-item-icon-loading,

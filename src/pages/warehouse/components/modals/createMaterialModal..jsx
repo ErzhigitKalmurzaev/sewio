@@ -8,7 +8,7 @@ import { materialUnits } from "../../../../utils/selectDatas/productDatas";
 import { getColors, postMaterial } from "../../../../store/technolog/material";
 import { toast } from "react-toastify";
 
-const CreateMaterialModal = ({ modals, setModals, setUpdate }) => {
+const CreateMaterialModal = ({ modals, setModals, setUpdate = () => {}, setID = () => {} }) => {
   const dispatch = useDispatch();
 
   const { colors_list } = useSelector((state) => state.material);
@@ -61,6 +61,7 @@ const CreateMaterialModal = ({ modals, setModals, setUpdate }) => {
           toast("Сырье создано успешно!");
           setModals({ ...modals, create: false });
           setUpdate((prev) => !prev);
+          setID(res.payload.id);
           setMaterial({
             title: "",
             vendor_code: "",

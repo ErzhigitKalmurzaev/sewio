@@ -114,8 +114,9 @@ const EditCalculate = () => {
         }, 0);
         return acc + childrenTotal;
       }, 0);
+      const consumablesTotal = consumables.reduce((total, consumable) => total + Number(consumable.price * consumable.consumption), 0) || 0;
       const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
-      const cost = (Number(combinationsTotal) + Number(pricesTotal)) || 0;
+      const cost = (Number(combinationsTotal) + Number(pricesTotal) + Number(consumablesTotal)) || 0;
 
       dispatch(createProduct({
         ...productData,

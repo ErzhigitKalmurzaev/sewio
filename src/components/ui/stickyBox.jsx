@@ -6,24 +6,29 @@ import { useSelector } from "react-redux";
 
 const StickyBox = ({ count, price }) => {
   
-  const { operations, consumables, prices } = useSelector(state => state.calculation);
+  const { operations, combinations, consumables, prices } = useSelector(state => state.calculation);
 
   const getTotal = (type) => {
     switch(type) {
       case 'payment': 
         return count * price || 0;
       case 'consumption':
-        const operationsTotal = operations.reduce((total, operation) => total + Number(operation.price), 0) || 0;
-        const consumablesTotal = consumables.reduce((total, consumable) => total + Number(consumable.price), 0) || 0;
+        const combinationsTotal = combinations.reduce((acc, combination) => {
+          const childrenTotal = combination.children.reduce((sum, child) => {
+              const price = Number(child.price) || 0; // Приводим к числу, если не число — берём 0
+              return sum + price;
+          }, 0);
+          return acc + childrenTotal;
+        }, 0);
+        const consumablesTotal = consumables.reduce((total, consumable) => total + Number(consumable.price * consumable.consumption), 0) || 0;
         const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
-        return (Number(operationsTotal) + Number(consumablesTotal) + Number(pricesTotal)).toFixed(2) || 0;
+        return (Number(combinationsTotal) + Number(consumablesTotal) + Number(pricesTotal)).toFixed(2) || 0;
       case 'total':
         return (getTotal('consumption') * count)?.toFixed(2) || 0;
       case 'profit': 
         return (getTotal('payment') - getTotal('total')).toFixed(2) || 0;
     }
   }
-  
   const [isMinimized, setIsMinimized] = useState(false);
 
   return (

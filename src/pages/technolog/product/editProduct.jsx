@@ -99,14 +99,15 @@ const EditProduct = () => {
       toast.error('Продукт должен содержать комбинации со статусами "Крой", "ОТК", "Упаковка"!')
     } else {
       const pricesTotal = prices.reduce((total, price) => total + Number(price.price), 0) || 0;
-        const combinationsTotal = combinations.reduce((acc, combination) => {
+      const combinationsTotal = combinations.reduce((acc, combination) => {
           const childrenTotal = combination.children.reduce((sum, child) => {
               const price = Number(child.price) || 0; // Приводим к числу, если не число — берём 0
               return sum + price;
           }, 0);
           return acc + childrenTotal;
       }, 0);
-        const cost = (Number(pricesTotal)) + Number(combinationsTotal) || 0;
+      const consumablesTotal = consumables.reduce((total, consumable) => total + Number(consumable.price * consumable.consumption), 0) || 0;
+      const cost = (Number(pricesTotal)) + Number(combinationsTotal) + Number(consumablesTotal) || 0;
 
         dispatch(editProductById({
             id,
@@ -155,7 +156,7 @@ const EditProduct = () => {
       }
     `
   })
-
+  //42.39 + 240 + 450 + 500 = 1232.39 
   return (
     <>
       <div className="w-full min-h-[100vh] flex flex-col gap-y-5 position-relative">

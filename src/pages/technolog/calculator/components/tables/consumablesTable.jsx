@@ -95,6 +95,18 @@ const ConsumablesTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
+            <Column width={200}>
+                <HeaderCell>Цена (сом)</HeaderCell>
+                <Cell style={{ padding: '7px 6px'}}>
+                    {(rowData, index) =>
+                        <NumInputForTable
+                            value={rowData.price}
+                            placeholder="0"
+                            onChange={(e) => getValue(e, "price", index)}
+                        />
+                    }
+                </Cell>
+            </Column>
             <Column width={150}>
                 <HeaderCell>Ед. измер.</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
@@ -103,7 +115,7 @@ const ConsumablesTable = ({ type }) => {
                             value={rowData.unit}
                             data={materialUnits}
                             placeholder="Ед. измер."
-                            disabled={true}
+                            onChange={(e) => getValue(e, "unit", index)}
                         />
                     }
                 </Cell>

@@ -420,6 +420,7 @@ const TechnologProductSlice = createSlice({
                     unit: item?.unit ? item.unit : item?.material_nomenclature?.unit,
                     material_nomenclature: item?.material_nomenclature?.id,
                     consumption: item.consumption,
+                    price: item.price,
                     title: item.material_nomenclature?.title,
                 }));
                 state.prices = action.payload.prices;
@@ -468,7 +469,7 @@ const TechnologProductSlice = createSlice({
                     title: item.material_nomenclature?.title,
                     consumption: item.consumption,
                     unit: item?.material_nomenclature?.unit,
-                    price: item?.material_nomenclature?.cost_price,
+                    price: item?.material_nomenclature?.price,
                     material_nomenclature: item?.material_nomenclature?.id,
                     color: item?.color?.id
                 }));

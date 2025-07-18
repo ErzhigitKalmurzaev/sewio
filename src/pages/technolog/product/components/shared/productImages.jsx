@@ -25,34 +25,6 @@ const ProductImages = ({ id_product, images, setImages, files, setFiles, deleteI
     }
   }, [dispatch, id_product, update]);
 
-  // const onSubmit = () => {
-  //   const imagesBlob = images.map(img => img.blobFile);
-  //   const filesBlob = newFiles.map(file => file.blobFile);
-
-  //   dispatch(createProductImages({
-  //     props: {
-  //       product_id: id_product,
-  //       images: imagesBlob,
-  //       delete_ids: deleteImages
-  //     }
-  //   }));
-
-  //   dispatch(createProductFiles({
-  //     props: {
-  //       product_id: id_product,
-  //       files: filesBlob,
-  //       delete_ids: deleteFiles
-  //     }
-  //   })).then((res) => {
-  //     if (res.meta.requestStatus === 'fulfilled') {
-  //       toast('Файлы успешно обновлены!');
-  //       setNewFiles([]);
-  //       setDeleteFiles([]);
-  //       setUpdate(!update);
-  //     }
-  //   });
-  // };
-
   return (
     <div className='bg-white p-4 rounded-lg space-y-6'>
       <div className='flex justify-between'>
@@ -78,10 +50,6 @@ const ProductImages = ({ id_product, images, setImages, files, setFiles, deleteI
         newFiles={files}
         setNewFiles={setFiles}
       />
-
-      {/* <div className="pt-6">
-        <Button onClick={onSubmit}>Сохранить</Button>
-      </div> */}
     </div>
   );
 };

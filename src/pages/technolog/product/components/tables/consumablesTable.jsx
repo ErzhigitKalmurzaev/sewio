@@ -12,6 +12,8 @@ import InputWithSuggestions from '../../../../../components/ui/inputs/inputWithS
 import { getColors, getConsumablesTitleList } from '../../../../../store/technolog/material';
 import { getMaterial } from './../../../../../store/technolog/material';
 import { materialUnits } from '../../../../../utils/selectDatas/productDatas';
+import Button from '../../../../../components/ui/button';
+import CreateMaterialModal from '../../../../warehouse/components/modals/createMaterialModal.';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -23,6 +25,7 @@ const ConsumablesTable = ({ type }) => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
+  const [modals, setModals] = useState({ create: false })
 
   useEffect(() => {
     if(!consumables_title_list) {
@@ -54,6 +57,7 @@ const ConsumablesTable = ({ type }) => {
                 material_nomenclature: res.payload.id,
                 title: res.payload.title,
                 consumption: '',
+                price: res.payload.cost_price.toFixed(0),
                 unit: res.payload.unit
             }}))
         }
@@ -96,6 +100,18 @@ const ConsumablesTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
+            <Column width={200}>
+                <HeaderCell>Цена</HeaderCell>
+                <Cell style={{ padding: '7px 6px'}}>
+                    {(rowData, index) =>
+                        <NumInputForTable
+                            value={rowData.price || 0}
+                            placeholder="0"
+                            onChange={(e) => getValue(e, "price", index)}
+                        />
+                    }
+                </Cell>
+            </Column>
             <Column width={150}>
                 <HeaderCell>Единица измерения</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
@@ -126,7 +142,15 @@ const ConsumablesTable = ({ type }) => {
                     }
                 </Cell>
             </Column>
+            <Column width={100}>
+                <HeaderCell verticalAlign='top' align="center">
+                    <Button style={{ marginTop: '-6.5px'}} onClick={() => setModals({ create: true })}>+ Создать</Button>
+                </HeaderCell>
+                <Cell/>
+            </Column>
         </Table>
+
+        <CreateMaterialModal modals={modals} setModals={setModals} setID={(e) => handleSelect(e, consumables?.length)}/>
     </div>
   )
 }

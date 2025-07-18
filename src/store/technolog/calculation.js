@@ -359,7 +359,7 @@ const CalculationSlice = createSlice({
                     id: item?.material_nomenclature?.id,
                     consumption: item.consumption,
                     unit: item?.material_nomenclature?.unit,
-                    price: item?.material_nomenclature?.cost_price,
+                    price: item?.material_nomenclature?.price,
                     nomenclature: item?.material_nomenclature?.id,
                     color: item?.color?.id
                 }));

@@ -17,17 +17,17 @@ const ConsumablesTable = ({ type = 'new', status }) => {
   const { colors_list } = useSelector(state => state.material);
 
   useEffect(() => {
-    if(type !== 'edit') {
+    if(type !== 'edit' && status === 'success') {
         dispatch(getKroiMaterials(id))
         .then((res) =>  {
             if(res.meta.requestStatus === 'fulfilled') {
-                dispatch(fillPartyConsumables(res.payload));
+                dispatch(fillPartyConsumables({ data: res.payload, sizes: party_active_sizes }));
             }
         });
     }
     
     dispatch(getColors());
-  }, [id, dispatch]);
+  }, [id, dispatch, status]);
 
   const getValue = ({ index, value, name }) => {
     dispatch(getValueConsumables({ index, name, value, select_sizes: party_active_sizes }));
@@ -49,7 +49,7 @@ const ConsumablesTable = ({ type = 'new', status }) => {
     fail: 'Недосдача',
     count_in_layer: 'Кол-во в слое',
   }
-  
+  console.log(party_consumables)
   return (
     <div className="flex flex-col gap-y-1">
         <Table

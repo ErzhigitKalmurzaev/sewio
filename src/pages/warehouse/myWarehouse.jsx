@@ -24,7 +24,8 @@ const MyWarehouse = () => {
     search: params?.get("search") || "",
     page: params.get("page") || 1,
     page_size: params.get("page_size") || 20,
-    is_active: params.get("is_active") || ""
+    is_active: params.get("is_active") || "",
+    status: params.get("status") || ""
   }
 
   const [modals, setModals] = useState({ create: false, edit: false });
@@ -33,7 +34,7 @@ const MyWarehouse = () => {
   useEffect(() => {
     dispatch(getMyMateralsList(urls));
     dispatch(getComings());
-  }, [dispatch, update, urls.page])
+  }, [dispatch, update, urls.page, urls.status])
 
   const handleChangeFilter = (name, value) => {
     params.set(name, value);
@@ -75,6 +76,11 @@ const MyWarehouse = () => {
                   </>
                 }
             </div>
+        </div>
+        <div className='flex items-center gap-x-3'>
+            <Button variant={urls.status === '' ? 'filterActive' : 'filter'} onClick={() => handleChangeFilter("status", "")}>Все</Button>
+            <Button variant={Number(urls.status) === 1 ? 'filterActive' : 'filter'} onClick={() => handleChangeFilter("status", 1)}>Ткани</Button>
+            <Button variant={Number(urls.status) === 2 ? 'filterActive' : 'filter'} onClick={() => handleChangeFilter("status", 2)}>Фурнитуры</Button>
         </div>
 
         <div className='mt-2'>

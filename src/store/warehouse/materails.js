@@ -5,9 +5,9 @@ export const getMyMateralsList = createAsyncThunk(
     'material/getMyMateralsList',
     async (props, { rejectWithValue }) => {
         try {
-            const { search, is_active, page, page_size } = props;
+            const { search, is_active, page, page_size, status } = props;
 
-            const { data } =  await axiosInstance.get(`warehouse/my-materials/list/?title=${search}&is_active=${is_active}&page=${page}&page_size=${page_size}`);
+            const { data } =  await axiosInstance.get(`warehouse/my-materials/list/?title=${search}&is_active=${is_active}&page=${page}&page_size=${page_size}&status=${status}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
