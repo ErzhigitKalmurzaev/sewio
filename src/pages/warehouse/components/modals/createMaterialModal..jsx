@@ -5,7 +5,7 @@ import Input from "../../../../components/ui/inputs/input";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "../../../../components/ui/inputs/select";
 import { materialUnits } from "../../../../utils/selectDatas/productDatas";
-import { getColors, postMaterial } from "../../../../store/technolog/material";
+import { getColors, getConsumablesTitleList, postMaterial } from "../../../../store/technolog/material";
 import { toast } from "react-toastify";
 
 const CreateMaterialModal = ({ modals, setModals, setUpdate = () => {}, setID = () => {} }) => {
@@ -21,9 +21,9 @@ const CreateMaterialModal = ({ modals, setModals, setUpdate = () => {}, setID = 
     title: "",
     vendor_code: "",
     unit: 0,
-    is_active: false,
+    is_active: true,
     color: null,
-    coefficient: 0,
+    coefficient: 1,
     status: 1
   });
   const [errors, setErrors] = useState({
@@ -66,11 +66,12 @@ const CreateMaterialModal = ({ modals, setModals, setUpdate = () => {}, setID = 
             title: "",
             vendor_code: "",
             unit: 0,
-            is_active: false,
+            is_active: true,
             color: null,
-            coefficient: 0,
+            coefficient: 1,
             status: 1
           });
+          dispatch(getConsumablesTitleList());
         }
       });
     } else {
