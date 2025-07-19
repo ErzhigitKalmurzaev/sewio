@@ -113,7 +113,7 @@ const EditProduct = () => {
             id,
             props: {
                 ...productData,
-                cost_price: cost,
+                cost_price: cost.toFixed(2),
                 prices,
                 combinations: combinations.map(item => ({
                   title: item.title,
