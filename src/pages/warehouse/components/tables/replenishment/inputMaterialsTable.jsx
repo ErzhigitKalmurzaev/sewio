@@ -23,7 +23,6 @@ const InputMaterialsTable = ({ data, status }) => {
     dataForInput[index] = {...dataForInput[index], [name]: value};
   }
 
-
   const validateField = () => {
     return dataForInput.every(material => material.amount && material.price)
   }
@@ -62,9 +61,15 @@ const InputMaterialsTable = ({ data, status }) => {
                     <HeaderCell>ID</HeaderCell>
                     <Cell dataKey="id" />
                 </Column>
-                <Column width={120} sty>
+                <Column width={120}>
                     <HeaderCell className='pl-2'>Артикул</HeaderCell>
-                    <Cell dataKey="vendor_code" />
+                    <Cell>
+                        {
+                            rowData => (
+                                <p>{rowData?.vendor_code ? rowData.vendor_code : '-/-'}</p>
+                            )
+                        }
+                    </Cell>
                 </Column>
 
                 <Column width={200}>

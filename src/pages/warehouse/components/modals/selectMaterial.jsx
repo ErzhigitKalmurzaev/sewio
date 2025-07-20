@@ -3,6 +3,8 @@ import { Checkbox, Modal, Table } from 'rsuite'
 import Input from '../../../../components/ui/inputs/input';
 import Button from '../../../../components/ui/button';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { materialUnits } from '../../../../utils/selectDatas/productDatas';
 
 
 const { Column, HeaderCell, Cell } = Table;
@@ -14,12 +16,26 @@ const SelectMaterial = ({ modals, setModals, materials_list, status, search, set
   const { colors_list } = useSelector(state => state.material);
 
   const selectMaterial = (material) => {
-    if(selectedMaterial.find(item => item.id === material.id)){
+    const isSelected = selectedMaterial.find(item => item.id === material.id);
+    const hasUnit6 = selectedMaterial.some(item => item.unit === 6);
+  
+    if (isSelected) {
       setSelectedMaterial(selectedMaterial.filter(item => item.id !== material.id));
     } else {
-      setSelectedMaterial([...selectedMaterial, material]);
+      if (material.unit === 6) {
+        if (selectedMaterial.length > 0) {
+          toast.error('Нельзя выбрать материал с ед. измерения "рулон" вместе с другими.');
+        }
+        setSelectedMaterial([material]);
+      } else {
+        if (hasUnit6) {
+          toast.error('Нельзя выбрать другие материалы, пока выбран материал с ед. измерения "рулон".');
+          return;
+        }
+        setSelectedMaterial([...selectedMaterial, material]);
+      }
     }
-  }
+  };
 
   const onSubmit = () => {
     setMaterials(selectedMaterial);
@@ -45,9 +61,6 @@ const SelectMaterial = ({ modals, setModals, materials_list, status, search, set
                   searchHandle={handleSearch}
                   onChange={(e) => setSearch(e.target.value)}
                 />
-                <Button onClick={() => setModals({ ...modals, select: false, create: true })}>
-                  + Создать сырье
-                </Button>
               </div>
               <div className='border border-borderGray rounded-lg'>
                 <Table
@@ -61,9 +74,15 @@ const SelectMaterial = ({ modals, setModals, materials_list, status, search, set
                         <HeaderCell>ID</HeaderCell>
                         <Cell dataKey="id" />
                     </Column>
-                    <Column width={120} sty>
+                    <Column width={100} sty>
                         <HeaderCell className='pl-2'>Артикул</HeaderCell>
-                        <Cell dataKey="vendor_code" />
+                        <Cell>
+                          {
+                            rowData => (
+                              <p className='pl-2'>{rowData?.article || '-/-'}</p>
+                            )
+                          }
+                        </Cell>
                     </Column>
 
                     <Column width={200}>
@@ -89,6 +108,17 @@ const SelectMaterial = ({ modals, setModals, materials_list, status, search, set
                             )}
                         </Cell>
                     </Column>
+                    <Column width={100}>
+                        <HeaderCell>Ед. измерения</HeaderCell>
+                        <Cell>
+                            {
+                                rowData => (
+                                    <p>{materialUnits.find(item => item.value === rowData.unit)?.label}</p>
+                                )
+                            }
+                        </Cell>
+                    </Column>
+
                     <Column width={70}>
                       <HeaderCell>Выбрать</HeaderCell>
                       <Cell style={{ padding: '7px 15px' }}>

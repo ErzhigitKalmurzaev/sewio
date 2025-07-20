@@ -27,7 +27,13 @@ const IssueMaterialsTable = ({ data, status, output, setOutput }) => {
 
             <Column width={300}>
                 <HeaderCell>Артикул</HeaderCell>
-                <Cell dataKey="vendor_code" />
+                <Cell>
+                    {
+                        rowData => (
+                            <p>{rowData?.vendor_code ? rowData.vendor_code : '-/-'}</p>
+                        )
+                    }
+                </Cell>
             </Column>
 
             <Column width={250}>

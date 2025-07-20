@@ -347,6 +347,21 @@ const TechnologProductSlice = createSlice({
                 id: nanoid()
             })
         },
+        reorderCombinations: (state, action) => {
+            const { fromIndex, toIndex } = action.payload;
+            
+            // Создаем копию массива комбинаций
+            const newCombinations = [...state.combinations];
+            
+            // Удаляем элемент из исходной позиции
+            const draggedItem = newCombinations.splice(fromIndex, 1)[0];
+            
+            // Вставляем элемент в новую позицию
+            newCombinations.splice(toIndex, 0, draggedItem);
+            
+            // Обновляем состояние
+            state.combinations = newCombinations;
+        },
         fillCombination: (state, action) => {
             const { childIndex, parentIndex, value} = action.payload;
 
@@ -492,5 +507,6 @@ export const { setUpdateProduct, getValueOperation,
                fillCombination, deleteCombination,
                addOperationInCombination, deleteOperationInCombination,
                editCombination, addConsumable, fillConsumable,
-               deleteConsumable, getValueConsumable, clearAll } = TechnologProductSlice.actions;
+               deleteConsumable, getValueConsumable, clearAll,
+               reorderCombinations } = TechnologProductSlice.actions;
 export default TechnologProductSlice;

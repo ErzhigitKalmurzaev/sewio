@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "rsuite";
+import { Checkbox, Table } from "rsuite";
 import NumInputForTable from "../../../../../components/ui/inputs/numInputForTable";
 import { deletePartyConsumable, fillPartyConsumables, getValueConsumables } from "../../../../../store/kroi/order";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,9 +47,9 @@ const ConsumablesTable = ({ type = 'new', status }) => {
     remainder: 'Конц-й остаток',
     fact_length: 'Факт. длина',
     fail: 'Недосдача',
-    count_in_layer: 'Кол-во в слое',
+    count_in_layer: 'Кол-во единиц',
   }
-  console.log(party_consumables)
+  
   return (
     <div className="flex flex-col gap-y-1">
         <Table
@@ -62,6 +62,21 @@ const ConsumablesTable = ({ type = 'new', status }) => {
             data={party_consumables || []}
             className="rounded-lg border-2 border-borderGray"
         >
+            <Column width={70} verticalAlign="middle" align="center">
+                <HeaderCell>Главная ткань</HeaderCell>
+                <Cell align="center">
+                    {
+                        (rowData, rowIndex) => (
+                            <Checkbox
+                                className="p-0"
+                                checked={Boolean(rowData?.is_main)} 
+                                onChange={(e) => getValue({ index: rowIndex, value: !Boolean(rowData?.is_main), name: 'is_main' })}
+                            />
+                        )
+                    }
+                </Cell>
+            </Column>
+
             <Column width={150} verticalAlign="middle">
                 <HeaderCell>Название</HeaderCell>
                 <Cell dataKey="title" />
@@ -91,7 +106,7 @@ const ConsumablesTable = ({ type = 'new', status }) => {
                         <HeaderCell>{kroi_details[key]}</HeaderCell>
                         <Cell style={{ padding: '6.5px' }}>
                             {(rowData, rowIndex) => {
-                                const isReadonlyField = ['passport_length', 'fact_length', 'fail'].includes(key);
+                                const isReadonlyField = ['passport_length', 'fact_length', 'fail', 'count_in_layer'].includes(key);
 
                                 return (
                                     <NumInputForTable

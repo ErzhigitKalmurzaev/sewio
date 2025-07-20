@@ -7,7 +7,7 @@ import { Table } from "rsuite";
 import Column from "rsuite/esm/Table/TableColumn";
 import { Cell, HeaderCell } from "rsuite-table";
 
-const InvoicePrint = forwardRef(({}, ref) => {
+const InvoicePrint = forwardRef(({ images }, ref) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { invoice_data } = useSelector((state) => state.order);
@@ -24,7 +24,21 @@ const InvoicePrint = forwardRef(({}, ref) => {
   );
 
   return (
-    <div className="w-full my-5" ref={ref}>
+    <div className="w-full my-5 flex flex-col gap-y-5" ref={ref}>
+      {/* ✅ Блок картинок */}
+      {images.length > 0 && (
+        <div className="flex flex-wrap gap-3 mb-4">
+          {images.map((img, i) => (
+            <div key={i} className="w-auto">
+              <img
+                src={img.image}
+                alt={`Изображение товара ${i + 1}`}
+                className="w-full h-[130px] object-contain"
+              />
+            </div>
+          ))}
+        </div>
+      )}
       <Table
         bordered
         cellBordered

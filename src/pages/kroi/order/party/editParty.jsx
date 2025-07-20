@@ -67,7 +67,7 @@ const EditParty = () => {
   const setParty = (e) => {
     dispatch(changePartyNumber({ value: e }))
   }
-  console.log(party_active_sizes)
+  
   const validateField = () => {
     if(!party.number && id) {
       return false;

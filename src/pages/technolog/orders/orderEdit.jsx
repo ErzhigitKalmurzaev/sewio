@@ -20,6 +20,7 @@ import { Print } from '@mui/icons-material';
 import InvoicePrint from './components/invoicePrint';
 import { getWarehouseList } from './../../../store/technolog/warehouse';
 import OrderSummary from '../../../components/shared/order/orderSummary';
+import { getProductImages } from '../../../store/technolog/product';
 
 const OrderEdit = () => {
   const breadcrumbs = [
@@ -52,6 +53,16 @@ const OrderEdit = () => {
 
   const printRef = React.useRef();
   const invoiceRef = React.useRef();
+
+  const [images, setImages] = useState([])
+
+  useEffect(() => {
+    if(edit_products_in_order[0]?.nomenclature) {
+      dispatch(getProductImages({ id: edit_products_in_order[0]?.nomenclature })).then(({ payload }) => {
+        setImages(payload || []);
+      });
+    }
+  }, [edit_products_in_order[0]?.nomenclature])
 
   useEffect(() => {
     dispatch(getOrderById({ id}))
@@ -238,8 +249,8 @@ const OrderEdit = () => {
       }
 
       <div className='hidden'>
-        <OrderPrint ref={printRef} order={order} products={edit_products_in_order} />
-        <InvoicePrint ref={invoiceRef}/>
+        <OrderPrint ref={printRef} order={order} products={edit_products_in_order} images={images} />
+        <InvoicePrint ref={invoiceRef} images={images} />
       </div>
 
       <div className='w-full flex gap-x-7'>

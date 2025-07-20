@@ -79,7 +79,13 @@ const SelectRejectMaterialModal = ({
               </Column>
               <Column width={120}>
                 <HeaderCell className='pl-2'>Артикул</HeaderCell>
-                <Cell dataKey="vendor_code" />
+                <Cell>
+                    {
+                        rowData => (
+                            <p>{rowData?.vendor_code ? rowData.vendor_code : '-/-'}</p>
+                        )
+                    }
+                </Cell>
               </Column>
               <Column width={200}>
                 <HeaderCell>Название</HeaderCell>

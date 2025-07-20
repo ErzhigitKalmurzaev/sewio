@@ -36,7 +36,7 @@ const PartyAmountTable = ({ data, status }) => {
       fact: item.sizes.reduce((sum, size) => sum + (Number(size.true_amount) || 0), 0)
     };
   });
-  console.log(party_amounts)
+  
   return (
     <div className="flex flex-col gap-y-1">
       <Table

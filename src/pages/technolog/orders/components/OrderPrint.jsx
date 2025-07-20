@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { formatedToDDMMYYYY } from '../../../../utils/functions/dateFuncs';
 
-const OrderPrint = forwardRef(({ order, products }, ref) => {
+const OrderPrint = forwardRef(({ order, products, images }, ref) => {
   const { id } = useParams();
   const { colors_list } = useSelector(state => state.material);
 
@@ -50,6 +50,21 @@ const OrderPrint = forwardRef(({ order, products }, ref) => {
               <p className="font-semibold">Товар: {product.title}</p>
               <p className="text-sm text-gray-600">Арт: {product.vendor_code}</p>
             </div>
+
+            {/* ✅ Блок картинок */}
+            {images.length > 0 && (
+              <div className="flex flex-wrap gap-3 mb-4">
+                {images.map((img, i) => (
+                  <div key={i} className="w-auto">
+                    <img
+                      src={img.image}
+                      alt={`Изображение товара ${i + 1}`}
+                      className="w-full h-[130px] object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
 
             <table className="w-full border-collapse border border-gray-400 mb-2 text-center">
               <thead>

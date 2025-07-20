@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Table, Tag, Uploader } from 'rsuite';
+import { Table, Tag } from 'rsuite';
+import { useReactToPrint } from 'react-to-print';
 
 import { getHistoryById } from '../../../store/warehouse/warehouse';
 import MyBreadcrums from '../../../components/ui/breadcrums';
 import Title from '../../../components/ui/title';
 import { formatedToDDMMYYYYHHMM } from '../../../utils/functions/dateFuncs';
 import { materialUnits } from '../../../utils/selectDatas/productDatas';
+import Button from '../../../components/ui/button';
+import { Print } from '@mui/icons-material';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -27,15 +30,151 @@ const InfoBlock = ({ label, value }) => (
   </div>
 );
 
+// Компонент для печати
+const PrintComponent = React.forwardRef(({ data }, ref) => {
+  const quantities = data?.quantity?.quantities || [];
+  const status = statusMap[data?.status];
+
+  return (
+    <div ref={ref} style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      {/* Заголовок */}
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <h1 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0' }}>
+          ДЕТАЛИ ПЕРЕМЕЩЕНИЯ СЫРЬЯ
+        </h1>
+        <p style={{ fontSize: '14px', color: '#666', margin: '5px 0 0 0' }}>
+          ID: {data?.id} | Дата: {formatedToDDMMYYYYHHMM(data?.created_at)}
+        </p>
+      </div>
+
+      {/* Компактные детали */}
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(2, 1fr)', 
+        gap: '10px', 
+        marginBottom: '20px',
+        fontSize: '12px'
+      }}>
+        <div style={{ border: '1px solid #ddd', padding: '8px', borderRadius: '4px' }}>
+          <strong>Сотрудник:</strong> {data?.staff_name} {data?.staff_surname}
+        </div>
+        <div style={{ border: '1px solid #ddd', padding: '8px', borderRadius: '4px' }}>
+          <strong>Статус:</strong> {status?.label}
+        </div>
+        <div style={{ border: '1px solid #ddd', padding: '8px', borderRadius: '4px' }}>
+          <strong>Склад-отправитель:</strong> {data?.quantity?.out_warehouse?.title || '-'}
+        </div>
+        <div style={{ border: '1px solid #ddd', padding: '8px', borderRadius: '4px' }}>
+          <strong>Склад-получатель:</strong> {data?.quantity?.in_warehouse?.title || '-'}
+        </div>
+      </div>
+
+      {/* Таблица */}
+      <div>
+        <h3 style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '10px' }}>
+          Список сырья
+        </h3>
+        <table style={{ 
+          width: '100%', 
+          borderCollapse: 'collapse', 
+          fontSize: '11px',
+          border: '1px solid #000'
+        }}>
+          <thead>
+            <tr style={{ backgroundColor: '#f5f5f5' }}>
+              <th style={{ border: '1px solid #000', padding: '6px', textAlign: 'left' }}>
+                Название
+              </th>
+              <th style={{ border: '1px solid #000', padding: '6px', textAlign: 'left' }}>
+                Артикул
+              </th>
+              <th style={{ border: '1px solid #000', padding: '6px', textAlign: 'center' }}>
+                Кол-во
+              </th>
+              <th style={{ border: '1px solid #000', padding: '6px', textAlign: 'center' }}>
+                Ед. изм.
+              </th>
+              <th style={{ border: '1px solid #000', padding: '6px', textAlign: 'center' }}>
+                Цена
+              </th>
+              <th style={{ border: '1px solid #000', padding: '6px', textAlign: 'left' }}>
+                Комментарий
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {quantities.map((row, index) => (
+              <tr key={index}>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>
+                  {row.nomenclature?.title || '-'}
+                </td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>
+                  {row.nomenclature?.vendor_code || '-'}
+                </td>
+                <td style={{ border: '1px solid #000', padding: '4px', textAlign: 'center' }}>
+                  {row.amount || '-'}
+                </td>
+                <td style={{ border: '1px solid #000', padding: '4px', textAlign: 'center' }}>
+                  {materialUnits.find(u => u.value === row.nomenclature?.unit)?.label || '-'}
+                </td>
+                <td style={{ border: '1px solid #000', padding: '4px', textAlign: 'center' }}>
+                  {row.price ? `${row.price} сом` : '-'}
+                </td>
+                <td style={{ border: '1px solid #000', padding: '4px' }}>
+                  {row.comment || '-'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Подпись внизу */}
+      <div style={{ 
+        marginTop: '30px', 
+        display: 'flex', 
+        justifyContent: 'space-between',
+        fontSize: '12px'
+      }}>
+        <div>
+          <p>Ответственный: _________________</p>
+        </div>
+        <div>
+          <p>Дата печати: {new Date().toLocaleDateString('ru-RU')}</p>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+PrintComponent.displayName = 'PrintComponent';
+
 const HistoryDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const printRef = useRef();
 
   const { history_details } = useSelector(state => state.ware_warehouse);
 
   useEffect(() => {
     dispatch(getHistoryById(id));
   }, [dispatch, id]);
+
+  const handlePrint = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: `Детали_перемещения_${id}`,
+    pageStyle: `
+      @page {
+        size: A4;
+        margin: 1cm;
+      }
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+        }
+      }
+    `
+  });
 
   const data = history_details;
   const quantities = data?.quantity?.quantities || [];
@@ -51,7 +190,16 @@ const HistoryDetail = () => {
         ]}
       />
 
-      <Title text="Детали перемещения" />
+      <div className="flex justify-between items-center">
+        <Title text="Детали перемещения" />
+        <Button
+          onClick={handlePrint}
+          disabled={!data}
+        >
+          <Print className='mr-2'/>
+          Печать
+        </Button>
+      </div>
 
       {data && (
         <div className="bg-white rounded-xl shadow-sm p-6 space-y-8">
@@ -92,7 +240,6 @@ const HistoryDetail = () => {
                     </ul>
                 </div>
             )}
-
 
           {/* Таблица сырья */}
           <div>
@@ -142,6 +289,11 @@ const HistoryDetail = () => {
           </div>
         </div>
       )}
+
+      {/* Скрытый компонент для печати */}
+      <div style={{ display: 'none' }}>
+        <PrintComponent ref={printRef} data={data} />
+      </div>
     </div>
   );
 };

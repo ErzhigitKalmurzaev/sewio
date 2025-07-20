@@ -63,7 +63,13 @@ const RejectMaterialsTable = ({ data, setMaterials }) => {
             </Column>
             <Column width={150}>
               <HeaderCell>Артикул</HeaderCell>
-              <Cell dataKey="vendor_code" />
+              <Cell>
+                  {
+                      rowData => (
+                          <p>{rowData?.vendor_code ? rowData.vendor_code : '-/-'}</p>
+                      )
+                  }
+              </Cell>
             </Column>
             <Column width={150}>
               <HeaderCell>Количество</HeaderCell>

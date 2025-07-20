@@ -97,6 +97,7 @@ const KroiOrderSlice = createSlice({
                 fact_length: '',
                 fail: '',
                 count_in_layer: '',
+                is_main: false
             }
         ],
         party_list: null,
@@ -116,64 +117,74 @@ const KroiOrderSlice = createSlice({
         },
         getValueConsumables: (state, action) => {
             const { index, name, value, select_sizes } = action.payload;
+        
+            if (!state.party_consumables[index]) return;
+        
             const item = state.party_consumables[index];
-          
-            // Обновляем значение поля
             item[name] = value;
-          
+        
             const toNum = (v) => Number(v) || 0;
-          
-            // Формулы для вычислений
+        
             const {
-              table_length = 0,
-              layers_count = 0,
-              restyled = 0,
-              defect = 0,
-              remainder = 0,
-              color,
+                table_length = 0,
+                layers_count = 0,
+                restyled = 0,
+                defect = 0,
+                remainder = 0,
             } = item;
-          
+        
             const shouldUpdateFactLength = ['table_length', 'layers_count', 'restyled', 'defect', 'remainder'].includes(name);
             const shouldUpdateFail = shouldUpdateFactLength || name === 'passport_length';
-          
-            // Пересчет fact_length
+        
             if (shouldUpdateFactLength) {
-              item.fact_length =
-                toNum(table_length) * toNum(layers_count) +
-                toNum(restyled) +
-                toNum(defect) +
-                toNum(remainder);
+                item.fact_length =
+                    (toNum(table_length) * toNum(layers_count) +
+                    toNum(restyled) +
+                    toNum(defect) +
+                    toNum(remainder)).toFixed(2);
             }
-          
-            // Пересчет fail
+        
             if (shouldUpdateFail) {
-              item.fail = toNum(item.passport_length) - toNum(item.fact_length);
+                item.fail = toNum(item.passport_length) - toNum(item.fact_length);
             }
-          
-            // Если изменено одно из: layers_count или count_in_layer — обновляем party_amounts
-            if (['layers_count', 'count_in_layer'].includes(name)) {
-              const total = toNum(item.layers_count) * toNum(item.count_in_layer);
-              const colorId = color;
-          
-              if (colorId && state.party_amounts?.length > 0) {
-                const colorIndex = state.party_amounts.findIndex(p => p.color.id === colorId);
-                if (colorIndex !== -1) {
-                  const sizes = state.party_amounts[colorIndex].sizes.filter(item => select_sizes?.some(size => item.size.id === size.id));
-                  const sizeCount = sizes.length;
-          
-                  if (sizeCount > 0) {
+        
+            if (['is_main', 'layers_count', 'count_in_layer', 'color'].includes(name)) {
+                const mainConsumables = state.party_consumables.filter(c =>
+                    c.is_main &&
+                    c.color &&
+                    c.count_in_layer &&
+                    c.layers_count
+                );
+        
+                const sizes = select_sizes || state.party_active_sizes || [];
+        
+                state.party_amounts = state.party_amounts.map((amountEntry) => {
+                    const matchingConsumables = mainConsumables.filter(
+                        c => c.color === amountEntry.color.id
+                    );
+        
+                    if (!matchingConsumables.length) return amountEntry;
+        
+                    const total = matchingConsumables.reduce(
+                        (sum, c) => sum + toNum(c.layers_count) * toNum(c.count_in_layer),
+                        0
+                    );
+        
+                    const sizeCount = sizes.length;
                     const distributed = Math.floor(total / sizeCount);
-                    const remainder = total % sizeCount;
-          
-                    sizes.forEach((s, i) => {
-                      // Распределяем остаток по первым N размерам
-                      sizes[i].true_amount = distributed + (i < remainder ? 1 : 0);
-                    });
-                  }
-                }
-              }
+                    const extra = total % sizeCount;
+        
+                    return {
+                        ...amountEntry,
+                        totalAmount: total,
+                        sizes: amountEntry.sizes.map((sizeEntry, i) => ({
+                            ...sizeEntry,
+                            true_amount: distributed + (i < extra ? 1 : 0)
+                        }))
+                    };
+                });
             }
-        },
+        },                      
         updatePartyAmountsBySelectedSizes: (state, action) => {
             const { select_sizes } = action.payload;
 
@@ -191,7 +202,7 @@ const KroiOrderSlice = createSlice({
                     }
                 });
             });
-          },
+        },
         fillPartyConsumables: (state, action) => {
             state.party_consumables = action.payload?.data?.map(item => ({
                 title: item.title,
@@ -207,6 +218,7 @@ const KroiOrderSlice = createSlice({
                 fact_length: '',
                 fail: '',
                 count_in_layer: action.payload.sizes?.length,
+                is_main: item.is_main || false
             }))
         },
         addPartyConsumable: (state) => {
@@ -224,6 +236,7 @@ const KroiOrderSlice = createSlice({
                 fact_length: '',
                 fail: '',
                 count_in_layer: '',
+                is_main: false
             })
         },
         deletePartyConsumable: (state, action) => {
@@ -245,13 +258,13 @@ const KroiOrderSlice = createSlice({
                     fact_length: '',
                     fail: '',
                     count_in_layer: '',
+                    is_main: false
                 }
             ]
         },
         changePartyNumber: (state, action) => {
             state.party.number = action.payload.value
         },
-
         changeActiveSizes: (state, action) => {
             state.party_active_sizes = action.payload
         },
@@ -318,6 +331,10 @@ const KroiOrderSlice = createSlice({
                 state.party_status = 'loading';
                 state.party_active_sizes = [];
             }).addCase(getPartyById.fulfilled, (state, action) => {
+                const sizes_list = action.payload?.details?.length > 0 ? action.payload?.details?.filter((obj, index, self) =>
+                index === self.findIndex((o) => o.size.id === obj.size.id)
+                ).map(item => item.size) : [];
+
                 state.party_status = 'success';
                 state.party = action.payload;
                 state.party_consumables = action.payload.consumptions.map(item => ({
@@ -333,11 +350,10 @@ const KroiOrderSlice = createSlice({
                     remainder: item.remainder,
                     fact_length: item.fact_length,
                     fail: item.fail,
-                    count_in_layer: item.quantity / item.layers_count
+                    count_in_layer: sizes_list?.length,
+                    is_main: item.is_main
                 }))
-                state.party_active_sizes = action.payload?.details?.length > 0 ? action.payload?.details?.filter((obj, index, self) =>
-                index === self.findIndex((o) => o.size.id === obj.size.id)
-                ).map(item => item.size) : [];
+                state.party_active_sizes = sizes_list;
                 state.party_amounts = Object.values(
                     action.payload?.details?.reduce((acc, item) => {
                       const colorId = item?.color?.id;

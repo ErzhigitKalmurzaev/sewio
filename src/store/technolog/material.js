@@ -73,6 +73,18 @@ export const fillWarehouseWithMaterial = createAsyncThunk(
     }
 )
 
+export const createRolls = createAsyncThunk(
+    'material/createRolls',
+    async (props, { rejectWithValue }) => {
+        try {
+            const { data } =  await axiosInstance.post(`warehouse/materials/create/`, props);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const createRank = createAsyncThunk(
     'material/createRank',
     async (props, { rejectWithValue }) => {

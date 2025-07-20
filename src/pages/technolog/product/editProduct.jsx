@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import ProductImages from "./components/shared/productImages";
-import { createProduct, createProductFiles, createProductImages, editProductById, getProductById, getProductImages, getProductInfoById } from "../../../store/technolog/product";
+import { createProductFiles, createProductImages, editProductById, getProductById, getProductImages, getProductInfoById } from "../../../store/technolog/product";
 import { Toggle } from "rsuite";
 import Title from "../../../components/ui/title";
 import ProdTable from "./components/shared/prodTable";
@@ -13,7 +13,6 @@ import BackDrop from "../../../components/ui/backdrop";
 import { getProductsNames } from "../../../store/technolog/calculation";
 import InputWithSuggestion from "../../../components/ui/inputs/inputWithSuggestion";
 import { getColors } from "../../../store/technolog/material";
-import CombinationsPrint from "./components/shared/combinationsPrint";
 import { useReactToPrint } from "react-to-print";
 import { Print } from "@mui/icons-material";
 
@@ -147,6 +146,10 @@ const EditProduct = () => {
     documentTitle: `Операции товара: ${productData.title}   Артикул: ${productData.vendor_code}`,
     contentRef: printRef,
     pageStyle: `
+      @page {
+        size: A4;
+        margin: 1cm;
+      }
       @media print {
         body {
           -webkit-print-color-adjust: exact;
@@ -173,7 +176,7 @@ const EditProduct = () => {
         {
           product_status === 'loading' && <BackDrop/>
         }
-
+      
         <ProductImages 
           id_product={id}
           images={images}

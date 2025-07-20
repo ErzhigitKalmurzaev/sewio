@@ -44,9 +44,9 @@ const WorksHistoryTable = ({ data, status }) => {
         cellBordered
         className="rounded-lg text-xs"
       >
-        <Column width={60} align="center" verticalAlign="center">
-          <HeaderCell>ID</HeaderCell>
-          <Cell dataKey="id" />
+        <Column width={70} align="center" verticalAlign="center">
+          <HeaderCell>Order ID</HeaderCell>
+          <Cell><p>{orderId}</p></Cell>
         </Column>
 
         <Column width={70}>

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MultiImagePicker from './../../../../../components/ui/imagePickers/multiImagePicker';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from '../../../../../components/ui/button';
-import { createProductImages, getProductFiles, getProductImages } from '../../../../../store/technolog/product';
-import { toast } from 'react-toastify';
+import { getProductFiles, getProductImages } from '../../../../../store/technolog/product';
 import MultiFileUploader from '../../../../../components/ui/imagePickers/multiFileUploader';
 import CombinationsPrint from './combinationsPrint';
 
@@ -33,14 +31,10 @@ const ProductImages = ({ id_product, images, setImages, files, setFiles, setDele
       </div>
 
       <div className="hidden">
-          <CombinationsPrint
-            ref={printRef}
-            existingImages={existingImages}
-            setExistingImages={setExistingImages}
-            setDeleteImages={setDeleteImages}
-            newImages={images}
-            setNewImages={setImages}
-          />
+            <CombinationsPrint
+              ref={printRef}
+              images={existingImages}
+            />
       </div>
 
       <MultiImagePicker

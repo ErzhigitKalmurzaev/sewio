@@ -60,7 +60,11 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
 
             <Column width={120}>
                 <HeaderCell>Артикул</HeaderCell>
-                <Cell dataKey="vendor_code" />
+                <Cell>
+                    {
+                        rowData => (<p>{rowData?.vendor_code ? rowData?.vendor_code : '-/-'}</p>)
+                    }
+                </Cell>
             </Column>
 
             <Column width={120}>

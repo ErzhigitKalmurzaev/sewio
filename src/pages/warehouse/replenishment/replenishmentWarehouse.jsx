@@ -3,11 +3,12 @@ import MyBreadcrums from '../../../components/ui/breadcrums'
 import Title from '../../../components/ui/title'
 import Button from '../../../components/ui/button'
 import InputMaterialsTable from '../components/tables/replenishment/inputMaterialsTable'
-import { getMateralList } from '../../../store/technolog/material'
+import { getColors, getMateralList } from '../../../store/technolog/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import SelectMaterial from '../components/modals/selectMaterial'
 import CreateMaterial from '../components/modals/createMaterial'
+import InputRollMaterialsTable from '../components/tables/replenishment/InputRollMaterialsTable'
 
 const ReplenishmentWarehouse = () => {
 
@@ -35,6 +36,7 @@ const ReplenishmentWarehouse = () => {
 
   useEffect(() => {
     dispatch(getMateralList({ title: search }))
+    dispatch(getColors());
   }, [modals.create]);
 
   const handleSearch = () => {
@@ -46,16 +48,20 @@ const ReplenishmentWarehouse = () => {
         <MyBreadcrums items={breadcrumbs}/>
         
         <div className='flex items-center justify-between'>
-            <Title text="Заполнение склада"/>
+            <Title text="Пополнение склада"/>
             <div className='2/6'>
                 <Button onClick={() => setModals({ ...modals, select: true })}>+ Добавить материал</Button>
             </div>
         </div>
 
         <div className='mt-2'>
-            <InputMaterialsTable
+            {
+              materials.find(item => item.unit === 6) ? 
+              <InputRollMaterialsTable materials={materials}/> :
+              <InputMaterialsTable
                 data={materials}
-            />
+              />
+            }
         </div>
 
         <SelectMaterial
