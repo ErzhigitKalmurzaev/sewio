@@ -25,7 +25,7 @@ const PartyAmountTable = ({ data, status }) => {
       dispatch(updatePartyAmountsBySelectedSizes({ select_sizes: party_active_sizes.filter(item => item.id !== size.id) }));
     } else {
       dispatch(changeActiveSizes([...party_active_sizes, size]));
-      dispatch(updatePartyAmountsBySelectedSizes({ select_sizes: [...party_active_sizes, size]}));
+      dispatch(updatePartyAmountsBySelectedSizes({ select_sizes: [...party_active_sizes, size] }));
     }
   }
 

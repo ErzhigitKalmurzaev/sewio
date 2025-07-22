@@ -173,36 +173,51 @@ const KroiOrderSlice = createSlice({
                     const sizeCount = sizes.length;
                     const distributed = Math.floor(total / sizeCount);
                     const extra = total % sizeCount;
-        
+                    
                     return {
                         ...amountEntry,
                         totalAmount: total,
-                        sizes: amountEntry.sizes.map((sizeEntry, i) => ({
+                        sizes: amountEntry.sizes.map((sizeEntry, i) => {
+                          const hasMatch = sizes.some(size => size.id === sizeEntry.size.id);
+                      
+                          return {
                             ...sizeEntry,
-                            true_amount: distributed + (i < extra ? 1 : 0)
-                        }))
+                            true_amount: hasMatch ? distributed + (i < extra ? 1 : 0) : 0, // или другая логика
+                          };
+                        })
                     };
                 });
             }
         },                      
         updatePartyAmountsBySelectedSizes: (state, action) => {
             const { select_sizes } = action.payload;
-
+        
             state.party_amounts.forEach((colorEntry) => {
-                
-                const total = Number(colorEntry.sizes.reduce((sum, s) => sum + Number(s.true_amount), 0));
-                const distributed = Math.floor(total / select_sizes?.length);
-                const remainder = Number(total % select_sizes?.length);
-
-                colorEntry.sizes.forEach((s, i) =>{
-                    if(select_sizes?.some((sel) => sel.id === s.size.id)) {
-                        s.true_amount = distributed + (i < remainder ? 1 : 0);
-                    } else{ 
-                        s.true_amount = ''
+                const activeSizeIds = select_sizes.map(s => s.id);
+        
+                // находим первый выбранный размер с ненулевым true_amount
+                const baseTrueAmount = colorEntry.sizes.find(
+                    s => activeSizeIds.includes(s.size.id) && !!s.true_amount
+                )?.true_amount;
+        
+                colorEntry.sizes.forEach((s) => {
+                    if (activeSizeIds.includes(s.size.id)) {
+                        // если true_amount уже был — не трогаем
+                        if (!s.true_amount && baseTrueAmount !== undefined) {
+                            s.true_amount = baseTrueAmount;
+                        }
+                    } else {
+                        s.true_amount = '';
                     }
                 });
             });
-        },
+        
+            // обновляем party_consumables
+            state.party_consumables = state.party_consumables?.map(item => ({
+                ...item,
+                count_in_layer: select_sizes?.length || 0
+            }));
+        },              
         fillPartyConsumables: (state, action) => {
             state.party_consumables = action.payload?.data?.map(item => ({
                 title: item.title,
