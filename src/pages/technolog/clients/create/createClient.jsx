@@ -60,7 +60,6 @@ const CreateClient = () => {
   const validateFields = () => {
     const newErrors = {
       name: !employee_data.name,
-      surname: !employee_data.surname,
       username: !employee_data.username,
       phone: !employee_data.phone || !/^\+?\d{10,13}$/.test(employee_data.phone),
       password: employee_data.password.length < 3,

@@ -129,7 +129,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
                                     <div className='mt-4 grid grid-cols-2 gap-6'>
                                         <div>
                                             <h3 className='text-lg font-medium mb-1'>Операции в комбинации</h3>
-                                            <div className='flex items-end justify-between py-1 mb-3'>
+                                            <div className='flex items-end justify-between mb-3'>
                                                 <p>Время: {combination.operations.reduce((total, op) => total + op.time, 0) || 0} c</p>
                                                 <p>Цена: {(combination.operations?.reduce((total, op) => total + op.price, 0))?.toFixed(2) || 0} cом</p>
                                             </div>

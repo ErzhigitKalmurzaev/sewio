@@ -22,7 +22,7 @@ const CreateFolder = ({ modals, setModals }) => {
                     setTitle('')
                     setError(false)
                     toast.success('Папка создана успешно!')
-                    dispatch(getFolderList())
+                    dispatch(getFolderList({ search: '' }))
                 } else {
                   setError(true)
                   toast.error('Произошла ошибка!')

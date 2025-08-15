@@ -90,7 +90,6 @@ const EditClient = () => {
   const validateFields = () => {
     const newErrors = {
       name: !client_data.name,
-      surname: !client_data.surname,
       username: !client_data.username,
       phone: !client_data.phone || !/^\+?\d{10,13}$/.test(client_data.phone),
       company_title: !client_data.company_title,
