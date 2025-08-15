@@ -77,7 +77,7 @@ const CreateCombination = ({ modals, setModals }) => {
         }
     };
 
-    const filteredOperations = operations_list?.filter(op =>
+    const filteredOperations = operaitions_list?.results?.filter(op =>
         op.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
         !combination.operations.some(selectedOp => selectedOp.id === op.id)
     ) || [];
@@ -97,11 +97,11 @@ const CreateCombination = ({ modals, setModals }) => {
                         <Select label='Статус' data={combinationStatuses} value={combination.status} onChange={e => getValue(e, 'status')} placeholder='Установите статус' valueKey='id' />
                     </div>
                     <div>
-                        {operaitions_list?.results?.length > 0 && (
+                        {operaitions_list?.results?.length > 0 ? (
                             <div className='mt-4 grid grid-cols-2 gap-6'>
                                 <div>
                                     <h3 className='text-lg font-medium mb-1'>Операции в комбинации</h3>
-                                    <div className='flex items-end justify-between py-1 mb-3'>
+                                    <div className='flex items-end justify-between mb-3'>
                                         <p>Время: {combination.operations.reduce((total, op) => total + op.time, 0) || 0} c</p>
                                         <p>Цена: {(combination.operations?.reduce((total, op) => total + op.price, 0))?.toFixed(2) || 0} cом</p>
                                     </div>
@@ -134,13 +134,18 @@ const CreateCombination = ({ modals, setModals }) => {
                                     </ul>
                                 </div>
                             </div>
+                        ) : (
+                            <span className='flex flex-col items-center my-3'>
+                                <p className='text-center text-red-500'>Нет операций</p>
+                                <p className='text-xs text-center text-zinc-500'>(Создайте операции для создания комбинации)</p>
+                            </span>
                         )}
                     </div>
                 </div>
             </Modal.Body>
             <Modal.Footer>
                 <div className='flex justify-end'>
-                    <Button onClick={onSubmit}>Сохранить</Button>
+                    <Button onClick={onSubmit} disabled={operaitions_list?.results?.length <= 0}>Сохранить</Button>
                 </div>
             </Modal.Footer>
         </Modal>

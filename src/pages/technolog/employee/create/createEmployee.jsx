@@ -66,12 +66,10 @@ const CreateEmployee = () => {
   const validateFields = () => {
     const newErrors = {
       name: !employee_data.name,
-      surname: !employee_data.surname,
       username: !employee_data.username,
       // email: !employee_data.email || !/\S+@\S+\.\S+/.test(employee_data.email),
       password: employee_data.password.length < 3,
-      role: !employee_data.role,
-      rank: !employee_data.rank
+      role: !employee_data.role
     };
 
     setErrors(newErrors);

@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { ClientNav, foremanNav, kroiNav, shveyaNav, technologNav, warehouseNav } from '../../utils/navDatas/navDatas'
 import NavButton from '../shared/navButton'
 import { useLocation } from 'react-router-dom';
-
 import { ChevronLeft } from 'lucide-react';
-import NavAccardion from '../shared/navAccardion';
+import NavAccordion from '../shared/navAccardion';
 
 const Navbar = ({ role }) => {
-
     const { pathname } = useLocation();
     const active = pathname.split("/")[2];
 
@@ -32,25 +30,51 @@ const Navbar = ({ role }) => {
         foremanNav,
         foremanNav,
         ClientNav
-    ]
+    ];
+
+    const currentNav = navs[role !== undefined ? role : navs.length - 1] || [];
+
+    const handleToggleHide = () => {
+        setHide(prev => !prev);
+    };
 
     return (
         <div className={`${hide ? 'w-[80px] min-w-[80px]' : 'w-[290px]'} relative border-r border-gray flex flex-col items-center gap-1 py-8 transition-all ease-linear duration-300`}>
-            {
-                navs[role ? role : navs?.length-1]?.map((item, index) => {
-                    return (
-                        item.elements ? 
-                            <NavAccardion key={index} title={item.title} icon={item.icon} active={active} hide={hide} buttons={item.buttons} />
-                            :
-                            <NavButton key={index} title={item.title} path={item.path} icon={item.icon} active={active === item.path} hide={hide}/>
-                    )
-                })
-            }
-            <button className='absolute top-1 right-[-16px] border bg-white rounded-full w-[32px] h-[32px] bg-white hover:drop-shadow-2xl' onClick={() => setHide(!hide)}>
-                <ChevronLeft size={28} color='#2F4F4F' className={`${hide ? 'rotate-180' : ''} transition-transform ease-out duration-300`} />
+            {currentNav.map((item, index) => {
+                return item.elements ? (
+                    <NavAccordion
+                        key={`${item.title}-${index}`} 
+                        title={item.title} 
+                        icon={item.icon} 
+                        active={active} 
+                        hide={hide} 
+                        buttons={item.buttons} 
+                    />
+                ) : (
+                    <NavButton 
+                        key={`${item.path}-${index}`} 
+                        title={item.title} 
+                        path={item.path} 
+                        icon={item.icon} 
+                        active={active === item.path} 
+                        hide={hide}
+                    />
+                );
+            })}
+            
+            <button 
+                className='absolute top-1 right-[-16px] border bg-white rounded-full w-[32px] h-[32px] hover:shadow-lg transition-shadow duration-200' 
+                onClick={handleToggleHide}
+                aria-label={hide ? 'Развернуть меню' : 'Свернуть меню'}
+            >
+                <ChevronLeft 
+                    size={20} 
+                    color='#2F4F4F' 
+                    className={`${hide ? 'rotate-180' : ''} transition-transform ease-out duration-300`} 
+                />
             </button>
         </div>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;

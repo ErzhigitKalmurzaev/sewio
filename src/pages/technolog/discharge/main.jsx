@@ -125,7 +125,7 @@ const Discharge = () => {
                         value={`${newRank.percent}`}
                         onChange={e => getValue({ target: { value: e, name: 'percent' } })}
                     />
-                    <Toggle value={newRank.is_active} onChange={(e) => getValue({ target: { value: e, name: 'is_active' } })}>
+                    <Toggle checked={newRank.is_active} onChange={(e) => getValue({ target: { value: e, name: 'is_active' } })}>
                         Активный
                     </Toggle>
                 </div>

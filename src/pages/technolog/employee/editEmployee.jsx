@@ -98,10 +98,8 @@ const EditEmployee = () => {
   const validateFields = () => {
     const newErrors = {
       name: !employee_data.name,
-      surname: !employee_data.surname,
       username: !employee_data.username,
-      role: !employee_data.role,
-      rank: !employee_data.rank,
+      role: !employee_data.role
     };
 
     setErrors(newErrors);
