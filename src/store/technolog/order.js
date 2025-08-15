@@ -372,6 +372,7 @@ const TechnologOrderSlice = createSlice({
                     created_at: item.created_at,
                     staff: item.staff,
                     number: item.number,
+                    consumables: item.consumptions,
                     amounts: Object.values(
                         item.details.reduce((acc, amount) => {
                           const colorId = amount.color.id;

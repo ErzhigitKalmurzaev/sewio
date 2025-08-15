@@ -210,7 +210,7 @@ const OrderEdit = () => {
   })
 
   const handlePrintInvoice = useReactToPrint({
-    documentTitle: `Накладная на заказе #${id}`,
+    documentTitle: `Накладная на заказ #${id}`,
     contentRef: invoiceRef,
     pageStyle: `
       @media print {

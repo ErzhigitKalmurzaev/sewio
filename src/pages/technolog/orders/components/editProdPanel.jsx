@@ -5,7 +5,6 @@ import NumInputForTable from '../../../../components/ui/inputs/numInputForTable'
 import { Table } from 'rsuite';
 import { getColors } from '../../../../store/technolog/material';
 import SelectForTable from '../../../../components/ui/inputs/selectForTable';
-import Button from '../../../../components/ui/button';
 import ConfirmDeleteModal from '../modals/confirmDeleteModal';
 import PartiesPanel from './partiesPanel';
 

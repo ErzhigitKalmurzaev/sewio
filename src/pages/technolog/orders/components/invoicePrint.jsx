@@ -5,7 +5,8 @@ import { useParams } from "react-router-dom";
 import { materialUnits } from "../../../../utils/selectDatas/productDatas";
 import { Table } from "rsuite";
 import Column from "rsuite/esm/Table/TableColumn";
-import { Cell, HeaderCell } from "rsuite-table";
+
+const { Cell, HeaderCell, ColumnGroup } = Table;
 
 const InvoicePrint = forwardRef(({ images }, ref) => {
   const { id } = useParams();
@@ -22,6 +23,7 @@ const InvoicePrint = forwardRef(({ images }, ref) => {
       (invoice_data || []).flatMap((item) => Object.keys(item.colors || {}))
     )
   );
+
 
   return (
     <div className="w-full my-5 flex flex-col gap-y-5" ref={ref}>
@@ -41,27 +43,51 @@ const InvoicePrint = forwardRef(({ images }, ref) => {
       )}
       <Table
         bordered
-        cellBordered
-        autoHeight
+        cellBordered={true}
+        headerHeight={70}
+        row
         data={invoice_data || []}
         className="rounded-lg border border-borderGray"
       >
-        <Column width={180} align="left" fixed>
+        <Column width={180} align="left" verticalAlign="middle" fixed>
           <HeaderCell>Название</HeaderCell>
           <Cell dataKey="title" />
         </Column>
 
-        {/* Динамические колонки по цветам */}
+        {/* Динамические колонки по цветам с подколонками */}
         {uniqueColors.map((color, idx) => (
-          <Column key={idx} flex={1} align="center">
-            <HeaderCell>{color}</HeaderCell>
-            <Cell>
-              {(rowData) => rowData.colors?.[color] ?? ""}
-            </Cell>
-          </Column>
+          <ColumnGroup key={idx} header={color} align="center">
+            <Column width={60} align="center">
+              <HeaderCell className="text-3xs">Треб.</HeaderCell>
+              <Cell>
+                {(rowData) => {
+                  const colorData = rowData.colors?.[color];
+                  return colorData?.need !== undefined ? Number(colorData.need) : 0;
+                }}
+              </Cell>
+            </Column>
+            <Column width={60} align="center">
+              <HeaderCell className="text-3xs">На складе</HeaderCell>
+              <Cell>
+                {(rowData) => {
+                  const colorData = rowData.colors?.[color];
+                  return colorData?.stock !== undefined ? Number(colorData.stock) : 0;
+                }}
+              </Cell>
+            </Column>
+            <Column width={60} align="center">
+              <HeaderCell className="text-3xs">Нехватка</HeaderCell>
+              <Cell>
+                {(rowData) => {
+                  const colorData = rowData.colors?.[color];
+                  return colorData?.shortage !== undefined ? Number(colorData.shortage) : 0;
+                }}
+              </Cell>
+            </Column>
+          </ColumnGroup>
         ))}
 
-        <Column flex={1} align="center" fixed>
+        <Column flex={1} align="center" verticalAlign="middle">
           <HeaderCell>Ед. изм.</HeaderCell>
           <Cell>
             {(rowData) =>
