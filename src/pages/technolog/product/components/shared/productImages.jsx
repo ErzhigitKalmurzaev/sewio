@@ -5,7 +5,7 @@ import { getProductFiles, getProductImages } from '../../../../../store/technolo
 import MultiFileUploader from '../../../../../components/ui/imagePickers/multiFileUploader';
 import CombinationsPrint from './combinationsPrint';
 
-const ProductImages = ({ id_product, images, setImages, files, setFiles, setDeleteImages, setDeleteFiles, printRef }) => {
+const ProductImages = ({ id_product, images, setImages, files, setFiles, setDeleteImages, setDeleteFiles, printRef, productInfo }) => {
   const dispatch = useDispatch();
 
   const [existingImages, setExistingImages] = useState([]);
@@ -33,7 +33,8 @@ const ProductImages = ({ id_product, images, setImages, files, setFiles, setDele
       <div className="hidden">
             <CombinationsPrint
               ref={printRef}
-              images={existingImages}
+              productInfo={productInfo}
+              images={[...existingImages, ...images]}
             />
       </div>
 

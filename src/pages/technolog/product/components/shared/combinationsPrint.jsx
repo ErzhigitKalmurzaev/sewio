@@ -4,7 +4,7 @@ import { getOperationsTitlesList } from '../../../../../store/technolog/calculat
 import { useDispatch, useSelector } from 'react-redux';
 import { getRankList } from '../../../../../store/technolog/rank';
 
-const CombinationsPrint = forwardRef(({ images }, ref) => {
+const CombinationsPrint = forwardRef(({ images, productInfo }, ref) => {
 
   const { operations_list } = useSelector(state => state.calculation);
   const { combinations } = useSelector(state => state.product)
@@ -97,21 +97,64 @@ const CombinationsPrint = forwardRef(({ images }, ref) => {
   };
 
   return (
-    <div ref={ref} className='my-3'>
-        {/* Блок картинок */}
-        {images && images.length > 0 && (
-            <div className="flex flex-wrap gap-3 mb-4">
-                {images.map((img, i) => (
-                    <div key={i} className="w-auto">
-                        <img
-                            src={img.image}
-                            alt={`Изображение товара ${i + 1}`}
-                            className="w-full h-[130px] object-contain"
-                        />
+    <div ref={ref} className='my-3 mr-1'>
+        <div className="flex flex-col">
+                {/* Основная информация */}
+                <div className="flex gap-4 items-start">
+                    <span className="text-lg font-semibold">
+                        Название: {productInfo.title}
+                    </span>
+                    
+                    <span className="text-lg font-semibold">
+                        Артикул: {productInfo.vendor_code}
+                    </span>
+                </div>
+
+                {/* Блок картинок */}
+                {images && images.length > 0 && (
+                    <div className="flex gap-3">
+                        {images.slice(0, 6).map((img, i) => {
+                            // Определяем источник изображения
+                            let imageSrc;
+                            if (img.image) {
+                                // Если есть ссылка на изображение
+                                imageSrc = img.image;
+                            } else if (img.blobFile || img.file) {
+                                // Если это файл, создаем URL
+                                imageSrc = URL.createObjectURL(img.blobFile || img.file);
+                            }
+                            
+                            return (
+                                <div key={i} className="w-24 h-24 rounded-lg overflow-hidden bg-gray-50">
+                                    <img
+                                        src={imageSrc}
+                                        alt=""
+                                        className="w-full h-full object-contain"
+                                        onLoad={() => {
+                                            // Освобождаем память для файловых URL после загрузки
+                                            if (imageSrc && imageSrc.startsWith('blob:')) {
+                                                // Можно добавить cleanup логику если нужно
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            );
+                        })}
+                        {images.length > 6 && (
+                            <div className="w-24 h-24 rounded-lg bg-gray-100 flex items-center justify-center">
+                                <span className="text-sm text-gray-400">
+                                    +{images.length - 6}
+                                </span>
+                            </div>
+                        )}
                     </div>
-                ))}
+                )}
             </div>
-        )}
+
+        <div className="mb-3">
+          <h3 className="text-lg font-semibold text-gray-900">Схема разделения труда</h3>
+          <p className="text-sm text-gray-600">Подробная информация о операциях и их стоимости</p>
+        </div>
 
         {/* Таблица */}
         <div className="overflow-x-auto mt-5">

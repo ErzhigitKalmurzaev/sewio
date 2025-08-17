@@ -143,7 +143,6 @@ const EditProduct = () => {
   };
 
   const handlePrint = useReactToPrint({
-    documentTitle: `Операции товара: ${productData.title}   Артикул: ${productData.vendor_code}`,
     contentRef: printRef,
     pageStyle: `
       @page {
@@ -188,6 +187,7 @@ const EditProduct = () => {
           deleteFiles={deleteFiles}
           setDeleteFiles={setDeleteFiles} 
           printRef={printRef}
+          productInfo={productData}
         />
 
         <div className="w-full bg-white rounded-lg px-6 py-6 flex flex-col gap-y-5">
