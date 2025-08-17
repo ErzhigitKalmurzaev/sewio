@@ -60,7 +60,6 @@ const OperationOpenModal = ({ modals, setModals }) => {
   const validateField = () => {
     const newErrors = {
         title: !operation.title,
-        equipment: !operation.equipment,
         price: !operation.price,
         time: !operation.time,
         rank: !operation.rank
