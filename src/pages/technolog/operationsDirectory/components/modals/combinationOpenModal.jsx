@@ -74,7 +74,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
     }
   }
 
-  const filteredOperations = operations_list?.filter(op =>
+  const filteredOperations = operaitions_list?.results?.filter(op =>
     op?.title?.toLowerCase()?.includes(searchTerm?.toLowerCase()) &&
     !combination?.operations?.some(selectedOp => selectedOp?.id === op?.id)
   );
