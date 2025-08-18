@@ -94,6 +94,8 @@ const Statistic = () => {
                 icon={<ChartColumn color='blue' size={20} />}
               />
           </div>
+          
+        <p className='text-sm font-medium font-inter text-center text-amber-500'>! Прибыль указана ориентировочно. Расчёт ведётся от текущей себестоимости, которая может изменяться.</p>
         </div>
 
         {/* По сотрудникам */}

@@ -54,6 +54,7 @@ const OrderSummary = ({ getStatistic }) => {
             />
           ))}
         </div>
+        <p className='text-sm font-medium font-inter text-center text-amber-500'>! Прибыль указана ориентировочно. Расчёт ведётся от текущей себестоимости, которая может изменяться.</p>
       </div>
     </div>
   );

@@ -106,7 +106,7 @@ const ConsumablesTable = ({ type }) => {
                 </Cell>
             </Column>
             <Column width={200}>
-                <HeaderCell>Цена (сом)</HeaderCell>
+                <HeaderCell>Цена за 1 ед.</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
                         <NumInputForTable

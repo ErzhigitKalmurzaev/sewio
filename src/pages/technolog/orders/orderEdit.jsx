@@ -95,7 +95,7 @@ const OrderEdit = () => {
           // Суммируем количество всех размеров каждого продукта
           const productTotal = product.amounts.reduce(
             (productSum, item) =>
-              productSum + item.sizes.reduce((sizeSum, size) => sizeSum + size.amount, 0),
+              productSum + item.sizes.reduce((sizeSum, size) => sizeSum + (order.status === 2 ? size.done : size.amount), 0),
             0
           );
           return sum + productTotal;
@@ -107,7 +107,7 @@ const OrderEdit = () => {
           const productIncome = product.amounts.reduce(
             (productSum, item) =>
               productSum +
-              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * (product.true_price || product.price), 0),
+              item.sizes.reduce((sizeSum, size) => sizeSum + (order.status === 2 ? size.done : size.amount) * (product.true_price || product.price), 0),
             0
           );
           return total + productIncome;
@@ -119,7 +119,7 @@ const OrderEdit = () => {
           const productCost = product.amounts.reduce(
             (productSum, item) =>
               productSum +
-              item.sizes.reduce((sizeSum, size) => sizeSum + size.amount * (product.true_cost_price || product.cost_price), 0),
+              item.sizes.reduce((sizeSum, size) => sizeSum + (order.status === 2 ? size.done : size.amount) * (product.true_cost_price || product.cost_price), 0),
             0
           );
           return total + productCost;
@@ -129,7 +129,7 @@ const OrderEdit = () => {
         const totalSeconds = edit_products_in_order.reduce((total, product) => {
             const productTotalTime = product.amounts.reduce((sum, colorItem) => {
                 return sum + colorItem.sizes.reduce((sizeSum, sizeItem) => {
-                    return sizeSum + (product.time * sizeItem.amount);
+                    return sizeSum + (product.time * (order.status === 2 ? sizeItem.done : sizeItem.amount));
                 }, 0);
             }, 0);
     
@@ -196,7 +196,7 @@ const OrderEdit = () => {
         toast('Заполните все поля и выберите минимум 1 товар!');
     }
   }
-
+  console.log(edit_products_in_order)
   const handlePrint = useReactToPrint({
     documentTitle: `Отчёт о заказе #${id}`,
     contentRef: printRef,

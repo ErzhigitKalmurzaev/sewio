@@ -28,9 +28,10 @@ const EditProduct = () => {
   const { colors_list } = useSelector(state => state.material)
   const printRef = React.useRef();
 
-  const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
+  const { search, status } = useLocation();
+  const queryParams = new URLSearchParams(search, status);
   const orderProduct = queryParams.get("order_product");
+  const orderStatus = queryParams.get("status");
 
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
