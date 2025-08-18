@@ -76,7 +76,7 @@ const ConsumablesTable = ({ type }) => {
         setLoading(false);
     })
   }
-  console.log(consumables)
+  
   return (
     <div>
         <Table
