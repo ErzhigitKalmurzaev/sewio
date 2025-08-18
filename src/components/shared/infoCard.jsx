@@ -37,7 +37,7 @@ const InfoCard = ({ title, value, plan, plan_status, icon, date, unit }) => {
                     <div className='flex flex-col gap-y-5'>
                         <p className='text-base font-semibold font-inter text-fprimary'>{title}</p>
                         <p className='text-xl font-semibold font-inter text-sprimary'>
-                            {formatNumber(value) + unit}
+                            {(title === 'Время работы') ? value : formatNumber(value) + unit}
                         </p>
                         <p className='text-xs font-semibold font-inter text-fprimary'>
                             Месяц: {getMonthName(date?.date)}

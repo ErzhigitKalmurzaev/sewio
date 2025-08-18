@@ -32,7 +32,7 @@ const OperationTable = ({ urls }) => {
   return (
     <>
         <Table
-            minHeight={500}
+            height={500}
             data={operaitions_list?.results || []}
             loading={operaitions_list_status === 'loading'}
             bordered
@@ -49,7 +49,7 @@ const OperationTable = ({ urls }) => {
                 <Cell dataKey="title" />
             </Column>
 
-            <Column width={200}>
+            <Column width={140}>
                 <HeaderCell>
                     <TableDropdown
                       title="Cтатус" 
@@ -61,6 +61,16 @@ const OperationTable = ({ urls }) => {
                 <Cell>
                     {rowData => (rowData.is_active ? 'Активен' : 'Не активен')}
                 </Cell>
+            </Column>
+
+            <Column width={120}>
+                <HeaderCell>Время (сек)</HeaderCell>
+                <Cell dataKey="time" />
+            </Column>
+            
+            <Column width={120}>
+                <HeaderCell>Цена (сом)</HeaderCell>
+                <Cell dataKey="price" />
             </Column>
 
             <Column width={300}>

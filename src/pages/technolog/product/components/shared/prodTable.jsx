@@ -13,7 +13,12 @@ const ProdTable = ({ type }) => {
       <Panel header='Комбинации' defaultExpanded>
         <CombinationsTable/>
       </Panel>
-      <Panel header="Материалы" defaultExpanded>
+      <Panel header={
+        <div className='flex items-center gap-x-5'>
+          <b>Материалы</b>
+          <p className='text-sm font-inter font-medium text-amber-500'>«Если на складе сырьё указано без цвета, оно будет списываться универсально — для всех цветов заказа.<br/> Если на складе у сырья указан конкретный цвет, списание будет происходить именно по цвету, выбранному в заказе.»</p>
+        </div>
+      } defaultExpanded>
         <ConsumablesTable type={type}/>
       </Panel>
       <Panel header="Прочие" defaultExpanded>

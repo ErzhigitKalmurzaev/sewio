@@ -73,7 +73,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
         toast.error('Заполните все поля!')
     }
   }
-
+  console.log(operaitions_list?.results);
   const filteredOperations = operaitions_list?.results?.filter(op =>
     op?.title?.toLowerCase()?.includes(searchTerm?.toLowerCase()) &&
     !combination?.operations?.some(selectedOp => selectedOp?.id === op?.id)

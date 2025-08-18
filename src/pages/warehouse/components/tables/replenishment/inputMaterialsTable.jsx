@@ -96,7 +96,7 @@ const InputMaterialsTable = ({ data, status }) => {
                     </Cell>
                 </Column>
 
-                <Column width={150}>
+                <Column width={200}>
                     <HeaderCell>Количество</HeaderCell>
                     <Cell style={{ padding: '8px 6px'}}>
                         {
@@ -111,8 +111,8 @@ const InputMaterialsTable = ({ data, status }) => {
                     </Cell>
                 </Column>
 
-                <Column width={150}>
-                    <HeaderCell>Цена</HeaderCell>
+                <Column width={200}>
+                    <HeaderCell>Цена за общее количество</HeaderCell>
                     <Cell style={{ padding: '8px 6px'}}>
                         {
                             rowData => (

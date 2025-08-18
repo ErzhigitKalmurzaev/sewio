@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Input from "../../../components/ui/inputs/input";
 import Button from "../../../components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import ProductImages from "./components/shared/productImages";
 import { createProductFiles, createProductImages, editProductById, getProductById, getProductImages, getProductInfoById } from "../../../store/technolog/product";
@@ -15,6 +15,7 @@ import InputWithSuggestion from "../../../components/ui/inputs/inputWithSuggesti
 import { getColors } from "../../../store/technolog/material";
 import { useReactToPrint } from "react-to-print";
 import { Print } from "@mui/icons-material";
+import ConfirmEdit from "./components/modals/confirmEdit";
 
 const EditProduct = () => {
 
@@ -26,6 +27,10 @@ const EditProduct = () => {
   const { products } = useSelector(state => state.calculation)
   const { colors_list } = useSelector(state => state.material)
   const printRef = React.useRef();
+
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+  const orderProduct = queryParams.get("order_product");
 
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
@@ -39,6 +44,9 @@ const EditProduct = () => {
     vendor_code: ""
   });
   const [errors, setErrors] = useState({});
+  const [modals, setModals] = useState({
+    editConfirm: false
+  })
 
   useEffect(() => {
     dispatch(getProductById({ id })).then(res => {
@@ -227,11 +235,16 @@ const EditProduct = () => {
             <ProdTable/>
           </div>
           <div className="flex justify-center">
-            <Button width='180px' onClick={onSubmit}>
+            <Button width='180px' onClick={orderProduct ? () => setModals({ ...modals, editConfirm: true }) : onSubmit}>
                 Сохранить
             </Button>
           </div>
         </div>
+        <ConfirmEdit
+          modals={modals}
+          setModals={setModals}
+          onSubmit={onSubmit}
+        />
       </div>
     </>
   );

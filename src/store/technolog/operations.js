@@ -3,7 +3,7 @@ import axiosInstance from "../../api/axios";
 
 export const getOperationList = createAsyncThunk(
     'operation/getOperationList',
-    async ({ search, is_active }, { rejectWithValue }) => {
+    async ({ search, is_active = '' }, { rejectWithValue }) => {
         try {
             const { data } =  await axiosInstance.get(`sample/operations/list/?title=${search}&page_size=${1000}&is_active=${is_active}`);
             return data;

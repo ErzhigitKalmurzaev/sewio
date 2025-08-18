@@ -36,7 +36,7 @@ const MainTable = ({ data, status }) => {
         }
         localStorage.setItem('order', JSON.stringify(rowData));
     }
-
+    
   return (
     <div className='min-h-[500px] bg-white rounded-lg overflow-x-auto'>
         <Table

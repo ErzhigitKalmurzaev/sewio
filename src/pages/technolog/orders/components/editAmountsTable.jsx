@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const { Cell, Column, HeaderCell } = Table;
 
-const EditAmountsTable = () => {
+const EditAmountsTable = ({ status }) => {
 
   const dispatch = useDispatch();    
   const navigate = useNavigate();
@@ -49,7 +49,10 @@ const EditAmountsTable = () => {
                                     <span className='ml-3 font-semibold text-sm text-fprimary'>
                                         Арт: {product.vendor_code}
                                     </span>
-                                    <Pencil className='ml-5 mb-2' onClick={() => navigate(`/crm/product/${product.nomenclature}`)}/>
+                                    {
+                                        status !== 2 && 
+                                        <Pencil className='ml-5 mb-2' onClick={() => navigate(`/crm/product/${product.nomenclature}?order_product=true`)}/>
+                                    }
                                 </span>
                             </div>
                         }

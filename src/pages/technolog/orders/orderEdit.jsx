@@ -171,6 +171,8 @@ const OrderEdit = () => {
           out_warehouse: order.out_warehouse,
           products: edit_products_in_order.map(item => ({
             ...item,
+            true_cost_price: Number(item.true_cost_price) || Number(item.cost_price),
+            true_price: Number(item.true_price) || Number(item.price),
             amounts: item.amounts.flatMap(amount => 
                 amount.sizes.map(size => ({
                     color: amount.color,
@@ -250,7 +252,7 @@ const OrderEdit = () => {
 
       <div className='hidden'>
         <OrderPrint ref={printRef} order={order} products={edit_products_in_order} images={images} />
-        <InvoicePrint ref={invoiceRef} images={images} />
+        <InvoicePrint ref={invoiceRef} images={images} productInfo={edit_products_in_order} />
       </div>
 
       <div className='w-full flex gap-x-7'>
@@ -312,7 +314,7 @@ const OrderEdit = () => {
         <OrderSummary getStatistic={getStatistic}/>
       </div>
       <div className='bg-white w-full p-3 rounded-lg shadow-sm'>
-        <EditAmountsTable/>
+        <EditAmountsTable status={order?.status}/>
       </div>
       <div className='flex justify-center'>
         {

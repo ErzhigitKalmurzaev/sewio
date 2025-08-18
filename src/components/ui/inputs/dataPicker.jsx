@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { DatePicker } from 'rsuite';
+import { DatePicker, CustomProvider } from 'rsuite';
 import 'rsuite/DatePicker/styles/index.css';
+import ruRU from 'rsuite/locales/ru_RU';
 
 const DataPicker = ({
   width = '100%',
@@ -13,7 +14,8 @@ const DataPicker = ({
   required,
   error,
   disabled = false,
-  errorTitle
+  errorTitle,
+  format = "dd.MM.yyyy"
 }) => {
 
   const parseDateString = (str) => {
@@ -54,14 +56,16 @@ const DataPicker = ({
         {label}
         {required && <span className="required"> *</span>}
       </label>
-      <DatePicker
-        format="dd.MM.yyyy"
-        placeholder={placeholder}
-        value={internalDate || parseDateString(value)}
-        onChange={handleChange}
-        disabled={disabled}
-        style={{ width: width }}
-      />
+      <CustomProvider locale={ruRU}>
+        <DatePicker
+          format={format}
+          placeholder={placeholder}
+          value={internalDate || parseDateString(value)}
+          onChange={handleChange}
+          disabled={disabled}
+          style={{ width: width }}
+        />
+      </CustomProvider>
       {error && (
         <p className="text-redd text-xs font-inter mt-1">
           {errorTitle || '(Заполните поле правильно!)'}

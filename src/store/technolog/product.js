@@ -358,7 +358,7 @@ const TechnologProductSlice = createSlice({
             
             // Вставляем элемент в новую позицию
             newCombinations.splice(toIndex, 0, draggedItem);
-            
+            console.log(newCombinations)
             // Обновляем состояние
             state.combinations = newCombinations;
         },
@@ -437,6 +437,7 @@ const TechnologProductSlice = createSlice({
                     consumption: item.consumption,
                     price: item.price,
                     title: item.material_nomenclature?.title,
+                    coefficient: item.material_nomenclature?.coefficient
                 }));
                 state.prices = action.payload.prices;
             }).addCase(getProductById.rejected, (state) => {
@@ -483,8 +484,8 @@ const TechnologProductSlice = createSlice({
                 state.consumables = action.payload?.consumables?.map(item => ({
                     title: item.material_nomenclature?.title,
                     consumption: item.consumption,
-                    unit: item?.material_nomenclature?.unit,
-                    price: item?.material_nomenclature?.price,
+                    unit: item?.unit,
+                    price: item?.price,
                     material_nomenclature: item?.material_nomenclature?.id,
                     color: item?.color?.id
                 }));
@@ -496,6 +497,7 @@ const TechnologProductSlice = createSlice({
             .addCase(getProductInfoById.rejected, (state) => {
                 state.product_status = 'error';
             })
+            // ------------------------------------------
     }
 })
 

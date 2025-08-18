@@ -30,6 +30,14 @@ const Statistic = () => {
     dispatch(getStatistic({ date: urls.date }));
   }, [urls.date])
 
+  const getTime = (time) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = time % 60;
+
+    return `${hours} ч. ${minutes} мин. ${seconds} сек.`;
+  }
+
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-12'>
         <div className='flex justify-between items-center'>
@@ -39,6 +47,7 @@ const Statistic = () => {
                   value={urls.date.split('-').join('.')}
                   onChange={handleChangeFilter}
                   placeholder='Дата'
+                  format='MMM yyyy'
                 />
                 {/* <Button width='200px' style={{ marginBottom: '5px' }}>+ Создать план</Button> */}
             </div>
@@ -130,9 +139,9 @@ const Statistic = () => {
               <InfoCard
                 title='Время работы'
                 plan_status={false}
-                value={(statistic_list?.staff?.time / 3600).toFixed(1) || 0}
+                value={getTime(statistic_list?.staff?.time) || 0}
                 date={urls}
-                unit=' ч.'
+                unit=''
                 icon={<Wrench color='gray' size={20} />}
               />
           </div>
@@ -164,9 +173,9 @@ const Statistic = () => {
               <InfoCard
                 title='Время работы'
                 plan_status={false}
-                value={(statistic_list?.machine?.time / 3600)?.toFixed(1) || 0}
+                value={getTime(statistic_list?.machine?.time) || 0}
                 date={urls}
-                unit=' ч.'
+                unit=''
                 icon={<Clock color='gray' size={20} />}
               />
               <InfoCard

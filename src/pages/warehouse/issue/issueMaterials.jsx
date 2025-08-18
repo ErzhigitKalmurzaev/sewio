@@ -86,13 +86,25 @@ const IssueMaterials = () => {
   }
 
   const onSubmit = () => {
+    // Проверяем, есть ли хотя бы один товар с заполненным количеством
+    const hasValidAmount = output.products.some(item => 
+        item.output_amount && Number(item.output_amount) > 0
+    );
+
+    if (!hasValidAmount) {
+        toast.error("Необходимо указать количество хотя бы для одного товара!");
+        return;
+    }
+
     const data = {
         output_warehouse_id: output.warehouse.id,
-        products: output.products.map(item => ({
-            product_id: item.id,
-            amount: Number(item.output_amount),
-            price: Number(item.cost_price)
-        }))
+        products: output.products
+            .filter(item => item.output_amount && Number(item.output_amount) > 0) // Фильтруем только товары с количеством
+            .map(item => ({
+                product_id: item.id,
+                amount: Number(item.output_amount),
+                price: Number(item.cost_price)
+            }))
     }
 
     dispatch(postIssueInWarehouse(data))

@@ -37,7 +37,7 @@ const PartiesPanel = () => {
     fail: 'Недосдача',
     count_in_layer: 'Кол-во единиц',
   }
-  console.log(order_parties)
+  
   return (
     <PanelGroup accordion bordered>
       {order_parties.map((party, index) => (

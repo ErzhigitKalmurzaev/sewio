@@ -88,7 +88,7 @@ const EditEmployee = () => {
 
   const getValue = (e) => {
     const { name, value } = e.target;
-    
+
     setEmployee_data({
       ...employee_data,
       [name]: value
@@ -118,7 +118,7 @@ const EditEmployee = () => {
 
       const props = image ? image?.blobFile ? { ...finalData, image: image?.blobFile } 
       : finalData : { ...finalData, image_delete: true } 
-
+      
       dispatch(editEmployeeInfo({ id, props }))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {

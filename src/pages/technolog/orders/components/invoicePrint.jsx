@@ -3,99 +3,137 @@ import { useDispatch, useSelector } from "react-redux";
 import { getInvoiceData } from "../../../../store/technolog/order";
 import { useParams } from "react-router-dom";
 import { materialUnits } from "../../../../utils/selectDatas/productDatas";
-import { Table } from "rsuite";
-import Column from "rsuite/esm/Table/TableColumn";
+import { Table, Divider } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
 
-const { Cell, HeaderCell, ColumnGroup } = Table;
+const { Cell, HeaderCell, Column } = Table;
 
-const InvoicePrint = forwardRef(({ images }, ref) => {
+const InvoicePrint = forwardRef(({ images, productInfo }, ref) => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { invoice_data } = useSelector((state) => state.order);
+  const { invoice_data: rawData } = useSelector((state) => state.order);
 
   useEffect(() => {
     dispatch(getInvoiceData(id));
   }, [dispatch, id]);
 
-  // 1. Собираем все уникальные цвета из всех materials
-  const uniqueColors = Array.from(
-    new Set(
-      (invoice_data || []).flatMap((item) => Object.keys(item.colors || {}))
-    )
-  );
-
+  // Transform data like in MainTable - each color becomes a separate row
+  const transformedData = [];
+  (rawData || []).forEach((material, materialIndex) => {
+    material.colors.forEach((color, colorIndex) => {
+      transformedData.push({
+        // Material data
+        materialId: materialIndex + 1,
+        materialTitle: material.title,
+        materialUnit: material.unit,
+        materialRowSpan: colorIndex === 0 ? material?.colors?.length : 0,
+        
+        // Color data
+        color: color.color || "Без цвета",
+        need: color.need,
+        stock: color.stock,
+        shortage: color.shortage,
+        
+        // Helper flags
+        isFirstInGroup: colorIndex === 0
+      });
+    });
+  });
 
   return (
-    <div className="w-full my-5 flex flex-col gap-y-5" ref={ref}>
-      {/* ✅ Блок картинок */}
-      {images.length > 0 && (
-        <div className="flex flex-wrap gap-3 mb-4">
-          {images.map((img, i) => (
-            <div key={i} className="w-auto">
-              <img
-                src={img.image}
-                alt={`Изображение товара ${i + 1}`}
-                className="w-full h-[130px] object-contain"
-              />
-            </div>
-          ))}
+    <div
+      className="w-full min-h-screen bg-white font-sans text-black p-6"
+      ref={ref}
+    >
+      <h1 className="text-lg text-center font-bold uppercase tracking-wide mb-2">
+        Накладная на материалы для заказа №{id}
+      </h1>
+
+      {/* Images */}
+      {images?.length > 0 && (
+        <div className="mb-6">
+          <div className="flex flex-wrap">
+            {images.map((img, i) => (
+              <div key={i} className="rounded border border-borderGray p-2">
+                <img
+                  src={img.image}
+                  alt={`Изображение ${i + 1}`}
+                  className="w-full h-24 object-contain"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
-      <Table
-        bordered
-        cellBordered={true}
-        headerHeight={70}
-        row
-        data={invoice_data || []}
-        className="rounded-lg border border-borderGray"
-      >
-        <Column width={180} align="left" verticalAlign="middle" fixed>
-          <HeaderCell>Название</HeaderCell>
-          <Cell dataKey="title" />
-        </Column>
 
-        {/* Динамические колонки по цветам с подколонками */}
-        {uniqueColors.map((color, idx) => (
-          <ColumnGroup key={idx} header={color} align="center">
-            <Column width={60} align="center">
-              <HeaderCell className="text-3xs">Треб.</HeaderCell>
-              <Cell>
-                {(rowData) => {
-                  const colorData = rowData.colors?.[color];
-                  return colorData?.need !== undefined ? Number(colorData.need) : 0;
-                }}
-              </Cell>
-            </Column>
-            <Column width={60} align="center">
-              <HeaderCell className="text-3xs">На складе</HeaderCell>
-              <Cell>
-                {(rowData) => {
-                  const colorData = rowData.colors?.[color];
-                  return colorData?.stock !== undefined ? Number(colorData.stock) : 0;
-                }}
-              </Cell>
-            </Column>
-            <Column width={60} align="center">
-              <HeaderCell className="text-3xs">Нехватка</HeaderCell>
-              <Cell>
-                {(rowData) => {
-                  const colorData = rowData.colors?.[color];
-                  return colorData?.shortage !== undefined ? Number(colorData.shortage) : 0;
-                }}
-              </Cell>
-            </Column>
-          </ColumnGroup>
-        ))}
+      {/* Materials Table */}
+      <div className="mb-6">
+        
+        <div className="overflow-x-auto border border-borderGray">
+          <Table
+            data={transformedData || []}
+            height={600}
+            bordered
+            cellBordered
+            className="rounded-none"
+          >
 
-        <Column flex={1} align="center" verticalAlign="middle">
-          <HeaderCell>Ед. изм.</HeaderCell>
-          <Cell>
-            {(rowData) =>
-              materialUnits.find((el) => el.value === rowData.unit)?.label || "-"
-            }
-          </Cell>
-        </Column>
-      </Table>
+            <Column width={220} verticalAlign="middle" rowSpan={rowData => rowData.materialRowSpan}>
+              <HeaderCell className="bg-gray-200 font-bold text-sm border-black">
+                Наименование материала
+              </HeaderCell>
+              <Cell dataKey="materialTitle" />
+            </Column>
+
+            <Column width={90} align="center" verticalAlign="middle" rowSpan={rowData => rowData.materialRowSpan}>
+              <HeaderCell className="bg-gray-200 font-bold text-sm border-black">
+                Ед. изм.
+              </HeaderCell>
+              <Cell>
+                {(rowData) => 
+                  materialUnits.find(unit => unit.value === rowData.materialUnit)?.label || "—"
+                }
+              </Cell>
+            </Column>
+
+            <Column width={90} align="center" verticalAlign="middle">
+              <HeaderCell className="bg-gray-200 font-bold text-sm border-black">
+                Цвет
+              </HeaderCell>
+              <Cell>
+                {(rowData) => rowData.color}
+              </Cell>
+            </Column>
+
+            <Column width={90} align="center" verticalAlign="middle">
+              <HeaderCell className="bg-gray-200 font-bold text-sm border-black">
+                Требуется
+              </HeaderCell>
+              <Cell>
+                {(rowData) => rowData.need.toFixed(1)}
+              </Cell>
+            </Column>
+
+            <Column width={90} align="center" verticalAlign="middle">
+              <HeaderCell className="bg-gray-200 font-bold text-sm border-black">
+                На складе
+              </HeaderCell>
+              <Cell>
+                {(rowData) => rowData.stock.toFixed(1)}
+              </Cell>
+            </Column>
+
+            <Column width={90} align="center" verticalAlign="middle">
+              <HeaderCell className="bg-gray-200 font-bold text-sm border-black">
+                Нехватка
+              </HeaderCell>
+              <Cell>
+                {(rowData) => rowData.shortage.toFixed(1)}
+              </Cell>
+            </Column>
+          </Table>
+        </div>
+      </div>
     </div>
   );
 });

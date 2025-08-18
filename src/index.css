@@ -77,3 +77,9 @@ body[style*="padding-right"] {
 .rs-table-row-group:nth-of-type(odd) {
   background-color: #ffffff !important;
 } 
+
+@media print {
+  .rs-table {
+    border-collapse: collapse !important;
+  }
+}

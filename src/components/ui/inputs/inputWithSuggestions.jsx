@@ -58,8 +58,7 @@ const TextInputForTable = ({
     }
 
     const filtered = suggestions
-      ?.filter((item) => item.title.toLowerCase().includes(text.toLowerCase()))
-      .slice(0, 5);
+      ?.filter((item) => item.title.toLowerCase().includes(text.toLowerCase()));
 
     setFilteredSuggestions(filtered);
     setHighlightedIndex(-1);
@@ -137,7 +136,7 @@ const TextInputForTable = ({
               >
                 <span>{suggestion.title}</span>
                 <span style={suggestion?.color ? { color: colors_list?.find(color => color.id === suggestion?.color).code } : { color: 'gray'}}>
-                  {suggestion?.vendor_code ? suggestion?.vendor_code : ''}
+                  {suggestion?.id ? suggestion?.id : ''}
                 </span>
               </SuggestionItem>
             ))}

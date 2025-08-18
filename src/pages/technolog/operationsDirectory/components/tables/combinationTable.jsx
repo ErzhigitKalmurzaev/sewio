@@ -28,7 +28,7 @@ const CombinationTable = ({ urls }) => {
   return (
     <>
         <Table
-            minHeight={500}
+            height={500}
             data={combinations_list?.results || []}
             loading={combinations_list_status === 'loading'}
             bordered

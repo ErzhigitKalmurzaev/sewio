@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder, required, error, errorTitle, disabled = false, max = 10000000000000 }) => {
   
   const formatNumber = (num) => {
-    // Преобразуем num в строку (если он не строка)
+    if (num === '' || num === 0) return ''
     let strNum = String(num || '');
 
     // Убираем все символы, кроме цифр и точки
@@ -33,17 +33,15 @@ const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder,
   const [inputValue, setInputValue] = useState(formatNumber(value));
 
   useEffect(() => {
-    setInputValue(formatNumber(value));
+    setInputValue(value === '' ? '' : formatNumber(value));
   }, [value]);
 
   const handleChange = (e) => {
     let { value } = e.target;
 
-    // Форматируем ввод
     const formattedValue = formatNumber(value);
     setInputValue(formattedValue);
 
-    // Убираем пробелы перед передачей наверх
     if (onChange) {
       onChange(formattedValue.replace(/\s+/g, ''));
     }
@@ -55,7 +53,7 @@ const NumInputForTable = ({ label, id, width, value = "", onChange, placeholder,
         id={id}
         name=""
         type="text"
-        value={inputValue}
+        value={max < inputValue ? '' : inputValue}
         onChange={handleChange}
         disabled={disabled}
         placeholder={placeholder}

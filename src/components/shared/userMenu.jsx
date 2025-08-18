@@ -15,6 +15,7 @@ import Logout from '@mui/icons-material/Logout';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile, logout } from '../../store/auth/auth';
 import { useNavigate } from 'react-router-dom';
+import { employeeRole } from '../../utils/selectDatas/employeeDatas';
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -90,12 +91,15 @@ const UserMenu = () => {
             </Box>
 
             <Box mt={1.5}>
-              <Typography fontSize={14} color="text.secondary">
-                Разряд: <strong>{me_info?.rank?.title}</strong>
+              <Typography fontSize={14} mt={0.5} color="text.secondary">
+                Роль: <strong>{employeeRole[me_info?.role].label}</strong>
               </Typography>
-              <Typography fontSize={14} mt={0.7} color="text.secondary">
-                Телефон: <strong>{me_info?.phone?.length > 4 ? me_info?.phone : 'Не указано'}</strong>
-              </Typography>
+              {
+                me_info?.rank?.title &&
+                <Typography fontSize={14} mt={0.5} color="text.secondary">
+                  Разряд: <strong>{me_info?.rank?.title}</strong>
+                </Typography>
+              }
             </Box>
           </Box>
 

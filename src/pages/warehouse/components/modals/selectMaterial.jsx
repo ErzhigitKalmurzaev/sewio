@@ -65,9 +65,9 @@ const SelectMaterial = ({ modals, setModals, materials_list, status, search, set
               <div className='border border-borderGray rounded-lg'>
                 <Table
                     loading={status === 'loading'}
-                    data={materials_list}
+                    data={materials_list || []}
                     cellBordered
-                    height={450}
+                    autoHeight
                     className='rounded-xl'
                 >
                     <Column width={80} align='center'>

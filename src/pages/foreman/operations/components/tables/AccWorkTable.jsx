@@ -38,6 +38,14 @@ const AccWorkTable = ({ data, status, amount }) => {
   };
 
   const maxDetails = Math.max(...data.map(op => op.details.length));
+
+  const getTotalCount = (arr, excludeIndex) => {
+    return amount - arr?.reduce((sum, item, index) => {
+      if (index === excludeIndex) return sum; // пропускаем элемент
+      const value = Number(item.count) || 0; // если пустая строка → 0
+      return sum + value;
+    }, 0);
+  }
   
   return (
     <div className="min-h-[300px] rounded-lg">
@@ -87,7 +95,7 @@ const AccWorkTable = ({ data, status, amount }) => {
                     value={rowData.details[index].count || ''}
                     disabled={rowData.details[index].status === 1 || !amount}
                     onChange={value => getAmountValue(value, rowData, index)}
-                    max={amount}
+                    max={getTotalCount(rowData.details, index)}
                     className="w-full"
                   />
                 ) : null}

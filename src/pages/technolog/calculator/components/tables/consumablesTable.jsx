@@ -47,13 +47,23 @@ const ConsumablesTable = ({ type }) => {
     setLoading(true);
     dispatch(getMaterial({ id }))
     .then(res => {
-        if(res.meta.requestStatus === 'fulfilled') {
+        if(res.payload?.unit === 6) {
             dispatch(fillConsumable({ key: index, value: {
                 material_nomenclature: res.payload.id,
                 title: res.payload.title,
                 consumption: '',
+                price: (res.payload.cost_price / res.payload.coefficient).toFixed(1),
+                unit: 9,
+                coefficient: res.payload.coefficient
+            }}))
+        } else {
+            dispatch(fillConsumable({ key: index, value: {
+                material_nomenclature: res.payload.id,
+                title: res.payload.title,
+                consumption: '',
+                price: res.payload.cost_price.toFixed(1) || 0,
                 unit: res.payload.unit,
-                price: res.payload.cost_price.toFixed(1)
+                coefficient: res.payload.coefficient
             }}))
         }
         setLoading(false);

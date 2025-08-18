@@ -28,7 +28,7 @@ const ProductTable = ({ data, status, total, activePage, limit, setPage }) => {
                   <Cell dataKey="id" />
               </Column>
 
-              <Column width={150}>
+              <Column width={250}>
                   <HeaderCell>Название</HeaderCell>
                   <Cell dataKey="title" />
               </Column>

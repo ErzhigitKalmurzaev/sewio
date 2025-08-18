@@ -34,10 +34,12 @@ const MultiFileUploader = ({ existingFiles = [], setExistingFiles, setDeleteFile
 
   const renderFileInfo = (file) => {
     return (
-      <div className="flex justify-between items-center w-[360px] pr-2 pl-7 pb-1">
-        <span className="truncate">{file.name}</span>
+      <div className="flex justify-between items-center w-full pr-2 pl-7 pb-1 min-w-0">
+        <div className="flex-1 min-w-0 mr-2">
+          <span className="truncate block text-sm">{file.name?.length > 32 ? `${file.name.slice(0, 32)}...` : file.name}</span>
+        </div>
         {file.url && (
-          <a href={file.url} target="_blank" rel="noopener noreferrer" className="ml-3">
+          <a href={file.url} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
             <Download size={18} />
           </a>
         )}
@@ -81,15 +83,46 @@ const MultiFileUploader = ({ existingFiles = [], setExistingFiles, setDeleteFile
           background-color: #f8f8f8;
           border-radius: 6px;
           font-size: 14px;
+          min-width: 0; /* Важно для корректной работы truncate */
+        }
+
+        .file-uploader-wrapper .rs-uploader-file-item .rs-uploader-file-item-info {
+          flex: 1;
+          min-width: 0;
+          margin-right: 8px;
+        }
+
+        .file-uploader-wrapper .rs-uploader-file-item .rs-uploader-file-item-remove {
+          flex-shrink: 0;
+          margin-left: auto;
         }
 
         .file-uploader-wrapper a {
           color: #3b82f6;
           transition: opacity 0.2s ease;
+          flex-shrink: 0;
         }
 
         .file-uploader-wrapper a:hover {
           opacity: 0.8;
+        }
+
+        /* Дополнительные стили для обрезки текста */
+        .file-uploader-wrapper .rs-uploader-file-item-title {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          max-width: 280px; /* Оставляем место для кнопки удаления */
+        }
+
+        .file-uploader-wrapper .rs-uploader-file-item-size {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 12px;
+          color: #666;
+          max-width: 280px;
+          margin-top: 3px;
         }
       `}</style>
     </div>

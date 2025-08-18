@@ -51,7 +51,7 @@ const CreateParty = () => {
             }))
         )),
         consumptions: party_consumables
-          .filter(item => item.nomenclature)  // Отфильтровываем элементы без nomenclature
+          .filter(item => item.nomenclature && item.table_length && item.layers_count)  // Отфильтровываем элементы без nomenclature
           .map(item => ({
             ...item,
             layers_count: Number(item.layers_count) || 0,
@@ -59,6 +59,7 @@ const CreateParty = () => {
           }))
       
       }
+      
       dispatch(postParty(new_party)).then(res => {
         if(res.meta.requestStatus === 'fulfilled') {
           toast.success('Партия успешно создана!');

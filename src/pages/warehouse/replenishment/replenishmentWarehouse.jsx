@@ -30,7 +30,7 @@ const ReplenishmentWarehouse = () => {
 
   const { materials_list, materials_list_status } = useSelector(state => state.material);
 
-  const [modals, setModals] = useState({ select: false, create: false });
+  const [modals, setModals] = useState({ select: true, create: false });
   const [search, setSearch] = useState('');
   const [materials, setMaterials] = useState([]);
 

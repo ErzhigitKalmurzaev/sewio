@@ -222,7 +222,7 @@ const KroiOrderSlice = createSlice({
             state.party_consumables = action.payload?.data?.map(item => ({
                 title: item.title,
                 nomenclature: item.id,
-                passport_length: item.coefficient,
+                passport_length: item.coefficient * item.stock_amount,
                 color: item.color,
                 table_length: '',
                 layers_count: '',

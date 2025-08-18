@@ -13,6 +13,7 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
   const [selectedMaterial, setSelectedMaterial] = useState({});
 
   const { colors_list } = useSelector(state => state.material);
+  const { me_info } = useSelector(state => state.auth);
 
   const selectEditMaterial = (data) => {
     setSelectedMaterial(data);
@@ -98,7 +99,7 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
             </Column>
 
             <Column width={120}>
-                <HeaderCell>Цена</HeaderCell>
+                <HeaderCell>Цена за 1 ед.</HeaderCell>
                 <Cell>
                     {rowData => (
                         <p>{rowData?.cost_price?.toFixed(2) || '-'}</p>
@@ -106,16 +107,19 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
                 </Cell>
             </Column>
 
-            <Column width={80}>
-                <HeaderCell align='center'>Действия</HeaderCell>
-                <Cell>
-                    {rowData => (
-                        <div className='flex justify-center gap-x-2 cursor-pointer' onClick={() => selectEditMaterial(rowData)}>
-                            <Pencil/>
-                        </div>
-                    )}
-                </Cell>
-            </Column>
+            {
+                me_info?.role === 3 && 
+                <Column width={80}>
+                    <HeaderCell align='center'>Действия</HeaderCell>
+                    <Cell>
+                        {rowData => (
+                            <div className='flex justify-center gap-x-2 cursor-pointer' onClick={() => selectEditMaterial(rowData)}>
+                                <Pencil/>
+                            </div>
+                        )}
+                    </Cell>
+                </Column>
+            }
         </Table>
         <EditMaterialModal
             modals={modals}

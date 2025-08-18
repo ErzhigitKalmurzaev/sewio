@@ -1,15 +1,23 @@
 import React from 'react'
 import { Table } from 'rsuite'
 import NumInputForTable from '../../../../../components/ui/inputs/numInputForTable';
+import { toast } from 'react-toastify';
 
 const { Column, HeaderCell, Cell } = Table;
 
 const IssueMaterialsTable = ({ data, status, output, setOutput }) => {
 
-  const getValue = (name, value, id) => {
-    const index = output.products.findIndex(item => item.id === id);
-    output.products[index] = {...output.products[index], [name]: value};
-    setOutput({...output});
+  const getValue = (name, value, rowData) => {
+    const index = output.products.findIndex(item => item.id === rowData.id);
+
+    if(rowData.amount >= value) {
+        output.products[index] = {...output.products[index], [name]: value};
+        setOutput({...output});
+    } else {
+        output.products[index] = {...output.products[index], [name]: ''};
+        setOutput({...output});
+        toast.error("Количество не может быть больше количества в складе!");
+    }
   }
 
   return (
@@ -54,8 +62,9 @@ const IssueMaterialsTable = ({ data, status, output, setOutput }) => {
                             <NumInputForTable
                                 name='output_amount'
                                 placeholder='0'
+                                max={rowData.amount}
                                 value={rowData.output_amount}
-                                onChange={(value) => getValue('output_amount', value, rowData.id)}
+                                onChange={(value) => getValue('output_amount', value, rowData)}
                             />
                         )
                     }

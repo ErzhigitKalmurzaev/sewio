@@ -62,16 +62,8 @@ const Navbar = ({ role }) => {
                 );
             })}
             
-            <button 
-                className='absolute top-1 right-[-16px] border bg-white rounded-full w-[32px] h-[32px] hover:shadow-lg transition-shadow duration-200' 
-                onClick={handleToggleHide}
-                aria-label={hide ? 'Развернуть меню' : 'Свернуть меню'}
-            >
-                <ChevronLeft 
-                    size={20} 
-                    color='#2F4F4F' 
-                    className={`${hide ? 'rotate-180' : ''} transition-transform ease-out duration-300`} 
-                />
+            <button className='absolute top-1 right-[-16px] border bg-white rounded-full w-[32px] h-[32px] bg-white hover:drop-shadow-2xl' onClick={() => setHide(!hide)}>
+                <ChevronLeft size={28} color='#2F4F4F' className={`${hide ? 'rotate-180' : ''} transition-transform ease-out duration-300`} />
             </button>
         </div>
     );

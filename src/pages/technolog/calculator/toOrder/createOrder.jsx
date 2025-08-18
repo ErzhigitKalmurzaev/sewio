@@ -113,7 +113,7 @@ const OrderCreate = () => {
 
       
       <div className='w-full h-auto bg-white flex flex-col gap-y-5 p-6 rounded-lg'>
-        <div className='flex gap-x-5 justify-between'>
+        <div className='flex gap-x-8'>
           <DataPicker
             width='300px'
             label='Дата сдачи заказа'

@@ -59,9 +59,9 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
     const validateField = () => {
       const newErrors = {
         title: !material.title,
-        vendor_code: !material.vendor_code,
+        status: !material.status,
+        coefficient: !material.coefficient,
         unit: !material.unit,
-        color: !material.color
       };
       setErrors(newErrors);
       return !Object.values(newErrors).some((error) => error === true);

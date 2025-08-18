@@ -102,11 +102,11 @@ const CombinationsPrint = forwardRef(({ images, productInfo }, ref) => {
                 {/* Основная информация */}
                 <div className="flex gap-4 items-start">
                     <span className="text-lg font-semibold">
-                        Название: {productInfo.title}
+                        Название: {productInfo?.title}
                     </span>
                     
                     <span className="text-lg font-semibold">
-                        Артикул: {productInfo.vendor_code}
+                        Артикул: {productInfo?.vendor_code}
                     </span>
                 </div>
 

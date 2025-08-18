@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pagination, Table } from 'rsuite'
 import { OrderStatuses } from '../../../../../utils/constants/statuses';
-import { formatedToDDMMYYYY } from '../../../../../utils/functions/dateFuncs';
+import { formatedToDDMMYYYY, formatedToDDMMYYYYHHMM } from '../../../../../utils/functions/dateFuncs';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Pencil } from '../../../../../assets/icons/pencil.svg';
 
@@ -63,7 +63,7 @@ const PartyHistoryTable = ({ data, status, urls, handleChangeFilter }) => {
                 <Cell>
                     {
                         rowData => (
-                            <p>{formatedToDDMMYYYY(rowData.created_at)}</p>
+                            <p>{formatedToDDMMYYYYHHMM(rowData.created_at)}</p>
                         )
                     }
                 </Cell>

@@ -47,7 +47,8 @@ const CreateMaterialModal = ({ modals, setModals, setUpdate = () => {}, setID = 
   const validateField = () => {
     const newErrors = {
       title: !material.title,
-      vendor_code: !material.vendor_code,
+      status: !material.status,
+      coefficient: !material.coefficient,
       unit: !material.unit,
     };
     setErrors(newErrors);
@@ -89,7 +90,7 @@ const CreateMaterialModal = ({ modals, setModals, setUpdate = () => {}, setID = 
         <Modal.Title>Создание сырья</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="flex flex-col gap-y-5">
+        <div className="flex flex-col gap-y-4">
           <div className="flex justify-between gap-x-5">
             <Input
               type="text"
@@ -171,6 +172,9 @@ const CreateMaterialModal = ({ modals, setModals, setUpdate = () => {}, setID = 
             >
               Активный
             </Toggle>
+          </div>
+          <div>
+            <p className='text-sm font-inter font-medium text-amber-500'>«Если на складе сырьё указано без цвета, оно будет списываться универсально — для всех цветов заказа.<br/> Если на складе у сырья указан конкретный цвет, списание будет происходить именно по цвету, выбранному в заказе.»</p>
           </div>
         </div>
       </Modal.Body>
