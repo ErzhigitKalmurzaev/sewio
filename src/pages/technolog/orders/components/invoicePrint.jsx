@@ -20,7 +20,7 @@ const InvoicePrint = forwardRef(({ images, productInfo }, ref) => {
   // Transform data like in MainTable - each color becomes a separate row
   const transformedData = [];
   (rawData || []).forEach((material, materialIndex) => {
-    material.colors.forEach((color, colorIndex) => {
+    material?.colors.forEach((color, colorIndex) => {
       transformedData.push({
         // Material data
         materialId: materialIndex + 1,
@@ -29,10 +29,10 @@ const InvoicePrint = forwardRef(({ images, productInfo }, ref) => {
         materialRowSpan: colorIndex === 0 ? material?.colors?.length : 0,
         
         // Color data
-        color: color.color || "Без цвета",
-        need: color.need,
-        stock: color.stock,
-        shortage: color.shortage,
+        color: color?.color || "Без цвета",
+        need: color?.need,
+        stock: color?.stock,
+        shortage: color?.shortage,
         
         // Helper flags
         isFirstInGroup: colorIndex === 0
@@ -53,7 +53,7 @@ const InvoicePrint = forwardRef(({ images, productInfo }, ref) => {
       {images?.length > 0 && (
         <div className="mb-6">
           <div className="flex flex-wrap">
-            {images.map((img, i) => (
+            {images?.map((img, i) => (
               <div key={i} className="rounded border border-borderGray p-2">
                 <img
                   src={img.image}

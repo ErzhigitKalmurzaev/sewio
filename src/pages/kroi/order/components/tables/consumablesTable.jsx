@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getColors, getKroiMaterials } from "../../../../../store/technolog/material";
 import { CircleMinus } from "lucide-react";
 import { useParams } from "react-router-dom";
+import TextInputForTable from "../../../../../components/ui/inputs/textInputForTable";
 
 const { Column, HeaderCell, Cell, ColumnGroup } = Table;
 
@@ -109,12 +110,20 @@ const ConsumablesTable = ({ type = 'new', status }) => {
                                 const isReadonlyField = ['passport_length', 'fact_length', 'fail', 'count_in_layer'].includes(key);
 
                                 return (
+                                    key === 'number_of_marker' ?
+                                    <TextInputForTable
+                                        value={rowData[key]}
+                                        onChange={(e) => getValue({ index: rowIndex, value: e.target.value, name: key })}
+                                        disabled={isReadonlyField}
+                                        placeholder="0"
+                                    /> : (
                                     <NumInputForTable
                                         value={rowData[key]}
                                         placeholder="0"
                                         disabled={isReadonlyField}
                                         onChange={(e) => getValue({ index: rowIndex, value: e, name: key })}
                                     />
+                                    )
                                 )
                             }}
                         </Cell>

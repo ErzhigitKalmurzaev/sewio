@@ -145,7 +145,7 @@ const KroiOrderSlice = createSlice({
             }
         
             if (shouldUpdateFail) {
-                item.fail = toNum(item.passport_length) - toNum(item.fact_length);
+                item.fail = (toNum(item.passport_length) - toNum(item.fact_length))?.toFixed(2);
             }
         
             if (['is_main', 'layers_count', 'count_in_layer', 'color'].includes(name)) {
@@ -222,7 +222,7 @@ const KroiOrderSlice = createSlice({
             state.party_consumables = action.payload?.data?.map(item => ({
                 title: item.title,
                 nomenclature: item.id,
-                passport_length: item.coefficient * item.stock_amount,
+                passport_length: (item.coefficient * item.stock_amount).toFixed(2),
                 color: item.color,
                 table_length: '',
                 layers_count: '',

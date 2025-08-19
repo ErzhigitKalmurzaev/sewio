@@ -35,9 +35,7 @@
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-      if(!products) {
-        dispatch(getProductsNames())
-      }
+      dispatch(getProductsNames())
       dispatch(getColors());
       dispatch(clearAll())
     }, [])

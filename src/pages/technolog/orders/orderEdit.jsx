@@ -196,7 +196,7 @@ const OrderEdit = () => {
         toast('Заполните все поля и выберите минимум 1 товар!');
     }
   }
-  console.log(edit_products_in_order)
+  
   const handlePrint = useReactToPrint({
     documentTitle: `Отчёт о заказе #${id}`,
     contentRef: printRef,

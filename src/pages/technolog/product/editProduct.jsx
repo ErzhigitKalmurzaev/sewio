@@ -59,12 +59,8 @@ const EditProduct = () => {
             })
         }
     })
-    if(!colors_list) {
-      dispatch(getColors());
-    }
-    if(!products) {
-      dispatch(getProductsNames())
-    }
+    dispatch(getColors());
+    dispatch(getProductsNames())
   }, [])
 
   const isObjectFilled = (obj) => Object.values(obj).every(value => value !== '');
