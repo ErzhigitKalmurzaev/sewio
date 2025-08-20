@@ -250,7 +250,7 @@ const OrderEdit = () => {
         order_status === 'loading' && <BackDrop />
       }
 
-      <div className='hidden'>
+      <div style={{ position: 'absolute', left: '-9999px', top: 0, overflow: 'hidden' }}>
         <OrderPrint ref={printRef} order={order} products={edit_products_in_order} images={images} />
         <InvoicePrint ref={invoiceRef} images={images} productInfo={edit_products_in_order} />
       </div>
