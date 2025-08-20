@@ -28,17 +28,14 @@ const CombinationsTable = ({ type }) => {
   const [modals, setModals] = useState({ combination: false, edit: false });
   const [editComb, setEditComb] = useState({});
   
-  // Состояние для drag and drop
+  // Улучшенное состояние для drag and drop
   const [draggedItem, setDraggedItem] = useState(null);
   const [dragOverIndex, setDragOverIndex] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
-    if(!rank_list) {
-        dispatch(getRankList());
-    } 
-    if(!operations_list) {
-        dispatch(getOperationsTitlesList());
-    }
+    dispatch(getRankList());
+    dispatch(getOperationsTitlesList());
   }, [dispatch])
 
   const addRow = () => {
@@ -122,72 +119,144 @@ const CombinationsTable = ({ type }) => {
     return children.reduce((acc, item) => acc + (Number(item[key]) || 0), 0).toFixed(2);
   };
 
-  // Функции для drag and drop
-  const handleDragStart = (e, rowData, index) => {
+  // Функция для получения реального индекса комбинации в массиве
+  const getCombinationIndex = (rowData) => {
+    if (!rowData || !rowData.id) return -1;
+    return combinations.findIndex(item => item.id === rowData.id);
+  };
+
+  // Проверка, является ли элемент родительской комбинацией
+  const isCombination = (rowData) => {
+    return rowData && rowData.children !== undefined;
+  };
+
+  // Улучшенные функции для drag and drop
+  const handleDragStart = (e, rowData, visualIndex) => {
     // Разрешаем перетаскивание только для родительских элементов (комбинаций)
-    if (rowData.children) {
-      setDraggedItem({ data: rowData, index });
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', e.target.outerHTML);
-      
-      // Добавляем стили для перетаскиваемого элемента
-      e.target.style.opacity = '0.5';
-    } else {
+    if (!isCombination(rowData)) {
       e.preventDefault();
+      return;
     }
+
+    const realIndex = getCombinationIndex(rowData);
+    if (realIndex === -1) {
+      e.preventDefault();
+      return;
+    }
+
+    setDraggedItem({ 
+      data: rowData, 
+      realIndex: realIndex,
+      visualIndex: visualIndex 
+    });
+    setIsDragging(true);
+    
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', '');
+    
+    // Добавляем стили для перетаскиваемого элемента
+    setTimeout(() => {
+      e.target.style.opacity = '0.5';
+    }, 0);
   };
 
   const handleDragEnd = (e) => {
     e.target.style.opacity = '1';
     setDraggedItem(null);
     setDragOverIndex(null);
+    setIsDragging(false);
   };
 
-  const handleDragOver = (e, rowData, index) => {
+  const handleDragOver = (e, rowData, visualIndex) => {
     e.preventDefault();
     
     // Разрешаем drop только на родительские элементы (комбинации)
-    if (rowData.children && draggedItem) {
-      e.dataTransfer.dropEffect = 'move';
-      setDragOverIndex(index);
+    if (!isCombination(rowData) || !draggedItem) {
+      return;
+    }
+
+    const realIndex = getCombinationIndex(rowData);
+    if (realIndex === -1) return;
+
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(realIndex);
+  };
+
+  const handleDragLeave = (e) => {
+    // Проверяем, что мы действительно покидаем элемент, а не переходим к дочернему
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+    
+    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+      setDragOverIndex(null);
     }
   };
 
-  const handleDragLeave = () => {
-    setDragOverIndex(null);
-  };
-
-  const handleDrop = (e, rowData, dropIndex) => {
+  const handleDrop = (e, rowData, visualIndex) => {
     e.preventDefault();
     
-    if (!draggedItem || !rowData.children) return;
-    
-    const dragIndex = draggedItem.index;
-    
-    if (dragIndex !== dropIndex) {
-      dispatch(reorderCombinations({ 
-        fromIndex: dragIndex, 
-        toIndex: dropIndex 
-      }));
+    if (!draggedItem || !isCombination(rowData)) {
+      return;
     }
+    
+    const dragRealIndex = draggedItem.realIndex;
+    const dropRealIndex = getCombinationIndex(rowData);
+    
+    if (dragRealIndex === -1 || dropRealIndex === -1 || dragRealIndex === dropRealIndex) {
+      return;
+    }
+    
+    // Проверяем, что элементы существуют
+    if (!combinations[dragRealIndex] || !combinations[dropRealIndex]) {
+      console.error('Invalid drag or drop index:', { dragRealIndex, dropRealIndex, combinationsLength: combinations.length });
+      return;
+    }
+    
+    dispatch(reorderCombinations({ 
+      fromIndex: dragRealIndex, 
+      toIndex: dropRealIndex 
+    }));
     
     setDraggedItem(null);
     setDragOverIndex(null);
   };
 
   // Функция для получения стилей строки
-  const getRowStyle = (rowData, index) => {
-    let style = { padding: '7px 6px' };
+  const getRowStyle = (rowData, visualIndex) => {
+    let style = { padding: '0px' };
     
-    // Стили для drag over
-    if (dragOverIndex === index && rowData.children) {
-      style.backgroundColor = '#f0f8ff';
-      style.borderTop = '2px solid #0066cc';
+    if (!rowData) return style;
+    
+    // Стили для drag over (только для комбинаций)
+    if (isCombination(rowData)) {
+      const realIndex = getCombinationIndex(rowData);
+      
+      if (dragOverIndex === realIndex && isDragging) {
+        style.backgroundColor = '#f0f8ff';
+        style.borderTop = '2px solid #0066cc';
+        style.transition = 'all 0.2s ease';
+      }
+      
+      // Стили для перетаскиваемого элемента
+      if (draggedItem && draggedItem.realIndex === realIndex) {
+        style.opacity = '0.7';
+        style.transform = 'scale(0.98)';
+      }
     }
     
     return style;
   };
 
+  // Функция для получения стилей курсора
+  const getCursorStyle = (rowData) => {
+    if (!isCombination(rowData)) return {};
+    
+    return {
+      cursor: isDragging ? 'grabbing' : 'grab'
+    };
+  };
+  
   return (
     <div>
         <Table
@@ -202,36 +271,38 @@ const CombinationsTable = ({ type }) => {
         >
             <Column width={50}>
                 <HeaderCell></HeaderCell>
-                <Cell style={{ padding: '0px 6px', cursor: 'grab' }}>
-                    {(rowData, index) =>
-                        rowData.children ? (
+                <Cell style={{ padding: '0px 14px' }}>
+                    {(rowData, visualIndex) => {
+                        if (!isCombination(rowData)) return null;
+                        
+                        return (
                             <div
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, rowData, index)}
+                                draggable={!isDragging || draggedItem?.realIndex === getCombinationIndex(rowData)}
+                                onDragStart={(e) => handleDragStart(e, rowData, visualIndex)}
                                 onDragEnd={handleDragEnd}
-                                onDragOver={(e) => handleDragOver(e, rowData, index)}
+                                onDragOver={(e) => handleDragOver(e, rowData, visualIndex)}
                                 onDragLeave={handleDragLeave}
-                                onDrop={(e) => handleDrop(e, rowData, index)}
-                                style={{ cursor: 'grab' }}
-                                onMouseDown={(e) => e.target.style.cursor = 'grabbing'}
-                                onMouseUp={(e) => e.target.style.cursor = 'grab'}
+                                onDrop={(e) => handleDrop(e, rowData, visualIndex)}
+                                style={getCursorStyle(rowData)}
+                                title="Перетащите для изменения порядка"
                             >
                                 <GripVertical size={20} color="#666" />
                             </div>
-                        ) : null
-                    }
+                        );
+                    }}
                 </Cell>
             </Column>
             <Column width={300}>
                 <HeaderCell>Название</HeaderCell>
-                <Cell style={(rowData, index) => getRowStyle(rowData, index)}>
-                    {(rowData, index) =>
+                <Cell style={{ ...getRowStyle, padding: '7px 6px' }}>
+                    {(rowData, visualIndex) =>
                         <div
-                            onDragOver={rowData.children ? (e) => handleDragOver(e, rowData, index) : undefined}
-                            onDragLeave={rowData.children ? handleDragLeave : undefined}
-                            onDrop={rowData.children ? (e) => handleDrop(e, rowData, index) : undefined}
+                            onDragOver={isCombination(rowData) ? (e) => handleDragOver(e, rowData, visualIndex) : undefined}
+                            onDragLeave={isCombination(rowData) ? handleDragLeave : undefined}
+                            onDrop={isCombination(rowData) ? (e) => handleDrop(e, rowData, visualIndex) : undefined}
+                            style={{ padding: '0px' }}
                         >
-                            {rowData.children ? 
+                            {isCombination(rowData) ? 
                                 <span className='font-inter'>
                                     {rowData?.title}
                                 </span>
@@ -240,7 +311,7 @@ const CombinationsTable = ({ type }) => {
                                     value={rowData.title}
                                     placeholder="Название"
                                     onChange={(e) => getValue(e.target.value, "title", rowData.id, rowData)}
-                                    onSelect={(id) => handleSelect(id, index, rowData)}
+                                    onSelect={(id) => handleSelect(id, visualIndex, rowData)}
                                     suggestions={operations_list}
                                 />
                             )
@@ -251,14 +322,14 @@ const CombinationsTable = ({ type }) => {
             </Column>
             <Column width={200}>
                 <HeaderCell>Время (сек)</HeaderCell>
-                <Cell style={(rowData, index) => getRowStyle(rowData, index)}>
-                    {(rowData, index) =>
+                <Cell style={{ ...getRowStyle, padding: '7px 6px' }}>
+                    {(rowData, visualIndex) =>
                         <div
-                            onDragOver={rowData.children ? (e) => handleDragOver(e, rowData, index) : undefined}
-                            onDragLeave={rowData.children ? handleDragLeave : undefined}
-                            onDrop={rowData.children ? (e) => handleDrop(e, rowData, index) : undefined}
+                            onDragOver={isCombination(rowData) ? (e) => handleDragOver(e, rowData, visualIndex) : undefined}
+                            onDragLeave={isCombination(rowData) ? handleDragLeave : undefined}
+                            onDrop={isCombination(rowData) ? (e) => handleDrop(e, rowData, visualIndex) : undefined}
                         >
-                            {rowData.children ? (
+                            {isCombination(rowData) ? (
                                 <span className="p-2">
                                     {sumChildValues(rowData.children, 'time')}
                                 </span>
@@ -276,14 +347,14 @@ const CombinationsTable = ({ type }) => {
             </Column>
             <Column width={200}>
                 <HeaderCell>Разряд</HeaderCell>
-                <Cell style={(rowData, index) => getRowStyle(rowData, index)}>
-                    {(rowData, index) =>
+                <Cell style={{ ...getRowStyle, padding: '7px 6px' }}>
+                    {(rowData, visualIndex) =>
                         <div
-                            onDragOver={rowData.children ? (e) => handleDragOver(e, rowData, index) : undefined}
-                            onDragLeave={rowData.children ? handleDragLeave : undefined}
-                            onDrop={rowData.children ? (e) => handleDrop(e, rowData, index) : undefined}
+                            onDragOver={isCombination(rowData) ? (e) => handleDragOver(e, rowData, visualIndex) : undefined}
+                            onDragLeave={isCombination(rowData) ? handleDragLeave : undefined}
+                            onDrop={isCombination(rowData) ? (e) => handleDrop(e, rowData, visualIndex) : undefined}
                         >
-                            {rowData.children ? null : (
+                            {isCombination(rowData) ? null : (
                                 <SelectForTable
                                     value={rowData.rank}
                                     placeholder="Разряд"
@@ -300,14 +371,14 @@ const CombinationsTable = ({ type }) => {
             </Column>
             <Column width={200}>
                 <HeaderCell>Цена (сом)</HeaderCell>
-                <Cell style={(rowData, index) => getRowStyle(rowData, index)}>
-                    {(rowData, index) =>
+                <Cell style={{ ...getRowStyle, padding: '7px 6px' }}>
+                    {(rowData, visualIndex) =>
                         <div
-                            onDragOver={rowData.children ? (e) => handleDragOver(e, rowData, index) : undefined}
-                            onDragLeave={rowData.children ? handleDragLeave : undefined}
-                            onDrop={rowData.children ? (e) => handleDrop(e, rowData, index) : undefined}
+                            onDragOver={isCombination(rowData) ? (e) => handleDragOver(e, rowData, visualIndex) : undefined}
+                            onDragLeave={isCombination(rowData) ? handleDragLeave : undefined}
+                            onDrop={isCombination(rowData) ? (e) => handleDrop(e, rowData, visualIndex) : undefined}
                         >
-                            {rowData.children ? (
+                            {isCombination(rowData) ? (
                                 <span className='p-2'>
                                     {sumChildValues(rowData.children, 'price')}
                                 </span>
@@ -329,16 +400,16 @@ const CombinationsTable = ({ type }) => {
                          <Plus color="#00796B" />
                     </button>
                 </HeaderCell>
-                <Cell style={(rowData, index) => getRowStyle(rowData, index)}>
-                    {(rowData, index) =>
+                <Cell style={getRowStyle}>
+                    {(rowData, visualIndex) =>
                         <div
-                            onDragOver={rowData.children ? (e) => handleDragOver(e, rowData, index) : undefined}
-                            onDragLeave={rowData.children ? handleDragLeave : undefined}
-                            onDrop={rowData.children ? (e) => handleDrop(e, rowData, index) : undefined}
+                            onDragOver={isCombination(rowData) ? (e) => handleDragOver(e, rowData, visualIndex) : undefined}
+                            onDragLeave={isCombination(rowData) ? handleDragLeave : undefined}
+                            onDrop={isCombination(rowData) ? (e) => handleDrop(e, rowData, visualIndex) : undefined}
                         >
-                            {rowData.children ? 
+                            {isCombination(rowData) ? 
                                 <div className='flex justify-evenly gap-x-4'>
-                                    <button onClick={() => addOperationRow(rowData)} key={rowData?.id + index} className="cursor-pointer">
+                                    <button onClick={() => addOperationRow(rowData)} key={rowData?.id + visualIndex} className="cursor-pointer">
                                         <Plus color="#0D47A1" />
                                     </button>
                                     <button onClick={() => editCombination(rowData)} className="cursor-pointer">
