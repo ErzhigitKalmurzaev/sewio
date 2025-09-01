@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Title from '../../../components/ui/title'
 import Button from '../../../components/ui/button'
-import DateRangePickerInput from '../../../components/ui/inputs/dateRangePicker';
 import InfoCard from '../../../components/shared/infoCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStatistic } from '../../../store/technolog/statistic';
 import { useSearchParams } from 'react-router-dom';
-import { formatedToDDMMYYYY, formatedToDDMMYYYY2, getDefaultDateRange } from '../../../utils/functions/dateFuncs';
-import { ChartColumn, CircleCheckBig, CircleDollarSign, Clock, Package, Pickaxe, Star, Wrench } from 'lucide-react';
+import { formatedToDDMMYYYY2, getDefaultDateRange } from '../../../utils/functions/dateFuncs';
+import { ChartColumn, CircleCheckBig, CircleDollarSign, Clock, Package, Pickaxe, Wrench } from 'lucide-react';
 import DataPicker from '../../../components/ui/inputs/dataPicker';
 
 const Statistic = () => {
 
   const dispatch = useDispatch();
 
-  const { statistic_list, statistic_list_status } = useSelector(state => state.statistic);
+  const { statistic_list } = useSelector(state => state.statistic);
   const [params, setParams] = useSearchParams();
 
   const urls = {

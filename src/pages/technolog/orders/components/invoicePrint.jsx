@@ -16,7 +16,7 @@ const InvoicePrint = forwardRef(({ images, productInfo }, ref) => {
   // Transform data like in MainTable - each color becomes a separate row
   const transformedData = [];
   (rawData || []).forEach((material, materialIndex) => {
-    material?.colors.forEach((color, colorIndex) => {
+    material?.colors?.forEach((color, colorIndex) => {
       transformedData.push({
         // Material data
         materialId: materialIndex + 1,

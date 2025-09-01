@@ -87,8 +87,7 @@ const EditProduct = () => {
 
   const validateFields = () => {
     const newErrors = {
-      title: !productData.title,
-      vendor_code: !productData.vendor_code
+      title: !productData.title
     };
     setErrors(newErrors);
     return !Object.values(newErrors).some(Boolean);

@@ -52,7 +52,7 @@ const EditEmployee = () => {
                 name: res.payload?.name,
                 surname: res.payload?.surname,
                 username: res.payload?.user?.username,
-                phone: res.payload?.phone,
+                phone: res.payload?.phone || '+996',
                 role: res.payload?.role,
                 rank: res.payload?.rank?.id,
                 salary: `${res.payload?.salary}`,

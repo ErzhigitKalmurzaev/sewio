@@ -53,7 +53,7 @@ const CombinationOpenModal = ({ modals, setModals }) => {
   };
 
   const onSubmit = () => {
-    if(combination?.operations?.length > 0 && combination?.title && combination?.file) {
+    if(combination?.operations?.length > 0 && combination?.title) {
         dispatch(editCombinationById({ id: modals.id, props: {
             is_sample: true,
             operations: combination?.operations?.map(item => item?.id),
@@ -106,7 +106,6 @@ const CombinationOpenModal = ({ modals, setModals }) => {
                                     data={folders_list}
                                     value={combination?.file?.id || combination?.file}
                                     onChange={(e) => getValue(e, 'file')}
-                                    error={changed && (!combination?.file?.id && !combination?.file)}
                                     placeholder='Выберите папку'
                                     labelKey={'title'}
                                     valueKey={'id'}

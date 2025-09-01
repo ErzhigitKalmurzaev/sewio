@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addProduct, deleteProduct, getOrderProductList } from '../../../../store/technolog/order';
+import { addProduct } from '../../../../store/technolog/order';
 import { Panel, PanelGroup, Table } from 'rsuite';
 import EditProdPanel from './editProdPanel';
 import { motion, AnimatePresence } from "framer-motion";
 import { ReactComponent as Pencil } from '../../../../assets/icons/pencil.svg';
 import { useNavigate } from 'react-router-dom';
-
-const { Cell, Column, HeaderCell } = Table;
 
 const EditAmountsTable = ({ status }) => {
 
@@ -15,8 +13,6 @@ const EditAmountsTable = ({ status }) => {
   const navigate = useNavigate();
 
   const { edit_products_in_order } = useSelector(state => state.order);
-
-  const [loading, setLoading] = useState(false);
 
   const addRow = () => {
     dispatch(addProduct());

@@ -107,7 +107,7 @@ const ConsumablesTable = ({ type = 'new', status }) => {
                         <HeaderCell>{kroi_details[key]}</HeaderCell>
                         <Cell style={{ padding: '6.5px' }}>
                             {(rowData, rowIndex) => {
-                                const isReadonlyField = ['passport_length', 'fact_length', 'fail', 'count_in_layer'].includes(key);
+                                const isReadonlyField = ['passport_length', 'fact_length', 'fail'].includes(key);
 
                                 return (
                                     key === 'number_of_marker' ?

@@ -32,8 +32,8 @@ const PartyAmountTable = ({ data, status }) => {
   // Подсчет итогов по каждому цвету
   const totalByColor = party_amounts.map(item => {
     return {
-      plan: item.sizes.reduce((sum, size) => sum + (size.plan_amount || 0), 0),
-      fact: item.sizes.reduce((sum, size) => sum + (Number(size.true_amount) || 0), 0)
+      plan: item.sizes.reduce((sum, size) => sum + (size.plan_amount || 0), 0) || 0,
+      fact: item.sizes.reduce((sum, size) => sum + (Number(size.true_amount) || 0), 0) || 0
     };
   });
   

@@ -158,6 +158,7 @@ const OperationSlice = createSlice({
             //---------------------------------------------------------
             .addCase(getCombinationById.pending, (state) => {
                 state.combination_status = 'loading';
+                state.combination = null;
             }).addCase(getCombinationById.fulfilled, (state, action) => {
                 state.combination_status = 'success';
                 state.combination = action.payload

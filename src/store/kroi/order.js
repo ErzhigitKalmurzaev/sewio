@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axios";
-import { color } from "framer-motion";
 
 export const getOrdersList = createAsyncThunk(
     'order/getOrdersList',
@@ -125,27 +124,35 @@ const KroiOrderSlice = createSlice({
         
             const toNum = (v) => Number(v) || 0;
         
-            const {
-                table_length = 0,
-                layers_count = 0,
-                restyled = 0,
-                defect = 0,
-                remainder = 0,
-            } = item;
-        
             const shouldUpdateFactLength = ['table_length', 'layers_count', 'restyled', 'defect', 'remainder'].includes(name);
             const shouldUpdateFail = shouldUpdateFactLength || name === 'passport_length';
-        
+            const shouldUpdateLayersCount = name === 'table_length';
+            
+            // Сначала обновляем layers_count если нужно
+            if(shouldUpdateLayersCount) {
+                item.layers_count = Math.floor(toNum(item.passport_length) / toNum(item.table_length));
+            }
+            
+            // Теперь получаем актуальные значения ПОСЛЕ всех обновлений
             if (shouldUpdateFactLength) {
-                item.fact_length =
-                    (toNum(table_length) * toNum(layers_count) +
-                    toNum(restyled) +
-                    toNum(defect) +
-                    toNum(remainder)).toFixed(2);
+                const currentTableLength = toNum(item.table_length);
+                const currentLayersCount = toNum(item.layers_count); // Теперь это актуальное значение
+                const currentRestyled = toNum(item.restyled);
+                const currentDefect = toNum(item.defect);
+                const currentRemainder = toNum(item.remainder);
+                
+                item.fact_length = (
+                    currentTableLength * currentLayersCount +
+                    currentRestyled +
+                    currentDefect +
+                    currentRemainder
+                ).toFixed(2);
             }
         
             if (shouldUpdateFail) {
-                item.fail = (toNum(item.passport_length) - toNum(item.fact_length))?.toFixed(2);
+                item.fail = (toNum(item.passport_length) - toNum(item.fact_length)) < 0 
+                    ? 0 
+                    : (toNum(item.passport_length) - toNum(item.fact_length))?.toFixed(2);
             }
         
             if (['is_main', 'layers_count', 'count_in_layer', 'color'].includes(name)) {
@@ -182,13 +189,13 @@ const KroiOrderSlice = createSlice({
                       
                           return {
                             ...sizeEntry,
-                            true_amount: hasMatch ? distributed + (i < extra ? 1 : 0) : 0, // или другая логика
+                            true_amount: hasMatch ? distributed + (i < extra ? 1 : 0) : 0,
                           };
                         })
                     };
                 });
             }
-        },                      
+        },                  
         updatePartyAmountsBySelectedSizes: (state, action) => {
             const { select_sizes } = action.payload;
         
