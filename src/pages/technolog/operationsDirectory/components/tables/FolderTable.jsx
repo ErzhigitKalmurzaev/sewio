@@ -24,7 +24,7 @@ const FolderTable = ({ urls, params, setParams }) => {
   return (
     <div className='w-full'>
         <Table
-            height={500}
+            height={600}
             data={folders_list || []}
             loading={folders_list_status === 'loading'}
             bordered

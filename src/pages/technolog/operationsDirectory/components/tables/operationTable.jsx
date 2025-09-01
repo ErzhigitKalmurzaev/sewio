@@ -32,7 +32,7 @@ const OperationTable = ({ urls }) => {
   return (
     <>
         <Table
-            height={500}
+            height={600}
             data={operaitions_list?.results || []}
             loading={operaitions_list_status === 'loading'}
             bordered
