@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Table } from 'rsuite';
 import { getOperationList } from '../../../../../store/technolog/operations';
 import { ExternalLink } from 'lucide-react';
-import CombinationOpenModal from '../modals/combinationOpenModal';
 import TableDropdown from '../../../../../components/tables/tableDropdown';
 import OperationOpenModal from '../modals/operationOpenModal';
 

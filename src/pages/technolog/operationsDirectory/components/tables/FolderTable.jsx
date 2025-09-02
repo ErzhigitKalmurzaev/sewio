@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Loader, Table } from 'rsuite'
-import { getCombinationById, getFolderById, getFolderList } from '../../../../../store/technolog/operations';
-import { ExternalLink, FolderClosed } from 'lucide-react';
+import { Table } from 'rsuite'
+import { getFolderList } from '../../../../../store/technolog/operations';
+import { ExternalLink } from 'lucide-react';
 import FolderOpenModal from '../modals/folderOpenModal';
-import { useSearchParams } from 'react-router-dom';
-import OperationOpenModal from '../modals/operationOpenModal';
 
 const { Column, HeaderCell, Cell } = Table;
 

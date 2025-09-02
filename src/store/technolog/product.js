@@ -152,7 +152,7 @@ export const getCombinationsList = createAsyncThunk(
     'technologProduct/getCombinationsList',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get(`sample/combinations/list/`);
+            const { data } = await axiosInstance.get(`sample/combinations/list/?page=${1}&page_size=${1000}`);
             return data;
         } catch (err) {
             return rejectWithValue(err)
