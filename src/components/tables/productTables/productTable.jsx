@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Pagination, Table } from 'rsuite';
+import { Button, Pagination, Popover, Table, Whisper } from 'rsuite';
 import { employeeRole, employeeSalaryType } from '../../../utils/selectDatas/employeeDatas';
 
 import { ReactComponent as Pencil } from '../../../assets/icons/pencil.svg';
@@ -38,7 +38,7 @@ const ProductTable = ({ data, status, total, activePage, limit, setPage }) => {
                   <Cell dataKey="vendor_code" />
               </Column>
 
-              <Column width={200}>
+              <Column width={130}>
                   <HeaderCell>Статус</HeaderCell>
                   <Cell dataKey="is_active">
                     {rowData => (
@@ -47,9 +47,29 @@ const ProductTable = ({ data, status, total, activePage, limit, setPage }) => {
                   </Cell>
               </Column>
 
-              <Column width={200}>
-                  <HeaderCell>Себестоимость</HeaderCell>
-                  <Cell dataKey="cost_price" />
+              <Column width={150} align="center">
+                  <HeaderCell>
+                    Себестоимость
+                  </HeaderCell>
+                  <Cell style={{ padding: '5px 10px' }}>
+                    {
+                      rowData => {
+                        const speaker = (
+                          <Popover title="Расчет себестоимости">
+                            <p>Расход на ткани: <span className='font-semibold'>{rowData.material_cut_price || 0} сом</span></p>
+                            <p>Расход на фурнитуру: <span className='font-semibold'>{rowData.material_shop_price || 0} сом</span></p>
+                            <p>Расход на ЗП: <span className='font-semibold'>{rowData.salary_price || 0} сом</span></p>
+                            <p>Прочие расходы: <span className='font-semibold'>{rowData.other_price || 0} сом</span></p>
+                          </Popover>
+                        )
+                        return (
+                          <Whisper placement="top" trigger="focus" controlId="control-id-focus" speaker={speaker}>
+                            <Button className='w-full' appearance='subtle'>{rowData.cost_price} сом</Button>
+                          </Whisper>
+                        )
+                      }
+                    }
+                  </Cell>
               </Column>
 
               <Column width={100} fixed="right">

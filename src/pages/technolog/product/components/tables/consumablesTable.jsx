@@ -113,7 +113,7 @@ const ConsumablesTable = ({ type }) => {
                 </Cell>
             </Column>
             <Column width={200}>
-                <HeaderCell>Цена за 1 ед.</HeaderCell>
+                <HeaderCell>Цена за 1 ед. сырья</HeaderCell>
                 <Cell style={{ padding: '7px 6px'}}>
                     {(rowData, index) =>
                         <NumInputForTable
@@ -121,6 +121,14 @@ const ConsumablesTable = ({ type }) => {
                             placeholder="0"
                             onChange={(e) => getValue(e, "price", index)}
                         />
+                    }
+                </Cell>
+            </Column>
+            <Column width={120}>
+                <HeaderCell>Цена за 1 модель</HeaderCell>
+                <Cell style={{ padding: '15px 6px'}}>
+                    {(rowData, index) =>
+                        <div className='w-full text-center'>{((rowData.price || 0) * (rowData.consumption || 0)).toFixed(1)}</div>
                     }
                 </Cell>
             </Column>

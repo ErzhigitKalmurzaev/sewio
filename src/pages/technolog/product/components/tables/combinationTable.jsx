@@ -36,7 +36,7 @@ const CombinationsTable = ({ type }) => {
   useEffect(() => {
     dispatch(getRankList());
     dispatch(getOperationsTitlesList());
-  }, [dispatch])
+  }, [])
 
   const addRow = () => {
     setModals({ ...modals, combination: true });

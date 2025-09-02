@@ -13,7 +13,7 @@ import { editOperationById } from '../../../../../store/technolog/product';
 import { ShieldAlert } from 'lucide-react';
 import { roundTo } from '../../../../../utils/functions/numFuncs';
 
-const OperationOpenModal = ({ modals, setModals }) => {
+const OperationOpenModal = ({ modals, setModals, search }) => {
 
   const dispatch = useDispatch();
 
@@ -77,7 +77,7 @@ const OperationOpenModal = ({ modals, setModals }) => {
         }}))
             .then(res => {
                 if(res?.meta?.requestStatus === 'fulfilled') {
-                    dispatch(getOperationList({ search: '' }))
+                    dispatch(getOperationList({ search: search }))
                     toast.success("Изменения сохранены")
                     setModals({ ...modals, operation: false })
                 } else {

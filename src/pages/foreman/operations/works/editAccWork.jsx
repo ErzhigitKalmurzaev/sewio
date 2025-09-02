@@ -78,14 +78,14 @@ const EditAccWork = () => {
           details: operations_list?.flatMap(item =>
             item?.details
               ?.filter(detail => {
-                const staffNumber = Number(detail.staff);
+                const staffNumber = detail.staff;
                 const amount = Number(detail.count);
       
                 // Пропустить если уже оплачен, или нет валидных данных
                 return detail.status !== 1 && staffNumber && amount > 0;
               })
               .map(detail => {
-                const staffNumber = Number(detail.staff);
+                const staffNumber = detail.staff;
                 const amount = Number(detail.count);
                 const staffObj = staff_list.find(staff => staff.number === staffNumber);
       

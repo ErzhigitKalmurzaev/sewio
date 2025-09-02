@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { combinationStatuses } from '../../../../../utils/selectDatas/productDatas';
 import { Plus, Search, Trash2 } from 'lucide-react';
 
-const CombinationOpenModal = ({ modals, setModals }) => {
+const CombinationOpenModal = ({ modals, setModals, search }) => {
 
   const dispatch = useDispatch();
 
@@ -63,8 +63,9 @@ const CombinationOpenModal = ({ modals, setModals }) => {
         } })).then(res => {
             if(res?.meta?.requestStatus === 'fulfilled') {
                 toast.success('Изменения сохранены!')
-                dispatch(getCombinationList())
+                dispatch(getCombinationList({ search: search }))
                 setModals({ ...modals, combination: false })
+                setSearchTerm('')
             } else {
                 toast.error('Произошла ошибка!')
             }

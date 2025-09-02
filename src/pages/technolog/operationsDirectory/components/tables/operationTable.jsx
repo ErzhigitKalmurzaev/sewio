@@ -85,7 +85,7 @@ const OperationTable = ({ urls }) => {
             </Column>
             
         </Table>
-        <OperationOpenModal modals={modals} setModals={setModals} />
+        <OperationOpenModal modals={modals} setModals={setModals} search={urls.search}/>
     </>
   )
 }

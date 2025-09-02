@@ -62,7 +62,7 @@ const AccWorkTable = ({ data, status, amount }) => {
           <Cell>{(rowData, rowIndex) => <p>{rowIndex + 1}</p>}</Cell>
         </Column>
 
-        <Column width={170} fixed>
+        <Column width={300} fixed>
           <HeaderCell>Operation</HeaderCell>
           <Cell dataKey="title" className="text-sm font-medium" />
         </Column>
@@ -86,8 +86,8 @@ const AccWorkTable = ({ data, status, amount }) => {
 
             <Column width={100}>
               <HeaderCell>
-                Quantity
-                <span className="font-inter font-bold ml-2" style={{ color: amount ? 'green' : '#C2185B' }}>({amount || '--'})</span>
+                Quan-y
+                <span className="font-inter font-bold ml-1 text-xs" style={{ color: amount ? 'green' : '#C2185B' }}>({amount || '--'})</span>
               </HeaderCell>
               <Cell style={{ padding: '6.5px' }}>
                 {(rowData) => rowData.details[index] ? (

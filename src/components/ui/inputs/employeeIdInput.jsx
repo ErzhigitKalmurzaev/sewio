@@ -21,7 +21,7 @@ const EmployeeIdInput = ({ value, onChange, employees, disabled = false }) => {
 
     // Поиск сотрудника по ID
     const foundEmployee = employees?.find((emp) => emp?.number?.toString() === value?.trim());
-    console.log(employees)
+    
     if (foundEmployee) {
       setEmployee(foundEmployee);
       setError("");

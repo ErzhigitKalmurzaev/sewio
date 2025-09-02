@@ -16,9 +16,7 @@ const CombinationTable = ({ urls }) => {
   const [modals, setModals] = useState({ combination: false, id: null });
   
   useEffect(() => {
-    if(!combinations_list) {
-      dispatch(getCombinationList({ search: urls.search }));
-    }
+    dispatch(getCombinationList({ search: urls.search }));
   }, [])
 
   const openCombination = (id) => {
@@ -67,7 +65,7 @@ const CombinationTable = ({ urls }) => {
             </Column>
             
         </Table>
-        <CombinationOpenModal modals={modals} setModals={setModals} />
+        <CombinationOpenModal modals={modals} setModals={setModals} search={urls.search} />
     </>
   )
 }
