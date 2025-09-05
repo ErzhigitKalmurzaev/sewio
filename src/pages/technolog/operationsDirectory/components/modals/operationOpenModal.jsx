@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { getEquipmentList } from './../../../../../store/technolog/equipment';
 import { getRankList } from '../../../../../store/technolog/rank';
 import NumInput from './../../../../../components/ui/inputs/numInput';
-import { editOperationById } from '../../../../../store/technolog/product';
+import { deactivateOperationById, editOperationById } from '../../../../../store/technolog/product';
 import { ShieldAlert } from 'lucide-react';
 import { roundTo } from '../../../../../utils/functions/numFuncs';
 
@@ -89,6 +89,19 @@ const OperationOpenModal = ({ modals, setModals, search }) => {
     }
   }
 
+  const onDelete = () => {
+    dispatch(deactivateOperationById({ id: modals.id }))
+        .then(res => {
+            if(res?.meta?.requestStatus === 'fulfilled') {
+                dispatch(getOperationList({ search: search }))
+                toast.success("Операция удалена!")
+                setModals({ ...modals, operation: false })
+            } else {
+                toast.error("Произошла ошибка!")
+            }
+        })
+  }
+
 
   return (
     <Modal open={modals?.operation} onClose={() => setModals({ ...modals, operation: false })}>
@@ -159,14 +172,17 @@ const OperationOpenModal = ({ modals, setModals, search }) => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <div className='flex justify-end'>
+                        <div className='flex justify-end gap-x-4'>
+                            <Button width='100px' variant='red' onClick={onDelete}>
+                                Удалить
+                            </Button>
                             {
                                 changed ? 
-                                    <Button onClick={onSubmit}>
+                                    <Button width='100px' onClick={onSubmit}>
                                         Сохранить
                                     </Button>
                                     :
-                                    <Button onClick={() => setModals({ ...modals, operation: false })}>
+                                    <Button width='100px' onClick={() => setModals({ ...modals, operation: false })}>
                                         Закрыть
                                     </Button>
                             }

@@ -100,6 +100,18 @@ export const createCombination = createAsyncThunk(
     }
 )
 
+export const deactivateCombinationById = createAsyncThunk(
+    'technologProduct/deactivateCombinationById',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.delete(`product/combination/crud/${id}/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const editCombinationById = createAsyncThunk(
     'technologProduct/editCombinationById',
     async ({ id, props }, { rejectWithValue }) => {

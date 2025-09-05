@@ -6,7 +6,7 @@ import Input from '../../../../../components/ui/inputs/input';
 import Select from '../../../../../components/ui/inputs/select';
 import { getOperationsTitlesList } from './../../../../../store/technolog/calculation';
 import Button from '../../../../../components/ui/button';
-import { editCombinationById } from './../../../../../store/technolog/product';
+import { deactivateCombinationById, editCombinationById } from './../../../../../store/technolog/product';
 import { toast } from 'react-toastify';
 import { combinationStatuses } from '../../../../../utils/selectDatas/productDatas';
 import { Plus, Search, Trash2 } from 'lucide-react';
@@ -73,6 +73,19 @@ const CombinationOpenModal = ({ modals, setModals, search }) => {
     } else {
         toast.error('Заполните все поля!')
     }
+  }
+
+  const onDelete = () => {
+    dispatch(deactivateCombinationById({ id: modals.id })).then(res => {
+        if(res?.meta?.requestStatus === 'fulfilled') {
+            toast.success('Комбинация удалена!')
+            dispatch(getCombinationList({ search: search }))
+            setModals({ ...modals, combination: false })
+            setSearchTerm('')
+        } else {
+            toast.error('Произошла ошибка!')
+        }
+    })
   }
   
   const filteredOperations = operaitions_list?.results?.filter(op =>
@@ -168,14 +181,17 @@ const CombinationOpenModal = ({ modals, setModals, search }) => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <div className='flex justify-end'>
+                        <div className='flex justify-end gap-x-4'>
+                            <Button width='100px' variant='red' onClick={onDelete}>
+                                Удалить
+                            </Button>
                             {
                                 changed ? 
-                                    <Button onClick={onSubmit}>
+                                    <Button width='100px' onClick={onSubmit}>
                                         Сохранить
                                     </Button>
                                     :
-                                    <Button onClick={() => setModals({ ...modals, combination: false })}>
+                                    <Button width='100px' onClick={() => setModals({ ...modals, combination: false })}>
                                         Закрыть
                                     </Button>
                             }
