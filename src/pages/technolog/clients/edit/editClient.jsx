@@ -118,6 +118,7 @@ const EditClient = () => {
               if(res.meta.requestStatus === 'fulfilled') {
                 setLoading(false)
                 toast("Клиент обновлен успешно!")
+                navigate(-1)
               }
             })
           } else {

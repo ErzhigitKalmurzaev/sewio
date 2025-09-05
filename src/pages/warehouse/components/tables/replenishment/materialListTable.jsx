@@ -98,14 +98,17 @@ const MaterialListTable = ({ data, status, modals, setModals, total, limit, acti
                 </Cell>
             </Column>
 
-            <Column width={120}>
-                <HeaderCell>Цена за 1 ед.</HeaderCell>
-                <Cell>
-                    {rowData => (
-                        <p>{rowData?.cost_price?.toFixed(2) || '-'}</p>
-                    )}
-                </Cell>
-            </Column>
+            {
+                me_info?.role === 3 && 
+                <Column width={120}>
+                    <HeaderCell>Цена за 1 ед.</HeaderCell>
+                    <Cell>
+                        {rowData => (
+                            <p>{rowData?.cost_price?.toFixed(2) || '-'}</p>
+                        )}
+                    </Cell>
+                </Column>
+            }
 
             {
                 me_info?.role === 3 && 

@@ -11,10 +11,13 @@ import TelInput from '../../../../components/ui/inputs/phoneInput';
 import NumInput from '../../../../components/ui/inputs/numInput';
 import { getRankList } from '../../../../store/technolog/rank';
 import { useDispatch, useSelector } from 'react-redux';
-import { createEmployee } from '../../../../store/technolog/staff';
+import { createEmployee, createEmployeeFiles } from '../../../../store/technolog/staff';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { Toggle } from 'rsuite';
+import { Toggle, Uploader } from 'rsuite';
+import { CloudUpload } from 'lucide-react';
+import DataPicker from '../../../../components/ui/inputs/dataPicker';
+import { formatedYYYYMMDD } from '../../../../utils/functions/dateFuncs';
 
 const CreateEmployee = () => {
   const breadcrumbs = [
@@ -36,7 +39,8 @@ const CreateEmployee = () => {
     role: '',
     rank: '',
     salary: 0,
-    is_active: true
+    is_active: true,
+    visa: ''
   })
   const [errors, setErrors] = useState({
     full_name: false,
@@ -47,6 +51,7 @@ const CreateEmployee = () => {
     salary: false
   })
   const [image, setImage] = useState(null);
+  const [files, setFiles] = useState([])
   
   useEffect(() => {
     if(!rank_list) {
@@ -82,11 +87,19 @@ const CreateEmployee = () => {
     e.preventDefault();
     
     if (validateFields()) {
-      dispatch(createEmployee({ ...employee_data, image }))
+      const visaDate = employee_data?.visa ? formatedYYYYMMDD(employee_data?.visa) : '';
+      dispatch(createEmployee({ ...employee_data, visa: visaDate, image }))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
-            navigate(-1)
-            toast("Сотрудник создан успешно!")
+            dispatch(createEmployeeFiles({ 
+              staff_id: res.payload.id, 
+              files: files.map(item => item.blobFile)
+             })).then(res => {
+              if(res.meta.requestStatus === 'fulfilled') {
+                navigate(-1)
+                toast("Сотрудник создан успешно!")
+              }
+            })
           } else {
             toast.error("Произошла ошибка! Или сотрудник с таким логином уже существует.")
           }
@@ -206,6 +219,27 @@ const CreateEmployee = () => {
                 valueKey='id'
                 onChange={e => getValue({ target: { value: e, name: 'rank' } })}
               />
+            </div>
+
+            <div className='w-1/2'>
+              <DataPicker
+                label='Срок визы сотрудника'
+                placeholder='Укажите срок визы'
+                value={employee_data.visa}
+                onChange={e => getValue({ target: { value: e, name: 'visa' } })}
+              />
+            </div>
+            
+            <div className='w-1/2 flex flex-col gap-y-2 mt-4'>
+              <p className='text-base font-semibold'>Файлы</p>
+              <div className='w-1/2 flex flex-col'>
+                  <Uploader fileList={files} onChange={setFiles} autoUpload={false}>
+                      <Button>
+                          <CloudUpload className='mr-2' size={18}/>
+                          Загрузите файл или изображение
+                      </Button>
+                  </Uploader>
+              </div>
             </div>
           </div>
         </div>

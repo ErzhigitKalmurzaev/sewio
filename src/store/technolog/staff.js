@@ -26,6 +26,31 @@ export const createEmployee = createAsyncThunk(
     }
 )
 
+export const createEmployeeFiles = createAsyncThunk(
+    'technologClient/createEmployeeFiles',
+    async (props, { rejectWithValue }) => {
+        try {
+            const formData = new FormData();
+
+            for (const key in props) {
+                if (key === "files" || key === 'delete_ids') {
+                    for (let i = 0; i < props[key].length; i++) {
+                        const item = props[key][i]
+                        formData.append(key, item)
+                    }
+                } else {
+                    formData.append(key, props[key])
+                }
+            }
+
+            const { data } = await ImageUploadingFetch.post('user/staff/files/crud/', formData);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const getEmployeeInfo = createAsyncThunk(
     'technologStaff/getEmployeeInfo',
     async (id, { rejectWithValue }) => {

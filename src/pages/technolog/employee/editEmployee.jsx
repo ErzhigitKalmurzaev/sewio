@@ -7,12 +7,12 @@ import Input from '../../../components/ui/inputs/input'
 import Select from '../../../components/ui/inputs/select'
 import Button from '../../../components/ui/button'
 import { employeeRole, employeeSalaryType } from '../../../utils/selectDatas/employeeDatas'
-import { Modal, Toggle } from 'rsuite'
+import { Modal, Toggle, Uploader } from 'rsuite'
 import Textarea from '../../../components/ui/inputs/textarea'
 import NumInput from '../../../components/ui/inputs/numInput'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { editEmployeeInfo, getEmployeeInfo } from '../../../store/technolog/staff'
+import { createEmployeeFiles, editEmployeeInfo, getEmployeeInfo } from '../../../store/technolog/staff'
 import TelInput from '../../../components/ui/inputs/phoneInput'
 import { getRankList } from '../../../store/technolog/rank'
 import { toast } from 'react-toastify'
@@ -20,6 +20,10 @@ import AdvanceModal from './components/modals/advanceModal'
 import FineModal from './components/modals/fineModal'
 import BackDrop from '../../../components/ui/backdrop'
 import BonusModal from './components/modals/bonusModal';
+import { CloudUpload } from 'lucide-react'
+import MultiFilePicker from '../clients/components/uploaderFiles'
+import DataPicker from '../../../components/ui/inputs/dataPicker'
+import { formatedToDDMMYYYY, formatedYYYYMMDD } from '../../../utils/functions/dateFuncs'
 
 const EditEmployee = () => {
 
@@ -43,6 +47,9 @@ const EditEmployee = () => {
   const { staff_info, staff_info_status } = useSelector(state => state.staff);
   const { rank_list } = useSelector(state => state.rank);
   const [update, setUpdate] = useState(false);
+  const [existingFiles, setExistingFiles] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [deleteFiles, setDeleteFiles] = useState([]);
 
   useEffect(() => {
     dispatch(getRankList());
@@ -57,8 +64,10 @@ const EditEmployee = () => {
                 rank: res.payload?.rank?.id,
                 salary: `${res.payload?.salary}`,
                 number: res.payload?.number,
-                is_active: res.payload?.user?.is_active
+                is_active: res.payload?.user?.is_active,
+                visa: res.payload?.visa ? formatedToDDMMYYYY(res.payload?.visa) : '',
             })
+            setExistingFiles(res.payload?.files)
             setImage(res.payload?.image)
         })
   }, [])
@@ -72,7 +81,8 @@ const EditEmployee = () => {
     role: '',
     rank: '',
     salary: '',
-    is_active: true
+    is_active: true,
+    visa: ''
   })
   const [errors, setErrors] = useState({
     name: false,
@@ -112,8 +122,9 @@ const EditEmployee = () => {
     e.preventDefault();
     
     if (validateFields()) {
-      const { password, ...datas} = employee_data
-      const finalData = password ? { ...datas, password } : datas
+      const { password, visa, ...datas} = employee_data;
+      const visaDate = visa ? formatedYYYYMMDD(visa) : '';
+      const finalData = password ? { ...datas, password, visa: visaDate } : { datas, visa: visaDate }
 
 
       const props = image ? image?.blobFile ? { ...finalData, image: image?.blobFile } 
@@ -122,7 +133,16 @@ const EditEmployee = () => {
       dispatch(editEmployeeInfo({ id, props }))
         .then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
-            toast("Данные сотрудника успешно изменены!");
+            dispatch(createEmployeeFiles({
+              staff_id: Number(id),
+              files: files.map(item => item.blobFile),
+              delete_ids: deleteFiles
+            })).then(res => {
+              if(res.meta.requestStatus === 'fulfilled') {
+                navigate(-1)
+                toast("Сотрудник обновлен успешно!")
+              }
+            })
           } else {
             toast.error("Произошла ошибка!")
           }
@@ -258,6 +278,26 @@ const EditEmployee = () => {
                 labelKey='title'
                 valueKey='id'
                 onChange={e => getValue({ target: { value: e, name: 'rank' } })}
+              />
+            </div>
+
+            <div className='w-1/2'>
+              <DataPicker
+                label='Срок визы сотрудника'
+                placeholder='Укажите срок визы'
+                value={employee_data?.visa || ''}
+                onChange={e => getValue({ target: { value: e, name: 'visa' } })}
+              />
+            </div>
+
+            <p className='text-base font-semibold'>Файлы</p>
+            <div className='w-1/2 flex flex-col'>
+              <MultiFilePicker
+                existingFiles={existingFiles} 
+                setExistingFiles={setExistingFiles}
+                newFiles={files}
+                setNewFiles={setFiles}
+                setDeleteFiles={setDeleteFiles}
               />
             </div>
           </div>

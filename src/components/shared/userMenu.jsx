@@ -92,7 +92,7 @@ const UserMenu = () => {
 
             <Box mt={1.5}>
               <Typography fontSize={14} mt={0.5} color="text.secondary">
-                Роль: <strong>{employeeRole[me_info?.role].label}</strong>
+                Роль: <strong>{employeeRole[me_info?.role]?.label}</strong>
               </Typography>
               {
                 me_info?.rank?.title &&
