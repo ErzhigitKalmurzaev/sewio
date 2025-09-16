@@ -47,7 +47,7 @@ const SalaryPaymentTable = ({ data, status, staff_id }) => {
       <div className="bg-[#EDEDED] rounded-xl border border-borderGray font-inter">
         <h3 className="text-lg font-bold mb-2 px-4 pt-2 flex justify-between items-center">
           <span>Операции</span>
-          <span className='text-base mt-1'>{`${formatedToDDMMYYYY(data?.earliest_created_at) + ' - ' + formattedDate}`}</span>
+          <span className='text-base mt-1'>{`${formatedToDDMMYYYY(data?.earliest_created_at || new Date()) + ' - ' + formattedDate}`}</span>
         </h3>
         <table className="min-w-full table-auto bg-white">
           <thead className="bg-gray-100">

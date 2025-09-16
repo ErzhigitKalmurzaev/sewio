@@ -124,7 +124,7 @@ const EditEmployee = () => {
     if (validateFields()) {
       const { password, visa, ...datas} = employee_data;
       const visaDate = visa ? formatedYYYYMMDD(visa) : '';
-      const finalData = password ? { ...datas, password, visa: visaDate } : { datas, visa: visaDate }
+      const finalData = password ? { ...datas, password, visa: visaDate } : { ...datas, visa: visaDate }
 
 
       const props = image ? image?.blobFile ? { ...finalData, image: image?.blobFile } 

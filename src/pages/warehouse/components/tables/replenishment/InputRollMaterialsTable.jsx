@@ -18,6 +18,7 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
   const navigate = useNavigate();
 
   const [rollCount, setRollCount] = useState('');
+  const [rollPrice, setPriceCount] = useState('');
   const [rolls, setRolls] = useState([]);
   const { colors_list } = useSelector(state => state.material);
 
@@ -38,7 +39,7 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
       color: defaultColor,
       title: template.title,
       unit: template.unit,
-      cost_price: ''
+      cost_price: rollPrice
     }));
 
     setRolls(newRolls);
@@ -87,6 +88,14 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
           placeholder='Кол-во рулонов'
           value={rollCount}
           onChange={e => setRollCount(e.target.value)}
+          width='200px'
+        />
+        <Input
+          type='number'
+          label='Укажите стоимость рулона'
+          placeholder='Стоимость рулона'
+          value={rollPrice}
+          onChange={e => setPriceCount(e.target.value)}
           width='200px'
         />
         <Button width='160px' style={{ marginTop: '15px' }} onClick={handleGenerateRolls}>
