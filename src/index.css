@@ -83,3 +83,18 @@ body[style*="padding-right"] {
     border-collapse: collapse !important;
   }
 }
+
+.rs-table-cell-expand-wrapper {
+  width: 60px !important;
+  height: 40px !important;
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px !important;
+}
+
+.rs-table-cell-expand-wrapper svg {
+  width: 20px !important;
+  height: 20px !important;
+}
