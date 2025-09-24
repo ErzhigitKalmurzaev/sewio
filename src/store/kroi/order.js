@@ -123,7 +123,7 @@ const KroiOrderSlice = createSlice({
             item[name] = value;
         
             const toNum = (v) => Number(v) || 0;
-        
+            
             const shouldUpdateFactLength = ['table_length', 'layers_count', 'restyled', 'defect', 'remainder'].includes(name);
             const shouldUpdateFail = shouldUpdateFactLength || name === 'passport_length';
             const shouldUpdateLayersCount = name === 'table_length';
@@ -155,17 +155,17 @@ const KroiOrderSlice = createSlice({
                     : (toNum(item.passport_length) - toNum(item.fact_length))?.toFixed(2);
             }
         
-            if (['is_main', 'layers_count', 'count_in_layer', 'color'].includes(name)) {
+            if (['is_main', 'table_length', 'layers_count', 'count_in_layer', 'color'].includes(name)) {
                 const mainConsumables = state.party_consumables.filter(c =>
                     c.is_main &&
                     c.color &&
                     c.count_in_layer &&
                     c.layers_count
                 );
+                
+                const sizes = select_sizes || state?.party_active_sizes || [];
         
-                const sizes = select_sizes || state.party_active_sizes || [];
-        
-                state.party_amounts = state.party_amounts.map((amountEntry) => {
+                state.party_amounts = state.party_amounts?.map((amountEntry) => {
                     const matchingConsumables = mainConsumables.filter(
                         c => c.color === amountEntry.color.id
                     );

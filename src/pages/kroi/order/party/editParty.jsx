@@ -259,13 +259,12 @@ const EditParty = () => {
             }))
           )),
           consumptions: party_consumables
-            .filter(item => item.nomenclature)
-            .map(item => ({
-              nomenclature: item.nomenclature,
-              consumption: Number(item.consumption),
-              defect: Number(item.defect),
-              left: Number(item.left)
-            }))
+          .filter(item => item.nomenclature && item.table_length && item.layers_count)  // Отфильтровываем элементы без nomenclature
+          .map(item => ({
+            ...item,
+            layers_count: Number(item.layers_count) || 0,
+            quantity: Number(item.layers_count * item.count_in_layer)
+          }))
         
         }
         dispatch(patchParty({ id, props: new_party })).then(res => {
@@ -274,6 +273,7 @@ const EditParty = () => {
             navigate(-1)
           }
         })
+        console.log(party_consumables);
       } else {
         toast.error('Заполните поле № партии!')
       }
