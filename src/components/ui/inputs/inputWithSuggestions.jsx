@@ -136,7 +136,7 @@ const TextInputForTable = ({
               >
                 <span>{suggestion.title}</span>
                 <span style={suggestion?.color ? { color: colors_list?.find(color => color.id === suggestion?.color).code } : { color: 'gray'}}>
-                  {suggestion?.id ? suggestion?.id : ''}
+                  {suggestion?.vendor_code ? suggestion?.vendor_code : ''}
                 </span>
               </SuggestionItem>
             ))}

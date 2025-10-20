@@ -18,7 +18,8 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
   const navigate = useNavigate();
 
   const [rollCount, setRollCount] = useState('');
-  const [rollPrice, setPriceCount] = useState('');
+  const [kurs, setKurs] = useState('');
+  const [price, setPrice] = useState('');
   const [rolls, setRolls] = useState([]);
   const { colors_list } = useSelector(state => state.material);
 
@@ -39,7 +40,8 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
       color: defaultColor,
       title: template.title,
       unit: template.unit,
-      cost_price: rollPrice
+      cost_price: price || '',
+      kurs: kurs || ''
     }));
 
     setRolls(newRolls);
@@ -53,7 +55,7 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
 
   const onSubmit = () => {
     const isValid = rolls.every(
-      roll => roll.cost_price && roll.coefficient
+      roll => roll.cost_price && roll.coefficient && roll.kurs
     );
     if (!isValid) {
       toast.error('Заполните все поля у всех рулонов');
@@ -64,7 +66,7 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
         unit: template.unit,
         details: rolls.map(roll => ({
           color: roll.color,
-          cost_price: Number(roll.cost_price),
+          cost_price: Number(roll.cost_price) * Number(roll.kurs) * Number(roll.coefficient),
           coefficient: Number(roll.coefficient)
         }))
     };
@@ -92,10 +94,18 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
         />
         <Input
           type='number'
-          label='Укажите стоимость рулона'
-          placeholder='Стоимость рулона'
-          value={rollPrice}
-          onChange={e => setPriceCount(e.target.value)}
+          label='Укажите курс к сому'
+          placeholder='Курс к сому'
+          value={kurs}
+          onChange={e => setKurs(e.target.value)}
+          width='200px'
+        />
+        <Input
+          type='number'
+          label='Цена за метр'
+          placeholder='Курс к сому'
+          value={price}
+          onChange={e => setPrice(e.target.value)}
           width='200px'
         />
         <Button width='160px' style={{ marginTop: '15px' }} onClick={handleGenerateRolls}>
@@ -151,7 +161,22 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
             </Column>
 
             <Column width={150}>
-              <HeaderCell>Цена</HeaderCell>
+              <HeaderCell>Курс к сому</HeaderCell>
+              <Cell style={{ padding: '6px 6px' }}>
+                {rowData => (
+                  <NumInputForTable
+                    placeholder='0'
+                    value={rowData.kurs}
+                    onChange={value =>
+                      updateRollField(rowData.id, 'kurs', value)
+                    }
+                  />
+                )}
+              </Cell>
+            </Column>
+
+            <Column width={150}>
+              <HeaderCell>Цена за метр</HeaderCell>
               <Cell style={{ padding: '6px 6px' }}>
                 {rowData => (
                   <NumInputForTable
@@ -165,12 +190,19 @@ const InputRollMaterialsTable = ({ materials = [] }) => {
               </Cell>
             </Column>
 
-            <Column width={100}>
-              <HeaderCell>Ед. изм.</HeaderCell>
-              <Cell>
-                {
-                  rowData => materialUnits.find(unit => unit.value === rowData.unit)?.label
-                }
+            <Column width={200}>
+              <HeaderCell>Стоимость в сомах</HeaderCell>
+              <Cell style={{ padding: '14px 12px' }}>
+                {rowData => {
+                  const totalInSom = (Number(rowData.cost_price) || 0) * 
+                                     (Number(rowData.kurs) || 0) * 
+                                     (Number(rowData.coefficient) || 0);
+                  return (
+                    <p className='text-start font-medium'>
+                      {totalInSom > 0 ? totalInSom.toFixed(2) : '0.00'} сом
+                    </p>
+                  );
+                }}
               </Cell>
             </Column>
           </Table>

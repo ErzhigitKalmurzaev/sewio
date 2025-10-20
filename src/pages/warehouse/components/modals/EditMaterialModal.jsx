@@ -5,7 +5,7 @@ import Input from '../../../../components/ui/inputs/input'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from '../../../../components/ui/inputs/select'
 import { materialUnits } from '../../../../utils/selectDatas/productDatas'
-import { patchMaterial, postMaterial } from '../../../../store/technolog/material'
+import { deleteMaterial, patchMaterial, postMaterial } from '../../../../store/technolog/material'
 import { toast } from 'react-toastify'
 import { color } from 'framer-motion'
 
@@ -89,6 +89,27 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
       } else {
           toast("Заполните все поля!")
       }
+    }
+
+    const onDelete = () => {
+        dispatch(deleteMaterial({ id: data.id }))
+        .then(res => {
+            if(res.meta.requestStatus === 'fulfilled') {
+                toast("Сырье удалено успешно!");
+                setModals({ ...modals, edit: false })
+                setMaterial({
+                    title: '',
+                    vendor_code: '',
+                    unit: 0,
+                    is_active: false,
+                    color: null,
+                    coefficient: 0,
+                    status: 1
+                })
+                
+            }
+        })
+        setUpdate(prev => !prev)
     }
 
     return (
@@ -180,7 +201,10 @@ const EditMaterialModal = ({ modals, setModals, data, setUpdate }) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button width='100px' onClick={onSubmit}>Сохранить</Button>
+                <div className='flex justify-end gap-x-5'>
+                    <Button width='110px' variant='red' onClick={onDelete}>Удалить</Button>
+                    <Button width='110px' onClick={onSubmit}>Сохранить</Button>
+                </div>
             </Modal.Footer>
         </Modal>
     )

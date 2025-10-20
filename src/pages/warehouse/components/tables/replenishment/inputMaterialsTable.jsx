@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Table } from 'rsuite'
 import NumInputForTable from '../../../../../components/ui/inputs/numInputForTable';
 import { fillWarehouseWithMaterial } from '../../../../../store/technolog/material';
@@ -16,26 +16,41 @@ const InputMaterialsTable = ({ data, status }) => {
 
   const { colors_list } = useSelector(state => state.material);
 
-  const dataForInput =  data?.map(item => ({...item, amount: '', price: ''} )) || [];
+  const [dataForInput, setDataForInput] = useState([]);
+
+  // Инициализируем данные при получении
+  useEffect(() => {
+    if (data) {
+      setDataForInput(data.map(item => ({
+        ...item,
+        amount: '',
+        price: '',
+        kurs: ''
+      })));
+    }
+  }, [data]);
 
   const getValue = (name, value, id) => {
-    const index = dataForInput.findIndex(item => item.id === id);
-    dataForInput[index] = {...dataForInput[index], [name]: value};
+    setDataForInput(prevData => 
+      prevData.map(item => 
+        item.id === id ? { ...item, [name]: value } : item
+      )
+    );
   }
 
   const validateField = () => {
-    return dataForInput.every(material => material.amount && material.price)
+    return dataForInput.every(material => material.amount && material.price && material.kurs)
   }
 
   const onSubmit = () => {
-    const data = dataForInput.map(material => ({
+    const submitData = dataForInput.map(material => ({
       product_id: material.id,
       amount: Number(material.amount),
-      price: Number(material.price)
+      price: Number(material.price) * Number(material.kurs) * Number(material.amount)
     }));
 
     if(validateField()) {
-        dispatch(fillWarehouseWithMaterial(data))
+        dispatch(fillWarehouseWithMaterial(submitData))
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
                 navigate(-1)
@@ -96,7 +111,7 @@ const InputMaterialsTable = ({ data, status }) => {
                     </Cell>
                 </Column>
 
-                <Column width={200}>
+                <Column width={120}>
                     <HeaderCell>Количество</HeaderCell>
                     <Cell style={{ padding: '8px 6px'}}>
                         {
@@ -111,8 +126,23 @@ const InputMaterialsTable = ({ data, status }) => {
                     </Cell>
                 </Column>
 
-                <Column width={200}>
-                    <HeaderCell>Цена за общее количество</HeaderCell>
+                <Column width={120}>
+                    <HeaderCell>Курс к сому</HeaderCell>
+                    <Cell style={{ padding: '8px 6px'}}>
+                        {
+                            rowData => (
+                                <NumInputForTable
+                                    placeholder='0'
+                                    value={rowData.kurs}
+                                    onChange={(value) => getValue('kurs', value, rowData.id)}
+                                />
+                            )
+                        }
+                    </Cell>
+                </Column>
+
+                <Column width={120}>
+                    <HeaderCell>Цена</HeaderCell>
                     <Cell style={{ padding: '8px 6px'}}>
                         {
                             rowData => (
@@ -122,6 +152,22 @@ const InputMaterialsTable = ({ data, status }) => {
                                     onChange={(value) => getValue('price', value, rowData.id)}
                                 />
                             )
+                        }
+                    </Cell>
+                </Column>
+
+                <Column width={200}>
+                    <HeaderCell>Цена в сомах за 1 ед.</HeaderCell>
+                    <Cell style={{ padding: '14px 12px'}}>
+                        {
+                            rowData => {
+                                const priceInSom = (Number(rowData.price) || 0) * (Number(rowData.kurs) || 0);
+                                return (
+                                    <p className='text-start font-medium'>
+                                        {priceInSom > 0 ? priceInSom.toFixed(2) : '0.00'} сом
+                                    </p>
+                                )
+                            }
                         }
                     </Cell>
                 </Column>

@@ -44,15 +44,9 @@ const OrderCreate = () => {
   });
 
   useEffect(() => {
-    if(!client_list) {
-      dispatch(getOrderClientList());
-    }
-    if(!product_list) {
-      dispatch(getOrderProductList());
-    }
-    if(!warehouse_list) {
-      dispatch(getWarehouseList())
-    }
+    dispatch(getOrderClientList());
+    dispatch(getOrderProductList());
+    dispatch(getWarehouseList())
     dispatch(clearAll());
   }, []);
 

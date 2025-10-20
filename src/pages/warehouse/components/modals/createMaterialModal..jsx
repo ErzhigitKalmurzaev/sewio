@@ -154,7 +154,7 @@ const CreateMaterialModal = ({ modals, setModals, setUpdate = () => {}, setID = 
               <Select
                 label="Статус"
                 placeholder="Выберите"
-                data={[{ value: 1, label: "В крой" }, { value: 2, label: "В цех" }]}
+                data={[{ value: 1, label: "Ткань" }, { value: 2, label: "Фурнитура" }]}
                 value={material.status}
                 error={errors.status}
                 onChange={(e) =>

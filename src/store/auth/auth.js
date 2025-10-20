@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosInstance from '../../api/axios';
+import axiosInstance from './../../api/axios';
 
 export const logIn = createAsyncThunk(
     'technologProduct/logIn',

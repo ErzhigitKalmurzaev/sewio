@@ -16,9 +16,45 @@ const InputWithSuggestion = ({
   const [inputValue, setInputValue] = useState(value);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
   const inputRef = useRef(null);
   const listRef = useRef(null);
-  const positionRef = useRef({ top: 0, left: 0, width: 0 });
+
+  // Функция для обновления позиции
+  const updatePosition = () => {
+    if (inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width
+      });
+    }
+  };
+
+  // Обновление позиции при скролле и ресайзе
+  useEffect(() => {
+    if (filteredSuggestions.length > 0) {
+      updatePosition();
+
+      const handleScroll = () => {
+        updatePosition();
+      };
+
+      const handleResize = () => {
+        updatePosition();
+      };
+
+      // Слушаем скролл на всех родительских элементах
+      window.addEventListener("scroll", handleScroll, true);
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("scroll", handleScroll, true);
+        window.removeEventListener("resize", handleResize);
+      };
+    }
+  }, [filteredSuggestions.length]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -61,10 +97,8 @@ const InputWithSuggestion = ({
     setFilteredSuggestions(filtered);
     setHighlightedIndex(-1);
 
-    if (inputRef.current) {
-      const rect = inputRef.current.getBoundingClientRect();
-      positionRef.current = { top: rect.bottom + window.scrollY, left: rect.left, width: rect.width };
-    }
+    // Обновляем позицию при открытии списка
+    updatePosition();
   };
 
   const handleSelectSuggestion = (suggestion) => {
@@ -126,7 +160,14 @@ const InputWithSuggestion = ({
 
       {filteredSuggestions.length > 0 &&
         createPortal(
-          <SuggestionsList ref={listRef} style={{ top: positionRef.current.top, left: positionRef.current.left, width: positionRef.current.width }}>
+          <SuggestionsList 
+            ref={listRef} 
+            style={{ 
+              top: position.top, 
+              left: position.left, 
+              width: position.width 
+            }}
+          >
             {filteredSuggestions.map((suggestion, index) => (
               <SuggestionItem
                 key={suggestion.id}
@@ -139,7 +180,7 @@ const InputWithSuggestion = ({
           </SuggestionsList>,
           document.body
         )}
-        <p className="mt-1 text-sm"></p>
+      <p className="mt-1 text-sm"></p>
     </StyledDiv>
   );
 };
