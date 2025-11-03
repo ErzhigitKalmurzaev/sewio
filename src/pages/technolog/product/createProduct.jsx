@@ -5,7 +5,7 @@
   import { useNavigate } from "react-router-dom";
   import { toast } from 'react-toastify';
   import ProductImages from "./components/shared/productImages";
-  import { clearAll, createProduct, createProductFiles, createProductImages, getProductInfoById } from "../../../store/technolog/product";
+  import { clearAll, createProduct, createProductFiles, createProductImages, createProductTZFiles, getProductInfoById } from "../../../store/technolog/product";
   import { Toggle } from "rsuite";
   import Title from "../../../components/ui/title";
   import ProdTable from "./components/shared/prodTable";
@@ -26,6 +26,9 @@
 
     const [files, setFiles] = useState([]);
     const [deleteFiles, setDeleteFiles] = useState([]);
+
+    const [TZfiles, setTZFiles] = useState([]);
+    const [deleteTZFiles, setDeleteTZFiles] = useState([]);
 
     const [productData, setProductData] = useState({
       title: "",
@@ -109,6 +112,10 @@
               files: files.map(item => item.blobFile),
               product_id: res.payload.id
             }}))
+            dispatch(createProductTZFiles({ props: {
+              files: TZfiles.map(item => item.blobFile),
+              product_id: res.payload.id
+            }}))
             toast.success("Товар создан успешно!")
             navigate(-1)
           } else if(res.payload?.vendor_code?.length > 0 && res.payload?.vendor_code[0] === 'nomenclature with this vendor code already exists.') {
@@ -136,7 +143,11 @@
             files={files}
             setFiles={setFiles}
             deleteFiles={deleteFiles}
-            setDeleteFiles={setDeleteFiles} 
+            setDeleteFiles={setDeleteFiles}
+            TZfiles={TZfiles}
+            setTZFiles={setTZFiles}
+            deleteTZFiles={deleteTZFiles}
+            setDeleteTZFiles={setDeleteTZFiles}  
           />
 
           <div className="w-full bg-white rounded-lg px-6 py-6 flex flex-col gap-y-5">

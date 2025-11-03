@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import ProductImages from "./components/shared/productImages";
-import { createProductFiles, createProductImages, editProductById, getProductById, getProductImages, getProductInfoById } from "../../../store/technolog/product";
+import { createProductFiles, createProductImages, createProductTZFiles, editProductById, getProductById, getProductImages, getProductInfoById } from "../../../store/technolog/product";
 import { Toggle } from "rsuite";
 import Title from "../../../components/ui/title";
 import ProdTable from "./components/shared/prodTable";
@@ -25,19 +25,20 @@ const EditProduct = () => {
   const { id } = useParams();
   const { combinations, consumables, prices, product_status } = useSelector(state => state.product);
   const { products } = useSelector(state => state.calculation)
-  const { colors_list } = useSelector(state => state.material)
   const printRef = React.useRef();
 
   const { search, status } = useLocation();
   const queryParams = new URLSearchParams(search, status);
   const orderProduct = queryParams.get("order_product");
-  const orderStatus = queryParams.get("status");
 
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
 
   const [files, setFiles] = useState([]);
   const [deleteFiles, setDeleteFiles] = useState([]);
+
+  const [TZfiles, setTZFiles] = useState([]);
+  const [deleteTZFiles, setDeleteTZFiles] = useState([]);
 
   const [productData, setProductData] = useState({
     title: "",
@@ -137,6 +138,11 @@ const EditProduct = () => {
               delete_ids: deleteFiles,
               product_id: res.payload.id
             }}))
+            dispatch(createProductTZFiles({ props: {
+              files: TZfiles.map(item => item.blobFile),
+              delete_ids: deleteTZFiles,
+              product_id: res.payload.id
+            }}))
             toast.success("Изменения сохранены!")
             navigate(-1)
           } else {
@@ -192,6 +198,10 @@ const EditProduct = () => {
           setDeleteFiles={setDeleteFiles} 
           printRef={printRef}
           productInfo={productData}
+          TZfiles={TZfiles}
+          setTZFiles={setTZFiles}
+          deleteTZFiles={deleteTZFiles}
+          setDeleteTZFiles={setDeleteTZFiles} 
         />
 
         <div className="w-full bg-white rounded-lg px-6 py-6 flex flex-col gap-y-5">

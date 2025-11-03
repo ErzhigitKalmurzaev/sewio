@@ -141,7 +141,7 @@ const RejectMaterials = () => {
         </div>
 
         <div className='flex justify-center mt-5'>
-            <Button width='200px' onClick={onSubmit}>Отправить</Button>
+            <Button width='200px' loading={loading} onClick={onSubmit}>Отправить</Button>
         </div>
 
         <SelectRejectMaterialModal

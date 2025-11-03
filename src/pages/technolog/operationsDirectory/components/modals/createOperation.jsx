@@ -103,7 +103,7 @@ const CreateOperation = ({ modals, setModals }) => {
                 equipment: res.payload?.equipment?.id,
                 time: res.payload?.time,
                 rank: res.payload?.rank?.id,
-                price: roundTo(rank_kef * res.payload?.time, 2)
+                price: res.payload?.price || roundTo(rank_kef * res.payload?.time, 2)
             })
         }
     })

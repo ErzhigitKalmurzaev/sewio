@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { changePartyNumber, getPartyById, patchParty } from '../../../../store/kroi/order';
@@ -229,6 +229,8 @@ const EditParty = () => {
 
   const { party, party_status, party_amounts, party_consumables, party_active_sizes } = useSelector(state => state.kroi_order);
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     dispatch(getPartyById({ id }))
   }, [id]);
@@ -246,6 +248,7 @@ const EditParty = () => {
 
   const onSubmit = () => {
     if(validateField()) {
+        setLoading(true);
         const new_party = {
           order: Number(party.order),
           nomenclature: party.nomenclature.id,
@@ -270,10 +273,10 @@ const EditParty = () => {
         dispatch(patchParty({ id, props: new_party })).then(res => {
           if(res.meta.requestStatus === 'fulfilled') {
             toast.success('Партия успешно изменена!');
+            setLoading(false);
             navigate(-1)
           }
         })
-        console.log(party_consumables);
       } else {
         toast.error('Заполните поле № партии!')
       }
@@ -357,7 +360,7 @@ const EditParty = () => {
         </div>
         
         <div className='flex justify-center'>
-            <Button width='180px' onClick={onSubmit}>Сохранить</Button>
+            <Button width='180px' loading={loading} onClick={onSubmit}>Сохранить</Button>
         </div>
     </div>
   )

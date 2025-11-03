@@ -17,6 +17,7 @@ const InputMaterialsTable = ({ data, status }) => {
   const { colors_list } = useSelector(state => state.material);
 
   const [dataForInput, setDataForInput] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Инициализируем данные при получении
   useEffect(() => {
@@ -48,13 +49,14 @@ const InputMaterialsTable = ({ data, status }) => {
       amount: Number(material.amount),
       price: Number(material.price) * Number(material.kurs) * Number(material.amount)
     }));
-
+    setLoading(true)
     if(validateField()) {
         dispatch(fillWarehouseWithMaterial(submitData))
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
                 navigate(-1)
                 toast("Склад успешно заполнен!")
+                setLoading(false)
             }
         })
     } else {
@@ -174,7 +176,7 @@ const InputMaterialsTable = ({ data, status }) => {
             </Table>
         </div>
         <div className='flex justify-center'>
-            <Button width='200px' onClick={onSubmit}>Сохранить</Button>
+            <Button width='200px' loading={loading} onClick={onSubmit}>Сохранить</Button>
         </div>
     </div>
   )

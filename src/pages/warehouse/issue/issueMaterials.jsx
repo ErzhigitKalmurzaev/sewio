@@ -37,6 +37,7 @@ const IssueMaterials = () => {
   const [params, setParams] = useSearchParams();
   
   const [stage, setStage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [modals, setModals] = useState({ select: false, create: false });
   const [output, setOutput] = useState({
     warehouse: null,
@@ -86,7 +87,6 @@ const IssueMaterials = () => {
   }
 
   const onSubmit = () => {
-    // Проверяем, есть ли хотя бы один товар с заполненным количеством
     const hasValidAmount = output.products.some(item => 
         item.output_amount && Number(item.output_amount) > 0
     );
@@ -95,6 +95,7 @@ const IssueMaterials = () => {
         toast.error("Необходимо указать количество хотя бы для одного товара!");
         return;
     }
+    setIsLoading(true);
 
     const data = {
         output_warehouse_id: output.warehouse.id,
@@ -110,6 +111,7 @@ const IssueMaterials = () => {
     dispatch(postIssueInWarehouse(data))
         .then(res => {
             if(res.meta.requestStatus === 'fulfilled') {
+                setIsLoading(false);
                 navigate(-1);
                 toast("Выдача успешно оформлена!");
             }
@@ -169,7 +171,7 @@ const IssueMaterials = () => {
                     Далее
                     <MoveRight className='ml-2'/>
                 </Button> : 
-                <Button width='130px' onClick={() => checkValidate('submit')}>
+                <Button loading={isLoading} width='130px' onClick={() => checkValidate('submit')}>
                     Выдать
                 </Button>
             }

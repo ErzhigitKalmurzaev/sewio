@@ -18,6 +18,7 @@ const CreateParty = () => {
 
   const { product_info, product_info_status, party_amounts, party_consumables } = useSelector(state => state.kroi_order);
 
+  const [loading, setLoading] = useState(false);
   const [party, setParty] = useState({
     number: '',
     product: null
@@ -59,11 +60,12 @@ const CreateParty = () => {
           }))
       
       }
-      
+      setLoading(true)
       dispatch(postParty(new_party)).then(res => {
         if(res.meta.requestStatus === 'fulfilled') {
           toast.success('Партия успешно создана!');
           navigate(-1)
+          setLoading(false)
         }
       })
     } else {
@@ -107,7 +109,7 @@ const CreateParty = () => {
             <ConsumablesTable status={product_info_status} />
 
             <div className='flex justify-center'>
-                <Button width='180px' onClick={onSubmit}>Создать</Button>
+                <Button width='180px' loading={loading} onClick={onSubmit}>Создать</Button>
             </div>
         </div>
 

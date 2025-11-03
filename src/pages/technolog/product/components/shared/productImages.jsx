@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import MultiImagePicker from './../../../../../components/ui/imagePickers/multiImagePicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductFiles, getProductImages } from '../../../../../store/technolog/product';
+import { getProductFiles, getProductImages, getProductTZFiles } from '../../../../../store/technolog/product';
 import MultiFileUploader from '../../../../../components/ui/imagePickers/multiFileUploader';
 import CombinationsPrint from './combinationsPrint';
 
-const ProductImages = ({ id_product, images, setImages, files, setFiles, setDeleteImages, setDeleteFiles, printRef, productInfo }) => {
+const ProductImages = ({ 
+    id_product, 
+    images, 
+    setImages, 
+    files, 
+    setFiles, 
+    setDeleteImages, 
+    setDeleteFiles, 
+    printRef, 
+    productInfo,
+    TZfiles,
+    setTZFiles,
+    setDeleteTZFiles,
+    deleteTZFiles }) => {
   const dispatch = useDispatch();
 
   const [existingImages, setExistingImages] = useState([]);
   const [existingFiles, setExistingFiles] = useState([]);
+  const [existingTZFiles, setExistingTZFiles] = useState([]);
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
@@ -20,6 +34,10 @@ const ProductImages = ({ id_product, images, setImages, files, setFiles, setDele
 
       dispatch(getProductFiles({ id: id_product })).then(({ payload }) => {
         setExistingFiles(payload || []);
+      });
+
+      dispatch(getProductTZFiles({ id: id_product })).then(({ payload }) => {
+        setExistingTZFiles(payload || []);
       });
     }
   }, [dispatch, id_product, update]);
@@ -46,17 +64,32 @@ const ProductImages = ({ id_product, images, setImages, files, setFiles, setDele
         setNewImages={setImages}
       />
 
-      <div className='flex justify-between pt-6'>
-        <p className='text-lg font-semibold'>Файлы</p>
+      <div className='flex gap-x-20'>
+        <div className='flex flex-col gap-y-4'>
+          <p className='text-lg font-semibold'>Файлы</p>
+        
+          <MultiFileUploader
+            existingFiles={existingFiles}
+            setExistingFiles={setExistingFiles}
+            setDeleteFiles={setDeleteFiles}
+            newFiles={files}
+            setNewFiles={setFiles}
+          />
+        </div>
+
+        <div className='flex flex-col gap-y-4'>
+          <p className='text-lg font-semibold'>Тех. Задание</p>
+
+          <MultiFileUploader
+            existingFiles={existingTZFiles}
+            setExistingFiles={setExistingTZFiles}
+            setDeleteFiles={setDeleteTZFiles}
+            newFiles={TZfiles}
+            setNewFiles={setTZFiles}
+          />
+        </div>
       </div>
 
-      <MultiFileUploader
-        existingFiles={existingFiles}
-        setExistingFiles={setExistingFiles}
-        setDeleteFiles={setDeleteFiles}
-        newFiles={files}
-        setNewFiles={setFiles}
-      />
     </div>
   );
 };
