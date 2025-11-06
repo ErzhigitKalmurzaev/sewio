@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'rsuite';
-import { formatedToDDMMYYYY, formatedToDDMMYYYYHHMM } from '../../../../../utils/functions/dateFuncs';
+import { formatedToDDMMYYYYHHMM } from '../../../../../utils/functions/dateFuncs';
 import { Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,12 +25,36 @@ const ComingsTable = ({ data, status }) => {
                 <Cell dataKey="id" />
             </Column>
 
-            <Column width={300}>
+            <Column width={250}>
                 <HeaderCell>Склад</HeaderCell>
                 <Cell dataKey="out_warehouse.title" />
             </Column>
 
-            <Column width={250}>
+            <Column width={350}>
+                <HeaderCell>Товары</HeaderCell>
+                <Cell>
+                    {rowData => (
+                        <div className='py-1'>
+                            {rowData.quantities?.slice(0, 2).map((item, index) => (
+                                <div key={index} className='text-sm mb-1'>
+                                    <span className='font-medium'>{item.nomenclature.title}</span>
+                                    {item.nomenclature.vendor_code && (
+                                        <span className='text-gray-500 ml-2'>({item.nomenclature.vendor_code})</span>
+                                    )}
+                                    <span className='text-gray-700 ml-2'>— {item.amount} шт.</span>
+                                </div>
+                            ))}
+                            {rowData.quantities?.length > 2 && (
+                                <span className='text-xs text-gray-500'>
+                                    +ещё {rowData.quantities.length - 2}
+                                </span>
+                            )}
+                        </div>
+                    )}
+                </Cell>
+            </Column>
+
+            <Column width={200}>
                 <HeaderCell>Дата выдачи</HeaderCell>
                 <Cell>
                     {rowData => (
@@ -39,7 +63,7 @@ const ComingsTable = ({ data, status }) => {
                 </Cell>
             </Column>
 
-            <Column width={250}>
+            <Column width={150}>
                 <HeaderCell>Действия</HeaderCell>
                 <Cell>
                     {rowData => (

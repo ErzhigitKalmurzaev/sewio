@@ -4,7 +4,6 @@ import { changeCombinationValue, getCombinationById, getCombinationList, getFold
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../../components/ui/inputs/input';
 import Select from '../../../../../components/ui/inputs/select';
-import { getOperationsTitlesList } from './../../../../../store/technolog/calculation';
 import Button from '../../../../../components/ui/button';
 import { deactivateCombinationById, editCombinationById } from './../../../../../store/technolog/product';
 import { toast } from 'react-toastify';
@@ -15,7 +14,7 @@ const CombinationOpenModal = ({ modals, setModals, search }) => {
 
   const dispatch = useDispatch();
 
-  const { combination, combination_status, operaitions_list, operaitions_list_status, folders_list } = useSelector(state => state.operation);
+  const { combination, combination_status, operaitions_list, folders_list } = useSelector(state => state.operation);
   const { operations_list } = useSelector(state => state.calculation);
 
   const [changed, setChanged] = useState(false);
