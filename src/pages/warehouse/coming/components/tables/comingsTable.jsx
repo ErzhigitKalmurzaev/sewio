@@ -3,6 +3,7 @@ import { Table } from 'rsuite';
 import { formatedToDDMMYYYYHHMM } from '../../../../../utils/functions/dateFuncs';
 import { Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { materialUnits } from '../../../../../utils/selectDatas/productDatas';
 
 const {Column, HeaderCell, Cell} = Table;
 
@@ -30,7 +31,7 @@ const ComingsTable = ({ data, status }) => {
                 <Cell dataKey="out_warehouse.title" />
             </Column>
 
-            <Column width={350}>
+            <Column width={500}>
                 <HeaderCell>Товары</HeaderCell>
                 <Cell>
                     {rowData => (
@@ -41,7 +42,7 @@ const ComingsTable = ({ data, status }) => {
                                     {item.nomenclature.vendor_code && (
                                         <span className='text-gray-500 ml-2'>({item.nomenclature.vendor_code})</span>
                                     )}
-                                    <span className='text-gray-700 ml-2'>— {item.amount} шт.</span>
+                                    <span className='text-gray-700 ml-2'>— {item.amount} {materialUnits.find(unit => unit.value === item.nomenclature.unit)?.label}</span>
                                 </div>
                             ))}
                             {rowData.quantities?.length > 2 && (
