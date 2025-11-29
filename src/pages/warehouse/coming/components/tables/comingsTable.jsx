@@ -13,7 +13,7 @@ const ComingsTable = ({ data, status }) => {
 
   return (
     <div className='min-h-[400px] bg-white rounded-xl'>
-      <Table
+        <Table
             height={450}
             loading={status === 'loading'}
             data={data || []}

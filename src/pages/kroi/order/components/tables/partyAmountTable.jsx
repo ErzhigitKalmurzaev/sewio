@@ -29,7 +29,6 @@ const PartyAmountTable = ({ data, status }) => {
     }
   }
 
-  // Подсчет итогов по каждому цвету
   const totalByColor = party_amounts.map(item => {
     return {
       plan: item.sizes.reduce((sum, size) => sum + (size.plan_amount || 0), 0) || 0,
@@ -48,7 +47,6 @@ const PartyAmountTable = ({ data, status }) => {
         data={[...party_amounts] || []}
         className="rounded-lg border-2 border-borderGray"
       >
-        {/* Колонка "Цвет" */}
         <Column width={100} align="center" verticalAlign="center"fullText>
           <HeaderCell>Цвет</HeaderCell>
           <Cell dataKey="color.title" />

@@ -123,6 +123,12 @@ export const foremanNav = [
         elements: false
     },
     {
+        title: 'Товары',
+        path: 'product',
+        icon: <ShoppingBasket />,
+        elements: false
+    },
+    {
         title: 'Salary',
         path: 'salary',
         icon: <CircleDollarSign/>,
