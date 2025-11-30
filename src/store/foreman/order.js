@@ -122,6 +122,18 @@ export const deleteWorkById = createAsyncThunk(
     }
 )
 
+export const getProducts = createAsyncThunk(
+    'foreman/getProducts',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`product/titles/`);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
 function groupOperations(details = [], allOperations = [], salaryDetails = []) {
     const grouped = {};
   
@@ -211,6 +223,8 @@ const ForemanOrderSlice = createSlice({
     party_list: null,
     party_list_status: 'loading',
     staff_list: null,
+    products_list: null,
+    products_list_status: 'loading',
     staff_list_status: 'loading',
     combinations_list: [],
     combinations_list_status: 'idle',
@@ -334,6 +348,15 @@ const ForemanOrderSlice = createSlice({
             state.works_history_status = 'success';
         }).addCase(getWorksHistory.rejected, (state) => {
             state.works_history_status = 'error';
+        })
+        //---------------------------------------------------------
+        .addCase(getProducts.pending, (state) => {
+            state.products_list_status = 'loading';
+        }).addCase(getProducts.fulfilled, (state, action) => {
+            state.products_list = action.payload;
+            state.products_list_status = 'success';
+        }).addCase(getProducts.rejected, (state) => {
+            state.products_list_status = 'error';
         })
         //---------------------------------------------------------
         .addCase(getWorkById.pending, (state) => {

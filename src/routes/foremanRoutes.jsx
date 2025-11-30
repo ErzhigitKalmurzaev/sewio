@@ -3,13 +3,12 @@ import CRMLayout from '../layouts/crm/CRMLayout';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import ForemanMain from '../pages/foreman/operations/main';
 import ForemanTabletLayout from '../layouts/tablet/foremanTabletLayout';
-import CreateAccWork from '../pages/foreman/operations/works/createAccWork';
 import WorkHistory from '../pages/foreman/operations/works/workHistory';
 import EditAccWork from '../pages/foreman/operations/works/editAccWork';
 import MySalary from '../pages/shveya/salary/main';
 import MySalaryDetail from '../pages/shveya/salary/mySalaryDetail';
-import Products from '../pages/technolog/product/main';
 import ViewProductCombinations from '../pages/foreman/product/productDetail';
+import ProductsMain from '../pages/foreman/product/productsMain';
 
 const ForemanRoutes = () => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -34,7 +33,7 @@ const ForemanRoutes = () => {
               </Route>
 
               <Route path="product" element={<Outlet />}>
-                <Route path="" element={<Products />} />
+                <Route path="" element={<ProductsMain />} />
                 <Route path=":id" element={<ViewProductCombinations/>}/>
               </Route>
               
