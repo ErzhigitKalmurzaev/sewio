@@ -13,6 +13,7 @@ const Products = () => {
   const dispatch = useDispatch();
 
   const { products_list, products_list_status } = useSelector(state => state.product);
+  const { me_info } = useSelector(state => state.auth);
   const [params, setParams] = useSearchParams();
 
   const urls = {
@@ -34,12 +35,15 @@ const Products = () => {
   const handleSearch = () => {
     dispatch(getProductList({ urls }))
   }
-
+  
   return (
     <div className='flex flex-col gap-y-5 mb-5'>
         <div className='flex justify-between items-center'>
             <Title text="Товары"/>
-            <Button onClick={() => navigate('create')}>+ Добавить товар</Button>
+            {
+              me_info?.role !== 6 &&
+              <Button onClick={() => navigate('create')}>+ Добавить товар</Button>
+            }
         </div>
 
         <div className='flex items-center my-2 gap-x-6'>

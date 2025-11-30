@@ -9,7 +9,7 @@ import EditAccWork from '../pages/foreman/operations/works/editAccWork';
 import MySalary from '../pages/shveya/salary/main';
 import MySalaryDetail from '../pages/shveya/salary/mySalaryDetail';
 import Products from '../pages/technolog/product/main';
-import EditProduct from '../pages/technolog/product/editProduct';
+import ViewProductCombinations from '../pages/foreman/product/productDetail';
 
 const ForemanRoutes = () => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -35,7 +35,7 @@ const ForemanRoutes = () => {
 
               <Route path="product" element={<Outlet />}>
                 <Route path="" element={<Products />} />
-                <Route path=":id" element={<EditProduct/>}/>
+                <Route path=":id" element={<ViewProductCombinations/>}/>
               </Route>
               
               <Route path="salary" element={<Outlet/>}>
