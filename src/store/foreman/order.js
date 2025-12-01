@@ -137,8 +137,10 @@ export const getProducts = createAsyncThunk(
 function groupOperations(details = [], allOperations = [], salaryDetails = []) {
     const grouped = {};
   
+    // Временный массив объединённых записей
     const merged = [];
   
+    // Добавляем неоплаченные
     details.forEach(({ staff, combination, amount }) => {
       if (!combination || !staff) return;
       merged.push({
@@ -149,6 +151,7 @@ function groupOperations(details = [], allOperations = [], salaryDetails = []) {
       });
     });
   
+    // Добавляем оплаченные (всё отдельно, не затираем)
     salaryDetails.forEach(({ staff, combination, amount }) => {
       if (!combination || !staff) return;
       merged.push({
@@ -159,6 +162,7 @@ function groupOperations(details = [], allOperations = [], salaryDetails = []) {
       });
     });
   
+    // Группируем по combination.id
     merged.forEach(({ combination, staff, amount, status }) => {
       if (!grouped[combination.id]) {
         grouped[combination.id] = {
@@ -175,6 +179,7 @@ function groupOperations(details = [], allOperations = [], salaryDetails = []) {
       });
     });
   
+    // Добавляем пустые операции, если их не было
     if (Array.isArray(allOperations)) {
       allOperations.forEach(op => {
         if (!grouped[op.id]) {
@@ -193,28 +198,12 @@ function groupOperations(details = [], allOperations = [], salaryDetails = []) {
       });
     }
   
+    // Сортируем внутри каждой комбинации: оплаченные — первыми
     Object.values(grouped).forEach(group => {
       group.details.sort((a, b) => b.status - a.status);
     });
   
     return Object.values(grouped);
-}
-
-// Новая функция для форматирования комбинаций
-function formatCombinations(combinations = []) {
-    return combinations.map((combination, index) => ({
-        id: `combination_${index}`,
-        title: combination.title,
-        operations: combination.operations || [],
-        details: [
-            {
-                staff: '',
-                count: '',
-                status: 0
-            }
-        ],
-        expanded: false
-    }));
 }
   
 const ForemanOrderSlice = createSlice({
@@ -249,35 +238,25 @@ const ForemanOrderSlice = createSlice({
   },
   reducers: {
     addDetail: (state, action) => {
-        const { combinationId } = action.payload;
-        const combination = state.combinations_list.find((comb) => comb.id === combinationId);
-        if (combination) {
-          combination.details.push({ staff: "", count: "", status: 0 });
+        const { operationId } = action.payload;
+        const operation = state.operations_list.find((op) => op.id === operationId);
+        if (operation) {
+          operation.details.push({ staff: "", count: "", status: 0 });
         }
     },
     removeDetail: (state, action) => {
-        const { combinationId, index } = action.payload;
-        const combination = state.combinations_list.find((comb) => comb.id === combinationId);
-        if (combination && combination.details.length > 1) {
-          combination.details.splice(index, 1);
+        const { operationId, index } = action.payload;
+        const operation = state.operations_list.find((op) => op.id === operationId);
+        if (operation) {
+          operation.details.splice(index, 1);
         }
-    },
+      },
     updateDetail: (state, action) => {
-        const { combinationId, index, field, value } = action.payload;
-        const combination = state.combinations_list.find((comb) => comb.id === combinationId);
-        if (combination) {
-            combination.details[index][field] = value;
+        const { operationId, index, field, value } = action.payload;
+        const operation = state.operations_list.find((op) => op.id === operationId);
+        if (operation) {
+            operation.details[index][field] = value;
         }
-    },
-    toggleExpanded: (state, action) => {
-        const { combinationId } = action.payload;
-        const combination = state.combinations_list.find((comb) => comb.id === combinationId);
-        if (combination) {
-            combination.expanded = !combination.expanded;
-        }
-    },
-    clearCombinationsList: (state) => {
-        state.combinations_list = [];
     },
     clearOperationsList: (state) => {
         state.operations_list = [{
@@ -303,15 +282,6 @@ const ForemanOrderSlice = createSlice({
             state.party_list_status = 'success';
         }).addCase(getPartyList.rejected, (state) => {
             state.party_list_status = 'error';
-        })
-        //---------------------------------------------------------
-        .addCase(getProductCombinations.pending, (state) => {
-            state.combinations_list_status = 'loading';
-        }).addCase(getProductCombinations.fulfilled, (state, action) => {
-            state.combinations_list = formatCombinations(action.payload);
-            state.combinations_list_status = 'success';
-        }).addCase(getProductCombinations.rejected, (state) => {
-            state.combinations_list_status = 'error';
         })
         //---------------------------------------------------------
         .addCase(getProductOperations.pending, (state) => {
