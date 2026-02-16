@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_DOMAIN = "72.60.33.18"
+export const API_DOMAIN = "194.31.52.244"
 export const Base_URL = `http://${API_DOMAIN}`; // base
 
 export const ImageUploadingFetch = axios.create({
