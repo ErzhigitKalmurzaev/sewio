@@ -270,7 +270,13 @@ const ForemanOrderSlice = createSlice({
                 }
             ]
         }];
-    }
+    },
+    toggleExpanded: (state, action) => {
+        const { combinationIndex } = action.payload;
+        if (state.combinations_list[combinationIndex]) {
+            state.combinations_list[combinationIndex].expanded = !state.combinations_list[combinationIndex].expanded;
+        }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -327,6 +333,15 @@ const ForemanOrderSlice = createSlice({
             state.products_list_status = 'success';
         }).addCase(getProducts.rejected, (state) => {
             state.products_list_status = 'error';
+        })
+        //---------------------------------------------------------
+        .addCase(getProductCombinations.pending, (state) => {
+            state.combinations_list_status = 'loading';
+        }).addCase(getProductCombinations.fulfilled, (state, action) => {
+            state.combinations_list = action.payload;
+            state.combinations_list_status = 'success';
+        }).addCase(getProductCombinations.rejected, (state) => {
+            state.combinations_list_status = 'error';
         })
         //---------------------------------------------------------
         .addCase(getWorkById.pending, (state) => {

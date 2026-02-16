@@ -1,6 +1,7 @@
+// ViewCombinationsTable.jsx
 import React, { useEffect } from 'react';
 import { Table, Button } from 'rsuite';
-import { ChevronDown, ChevronRight, Clock, Award, DollarSign } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getRankList } from '../../../store/technolog/rank';
 import { toggleExpanded } from '../../../store/foreman/order';
@@ -15,8 +16,8 @@ const ViewCombinationsTable = ({ combinations = [], status }) => {
     dispatch(getRankList());
   }, [dispatch]);
 
-  const handleToggleExpanded = (combinationId) => {
-    dispatch(toggleExpanded({ combinationId }));
+  const handleToggleExpanded = (combinationIndex) => {
+    dispatch(toggleExpanded({ combinationIndex }));
   };
 
   const sumOperationsValues = (operations, key) => {
@@ -27,7 +28,6 @@ const ViewCombinationsTable = ({ combinations = [], status }) => {
     }, 0).toFixed(2);
   };
 
-  // Создаем расширенный массив данных для таблицы
   const expandedData = [];
   combinations.forEach((combination, index) => {
     // Добавляем комбинацию
@@ -43,7 +43,7 @@ const ViewCombinationsTable = ({ combinations = [], status }) => {
         expandedData.push({
           ...operation,
           rowType: 'operation',
-          combinationId: combination.id,
+          combinationIndex: index,
           operationIndex: opIndex
         });
       });
@@ -102,7 +102,7 @@ const ViewCombinationsTable = ({ combinations = [], status }) => {
                       <Button
                         size="xs"
                         appearance="subtle"
-                        onClick={() => handleToggleExpanded(rowData.id)}
+                        onClick={() => handleToggleExpanded(rowData.combinationIndex)}
                         className="p-0 min-w-[24px]"
                       >
                         {rowData.expanded ? 

@@ -23,15 +23,11 @@ const ViewProductCombinations = () => {
   useEffect(() => {
     setIsLoading(true);
     
-    // Очищаем предыдущие данные
-    dispatch(clearCombinationsList());
+    // dispatch(clearCombinationsList());
     
-    // Загружаем комбинации для продукта
     if (id) {
       dispatch(getProductCombinations(id)).then(res => {
         if (res.meta.requestStatus === 'fulfilled' && res.payload?.length > 0) {
-          // Получаем информацию о товаре из первой комбинации или другого источника
-          // Если у вас есть отдельный endpoint для получения инфы о продукте, используйте его
           const storedOrder = JSON.parse(localStorage.getItem('order') || '{}');
           setProductData({
             title: storedOrder.productTitle || "—",
@@ -43,29 +39,8 @@ const ViewProductCombinations = () => {
         setIsLoading(false);
       });
     }
-
-    return () => {
-      // Очистка при размонтировании
-      dispatch(clearCombinationsList());
-    };
   }, [dispatch, id]);
-
-  const sumOperationsValues = (operations, key) => {
-    if (!operations || operations.length === 0) return 0;
-    return operations.reduce((acc, item) => {
-      const value = Number(item[key]) || 0;
-      return acc + value;
-    }, 0);
-  };
-
-  const totalTime = combinations_list.reduce((acc, comb) => {
-    return acc + sumOperationsValues(comb.operations, 'time');
-  }, 0).toFixed(2);
-
-  const totalPrice = combinations_list.reduce((acc, comb) => {
-    return acc + sumOperationsValues(comb.operations, 'price');
-  }, 0).toFixed(2);
-
+  
   return (
     <div className="w-full min-h-[100vh] flex flex-col gap-y-5 mb-5">
       <div className="flex justify-between items-center">
