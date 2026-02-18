@@ -1,21 +1,17 @@
 import { useEffect } from 'react'
-import Button from '../../../components/ui/button'
-import Title from '../../../components/ui/title'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { getOrdersList } from '../../../store/kroi/order'
 import MainTable from '../../kroi/order/components/tables/mainTable'
 
 const ForemanMain = () => {
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { orders_list, orders_list_status } = useSelector(state => state.kroi_order);
 
   useEffect(() => {
     dispatch(getOrdersList());
-  }, [])
+  }, [dispatch])
   
   return (
     <div className='w-full min-h-[100vh] flex flex-col gap-y-5'>

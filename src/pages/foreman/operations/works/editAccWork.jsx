@@ -92,6 +92,7 @@ const EditAccWork = () => {
                 if (!staffObj) return null;
       
                 return {
+                  id: item.id,
                   combination: item.id,
                   staff: staffObj.id,
                   amount
