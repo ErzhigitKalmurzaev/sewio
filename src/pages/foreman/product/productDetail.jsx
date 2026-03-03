@@ -30,8 +30,7 @@ const ViewProductCombinations = () => {
         if (res.meta.requestStatus === 'fulfilled' && res.payload?.length > 0) {
           const storedOrder = JSON.parse(localStorage.getItem('order') || '{}');
           setProductData({
-            title: storedOrder.productTitle || "—",
-            vendor_code: storedOrder.vendorCode || "—"
+            title: storedOrder[1] || "—",
           });
         }
         setIsLoading(false);
@@ -61,10 +60,6 @@ const ViewProductCombinations = () => {
             <div className="flex flex-col gap-y-1">
               <span className="text-sm text-gray-500">Название:</span>
               <span className="text-base font-medium">{productData.title || "—"}</span>
-            </div>
-            <div className="flex flex-col gap-y-1">
-              <span className="text-sm text-gray-500">Артикул:</span>
-              <span className="text-base font-medium">{productData.vendor_code || "—"}</span>
             </div>
             <div className="flex flex-col gap-y-1">
               <span className="text-sm text-gray-500">Всего комбинаций:</span>

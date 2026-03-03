@@ -36,7 +36,8 @@ const ProductsMain = () => {
     }
   }, [products_list, searchQuery]);
 
-  const handleProductClick = (productId) => {
+  const handleProductClick = (productId, product) => {
+    localStorage.setItem('order', JSON.stringify(product));
     navigate(`${productId}`);
   };
 
@@ -95,7 +96,7 @@ const ProductsMain = () => {
               return (
                 <div
                   key={`${productId}_${index}`}
-                  onClick={() => handleProductClick(productId)}
+                  onClick={() => handleProductClick(productId, product)}
                   className='bg-white border border-slate-400 rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-blue-400 hover:scale-105 active:scale-100'
                 >
                   <div className='flex items-start gap-3'>
