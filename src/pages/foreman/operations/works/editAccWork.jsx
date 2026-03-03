@@ -76,29 +76,22 @@ const EditAccWork = () => {
           color: work?.color?.id,
           size: work?.size?.id,
           details: operations_list?.flatMap(item =>
-            item?.details
-              ?.filter(detail => {
-                const staffNumber = detail.staff;
-                const amount = Number(detail.count);
-      
-                // Пропустить если уже оплачен, или нет валидных данных
-                return detail.status !== 1 && staffNumber && amount > 0;
-              })
-              .map(detail => {
-                const staffNumber = detail.staff;
-                const amount = Number(detail.count);
-                const staffObj = staff_list.find(staff => staff.number === staffNumber);
-      
-                if (!staffObj) return null;
-      
-                return {
-                  id: item.id,
-                  combination: item.id,
-                  staff: staffObj.id,
-                  amount
-                };
-              })
-              .filter(Boolean) // удаляет null если сотрудник не найден
+                item?.details
+                  ?.filter(detail => {
+                    return detail.status !== 1 && detail.staff && Number(detail.count) > 0;
+                  })
+                  .map(detail => {
+                    const staffObj = staff_list.find(staff => staff.number === detail.staff);
+                    if (!staffObj) return null;
+
+                    return {
+                      ...(detail.id ? { id: detail.id } : {}),
+                      combination: item.id,
+                      staff: staffObj.id,
+                      amount: Number(detail.count)
+                    };
+                  })
+            .filter(Boolean)// удаляет null если сотрудник не найден
           )
         }
       })).then(res => {

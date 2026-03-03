@@ -141,29 +141,19 @@ function groupOperations(details = [], allOperations = [], salaryDetails = []) {
     const merged = [];
   
     // Добавляем неоплаченные
-    details.forEach(({ staff, combination, amount }) => {
-      if (!combination || !staff) return;
-      merged.push({
-        combination,
-        staff,
-        amount,
-        status: 0
-      });
+    details.forEach(({ id, staff, combination, amount }) => {
+        if (!combination || !staff) return;
+        merged.push({ id, combination, staff, amount, status: 0 });
     });
   
     // Добавляем оплаченные (всё отдельно, не затираем)
-    salaryDetails.forEach(({ staff, combination, amount }) => {
-      if (!combination || !staff) return;
-      merged.push({
-        combination,
-        staff,
-        amount,
-        status: 1
-      });
+    salaryDetails.forEach(({ id, staff, combination, amount }) => {
+        if (!combination || !staff) return;
+        merged.push({ id, combination, staff, amount, status: 1 });
     });
   
     // Группируем по combination.id
-    merged.forEach(({ combination, staff, amount, status }) => {
+    merged.forEach(({ combination, staff, amount, status, id }) => {
       if (!grouped[combination.id]) {
         grouped[combination.id] = {
           id: combination.id,
@@ -173,6 +163,7 @@ function groupOperations(details = [], allOperations = [], salaryDetails = []) {
       }
   
       grouped[combination.id].details.push({
+        id: id,           // ← уже было, но теперь id реально приходит
         staff: `${staff.number}`,
         count: amount,
         status
