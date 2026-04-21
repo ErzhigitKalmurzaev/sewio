@@ -437,7 +437,11 @@ const TechnologProductSlice = createSlice({
             state.consumables[action.payload.key][action.payload.name] = action.payload.value;
         },
         fillConsumable: (state, action) => {
-            state.consumables[action.payload.key] = action.payload.value;
+            const existingId = state.consumables[action.payload.key]?.id;
+            state.consumables[action.payload.key] = {
+                ...(existingId ? { id: existingId } : {}),
+                ...action.payload.value
+            };
         },
         deleteConsumable: (state, action) => {
             state.consumables.splice(action.payload, 1);
@@ -480,6 +484,7 @@ const TechnologProductSlice = createSlice({
                     }))
                 }))
                 state.consumables = action.payload.consumables.map(item => ({
+                    id: item.id,
                     unit: item?.unit ? item.unit : item?.material_nomenclature?.unit,
                     material_nomenclature: item?.material_nomenclature?.id,
                     consumption: item.consumption,

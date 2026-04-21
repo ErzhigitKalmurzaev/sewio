@@ -120,9 +120,13 @@ const EditProduct = () => {
                 cost_price: cost.toFixed(2),
                 prices,
                 combinations: combinations.map(item => ({
+                  ...(typeof item.id === 'number' ? { id: item.id } : {}),
                   title: item.title,
                   status: item.status,
-                  operations: item.children.map(({ equipment, nomenclature, ...op}) => op)
+                  operations: item.children.map(({ equipment, nomenclature, id, ...op }) => ({
+                    ...(typeof id === 'number' ? { id } : {}),
+                    ...op
+                  }))
                 })),
                 consumables
             }
