@@ -45,10 +45,7 @@ const EditAmountsTable = ({ status }) => {
                                     <span className='ml-3 font-semibold text-sm text-fprimary'>
                                         Арт: {product.vendor_code}
                                     </span>
-                                    {
-                                        status === 1 &&
-                                        <Pencil className='ml-5 mb-2' onClick={() => navigate(`/crm/product/${product.nomenclature}?order_product=true&status=${status}`)}/>
-                                    }
+                                    <Pencil className='ml-5 mb-2' onClick={() => navigate(`/crm/product/${product.nomenclature}?order_product=true&status=${status}`)}/>
                                 </span>
                             </div>
                         }
